@@ -277,17 +277,20 @@ int main() {
 		scene = Scene::Load("scene.json");
 	} 
 	else {
+	
+									/// Makes scene 1 ///
+		{
 		// Create our OpenGL resources
 		Shader::Sptr uboShader = ResourceManager::CreateAsset<Shader>(std::unordered_map<ShaderPartType, std::string>{
-			{ ShaderPartType::Vertex, "shaders/vertex_shader.glsl" }, 
+			{ ShaderPartType::Vertex, "shaders/vertex_shader.glsl" },
 			{ ShaderPartType::Fragment, "shaders/frag_blinn_phong_textured.glsl" }
-		}); 
+		});
 
 		MeshResource::Sptr monkeyMesh = ResourceManager::CreateAsset<MeshResource>("Monkey.obj");
 		Texture2D::Sptr    boxTexture = ResourceManager::CreateAsset<Texture2D>("textures/box-diffuse.png");
 		Texture2D::Sptr    grassTexture = ResourceManager::CreateAsset<Texture2D>("textures/grass.png");
-		Texture2D::Sptr    monkeyTex  = ResourceManager::CreateAsset<Texture2D>("textures/monkey-uvMap.png");  
-		
+		Texture2D::Sptr    monkeyTex = ResourceManager::CreateAsset<Texture2D>("textures/monkey-uvMap.png");
+
 		// Create an empty scene
 		scene = std::make_shared<Scene>();
 
@@ -331,6 +334,182 @@ int main() {
 
 		scene->Lights[2].Position = glm::vec3(0.0f, 1.0f, 3.0f);
 		scene->Lights[2].Color = glm::vec3(1.0f, 0.2f, 0.1f);
+
+		// We'll create a mesh that is a simple plane that we can resize later
+		MeshResource::Sptr planeMesh = ResourceManager::CreateAsset<MeshResource>();
+		MeshResource::Sptr cubeMesh = ResourceManager::CreateAsset<MeshResource>("cube.obj");
+		planeMesh->AddParam(MeshBuilderParam::CreatePlane(ZERO, UNIT_Z, UNIT_X, glm::vec2(1.0f)));
+		planeMesh->GenerateMesh();
+
+		// Set up the scene's camera
+		GameObject::Sptr camera = scene->CreateGameObject("Main Camera");
+		{
+			camera->SetPostion(glm::vec3(0, 4, 4));
+			camera->LookAt(glm::vec3(0.0f));
+
+			Camera::Sptr cam = camera->Add<Camera>();
+
+			// Make sure that the camera is set as the scene's main camera!
+			scene->MainCamera = cam;
+		}
+
+	// Set up all our sample objects
+	GameObject::Sptr plane = scene->CreateGameObject("Plane");
+	{
+		// Scale up the plane
+		plane->SetScale(glm::vec3(50.0F));
+
+		// Create and attach a RenderComponent to the object to draw our mesh
+		RenderComponent::Sptr renderer = plane->Add<RenderComponent>();
+		renderer->SetMesh(planeMesh);
+		renderer->SetMaterial(grassMaterial);
+
+		// Attach a plane collider that extends infinitely along the X/Y axis
+		RigidBody::Sptr physics = plane->Add<RigidBody>(/*static by default*/);
+		physics->AddCollider(PlaneCollider::Create());
+	}
+
+	GameObject::Sptr square = scene->CreateGameObject("Square");
+	{
+		// Set position in the scene
+		square->SetPostion(glm::vec3(0.0f, 0.0f, 2.0f));
+		// Scale down the plane
+		square->SetScale(glm::vec3(0.5f));
+
+		// Create and attach a render component
+		RenderComponent::Sptr renderer = square->Add<RenderComponent>();
+		renderer->SetMesh(planeMesh);
+		renderer->SetMaterial(boxMaterial);
+
+		// This object is a renderable only, it doesn't have any behaviours or
+		// physics bodies attached!
+	}
+
+	GameObject::Sptr player = scene->CreateGameObject("player");
+	{
+		// Set position in the scene
+		player->SetPostion(glm::vec3(1.5f, 0.0f, 1.0f));
+		player->SetScale(glm::vec3(1.0f, 1.0f, 1.0f));
+		player->SetScale(glm::vec3(0.5f, 0.5f, 0.5f));
+
+		// Add some behaviour that relies on the physics body
+		player->Add<JumpBehaviour>();
+
+		// Create and attach a renderer for the monkey
+		RenderComponent::Sptr renderer = player->Add<RenderComponent>();
+		renderer->SetMesh(cubeMesh);
+		renderer->SetMaterial(boxMaterial);
+	
+		collisions.push_back(CollisionRect(player->GetPosition(), 1.0f, 1.0f, 0));
+	
+		// Add a dynamic rigid body to this monkey
+		RigidBody::Sptr physics = player->Add<RigidBody>(RigidBodyType::Dynamic);
+		physics->AddCollider(ConvexMeshCollider::Create());
+
+
+		// We'll add a behaviour that will interact with our trigger volumes
+		MaterialSwapBehaviour::Sptr triggerInteraction = player->Add<MaterialSwapBehaviour>();
+		triggerInteraction->EnterMaterial = boxMaterial;
+		triggerInteraction->ExitMaterial = monkeyMaterial;
+	}
+
+	GameObject::Sptr jumpingObstacle = scene->CreateGameObject("Trigger2");
+	{
+		// Set and rotation position in the scene
+		jumpingObstacle->SetPostion(glm::vec3(-2.5f, 0.0f, 1.0f));
+		jumpingObstacle->SetRotation(glm::vec3(0.0f, 0.0f, 0.0f));
+		jumpingObstacle->SetScale(glm::vec3(0.5f, 0.5f, 0.5f));
+
+		// Add a render component
+		RenderComponent::Sptr renderer = jumpingObstacle->Add<RenderComponent>();
+		renderer->SetMesh(cubeMesh);
+		renderer->SetMaterial(boxMaterial);
+	
+		collisions.push_back(CollisionRect(jumpingObstacle->GetPosition(), 1.0f, 1.0f, 1));
+
+		//// This is an example of attaching a component and setting some parameters
+		//RotatingBehaviour::Sptr behaviour = jumpingObstacle->Add<RotatingBehaviour>();
+		//behaviour->RotationSpeed = glm::vec3(0.0f, 0.0f, -90.0f);
+	}
+
+	// Kinematic rigid bodies are those controlled by some outside controller
+	// and ONLY collide with dynamic objects
+	RigidBody::Sptr physics = jumpingObstacle->Add<RigidBody>(RigidBodyType::Kinematic);
+	physics->AddCollider(ConvexMeshCollider::Create());
+
+	// Create a trigger volume for testing how we can detect collisions with objects!
+	GameObject::Sptr trigger = scene->CreateGameObject("Trigger");
+	{
+		TriggerVolume::Sptr volume = trigger->Add<TriggerVolume>();
+		BoxCollider::Sptr collider = BoxCollider::Create(glm::vec3(3.0f, 3.0f, 1.0f));
+		collider->SetPosition(glm::vec3(0.0f, 0.0f, 0.5f));
+		volume->AddCollider(collider);
+	}
+
+	// Save the asset manifest for all the resources we just loaded
+	ResourceManager::SaveManifest("manifest.json");
+	// Save the scene to a JSON file
+	scene->Save("scene.json");
+		}
+
+								/// Testing to make a second scene /// 
+										/// it works poggers ///
+
+		{
+		// Create our OpenGL resources
+		Shader::Sptr uboShader = ResourceManager::CreateAsset<Shader>(std::unordered_map<ShaderPartType, std::string>{
+			{ ShaderPartType::Vertex, "shaders/vertex_shader.glsl" },
+			{ ShaderPartType::Fragment, "shaders/frag_blinn_phong_textured.glsl" }
+		});
+
+		MeshResource::Sptr monkeyMesh = ResourceManager::CreateAsset<MeshResource>("Monkey.obj");
+		Texture2D::Sptr    boxTexture = ResourceManager::CreateAsset<Texture2D>("textures/box-diffuse.png");
+		Texture2D::Sptr    grassTexture = ResourceManager::CreateAsset<Texture2D>("textures/grass.png");
+		Texture2D::Sptr    monkeyTex = ResourceManager::CreateAsset<Texture2D>("textures/monkey-uvMap.png");
+
+		// Create an empty scene
+		scene = std::make_shared<Scene>();
+
+		// I hate this
+		scene->BaseShader = uboShader;
+
+		// Create our materials
+		Material::Sptr boxMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			boxMaterial->Name = "Box";
+			boxMaterial->MatShader = scene->BaseShader;
+			boxMaterial->Texture = boxTexture;
+			boxMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr grassMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			grassMaterial->Name = "Grass";
+			grassMaterial->MatShader = scene->BaseShader;
+			grassMaterial->Texture = grassTexture;
+			grassMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr monkeyMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			monkeyMaterial->Name = "Monkey";
+			monkeyMaterial->MatShader = scene->BaseShader;
+			monkeyMaterial->Texture = monkeyTex;
+			monkeyMaterial->Shininess = 256.0f;
+
+		}
+
+		// Create some lights for our scene
+		scene->Lights.resize(3);
+		scene->Lights[0].Position = glm::vec3(0.0f, 1.0f, 3.0f);
+		scene->Lights[0].Color = glm::vec3(0.5f, 0.0f, 0.7f);
+		scene->Lights[0].Range = 10.0f;
+
+		scene->Lights[1].Position = glm::vec3(1.0f, 0.0f, 3.0f);
+		scene->Lights[1].Color = glm::vec3(0.2f, 0.8f, 0.1f);
+
+		scene->Lights[2].Position = glm::vec3(0.0f, 1.0f, 3.0f);
+		scene->Lights[2].Color = glm::vec3(0.0f, 1.0f, 0.0f);
 
 		// We'll create a mesh that is a simple plane that we can resize later
 		MeshResource::Sptr planeMesh = ResourceManager::CreateAsset<MeshResource>();
@@ -435,7 +614,7 @@ int main() {
 		physics->AddCollider(ConvexMeshCollider::Create());
 
 		// Create a trigger volume for testing how we can detect collisions with objects!
-		GameObject::Sptr trigger = scene->CreateGameObject("Trigger"); 
+		GameObject::Sptr trigger = scene->CreateGameObject("Trigger");
 		{
 			TriggerVolume::Sptr volume = trigger->Add<TriggerVolume>();
 			BoxCollider::Sptr collider = BoxCollider::Create(glm::vec3(3.0f, 3.0f, 1.0f));
@@ -446,7 +625,144 @@ int main() {
 		// Save the asset manifest for all the resources we just loaded
 		ResourceManager::SaveManifest("manifest.json");
 		// Save the scene to a JSON file
-		scene->Save("scene.json");
+		scene->Save("scene2.json");
+
+		}
+
+																	//// Making a 'Menu' Scene ////
+
+		{
+		// Create our OpenGL resources
+		Shader::Sptr uboShader = ResourceManager::CreateAsset<Shader>(std::unordered_map<ShaderPartType, std::string>{
+			{ ShaderPartType::Vertex, "shaders/vertex_shader.glsl" },
+			{ ShaderPartType::Fragment, "shaders/frag_blinn_phong_textured.glsl" }
+		});
+
+		MeshResource::Sptr monkeyMesh = ResourceManager::CreateAsset<MeshResource>("Monkey.obj");
+		Texture2D::Sptr    boxTexture = ResourceManager::CreateAsset<Texture2D>("textures/box-diffuse.png");
+		Texture2D::Sptr    grassTexture = ResourceManager::CreateAsset<Texture2D>("textures/grass.png");
+		Texture2D::Sptr    monkeyTex = ResourceManager::CreateAsset<Texture2D>("textures/monkey-uvMap.png");
+		Texture2D::Sptr    MenuTex = ResourceManager::CreateAsset<Texture2D>("textures/Game Poster 3.png");
+
+		// Create an empty scene
+		scene = std::make_shared<Scene>();
+
+		// I hate this
+		scene->BaseShader = uboShader;
+
+		// Create our materials
+		Material::Sptr boxMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			boxMaterial->Name = "Box";
+			boxMaterial->MatShader = scene->BaseShader;
+			boxMaterial->Texture = boxTexture;
+			boxMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr grassMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			grassMaterial->Name = "Grass";
+			grassMaterial->MatShader = scene->BaseShader;
+			grassMaterial->Texture = grassTexture;
+			grassMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr monkeyMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			monkeyMaterial->Name = "Monkey";
+			monkeyMaterial->MatShader = scene->BaseShader;
+			monkeyMaterial->Texture = monkeyTex;
+			monkeyMaterial->Shininess = 256.0f;
+
+		}
+
+		Material::Sptr MenuMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			MenuMaterial->Name = "Menu";
+			MenuMaterial->MatShader = scene->BaseShader;
+			MenuMaterial->Texture = MenuTex;
+			MenuMaterial->Shininess = 2.0f;
+		}
+
+		// Create some lights for our scene
+		scene->Lights.resize(4);
+		scene->Lights[0].Position = glm::vec3(3.0f, 3.0f, 3.0f);
+		scene->Lights[0].Color = glm::vec3(0.892f, 1.0f, 0.882f);
+		scene->Lights[0].Range = 10.0f;
+
+		scene->Lights[1].Position = glm::vec3(3.0f, -3.0f, 3.0f);
+		scene->Lights[1].Color = glm::vec3(0.892f, 1.0f, 0.882f);
+		scene->Lights[1].Range = 10.0f;
+
+		scene->Lights[2].Position = glm::vec3(-3.0f, 3.0f, 3.0f);
+		scene->Lights[2].Color = glm::vec3(0.892f, 1.0f, 0.882f);
+		scene->Lights[2].Range = 10.0f;
+
+		scene->Lights[3].Position = glm::vec3(-3.0f, -3.0f, 3.0f);
+		scene->Lights[3].Color = glm::vec3(0.892f, 1.0f, 0.882f);
+		scene->Lights[3].Range = 10.0f;
+
+		// We'll create a mesh that is a simple plane that we can resize later
+		MeshResource::Sptr planeMesh = ResourceManager::CreateAsset<MeshResource>();
+		MeshResource::Sptr cubeMesh = ResourceManager::CreateAsset<MeshResource>("cube.obj");
+		planeMesh->AddParam(MeshBuilderParam::CreatePlane(ZERO, UNIT_Z, UNIT_X, glm::vec2(1.0f)));
+		planeMesh->GenerateMesh();
+
+		// Set up the scene's camera
+		GameObject::Sptr camera = scene->CreateGameObject("Main Camera");
+		{
+			camera->SetPostion(glm::vec3(0, 0, 5));
+			camera->SetRotation(glm::vec3(0, -0, 0));
+
+			Camera::Sptr cam = camera->Add<Camera>();
+
+			// Make sure that the camera is set as the scene's main camera!
+			scene->MainCamera = cam;
+		}
+
+		// Set up all our sample objects
+		GameObject::Sptr plane = scene->CreateGameObject("Plane");
+		{
+			// Scale up the plane
+			plane->SetScale(glm::vec3(10.0F));
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = plane->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(MenuMaterial);
+
+			// Attach a plane collider that extends infinitely along the X/Y axis
+			RigidBody::Sptr physics = plane->Add<RigidBody>(/*static by default*/);
+			physics->AddCollider(PlaneCollider::Create());
+		}
+
+		GameObject::Sptr square = scene->CreateGameObject("Square");
+		{
+			// Set position in the scene
+			square->SetPostion(glm::vec3(0.0f, 0.0f, 2.0f));
+			// Scale down the plane
+			square->SetScale(glm::vec3(0.5f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = square->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(boxMaterial);
+
+			// This object is a renderable only, it doesn't have any behaviours or
+			// physics bodies attached!
+		}
+
+	
+
+
+		// Save the asset manifest for all the resources we just loaded
+		ResourceManager::SaveManifest("manifest.json");
+		// Save the scene to a JSON file
+		scene->Save("menu.json");
+
+		}
+
+		scene = Scene::Load("scene.json");
 	}
 
 	// Call scene awake to start up all of our components
@@ -479,28 +795,37 @@ int main() {
 	//	scene->FindObjectByName("player")->SetPostion(glm::vec3(0.0f, 0.0f, scene->FindObjectByName("player")->GetPosition().z)); //so the player only moves up and down
 		//scene->FindObjectByName("Trigger1")->SetRotation(glm::vec3(0.f,0.f, scene->FindObjectByName("Trigger1")->GetRotation().z));
 
+		//test for arguement validity
+		if (scenePath == "menu.json")
+		{
+	//		std::cout << "truth" << std::endl;
+		}
 
-		//collisions system
-		for (std::vector<int>::size_type i = 0; i != collisions.size(); i++) {
-			if (collisions[i].id == 0) {
-				collisions[i].update(scene->FindObjectByName("player")->GetPosition());
+		if (scenePath != "menu.json")
+		{
+			//collisions system
+			for (std::vector<int>::size_type i = 0; i != collisions.size(); i++) {
+				if (collisions[i].id == 0) {
+					collisions[i].update(scene->FindObjectByName("player")->GetPosition());
+				}
+				if (collisions[i].id == 1) {
+					collisions[i].update(scene->FindObjectByName("Trigger2")->GetPosition());
+				}
 			}
-			if (collisions[i].id == 1) {
-				collisions[i].update(scene->FindObjectByName("Trigger2")->GetPosition());
+
+			for (std::vector<int>::size_type i = 0; i != collisions.size(); i++) {
+				ballCollision.rectOverlap(ballCollision, collisions[i]);
 			}
+
+			if (ballCollision.hitEntered == true) {
+				std::cout << "colision detected";
+				ballCollision.hitEntered = false;
+			}
+
+			ballCollision.update(scene->FindObjectByName("player")->GetPosition()); // to update
+
 		}
-
-		for (std::vector<int>::size_type i = 0; i != collisions.size(); i++) {
-			ballCollision.rectOverlap(ballCollision, collisions[i]);
-		}
-
-		if (ballCollision.hitEntered == true) {
-			std::cout << "colision detected";
-			ballCollision.hitEntered = false;
-		}
-
-		ballCollision.update(scene->FindObjectByName("player")->GetPosition()); // to update
-
+		
 		// Calculate the time since our last frame (dt)
 		double thisFrame = glfwGetTime();
 		float dt = static_cast<float>(thisFrame - lastFrame);
