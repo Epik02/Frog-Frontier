@@ -643,6 +643,15 @@ int main() {
 		Texture2D::Sptr    grassTexture = ResourceManager::CreateAsset<Texture2D>("textures/grass.png");
 		Texture2D::Sptr    monkeyTex = ResourceManager::CreateAsset<Texture2D>("textures/monkey-uvMap.png");
 		Texture2D::Sptr    MenuTex = ResourceManager::CreateAsset<Texture2D>("textures/Game Poster 3.png");
+		
+		// Textures for UI
+
+		Texture2D::Sptr    ButtonBackTex = ResourceManager::CreateAsset<Texture2D>("textures/Button Background.png");
+		Texture2D::Sptr    ButtonStartTex = ResourceManager::CreateAsset<Texture2D>("textures/Start Text.png");
+		Texture2D::Sptr    ButtonExitTex = ResourceManager::CreateAsset<Texture2D>("textures/Exit Text.png");
+		Texture2D::Sptr    FFLogoTex = ResourceManager::CreateAsset<Texture2D>("textures/Frog Frontier Logo.png");
+		Texture2D::Sptr    BackTextTex = ResourceManager::CreateAsset<Texture2D>("textures/Exit Text.png");
+		Texture2D::Sptr    StartTextTex = ResourceManager::CreateAsset<Texture2D>("textures/Start Text.png");
 
 		// Create an empty scene
 		scene = std::make_shared<Scene>();
@@ -683,6 +692,55 @@ int main() {
 			MenuMaterial->Texture = MenuTex;
 			MenuMaterial->Shininess = 2.0f;
 		}
+
+		Material::Sptr ButtonBackMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			ButtonBackMaterial->Name = "ButtonBackground";
+			ButtonBackMaterial->MatShader = scene->BaseShader;
+			ButtonBackMaterial->Texture = ButtonBackTex;
+			ButtonBackMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr ButtonStartMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			ButtonStartMaterial->Name = "ButtonStart";
+			ButtonStartMaterial->MatShader = scene->BaseShader;
+			ButtonStartMaterial->Texture = ButtonStartTex;
+			ButtonStartMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr ButtonExitMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			ButtonExitMaterial->Name = "ButtonExit";
+			ButtonExitMaterial->MatShader = scene->BaseShader;
+			ButtonExitMaterial->Texture = ButtonExitTex;
+			ButtonExitMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr FFLogoMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			FFLogoMaterial->Name = "Frog Frontier Logo";
+			FFLogoMaterial->MatShader = scene->BaseShader;
+			FFLogoMaterial->Texture = FFLogoTex;
+			FFLogoMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr BackTextMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			BackTextMaterial->Name = "Back Button Text";
+			BackTextMaterial->MatShader = scene->BaseShader;
+			BackTextMaterial->Texture = BackTextTex;
+			BackTextMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr StartTextMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			StartTextMaterial->Name = "Start Button Text";
+			StartTextMaterial->MatShader = scene->BaseShader;
+			StartTextMaterial->Texture = StartTextTex;
+			StartTextMaterial->Shininess = 2.0f;
+		}
+
 
 		// Create some lights for our scene
 		scene->Lights.resize(4);
@@ -736,22 +794,86 @@ int main() {
 			physics->AddCollider(PlaneCollider::Create());
 		}
 
-		GameObject::Sptr square = scene->CreateGameObject("Square");
+		GameObject::Sptr GameLogo = scene->CreateGameObject("Game Menu Logo");
 		{
 			// Set position in the scene
-			square->SetPostion(glm::vec3(0.0f, 0.0f, 2.0f));
+			GameLogo->SetPostion(glm::vec3(1.0f, 1.25f, 3.0f));
 			// Scale down the plane
-			square->SetScale(glm::vec3(0.5f));
+			GameLogo->SetScale(glm::vec3(1.5f, 1.0f, 1.0f));
 
 			// Create and attach a render component
-			RenderComponent::Sptr renderer = square->Add<RenderComponent>();
+			RenderComponent::Sptr renderer = GameLogo->Add<RenderComponent>();
 			renderer->SetMesh(planeMesh);
-			renderer->SetMaterial(boxMaterial);
+			renderer->SetMaterial(FFLogoMaterial);
 
 			// This object is a renderable only, it doesn't have any behaviours or
 			// physics bodies attached!
 		}
 
+		GameObject::Sptr ButtonBackground1 = scene->CreateGameObject("ButtonBackground1");
+		{
+			// Set position in the scene
+			ButtonBackground1->SetPostion(glm::vec3(1.0f, 0.5f, 3.0f));
+			// Scale down the plane
+			ButtonBackground1->SetScale(glm::vec3(1.25f, 0.250f, 1.0f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = ButtonBackground1->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(ButtonBackMaterial);
+
+			// This object is a renderable only, it doesn't have any behaviours or
+			// physics bodies attached!
+		}
+
+
+		GameObject::Sptr ButtonBackground2 = scene->CreateGameObject("ButtonBackground2");
+		{
+			// Set position in the scene
+			ButtonBackground2->SetPostion(glm::vec3(1.0f, 0.15f, 3.0f));
+			// Scale down the plane
+			ButtonBackground2->SetScale(glm::vec3(1.25f, 0.250f, 1.0f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = ButtonBackground2->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(ButtonBackMaterial);
+
+			// This object is a renderable only, it doesn't have any behaviours or
+			// physics bodies attached!
+		}
+
+		GameObject::Sptr StartButton = scene->CreateGameObject("StartButton");
+		{
+			// Set position in the scene
+			StartButton->SetPostion(glm::vec3(0.75f, 0.375f, 3.5f));
+			// Scale down the plane
+			StartButton->SetScale(glm::vec3(0.5f, 0.125f, 1.0f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = StartButton->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(StartTextMaterial);
+
+			// This object is a renderable only, it doesn't have any behaviours or
+			// physics bodies attached!
+		}
+
+		GameObject::Sptr BackButton = scene->CreateGameObject("BackButton");
+		{
+			// Set position in the scene
+			BackButton->SetPostion(glm::vec3(0.750f, 0.11f, 3.5f));
+			// Scale down the plane
+			BackButton->SetScale(glm::vec3(0.5f, 0.125f, 1.0f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = BackButton->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(BackTextMaterial);
+
+			// This object is a renderable only, it doesn't have any behaviours or
+			// physics bodies attached!
+		}
 
 		// Save the asset manifest for all the resources we just loaded
 		ResourceManager::SaveManifest("manifest.json");
@@ -775,6 +897,9 @@ int main() {
 		Texture2D::Sptr    monkeyTex = ResourceManager::CreateAsset<Texture2D>("textures/monkey-uvMap.png");
 		Texture2D::Sptr    MenuTex = ResourceManager::CreateAsset<Texture2D>("textures/Game Poster 2 Extended.png");
 		
+		Texture2D::Sptr    LSButtonTex = ResourceManager::CreateAsset<Texture2D>("textures/Level Button Background 1.png");
+		Texture2D::Sptr    LSLogoTex = ResourceManager::CreateAsset<Texture2D>("textures/Frog Frontier Logo Side Scroller.png");
+		Texture2D::Sptr    ButtonBackTex = ResourceManager::CreateAsset<Texture2D>("textures/Button Background.png");
 
 		// Create an empty scene
 		scene = std::make_shared<Scene>();
@@ -814,6 +939,30 @@ int main() {
 			MenuMaterial->MatShader = scene->BaseShader;
 			MenuMaterial->Texture = MenuTex;
 			MenuMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr LSButtonMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			LSButtonMaterial->Name = "LSButton";
+			LSButtonMaterial->MatShader = scene->BaseShader;
+			LSButtonMaterial->Texture = LSButtonTex;
+			LSButtonMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr LSLogoMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			LSLogoMaterial->Name = "LSLogo";
+			LSLogoMaterial->MatShader = scene->BaseShader;
+			LSLogoMaterial->Texture = LSLogoTex;
+			LSLogoMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr ButtonBackMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			ButtonBackMaterial->Name = "ButtonBackground";
+			ButtonBackMaterial->MatShader = scene->BaseShader;
+			ButtonBackMaterial->Texture = ButtonBackTex;
+			ButtonBackMaterial->Shininess = 2.0f;
 		}
 
 		// Create some lights for our scene
@@ -868,22 +1017,197 @@ int main() {
 			physics->AddCollider(PlaneCollider::Create());
 		}
 
-		GameObject::Sptr square = scene->CreateGameObject("Square");
+		GameObject::Sptr LsButton1 = scene->CreateGameObject("LSButton1");
 		{
 			// Set position in the scene
-			square->SetPostion(glm::vec3(0.0f, 0.0f, 2.0f));
+			LsButton1->SetPostion(glm::vec3(0.3f, 0.5f, 3.0f));
 			// Scale down the plane
-			square->SetScale(glm::vec3(0.5f));
+			LsButton1->SetScale(glm::vec3(0.5f));
 
 			// Create and attach a render component
-			RenderComponent::Sptr renderer = square->Add<RenderComponent>();
+			RenderComponent::Sptr renderer = LsButton1->Add<RenderComponent>();
 			renderer->SetMesh(planeMesh);
-			renderer->SetMaterial(boxMaterial);
+			renderer->SetMaterial(LSButtonMaterial);
 
 			// This object is a renderable only, it doesn't have any behaviours or
 			// physics bodies attached!
 		}
 
+		GameObject::Sptr LsButton2 = scene->CreateGameObject("LSButton2");
+		{
+			// Set position in the scene
+			LsButton2->SetPostion(glm::vec3(0.9f, 0.5f, 3.0f));
+			// Scale down the plane
+			LsButton2->SetScale(glm::vec3(0.5f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = LsButton2->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(LSButtonMaterial);
+
+			// This object is a renderable only, it doesn't have any behaviours or
+			// physics bodies attached!
+		}
+
+		GameObject::Sptr LsButton3 = scene->CreateGameObject("LSButton3");
+		{
+			// Set position in the scene
+			LsButton3->SetPostion(glm::vec3(1.5f, 0.5f, 3.0f));
+			// Scale down the plane
+			LsButton3->SetScale(glm::vec3(0.5f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = LsButton3->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(LSButtonMaterial);
+
+			// This object is a renderable only, it doesn't have any behaviours or
+			// physics bodies attached!
+		}
+
+		GameObject::Sptr LsButton4 = scene->CreateGameObject("LSButton4");
+		{
+			// Set position in the scene
+			LsButton4->SetPostion(glm::vec3(2.1f, 0.5f, 3.0f));
+			// Scale down the plane
+			LsButton4->SetScale(glm::vec3(0.5f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = LsButton4->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(LSButtonMaterial);
+
+			// This object is a renderable only, it doesn't have any behaviours or
+			// physics bodies attached!
+		}
+
+		GameObject::Sptr LsButton5 = scene->CreateGameObject("LSButton5");
+		{
+			// Set position in the scene
+			LsButton5->SetPostion(glm::vec3(2.7f, 0.5f, 3.0f));
+			// Scale down the plane
+			LsButton5->SetScale(glm::vec3(0.5f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = LsButton5->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(LSButtonMaterial);
+
+			// This object is a renderable only, it doesn't have any behaviours or
+			// physics bodies attached!
+		}
+
+		GameObject::Sptr LsButton6 = scene->CreateGameObject("LSButton6");
+		{
+			// Set position in the scene
+			LsButton6->SetPostion(glm::vec3(0.3f,-0.1f, 3.0f));
+			// Scale down the plane
+			LsButton6->SetScale(glm::vec3(0.5f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = LsButton6->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(LSButtonMaterial);
+
+			// This object is a renderable only, it doesn't have any behaviours or
+			// physics bodies attached!
+		}
+
+		GameObject::Sptr LsButton7 = scene->CreateGameObject("LSButton7");
+		{
+			// Set position in the scene
+			LsButton7->SetPostion(glm::vec3(0.9f, -0.1f, 3.0f));
+			// Scale down the plane
+			LsButton7->SetScale(glm::vec3(0.5f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = LsButton7->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(LSButtonMaterial);
+
+			// This object is a renderable only, it doesn't have any behaviours or
+			// physics bodies attached!
+		}
+
+		GameObject::Sptr LsButton8 = scene->CreateGameObject("LSButton8");
+		{
+			// Set position in the scene
+			LsButton8->SetPostion(glm::vec3(1.5f, -0.1f, 3.0f));
+			// Scale down the plane
+			LsButton8->SetScale(glm::vec3(0.5f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = LsButton8->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(LSButtonMaterial);
+
+			// This object is a renderable only, it doesn't have any behaviours or
+			// physics bodies attached!
+		}
+
+		GameObject::Sptr LsButton9 = scene->CreateGameObject("LSButton9");
+		{
+			// Set position in the scene
+			LsButton9->SetPostion(glm::vec3(2.1f, -0.1f, 3.0f));
+			// Scale down the plane
+			LsButton9->SetScale(glm::vec3(0.5f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = LsButton9->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(LSButtonMaterial);
+
+			// This object is a renderable only, it doesn't have any behaviours or
+			// physics bodies attached!
+		}
+
+		GameObject::Sptr LsButton10 = scene->CreateGameObject("LSButton10");
+		{
+			// Set position in the scene
+			LsButton10->SetPostion(glm::vec3(2.7f, -0.1f, 3.0f));
+			// Scale down the plane
+			LsButton10->SetScale(glm::vec3(0.5f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = LsButton10->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(LSButtonMaterial);
+
+			// This object is a renderable only, it doesn't have any behaviours or
+			// physics bodies attached!
+		}
+
+		GameObject::Sptr BackButtonBack = scene->CreateGameObject("BackButtonBack");
+		{
+			// Set position in the scene
+			BackButtonBack->SetPostion(glm::vec3(1.75f, -1.0f, 3.0f));
+			// Scale down the plane
+			BackButtonBack->SetScale(glm::vec3(2.0f, 0.4f, 0.5f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = BackButtonBack->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(ButtonBackMaterial);
+
+			// This object is a renderable only, it doesn't have any behaviours or
+			// physics bodies attached!
+		}
+
+		GameObject::Sptr LsLogo = scene->CreateGameObject("LSLogo");
+		{
+			// Set position in the scene
+			LsLogo->SetPostion(glm::vec3(1.5f, 1.25f, 3.0f));
+			// Scale down the plane
+			LsLogo->SetScale(glm::vec3(2.75f, 1.0f, 0.5f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = LsLogo->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(LSLogoMaterial);
+
+			// This object is a renderable only, it doesn't have any behaviours or
+			// physics bodies attached!
+		}
 		
 
 		// Save the asset manifest for all the resources we just loaded
