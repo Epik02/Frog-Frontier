@@ -900,6 +900,18 @@ int main() {
 		Texture2D::Sptr    LSButtonTex = ResourceManager::CreateAsset<Texture2D>("textures/Level Button Background 1.png");
 		Texture2D::Sptr    LSLogoTex = ResourceManager::CreateAsset<Texture2D>("textures/Frog Frontier Logo Side Scroller.png");
 		Texture2D::Sptr    ButtonBackTex = ResourceManager::CreateAsset<Texture2D>("textures/Button Background.png");
+		Texture2D::Sptr    BackTex = ResourceManager::CreateAsset<Texture2D>("textures/Back Text.png");
+
+		Texture2D::Sptr    Tex1 = ResourceManager::CreateAsset<Texture2D>("textures/1.png");
+		Texture2D::Sptr    Tex2 = ResourceManager::CreateAsset<Texture2D>("textures/2.png");
+		Texture2D::Sptr    Tex3 = ResourceManager::CreateAsset<Texture2D>("textures/3.png");
+		Texture2D::Sptr    Tex4 = ResourceManager::CreateAsset<Texture2D>("textures/4.png");
+		Texture2D::Sptr    Tex5 = ResourceManager::CreateAsset<Texture2D>("textures/5.png");
+		Texture2D::Sptr    Tex6 = ResourceManager::CreateAsset<Texture2D>("textures/6.png");
+		Texture2D::Sptr    Tex7 = ResourceManager::CreateAsset<Texture2D>("textures/7.png");
+		Texture2D::Sptr    Tex8 = ResourceManager::CreateAsset<Texture2D>("textures/8.png");
+		Texture2D::Sptr    Tex9 = ResourceManager::CreateAsset<Texture2D>("textures/9.png");
+		Texture2D::Sptr    Tex10 = ResourceManager::CreateAsset<Texture2D>("textures/10.png");
 
 		// Create an empty scene
 		scene = std::make_shared<Scene>();
@@ -963,6 +975,94 @@ int main() {
 			ButtonBackMaterial->MatShader = scene->BaseShader;
 			ButtonBackMaterial->Texture = ButtonBackTex;
 			ButtonBackMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr BackMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			BackMaterial->Name = "Back";
+			BackMaterial->MatShader = scene->BaseShader;
+			BackMaterial->Texture = BackTex;
+			BackMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr Material1 = ResourceManager::CreateAsset<Material>();
+		{
+			Material1->Name = "1";
+			Material1->MatShader = scene->BaseShader;
+			Material1->Texture = Tex1;
+			Material1->Shininess = 2.0f;
+		}
+
+		Material::Sptr Material2 = ResourceManager::CreateAsset<Material>();
+		{
+			Material2->Name = "2";
+			Material2->MatShader = scene->BaseShader;
+			Material2->Texture = Tex2;
+			Material2->Shininess = 2.0f;
+		}
+
+		Material::Sptr Material3 = ResourceManager::CreateAsset<Material>();
+		{
+			Material3->Name = "3";
+			Material3->MatShader = scene->BaseShader;
+			Material3->Texture = Tex3;
+			Material3->Shininess = 2.0f;
+		}
+
+		Material::Sptr Material4 = ResourceManager::CreateAsset<Material>();
+		{
+			Material4->Name = "4";
+			Material4->MatShader = scene->BaseShader;
+			Material4->Texture = Tex4;
+			Material4->Shininess = 2.0f;
+		}
+
+		Material::Sptr Material5 = ResourceManager::CreateAsset<Material>();
+		{
+			Material5->Name = "5";
+			Material5->MatShader = scene->BaseShader;
+			Material5->Texture = Tex5;
+			Material5->Shininess = 2.0f;
+		}
+
+		Material::Sptr Material6 = ResourceManager::CreateAsset<Material>();
+		{
+			Material6->Name = "6";
+			Material6->MatShader = scene->BaseShader;
+			Material6->Texture = Tex6;
+			Material6->Shininess = 2.0f;
+		}
+
+		Material::Sptr Material7 = ResourceManager::CreateAsset<Material>();
+		{
+			Material7->Name = "7";
+			Material7->MatShader = scene->BaseShader;
+			Material7->Texture = Tex7;
+			Material7->Shininess = 2.0f;
+		}
+
+		Material::Sptr Material8 = ResourceManager::CreateAsset<Material>();
+		{
+			Material8->Name = "8";
+			Material8->MatShader = scene->BaseShader;
+			Material8->Texture = Tex8;
+			Material8->Shininess = 2.0f;
+		}
+		
+		Material::Sptr Material9 = ResourceManager::CreateAsset<Material>();
+		{
+			Material9->Name = "9";
+			Material9->MatShader = scene->BaseShader;
+			Material9->Texture = Tex9;
+			Material9->Shininess = 2.0f;
+		}
+
+		Material::Sptr Material10 = ResourceManager::CreateAsset<Material>();
+		{
+			Material10->Name = "10";
+			Material10->MatShader = scene->BaseShader;
+			Material10->Texture = Tex10;
+			Material10->Shininess = 2.0f;
 		}
 
 		// Create some lights for our scene
@@ -1209,6 +1309,115 @@ int main() {
 			// physics bodies attached!
 		}
 		
+		GameObject::Sptr Back = scene->CreateGameObject("Back");
+		{
+			Back->SetPostion(glm::vec3(1.3f, -0.75f, 3.5f));
+			Back->SetScale(glm::vec3(0.5f, 0.125f, 0.5f));
+
+			RenderComponent::Sptr renderer = Back->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(BackMaterial);
+		}
+
+		GameObject::Sptr Num1 = scene->CreateGameObject("Num1");
+		{
+			Num1->SetPostion(glm::vec3(0.225f, 0.375f, 3.5f));
+			Num1->SetScale(glm::vec3(0.25f));
+
+			RenderComponent::Sptr renderer = Num1->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(Material1);
+		}
+
+		GameObject::Sptr Num2 = scene->CreateGameObject("Num2");
+		{
+			Num2->SetPostion(glm::vec3(0.675f, 0.375f, 3.5f));
+			Num2->SetScale(glm::vec3(0.25f));
+
+			RenderComponent::Sptr renderer = Num2->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(Material2);
+		}
+
+		GameObject::Sptr Num3 = scene->CreateGameObject("Num3");
+		{
+			Num3->SetPostion(glm::vec3(1.125f, 0.375f, 3.5f));
+			Num3->SetScale(glm::vec3(0.25f));
+
+			RenderComponent::Sptr renderer = Num3->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(Material3);
+		}
+
+		GameObject::Sptr Num4 = scene->CreateGameObject("Num4");
+		{
+			Num4->SetPostion(glm::vec3(1.575f, 0.375f, 3.5f));
+			Num4->SetScale(glm::vec3(0.25f));
+
+			RenderComponent::Sptr renderer = Num4->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(Material4);
+		}
+
+		GameObject::Sptr Num5 = scene->CreateGameObject("Num5");
+		{
+			Num5->SetPostion(glm::vec3(2.025f, 0.375f, 3.5f));
+			Num5->SetScale(glm::vec3(0.25f));
+
+			RenderComponent::Sptr renderer = Num5->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(Material5);
+		}
+
+		GameObject::Sptr Num6 = scene->CreateGameObject("Num6");
+		{
+			Num6->SetPostion(glm::vec3(0.225f, -0.075f, 3.5f));
+			Num6->SetScale(glm::vec3(0.25f));
+
+			RenderComponent::Sptr renderer = Num6->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(Material6);
+		}
+
+		GameObject::Sptr Num7 = scene->CreateGameObject("Num7");
+		{
+			Num7->SetPostion(glm::vec3(0.675f, -0.075f, 3.5f));
+			Num7->SetScale(glm::vec3(0.25f));
+
+			RenderComponent::Sptr renderer = Num7->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(Material7);
+		}
+
+		GameObject::Sptr Num8 = scene->CreateGameObject("Num8");
+		{
+			Num8->SetPostion(glm::vec3(1.125f, -0.075f, 3.5f));
+			Num8->SetScale(glm::vec3(0.25f));
+
+			RenderComponent::Sptr renderer = Num8->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(Material8);
+		}
+
+		GameObject::Sptr Num9 = scene->CreateGameObject("Num9");
+		{
+			Num9->SetPostion(glm::vec3(1.575f, -0.075f, 3.5f));
+			Num9->SetScale(glm::vec3(0.25f));
+
+			RenderComponent::Sptr renderer = Num9->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(Material9);
+		}
+
+		GameObject::Sptr Num10 = scene->CreateGameObject("Num10");
+		{
+			Num10->SetPostion(glm::vec3(2.025f, -0.075f, 3.5f));
+			Num10->SetScale(glm::vec3(0.25f));
+
+			RenderComponent::Sptr renderer = Num10->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(Material10);
+		}
 
 		// Save the asset manifest for all the resources we just loaded
 		ResourceManager::SaveManifest("manifest.json");
