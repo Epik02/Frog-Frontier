@@ -1684,54 +1684,7 @@ int main() {
 		glfwPollEvents();
 		ImGuiHelper::StartFrame();
 
-		if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
-			if (!isEscapePressed) {
-				if (paused == false) {
-					//ballxpos = xpos;
-				}
-				playerFlying = true;
-			}
-			isEscapePressed = true;
-		}
-		else {
-			isEscapePressed = false;
-		}
 
-		//	scene->FindObjectByName("player")->SetPostion(glm::vec3(0.0f, 0.0f, scene->FindObjectByName("player")->GetPosition().z)); //so the player only moves up and down
-			//scene->FindObjectByName("Trigger1")->SetRotation(glm::vec3(0.f,0.f, scene->FindObjectByName("Trigger1")->GetRotation().z));
-
-		scene->FindObjectByName("Main Camera")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 3, 12, 6)); // makes the camera follow the player
-
-		scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x, 0.f, scene->FindObjectByName("player")->GetPosition().z)); // makes the camera follow the player
-		//scene->FindObjectByName("player")->SetRotation(glm::vec3(0.f, 0.f, 0.f)); // makes the camera follow the player
-
-		keyboard();
-
-		std::string test = "Trigger";
-		std::cout << test + "1" << "\n";
-
-
-		//collisions system
-		for (std::vector<int>::size_type i = 0; i != collisions.size(); i++) {
-			if (collisions[i].id == 0) {
-				collisions[i].update(scene->FindObjectByName("player")->GetPosition());
-			}
-			if (collisions[i].id == 1) {
-				collisions[i].update(scene->FindObjectByName("Trigger2")->GetPosition());
-			}
-		}
-
-		for (std::vector<int>::size_type i = 0; i != collisions.size(); i++) {
-			ballCollision.rectOverlap(ballCollision, collisions[i]);
-		}
-
-		if (ballCollision.hitEntered == true) {
-			scene->FindObjectByName("player")->SetPostion(glm::vec3(0.0f, 0.f, scene->FindObjectByName("player")->GetPosition().z));
-			std::cout << "colision detected";
-			ballCollision.hitEntered = false;
-		}
-
-		ballCollision.update(scene->FindObjectByName("player")->GetPosition()); // to update
 
 	//	scene->FindObjectByName("player")->SetPostion(glm::vec3(0.0f, 0.0f, scene->FindObjectByName("player")->GetPosition().z)); //so the player only moves up and down
 		//scene->FindObjectByName("Trigger1")->SetRotation(glm::vec3(0.f,0.f, scene->FindObjectByName("Trigger1")->GetRotation().z));
@@ -1749,6 +1702,7 @@ int main() {
 
 		if (scenePath != "menu.json" && scenePath != "LS.json")
 		{
+
 			//collisions system
 			for (std::vector<int>::size_type i = 0; i != collisions.size(); i++) {
 				if (collisions[i].id == 0) {
@@ -1764,11 +1718,42 @@ int main() {
 			}
 
 			if (ballCollision.hitEntered == true) {
+				scene->FindObjectByName("player")->SetPostion(glm::vec3(0.0f, 0.f, scene->FindObjectByName("player")->GetPosition().z));
 				std::cout << "colision detected";
 				ballCollision.hitEntered = false;
 			}
 
 			ballCollision.update(scene->FindObjectByName("player")->GetPosition()); // to update
+
+
+
+			if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
+				if (!isEscapePressed) {
+					if (paused == false) {
+						//ballxpos = xpos;
+					}
+					playerFlying = true;
+				}
+				isEscapePressed = true;
+			}
+			else {
+				isEscapePressed = false;
+			}
+
+			//	scene->FindObjectByName("player")->SetPostion(glm::vec3(0.0f, 0.0f, scene->FindObjectByName("player")->GetPosition().z)); //so the player only moves up and down
+				//scene->FindObjectByName("Trigger1")->SetRotation(glm::vec3(0.f,0.f, scene->FindObjectByName("Trigger1")->GetRotation().z));
+
+			scene->FindObjectByName("Main Camera")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 3, 12, 6)); // makes the camera follow the player
+
+			scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x, 0.f, scene->FindObjectByName("player")->GetPosition().z)); // makes the camera follow the player
+			//scene->FindObjectByName("player")->SetRotation(glm::vec3(0.f, 0.f, 0.f)); // makes the camera follow the player
+
+			keyboard();
+
+			std::string test = "Trigger";
+			std::cout << test + "1" << "\n";
+
+
 
 		}
 		
