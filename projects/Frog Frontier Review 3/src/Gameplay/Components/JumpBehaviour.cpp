@@ -24,26 +24,35 @@ nlohmann::json JumpBehaviour::ToJson() const {
 
 JumpBehaviour::JumpBehaviour() :
 	IComponent(),
-	_impulse(8.0f)
+	_impulse(-1.f)
 { }
 
 JumpBehaviour::~JumpBehaviour() = default;
 
-JumpBehaviour::Sptr JumpBehaviour::FromJson(const nlohmann::json& blob) {
+JumpBehaviour::Sptr JumpBehaviour::FromJson(const nlohmann::json & blob) {
 	JumpBehaviour::Sptr result = std::make_shared<JumpBehaviour>();
 	result->_impulse = blob["impulse"];
 	return result;
 }
 
 void JumpBehaviour::Update(float deltaTime) {
+	_body->SetLinearDamping(-10.f);
+	float test = _body->GetMass();
+	std::cout << test;
 	bool pressed = glfwGetKey(GetGameObject()->GetScene()->Window, GLFW_KEY_SPACE);
 	if (pressed) {
 		if (_isPressed == false) {
 			_body->ApplyImpulse(glm::vec3(0.0f, 0.0f, _impulse));
+			//_body->ApplyForce(glm::vec3(0.0f, 0.0f, -10.f));
+			_body->ApplyForce(glm::vec3(0.0f, 0.0f, 1000.f));
 		}
 		_isPressed = pressed;
-	} else {
+	}
+	else {
 		_isPressed = false;
+	}
+	if (glfwGetKey(GetGameObject()->GetScene()->Window, GLFW_KEY_L)) {
+
 	}
 }
 

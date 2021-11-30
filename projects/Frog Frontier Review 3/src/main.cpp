@@ -103,7 +103,7 @@ glm::ivec2 windowSize = glm::ivec2(800, 800);
 std::string windowTitle = "INFR-1350U";
 
 std::vector<CollisionRect> collisions;
-CollisionRect ballCollision;
+CollisionRect playerCollision;
 
 // using namespace should generally be avoided, and if used, make sure it's ONLY in cpp files
 using namespace Gameplay;
@@ -246,7 +246,7 @@ int clickCount = 0;
 bool playerJumping = false;
 
 void keyboard() {
-	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
 		if (!isUpPressed) {
 			if (playerFlying == false) {
 				//ballxpos = xpos;
@@ -268,18 +268,25 @@ void keyboard() {
 			scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x, scene->FindObjectByName("player")->GetPosition().y, 5));
 		}
 	}
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+		scene->FindObjectByName("player")->SetScale(glm::vec3(0.5f, 0.5f, 0.25f));
+
+	}
+	else {
+		scene->FindObjectByName("player")->SetScale(glm::vec3(0.5f, 0.5f, 0.5f));
+	}
 
 	if (clickCount % 2 == 0) {
 		playerFlying = false;
 	}
-	std::cout << clickCount;
+	//std::cout << clickCount;
 
 	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
 		playerMove = true;
 	}
 
 	if (playerMove == true) {
-		scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 0.02f, scene->FindObjectByName("player")->GetPosition().y, scene->FindObjectByName("player")->GetPosition().z)); // makes the camera follow the player
+		scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 0.06f, scene->FindObjectByName("player")->GetPosition().y, scene->FindObjectByName("player")->GetPosition().z)); // makes the camera follow the player
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
@@ -309,9 +316,6 @@ void keyboard() {
 		//else if (scene->FindObjectByName("player")->GetPosition().z >= 5) {
 		//	scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x, scene->FindObjectByName("player")->GetPosition().y, 5.1));
 		//}
-	}
-	if (clickCount % 2 == 0) {
-		playerFlying = false;
 	}
 
 	//displays win screen
@@ -385,10 +389,10 @@ int main() {
 			MeshResource::Sptr monkeyMesh = ResourceManager::CreateAsset<MeshResource>("Monkey.obj");
 			Texture2D::Sptr    boxTexture = ResourceManager::CreateAsset<Texture2D>("textures/box-diffuse.png");
 			Texture2D::Sptr    rockTexture = ResourceManager::CreateAsset<Texture2D>("textures/grey.png");
-			Texture2D::Sptr    grassTexture = ResourceManager::CreateAsset<Texture2D>("textures/grass.png");
+			Texture2D::Sptr    grassTexture = ResourceManager::CreateAsset<Texture2D>("textures/ground.png");
 			Texture2D::Sptr    winTexture = ResourceManager::CreateAsset<Texture2D>("textures/win.png");
 			Texture2D::Sptr    ladybugTexture = ResourceManager::CreateAsset<Texture2D>("textures/lbuv.png");
-			Texture2D::Sptr    bgTexture = ResourceManager::CreateAsset<Texture2D>("textures/bg.jpg");
+			Texture2D::Sptr    bgTexture = ResourceManager::CreateAsset<Texture2D>("textures/bg.png");
 			Texture2D::Sptr    monkeyTex = ResourceManager::CreateAsset<Texture2D>("textures/monkey-uvMap.png");
 
 			// Create an empty scene
@@ -468,17 +472,17 @@ int main() {
 			scene->Lights[2].Color = glm::vec3(1.0f, 0.2f, 0.1f);
 
 			scene->Lights[3].Position = glm::vec3(-40.0f, 1.0f, 40.0f);
-			scene->Lights[3].Color = glm::vec3(0.2f, 0.8f, 0.1f);
+			scene->Lights[3].Color = glm::vec3(1.f, 1.f, 1.f);
 			scene->Lights[3].Range = 1000.0f;
 
 			scene->Lights[4].Position = glm::vec3(-20.0f, 1.0f, 40.0f);
-			scene->Lights[4].Color = glm::vec3(0.2f, 0.8f, 0.1f);
+			scene->Lights[4].Color = glm::vec3(1.f, 1.f, 1.f);
 			scene->Lights[4].Range = 1000.0f;
 
 			// We'll create a mesh that is a simple plane that we can resize later
 			MeshResource::Sptr planeMesh = ResourceManager::CreateAsset<MeshResource>();
 			MeshResource::Sptr cubeMesh = ResourceManager::CreateAsset<MeshResource>("cube.obj");
-			//MeshResource::Sptr lbMesh = ResourceManager::CreateAsset<MeshResource>("lbo.obj");
+			MeshResource::Sptr ladybugMesh = ResourceManager::CreateAsset<MeshResource>("cube.obj"); //change to lbo.obj
 			planeMesh->AddParam(MeshBuilderParam::CreatePlane(ZERO, UNIT_Z, UNIT_X, glm::vec2(1.0f)));
 			planeMesh->GenerateMesh();
 
@@ -499,7 +503,8 @@ int main() {
 			GameObject::Sptr plane = scene->CreateGameObject("Plane");
 			{
 				// Scale up the plane
-				plane->SetScale(glm::vec3(50.0F));
+				plane->SetPostion(glm::vec3(0.060f, 3.670f, -0.430f));
+				plane->SetScale(glm::vec3(47.880f, 23.7f, 48.38f));
 
 				// Create and attach a RenderComponent to the object to draw our mesh
 				RenderComponent::Sptr renderer = plane->Add<RenderComponent>();
@@ -513,8 +518,8 @@ int main() {
 			GameObject::Sptr plane2 = scene->CreateGameObject("Plane2");
 			{
 				// Scale up the plane
-				plane2->SetPostion(glm::vec3(-48.f, 0.f, 0.f));
-				plane2->SetScale(glm::vec3(50.0F));
+				plane2->SetPostion(glm::vec3(-47.820f, 3.670f, -0.430f));
+				plane2->SetScale(glm::vec3(47.880f, 23.7f, 48.38f));
 
 				// Create and attach a RenderComponent to the object to draw our mesh
 				RenderComponent::Sptr renderer = plane2->Add<RenderComponent>();
@@ -528,9 +533,9 @@ int main() {
 			GameObject::Sptr plane3 = scene->CreateGameObject("Plane3");
 			{
 				// Scale up the plane
-				plane3->SetPostion(glm::vec3(-8.f, -15.f, 11.4f));
+				plane3->SetPostion(glm::vec3(-7.880f, -7.540f, 8.220f));
 				plane3->SetRotation(glm::vec3(87.0F, 0.f, -180.0f));
-				plane3->SetScale(glm::vec3(69.0F, 25.6f, 50.5f));
+				plane3->SetScale(glm::vec3(63.390F, 17.610f, 52.54f));
 
 				// Create and attach a RenderComponent to the object to draw our mesh
 				RenderComponent::Sptr renderer = plane3->Add<RenderComponent>();
@@ -544,9 +549,9 @@ int main() {
 			GameObject::Sptr plane4 = scene->CreateGameObject("Plane4");
 			{
 				// Scale up the plane
-				plane4->SetPostion(glm::vec3(-77.f, -15.f, 11.4f));
+				plane4->SetPostion(glm::vec3(-71.260f, -7.540f, 8.220f));
 				plane4->SetRotation(glm::vec3(87.0F, 0.f, -180.0f));
-				plane4->SetScale(glm::vec3(69.0F, 25.6f, 50.5f));
+				plane4->SetScale(glm::vec3(63.390F, 17.610f, 52.54f));
 
 				// Create and attach a RenderComponent to the object to draw our mesh
 				RenderComponent::Sptr renderer = plane4->Add<RenderComponent>();
@@ -561,7 +566,7 @@ int main() {
 			GameObject::Sptr plane5 = scene->CreateGameObject("plane5");
 			{
 				// Scale up the plane
-				plane5->SetPostion(glm::vec3(-48.f, 0.f, 0.f));
+				plane5->SetPostion(glm::vec3(-48.f, 0.f, -7.f));
 				plane5->SetScale(glm::vec3(50.0F));
 
 				// Create and attach a RenderComponent to the object to draw our mesh
@@ -573,41 +578,11 @@ int main() {
 				RigidBody::Sptr physics = plane5->Add<RigidBody>(/*static by default*/);
 				physics->AddCollider(PlaneCollider::Create());
 			}
-			//GameObject::Sptr plane2 = scene->CreateGameObject("Plane2");
-			//{
-			//	// Scale up the plane
-			//	plane2->SetScale(glm::vec3(10.0F));
-
-			//	// Create and attach a RenderComponent to the object to draw our mesh
-			//	RenderComponent::Sptr renderer = plane2->Add<RenderComponent>();
-			//	renderer->SetMesh(planeMesh);
-			//	renderer->SetMaterial(bgMaterial);
-
-			//	// Attach a plane collider that extends infinitely along the X/Y axis
-			//	RigidBody::Sptr physics = plane2->Add<RigidBody>(/*static by default*/);
-			//	physics->AddCollider(PlaneCollider::Create());
-			//}
-
-			GameObject::Sptr square = scene->CreateGameObject("Square");
-			{
-				// Set position in the scene
-				square->SetPostion(glm::vec3(0.0f, 0.0f, 2.0f));
-				// Scale down the plane
-				square->SetScale(glm::vec3(0.5f));
-
-				// Create and attach a render component
-				RenderComponent::Sptr renderer = square->Add<RenderComponent>();
-				renderer->SetMesh(planeMesh);
-				renderer->SetMaterial(boxMaterial);
-
-				// This object is a renderable only, it doesn't have any behaviours or
-				// physics bodies attached!
-			}
 
 			GameObject::Sptr player = scene->CreateGameObject("player");
 			{
 				// Set position in the scene
-				player->SetPostion(glm::vec3(1.5f, 0.0f, 1.0f));
+				player->SetPostion(glm::vec3(6.f, 0.0f, 1.0f));
 				player->SetScale(glm::vec3(1.0f, 1.0f, 1.0f));
 				player->SetScale(glm::vec3(0.5f, 0.5f, 0.5f));
 
@@ -616,10 +591,10 @@ int main() {
 
 				// Create and attach a renderer for the monkey
 				RenderComponent::Sptr renderer = player->Add<RenderComponent>();
-				renderer->SetMesh(cubeMesh);
-				renderer->SetMaterial(boxMaterial);
+				renderer->SetMesh(ladybugMesh);
+				renderer->SetMaterial(ladybugMaterial);
 
-				collisions.push_back(CollisionRect(player->GetPosition(), 1.0f, 2.0f, 0));
+				collisions.push_back(CollisionRect(player->GetPosition(), 1.0f, 1.0f, 0));
 
 				// Add a dynamic rigid body to this monkey
 				RigidBody::Sptr physics = player->Add<RigidBody>(RigidBodyType::Dynamic);
@@ -631,11 +606,10 @@ int main() {
 				triggerInteraction->EnterMaterial = boxMaterial;
 				triggerInteraction->ExitMaterial = monkeyMaterial;
 			}
-
 			GameObject::Sptr jumpingObstacle = scene->CreateGameObject("Trigger2");
 			{
 				// Set and rotation position in the scene
-				jumpingObstacle->SetPostion(glm::vec3(-2.5f, 0.0f, 1.0f));
+				jumpingObstacle->SetPostion(glm::vec3(40.f, 0.0f, 1.0f));
 				jumpingObstacle->SetRotation(glm::vec3(0.0f, 0.0f, 0.0f));
 				jumpingObstacle->SetScale(glm::vec3(0.5f, 0.5f, 0.5f));
 
@@ -644,7 +618,7 @@ int main() {
 				renderer->SetMesh(cubeMesh);
 				renderer->SetMaterial(rockMaterial);
 
-				collisions.push_back(CollisionRect(jumpingObstacle->GetPosition(), 1.0f, 2.0f, 1));
+				collisions.push_back(CollisionRect(jumpingObstacle->GetPosition(), 1.0f, 1.0f, 1));
 
 				//// This is an example of attaching a component and setting some parameters
 				//RotatingBehaviour::Sptr behaviour = jumpingObstacle->Add<RotatingBehaviour>();
@@ -665,6 +639,7 @@ int main() {
 				volume->AddCollider(collider);
 			}
 
+			//Obstacles
 			createGroundObstacle("2", -15.f, 1.0f);
 			createGroundObstacle("3", -25.f, 1.0f);
 			createGroundObstacle("4", -35.f, 1.0f);
@@ -1671,7 +1646,7 @@ int main() {
 
 
 	BulletDebugMode physicsDebugMode = BulletDebugMode::None;
-	float playbackSpeed = 1.0f;
+	float playbackSpeed = 2.0f;
 
 	nlohmann::json editorSceneState;
 
@@ -1703,30 +1678,6 @@ int main() {
 		if (scenePath != "menu.json" && scenePath != "LS.json")
 		{
 
-			//collisions system
-			for (std::vector<int>::size_type i = 0; i != collisions.size(); i++) {
-				if (collisions[i].id == 0) {
-					collisions[i].update(scene->FindObjectByName("player")->GetPosition());
-				}
-				if (collisions[i].id == 1) {
-					collisions[i].update(scene->FindObjectByName("Trigger2")->GetPosition());
-				}
-			}
-
-			for (std::vector<int>::size_type i = 0; i != collisions.size(); i++) {
-				ballCollision.rectOverlap(ballCollision, collisions[i]);
-			}
-
-			if (ballCollision.hitEntered == true) {
-				scene->FindObjectByName("player")->SetPostion(glm::vec3(0.0f, 0.f, scene->FindObjectByName("player")->GetPosition().z));
-				std::cout << "colision detected";
-				ballCollision.hitEntered = false;
-			}
-
-			ballCollision.update(scene->FindObjectByName("player")->GetPosition()); // to update
-
-
-
 			if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
 				if (!isEscapePressed) {
 					if (paused == false) {
@@ -1740,21 +1691,35 @@ int main() {
 				isEscapePressed = false;
 			}
 
-			//	scene->FindObjectByName("player")->SetPostion(glm::vec3(0.0f, 0.0f, scene->FindObjectByName("player")->GetPosition().z)); //so the player only moves up and down
-				//scene->FindObjectByName("Trigger1")->SetRotation(glm::vec3(0.f,0.f, scene->FindObjectByName("Trigger1")->GetRotation().z));
-
 			scene->FindObjectByName("Main Camera")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 3, 12, 6)); // makes the camera follow the player
-
 			scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x, 0.f, scene->FindObjectByName("player")->GetPosition().z)); // makes the camera follow the player
-			//scene->FindObjectByName("player")->SetRotation(glm::vec3(0.f, 0.f, 0.f)); // makes the camera follow the player
+
+			//Stops the player from rotating
+			scene->FindObjectByName("player")->SetRotation(glm::vec3(scene->FindObjectByName("player")->GetRotation().x, scene->FindObjectByName("player")->GetRotation().y, 0.f));
 
 			keyboard();
 
-			std::string test = "Trigger";
-			std::cout << test + "1" << "\n";
+			//collisions system
+			for (std::vector<int>::size_type i = 0; i != collisions.size(); i++) {
+				if (collisions[i].id == 0) {
+					collisions[i].update(scene->FindObjectByName("player")->GetPosition());
+				}
+				if (collisions[i].id == 1) {
+					collisions[i].update(scene->FindObjectByName("Trigger2")->GetPosition());
+				}
+			}
 
+			for (std::vector<int>::size_type i = 0; i != collisions.size(); i++) {
+				playerCollision.rectOverlap(playerCollision, collisions[i]); //changed ballcollision to playercollision
+			}
 
+			if (playerCollision.hitEntered == true) {
+				scene->FindObjectByName("player")->SetPostion(glm::vec3(6.f, 0.f, scene->FindObjectByName("player")->GetPosition().z));
+				std::cout << "colision detected";
+				playerCollision.hitEntered = false;
+			}
 
+			playerCollision.update(scene->FindObjectByName("player")->GetPosition()); // to update
 		}
 		
 		// Calculate the time since our last frame (dt)

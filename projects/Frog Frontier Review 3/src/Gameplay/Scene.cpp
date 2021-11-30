@@ -20,7 +20,7 @@ namespace Gameplay {
 		_isAwake(false),
 		_filePath(""),
 		_ambientLight(glm::vec3(0.1f)),
-		_gravity(glm::vec3(0.0f, 0.0f, -9.81f))
+		_gravity(glm::vec3(0.0f, 0.0f, -20.f))
 	{
 		_InitPhysics();
 	}
