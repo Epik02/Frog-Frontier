@@ -275,7 +275,16 @@ bool playerMove = false;
 int clickCount = 0;
 bool playerJumping = false;
 
+//secoundary keyboard function for controls when on the menu or level select screen, possibly when paused?
+// currently used for testing
+void SceneChanger()
+{
+
+}
+
 void keyboard() {
+
+	
 
 	//sliding
 	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
@@ -1741,23 +1750,13 @@ int main() {
 		glfwPollEvents();
 		ImGuiHelper::StartFrame();
 
+		/// check for scene change validity
+
+		
 
 
-	//	scene->FindObjectByName("player")->SetPostion(glm::vec3(0.0f, 0.0f, scene->FindObjectByName("player")->GetPosition().z)); //so the player only moves up and down
-		//scene->FindObjectByName("Trigger1")->SetRotation(glm::vec3(0.f,0.f, scene->FindObjectByName("Trigger1")->GetRotation().z));
-
-		//test for arguement validity
-		if (scenePath == "menu.json")
-		{
-		//	std::cout << "truth" << std::endl;
-		}
-
-		if (scenePath == "LS.json")
-		{
-			//std::cout << "2nd truth" << std::endl;
-		}
-
-		if (scenePath != "menu.json" && scenePath != "LS.json")
+		/// with this change to the check, switching between scenes using scenePath no longer causes the game to crash since if the scene doesn't have a player it wont prompt commands
+		if (scene->FindObjectByName("player") != NULL)
 		{
 
 			scene->FindObjectByName("Main Camera")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 11.480, 6.290)); // makes the camera follow the player
@@ -1795,6 +1794,10 @@ int main() {
 			playerCollision.update(scene->FindObjectByName("player")->GetPosition()); // to update
 			scene->FindObjectByName("player")->Get<JumpBehaviour>()->getPlayerCoords(scene->FindObjectByName("player")->GetPosition()); //send the players coordinates to JumpBehavior so we know when the player is on the ground
 
+		}
+		else
+		{
+			SceneChanger();
 		}
 		
 		// Calculate the time since our last frame (dt)
