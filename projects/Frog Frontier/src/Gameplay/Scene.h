@@ -23,7 +23,7 @@ namespace Gameplay {
 	public:
 		typedef std::shared_ptr<Scene> Sptr;
 
-		static const int MAX_LIGHTS = 8;
+		static const int MAX_LIGHTS = 40;
 
 		// Stores all the lights in our scene
 		std::vector<Light>         Lights;
