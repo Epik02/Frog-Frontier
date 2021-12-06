@@ -112,6 +112,19 @@ using namespace Gameplay::Physics;
 // The scene that we will be rendering
 Scene::Sptr scene = nullptr;
 
+int SceneLoad(Scene::Sptr& scene, std::string& path)
+{
+	// Since it's a reference to a ptr, this will
+		// overwrite the existing scene!
+	scene = nullptr;
+	scene = Scene::Load(path);
+	std::cout << scene << std::endl << path << std::endl;
+
+
+
+	return true;
+}
+
 void GlfwWindowResizedCallback(GLFWwindow* window, int width, int height) {
 	glViewport(0, 0, width, height);
 	windowSize = glm::ivec2(width, height);
@@ -174,8 +187,7 @@ bool DrawSaveLoadImGui(Scene::Sptr& scene, std::string& path) {
 	if (ImGui::Button("Load")) {
 		// Since it's a reference to a ptr, this will
 		// overwrite the existing scene!
-		scene = nullptr;
-		scene = Scene::Load(path);
+		SceneLoad(scene,path);
 
 		return true;
 	}
@@ -279,7 +291,10 @@ bool playerJumping = false;
 // currently used for testing
 void SceneChanger()
 {
+	if (glfwGetKey(window, GLFW_KEY_0) == GLFW_PRESS) {
+		//SceneLoad();
 
+	}
 }
 
 void keyboard() {
@@ -305,7 +320,7 @@ void keyboard() {
 	}
 
 	if (playerMove == true) {
-		scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 0.06f, scene->FindObjectByName("player")->GetPosition().y, scene->FindObjectByName("player")->GetPosition().z)); // makes the camera follow the player
+		scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 0.2f, scene->FindObjectByName("player")->GetPosition().y, scene->FindObjectByName("player")->GetPosition().z)); // makes the camera follow the player
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
@@ -386,6 +401,8 @@ int main() {
 	// GL states, we'll enable depth testing and backface fulling
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glCullFace(GL_BACK);
 	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 
@@ -730,10 +747,10 @@ int main() {
 			createGroundObstacle("4", glm::vec3(-55.970f, 0.0f, 1.730f), 0.2f, glm::vec3(0.0f, 0.0f, -45.f), cobwebMesh, cobwebMaterial);
 
 			//Collisions
-			createCollision("2", -14.660f, 1.560f, 1.f, 1.f);
-			createCollision("3", -15.410f, 1.560f, 1.f, 1.f);
-			createCollision("4", -14.970f, 1.860f, 1.f, 1.f);
-			createCollision("5", -15.190f, 0.450f, 1.f, 1.f);
+			//createCollision("2", -14.660f, 1.560f, 1.f, 1.f);
+			//createCollision("3", -15.410f, 1.560f, 1.f, 1.f);
+			//createCollision("4", -14.970f, 1.860f, 1.f, 1.f);
+			//createCollision("5", -15.190f, 0.450f, 1.f, 1.f);
 
 			// Save the asset manifest for all the resources we just loaded
 			ResourceManager::SaveManifest("manifest.json");
@@ -753,8 +770,16 @@ int main() {
 
 		MeshResource::Sptr monkeyMesh = ResourceManager::CreateAsset<MeshResource>("Monkey.obj");
 		Texture2D::Sptr    boxTexture = ResourceManager::CreateAsset<Texture2D>("textures/box-diffuse.png");
-		Texture2D::Sptr    grassTexture = ResourceManager::CreateAsset<Texture2D>("textures/grass.png");
+		Texture2D::Sptr    mushroomTexture = ResourceManager::CreateAsset<Texture2D>("textures/MushroomUV.png");
+		Texture2D::Sptr    vinesTexture = ResourceManager::CreateAsset<Texture2D>("textures/VinesUV.png");
+		Texture2D::Sptr    cobwebTexture = ResourceManager::CreateAsset<Texture2D>("textures/CobwebUV.png");
+		Texture2D::Sptr    rockTexture = ResourceManager::CreateAsset<Texture2D>("textures/grey.png");
+		Texture2D::Sptr    grassTexture = ResourceManager::CreateAsset<Texture2D>("textures/ground.png");
+		Texture2D::Sptr    winTexture = ResourceManager::CreateAsset<Texture2D>("textures/win.png");
+		Texture2D::Sptr    ladybugTexture = ResourceManager::CreateAsset<Texture2D>("textures/lbuv.png");
+		Texture2D::Sptr    bgTexture = ResourceManager::CreateAsset<Texture2D>("textures/bg.png");
 		Texture2D::Sptr    monkeyTex = ResourceManager::CreateAsset<Texture2D>("textures/monkey-uvMap.png");
+		Texture2D::Sptr    greenTex = ResourceManager::CreateAsset<Texture2D>("textures/green.png");
 
 		// Create an empty scene
 		scene = std::make_shared<Scene>();
@@ -771,12 +796,52 @@ int main() {
 			boxMaterial->Shininess = 2.0f;
 		}
 
+		Material::Sptr rockMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			rockMaterial->Name = "lbo";
+			rockMaterial->MatShader = scene->BaseShader;
+			rockMaterial->Texture = rockTexture;
+			rockMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr greenMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			greenMaterial->Name = "green";
+			greenMaterial->MatShader = scene->BaseShader;
+			greenMaterial->Texture = greenTex;
+			greenMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr bgMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			bgMaterial->Name = "bg";
+			bgMaterial->MatShader = scene->BaseShader;
+			bgMaterial->Texture = bgTexture;
+			bgMaterial->Shininess = 2.0f;
+		}
+
 		Material::Sptr grassMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			grassMaterial->Name = "Grass";
 			grassMaterial->MatShader = scene->BaseShader;
 			grassMaterial->Texture = grassTexture;
 			grassMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr winMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			winMaterial->Name = "win";
+			winMaterial->MatShader = scene->BaseShader;
+			winMaterial->Texture = winTexture;
+			winMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr ladybugMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			ladybugMaterial->Name = "lbo";
+			ladybugMaterial->MatShader = scene->BaseShader;
+			ladybugMaterial->Texture = ladybugTexture;
+			ladybugMaterial->Shininess = 2.0f;
 		}
 
 		Material::Sptr monkeyMaterial = ResourceManager::CreateAsset<Material>();
@@ -788,28 +853,81 @@ int main() {
 
 		}
 
+		Material::Sptr mushroomMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			mushroomMaterial->Name = "Mushroom";
+			mushroomMaterial->MatShader = scene->BaseShader;
+			mushroomMaterial->Texture = mushroomTexture;
+			mushroomMaterial->Shininess = 256.0f;
+
+		}
+
+		Material::Sptr vinesMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			vinesMaterial->Name = "vines";
+			vinesMaterial->MatShader = scene->BaseShader;
+			vinesMaterial->Texture = vinesTexture;
+			vinesMaterial->Shininess = 256.0f;
+
+		}
+
+		Material::Sptr cobwebMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			cobwebMaterial->Name = "cobweb";
+			cobwebMaterial->MatShader = scene->BaseShader;
+			cobwebMaterial->Texture = cobwebTexture;
+			cobwebMaterial->Shininess = 256.0f;
+
+		}
+
 		// Create some lights for our scene
-		scene->Lights.resize(3);
-		scene->Lights[0].Position = glm::vec3(0.0f, 1.0f, 3.0f);
-		scene->Lights[0].Color = glm::vec3(0.5f, 0.0f, 0.7f);
-		scene->Lights[0].Range = 10.0f;
+		scene->Lights.resize(8);
+		scene->Lights[0].Position = glm::vec3(0.0f, 1.0f, 40.0f);
+		scene->Lights[0].Color = glm::vec3(0.2f, 0.8f, 0.1f);
+		scene->Lights[0].Range = 1000.0f;
 
 		scene->Lights[1].Position = glm::vec3(1.0f, 0.0f, 3.0f);
 		scene->Lights[1].Color = glm::vec3(0.2f, 0.8f, 0.1f);
 
 		scene->Lights[2].Position = glm::vec3(0.0f, 1.0f, 3.0f);
-		scene->Lights[2].Color = glm::vec3(0.0f, 1.0f, 0.0f);
+		scene->Lights[2].Color = glm::vec3(1.0f, 0.2f, 0.1f);
+
+		scene->Lights[3].Position = glm::vec3(-40.0f, 1.0f, 40.0f);
+		scene->Lights[3].Color = glm::vec3(1.f, 1.f, 1.f);
+		scene->Lights[3].Range = 1000.0f;
+
+		scene->Lights[4].Position = glm::vec3(-20.0f, 1.0f, 40.0f);
+		scene->Lights[4].Color = glm::vec3(1.f, 1.f, 1.f);
+		scene->Lights[4].Range = 1000.0f;
+
+		scene->Lights[5].Position = glm::vec3(-80.0f, 1.0f, 40.0f);
+		scene->Lights[5].Color = glm::vec3(1.f, 1.f, 1.f);
+		scene->Lights[5].Range = 1000.0f;
+
+		scene->Lights[6].Position = glm::vec3(-120.0f, 1.0f, 40.0f);
+		scene->Lights[6].Color = glm::vec3(1.f, 1.f, 1.f);
+		scene->Lights[6].Range = 1000.0f;
+
+		scene->Lights[7].Position = glm::vec3(-160.0f, 1.0f, 40.0f);
+		scene->Lights[7].Color = glm::vec3(1.f, 1.f, 1.f);
+		scene->Lights[7].Range = 1000.0f;
 
 		// We'll create a mesh that is a simple plane that we can resize later
 		MeshResource::Sptr planeMesh = ResourceManager::CreateAsset<MeshResource>();
 		MeshResource::Sptr cubeMesh = ResourceManager::CreateAsset<MeshResource>("cube.obj");
+		MeshResource::Sptr mushroomMesh = ResourceManager::CreateAsset<MeshResource>("Mushroom.obj");
+		MeshResource::Sptr vinesMesh = ResourceManager::CreateAsset<MeshResource>("Vines.obj");
+		MeshResource::Sptr cobwebMesh = ResourceManager::CreateAsset<MeshResource>("Cobweb.obj");
+		MeshResource::Sptr ladybugMesh = ResourceManager::CreateAsset<MeshResource>("lbo.obj"); //change to lbo.obj
 		planeMesh->AddParam(MeshBuilderParam::CreatePlane(ZERO, UNIT_Z, UNIT_X, glm::vec2(1.0f)));
 		planeMesh->GenerateMesh();
 
 		// Set up the scene's camera
 		GameObject::Sptr camera = scene->CreateGameObject("Main Camera");
 		{
-			camera->SetPostion(glm::vec3(0, 4, 4));
+			camera->SetPostion(glm::vec3(0, 6.8, 2));
+			camera->SetRotation(glm::vec3(90, 0, -180));
+			camera->SetScale(glm::vec3(0.8f, 0.8f, 0.8f));
 			camera->LookAt(glm::vec3(0.0f));
 
 			Camera::Sptr cam = camera->Add<Camera>();
@@ -821,8 +939,10 @@ int main() {
 		// Set up all our sample objects
 		GameObject::Sptr plane = scene->CreateGameObject("Plane");
 		{
+			//groud 1
 			// Scale up the plane
-			plane->SetScale(glm::vec3(50.0F));
+			plane->SetPostion(glm::vec3(0.060f, 3.670f, -0.430f));
+			plane->SetScale(glm::vec3(47.880f, 23.7f, 48.38f));
 
 			// Create and attach a RenderComponent to the object to draw our mesh
 			RenderComponent::Sptr renderer = plane->Add<RenderComponent>();
@@ -833,37 +953,122 @@ int main() {
 			RigidBody::Sptr physics = plane->Add<RigidBody>(/*static by default*/);
 			physics->AddCollider(PlaneCollider::Create());
 		}
-
-		GameObject::Sptr square = scene->CreateGameObject("Square");
+		GameObject::Sptr plane2 = scene->CreateGameObject("Plane2");
 		{
-			// Set position in the scene
-			square->SetPostion(glm::vec3(0.0f, 0.0f, 2.0f));
-			// Scale down the plane
-			square->SetScale(glm::vec3(0.5f));
+			//ground 2
+			// Scale up the plane
+			plane2->SetPostion(glm::vec3(-47.820f, 3.670f, -0.430f));
+			plane2->SetScale(glm::vec3(47.880f, 23.7f, 48.38f));
 
-			// Create and attach a render component
-			RenderComponent::Sptr renderer = square->Add<RenderComponent>();
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = plane2->Add<RenderComponent>();
 			renderer->SetMesh(planeMesh);
-			renderer->SetMaterial(boxMaterial);
+			renderer->SetMaterial(grassMaterial);
 
-			// This object is a renderable only, it doesn't have any behaviours or
-			// physics bodies attached!
+			// Attach a plane collider that extends infinitely along the X/Y axis
+			RigidBody::Sptr physics = plane2->Add<RigidBody>(/*static by default*/);
+			physics->AddCollider(PlaneCollider::Create());
+		}
+		GameObject::Sptr plane3 = scene->CreateGameObject("Plane3");
+		{
+			//wall 1
+			// Scale up the plane
+			plane3->SetPostion(glm::vec3(-7.880f, -7.540f, 8.220f));
+			plane3->SetRotation(glm::vec3(87.0F, 0.f, -180.0f));
+			plane3->SetScale(glm::vec3(63.390F, 17.610f, 52.54f));
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = plane3->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(bgMaterial);
+
+			// Attach a plane collider that extends infinitely along the X/Y axis
+			RigidBody::Sptr physics = plane3->Add<RigidBody>(/*static by default*/);
+			physics->AddCollider(PlaneCollider::Create());
+		}
+		GameObject::Sptr plane4 = scene->CreateGameObject("Plane4");
+		{
+			//wall 2
+			// Scale up the plane
+			plane4->SetPostion(glm::vec3(-71.260f, -7.540f, 8.220f));
+			plane4->SetRotation(glm::vec3(87.0F, 0.f, -180.0f));
+			plane4->SetScale(glm::vec3(63.390F, 17.610f, 52.54f));
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = plane4->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(bgMaterial);
+
+			// Attach a plane collider that extends infinitely along the X/Y axis
+			RigidBody::Sptr physics = plane4->Add<RigidBody>(/*static by default*/);
+			physics->AddCollider(PlaneCollider::Create());
+		}
+
+		GameObject::Sptr plane5 = scene->CreateGameObject("plane5");
+		{
+			//under 1
+			// Scale up the plane
+			plane5->SetPostion(glm::vec3(-48.f, 0.f, -7.f));
+			plane5->SetScale(glm::vec3(50.0F));
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = plane5->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(winMaterial);
+
+			// Attach a plane collider that extends infinitely along the X/Y axis
+			RigidBody::Sptr physics = plane5->Add<RigidBody>(/*static by default*/);
+			physics->AddCollider(PlaneCollider::Create());
+		}
+		GameObject::Sptr plane6 = scene->CreateGameObject("Plane6");
+		{
+			//over 1
+			// Scale up the plane
+			plane6->SetPostion(glm::vec3(-95.680f, 3.670f, -0.430f));
+			plane6->SetScale(glm::vec3(47.880f, 23.7f, 48.38f));
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = plane6->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(grassMaterial);
+
+			// Attach a plane collider that extends infinitely along the X/Y axis
+			RigidBody::Sptr physics = plane6->Add<RigidBody>(/*static by default*/);
+			physics->AddCollider(PlaneCollider::Create());
+		}
+
+		GameObject::Sptr plane7 = scene->CreateGameObject("Plane7");
+		{
+			//under 2
+			// Scale up the plane
+			plane7->SetPostion(glm::vec3(-53.280f, -7.540f, 32.610f));
+			plane7->SetRotation(glm::vec3(87.0F, 0.f, -180.0f));
+			plane7->SetScale(glm::vec3(200.F, 33.050f, 54.550f));
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = plane7->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(greenMaterial);
+
+			// Attach a plane collider that extends infinitely along the X/Y axis
+			RigidBody::Sptr physics = plane7->Add<RigidBody>(/*static by default*/);
+			physics->AddCollider(PlaneCollider::Create());
 		}
 
 		GameObject::Sptr player = scene->CreateGameObject("player");
 		{
 			// Set position in the scene
-			player->SetPostion(glm::vec3(1.5f, 0.0f, 1.0f));
+			player->SetPostion(glm::vec3(6.f, 0.0f, 1.0f));
 			player->SetScale(glm::vec3(1.0f, 1.0f, 1.0f));
 			player->SetScale(glm::vec3(0.5f, 0.5f, 0.5f));
 
 			// Add some behaviour that relies on the physics body
-			player->Add<JumpBehaviour>();
-
+			player->Add<JumpBehaviour>(player->GetPosition());
+			//player->Get<JumpBehaviour>(player->GetPosition());
 			// Create and attach a renderer for the monkey
 			RenderComponent::Sptr renderer = player->Add<RenderComponent>();
-			renderer->SetMesh(cubeMesh);
-			renderer->SetMaterial(boxMaterial);
+			renderer->SetMesh(ladybugMesh);
+			renderer->SetMaterial(ladybugMaterial);
 
 			collisions.push_back(CollisionRect(player->GetPosition(), 1.0f, 1.0f, 0));
 
@@ -877,18 +1082,17 @@ int main() {
 			triggerInteraction->EnterMaterial = boxMaterial;
 			triggerInteraction->ExitMaterial = monkeyMaterial;
 		}
-
 		GameObject::Sptr jumpingObstacle = scene->CreateGameObject("Trigger2");
 		{
 			// Set and rotation position in the scene
-			jumpingObstacle->SetPostion(glm::vec3(-2.5f, 0.0f, 1.0f));
+			jumpingObstacle->SetPostion(glm::vec3(40.f, 0.0f, 1.0f));
 			jumpingObstacle->SetRotation(glm::vec3(0.0f, 0.0f, 0.0f));
 			jumpingObstacle->SetScale(glm::vec3(0.5f, 0.5f, 0.5f));
 
 			// Add a render component
 			RenderComponent::Sptr renderer = jumpingObstacle->Add<RenderComponent>();
 			renderer->SetMesh(cubeMesh);
-			renderer->SetMaterial(boxMaterial);
+			renderer->SetMaterial(rockMaterial);
 
 			collisions.push_back(CollisionRect(jumpingObstacle->GetPosition(), 1.0f, 1.0f, 1));
 
@@ -902,19 +1106,47 @@ int main() {
 		RigidBody::Sptr physics = jumpingObstacle->Add<RigidBody>(RigidBodyType::Kinematic);
 		physics->AddCollider(ConvexMeshCollider::Create());
 
-		// Create a trigger volume for testing how we can detect collisions with objects!
-		GameObject::Sptr trigger = scene->CreateGameObject("Trigger");
-		{
-			TriggerVolume::Sptr volume = trigger->Add<TriggerVolume>();
-			BoxCollider::Sptr collider = BoxCollider::Create(glm::vec3(3.0f, 3.0f, 1.0f));
-			collider->SetPosition(glm::vec3(0.0f, 0.0f, 0.5f));
-			volume->AddCollider(collider);
-		}
+		//Obstacles
+		createGroundObstacle("2", glm::vec3(-20.f, 0.0f, -0.660), 0.5, glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 1 (small jump)
+		createGroundObstacle("3", glm::vec3(-60.f, 0.0f, 3.0), 1.0, glm::vec3(90.f, 0.0f, 73.f), vinesMesh, vinesMaterial); // vine 1 (jump blocking)
+		createGroundObstacle("4", glm::vec3(-110.f, 0.0f, 3.3f), 0.25f, glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 1 (tall jump)
+		createGroundObstacle("5", glm::vec3(-45.f, 0.0f, -0.660), 0.5, glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 2
+		createGroundObstacle("6", glm::vec3(-150.f, 5.530f, 0.250f), 1.5, glm::vec3(90.f, 0.0f, -25.f), vinesMesh, vinesMaterial); // vine 2 (squish blocking)
+		createGroundObstacle("7", glm::vec3(-150.240f, 0.f, 7.88f), 0.25f, glm::vec3(0.0f, 0.0f, 84.f), cobwebMesh, cobwebMaterial); //cobweb 2 (squish Blocking 2)
+
+		//Collisions
+
+		//mushroom 1 collision
+		createCollision("2", -19.660f, 1.560f, 1.f, 1.f);
+		createCollision("3", -20.410f, 1.560f, 1.f, 1.f);
+		createCollision("4", -19.970f, 1.860f, 1.f, 1.f);
+		createCollision("5", -20.190f, 0.450f, 1.f, 1.f);
+
+		//mushroom 2 collision
+		createCollision("6", -44.660f, 1.560f, 1.f, 1.f);
+		createCollision("7", -45.410f, 1.560f, 1.f, 1.f);
+		createCollision("8", -44.970f, 1.860f, 1.f, 1.f);
+		createCollision("9", -45.190f, 0.450f, 1.f, 1.f);
+
+		// vine 1 collisions
+		createCollision("10", -53.30f, 11.f, 0.5f, 5.5f);
+		createCollision("11", -60.30f, 11.f, 0.5f, 5.5f);
+		createCollision("12", -56.8f, 6.f, 4.0f, 0.5f);
+		createCollision("13", -56.8f, 17.f, 4.0f, 0.5f);
+
+		//cobweb collisions
+		createCollision("14", -110.f, 1.63f, 1.f, 7.f);
+		
+		// squish collision
+		createCollision("15", -149.780f, 10.4f, 0.420f, 10.f);
+		
+
+		
 
 		// Save the asset manifest for all the resources we just loaded
 		ResourceManager::SaveManifest("manifest.json");
 		// Save the scene to a JSON file
-		scene->Save("scene2.json");
+		scene->Save("Level.json");
 
 		}
 
@@ -1716,7 +1948,7 @@ int main() {
 		}
 
 
-		scene = Scene::Load("scene.json");
+		scene = Scene::Load("menu.json");
 	}
 
 	// Call scene awake to start up all of our components
