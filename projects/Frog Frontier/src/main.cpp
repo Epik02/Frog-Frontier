@@ -199,6 +199,8 @@ bool DrawSaveLoadImGui(Scene::Sptr& scene, std::string& path) {
 		return true;
 	}
 
+	
+
 	if (glfwGetKey(window, GLFW_KEY_ENTER) ==GLFW_RELEASE)
 	{
 		enterclick = false;
@@ -3043,16 +3045,17 @@ int main() {
 
 			if (paused != true && playerLose != true && playerWin != true)
 			{
+				//originally these were all back at -15 but idk if that makes the game more jank cause of overlap so i tried to spread em out
 				scene->FindObjectByName("PanelPause")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, -15, 6.5));
-				scene->FindObjectByName("ButtonBack1")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, -15, 6.0));
-				scene->FindObjectByName("ButtonBack2")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, -15, 5.0));
-				scene->FindObjectByName("ResumeText")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, -15, 6.1));
-				scene->FindObjectByName("MainMenuText")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, -15, 5.4));
-				scene->FindObjectByName("PauseLogo")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, -15, 8.0));
-				scene->FindObjectByName("Filter")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, -15, 8.0));
-				scene->FindObjectByName("LoserLogo")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, -15, 8.0));
-				scene->FindObjectByName("ReplayText")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, -15, 6.1));
-				scene->FindObjectByName("WinnerLogo")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, -15, 6.1));
+				scene->FindObjectByName("ButtonBack1")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, -20, 6.0));
+				scene->FindObjectByName("ButtonBack2")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, -22, 5.0));
+				scene->FindObjectByName("ResumeText")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, -23, 6.1));
+				scene->FindObjectByName("MainMenuText")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 24, -15, 5.4));
+				scene->FindObjectByName("PauseLogo")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, -25, 8.0));
+				scene->FindObjectByName("Filter")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, -26, 8.0));
+				scene->FindObjectByName("LoserLogo")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, -27, 8.0));
+				scene->FindObjectByName("ReplayText")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, -28, 6.1));
+				scene->FindObjectByName("WinnerLogo")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, -29, 6.1));
 			}
 
 			scene->FindObjectByName("Main Camera")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 11.480, 6.290)); // makes the camera follow the player
@@ -3115,7 +3118,8 @@ int main() {
 			static char buttonLabel[64];
 			sprintf_s(buttonLabel, "%s###playmode", scene->IsPlaying ? "Exit Play Mode" : "Enter Play Mode");
 			if (ImGui::Button(buttonLabel)) {
-				// Save scene so it can be restored when exiting play mode
+			//if (glfwGetKey(window, GLFW_KEY_UP)){
+			// Save scene so it can be restored when exiting play mode
 				if (!scene->IsPlaying) {
 					editorSceneState = scene->ToJson();
 				}
@@ -3133,6 +3137,13 @@ int main() {
 					scene->Awake();
 				}
 			}
+
+
+			/// If your game gets reaaaally chunky take this code out
+			if (glfwGetKey(window, GLFW_KEY_UP) && scene->IsPlaying == false) {
+				scene->IsPlaying = true;
+			}
+			//////
 
 			// Make a new area for the scene saving/loading
 			ImGui::Separator();
