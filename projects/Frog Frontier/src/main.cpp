@@ -171,6 +171,8 @@ int index = 1;
 bool paused = false;
 bool performedtask = false;
 bool enterclick = false;
+bool playerLose = false;
+bool playerWin = false;
 
 /// <summary>
 /// Draws a widget for saving or loading our scene
@@ -229,7 +231,7 @@ bool DrawSaveLoadImGui(Scene::Sptr& scene, std::string& path) {
 		return true;
 	}
 
-	if (glfwGetKey(window, GLFW_KEY_ENTER) && scene->FindObjectByName("player") != NULL && paused == true && index == 2 && enterclick == false)
+	if (glfwGetKey(window, GLFW_KEY_ENTER) && scene->FindObjectByName("player") != NULL && (paused == true || playerLose == true || playerWin == true)&& index == 2 && enterclick == false)
 	{
 		path = "menu.json";
 		SceneLoad(scene, path);
@@ -410,7 +412,7 @@ void keyboard() {
 		performedtask = true;
 	}
 
-	if (paused == true)
+	if (paused == true || playerLose == true || playerWin == true)
 	{
 		if ((glfwGetKey(window, GLFW_KEY_UP) && performedtask == false) || (glfwGetKey(window, GLFW_KEY_DOWN) && performedtask == false)) {
 			if (index == 1)
@@ -425,7 +427,22 @@ void keyboard() {
 
 		if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS && index == 1)
 		{
-			paused = false;
+			if (paused == true)
+			{
+				paused = false;
+			}
+
+			if (playerLose == true)
+			{
+				playerLose = false;
+				playerMove = true;
+			}
+
+			if (playerWin == true)
+			{
+				playerWin = false;
+				playerMove = true;
+			}
 		}
 
 
@@ -924,6 +941,9 @@ int main() {
 		Texture2D::Sptr    ButtonTex = ResourceManager::CreateAsset<Texture2D>("textures/Button Background.png");
 		Texture2D::Sptr    PauseTex = ResourceManager::CreateAsset<Texture2D>("textures/Pause.png");
 		Texture2D::Sptr    FilterTex = ResourceManager::CreateAsset<Texture2D>("textures/Button Filter.png");
+		Texture2D::Sptr    WinnerTex = ResourceManager::CreateAsset<Texture2D>("textures/Winner.png");
+		Texture2D::Sptr    LoserTex = ResourceManager::CreateAsset<Texture2D>("textures/YouLose.png");
+		Texture2D::Sptr    ReplayTex = ResourceManager::CreateAsset<Texture2D>("textures/ReplayText.png");
 
 		// Create an empty scene
 		scene = std::make_shared<Scene>();
@@ -1070,6 +1090,30 @@ int main() {
 			FilterMaterial->MatShader = scene->BaseShader;
 			FilterMaterial->Texture = FilterTex;
 			FilterMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr WinnerMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			WinnerMaterial->Name = "WinnerLogo";
+			WinnerMaterial->MatShader = scene->BaseShader;
+			WinnerMaterial->Texture = WinnerTex;
+			WinnerMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr LoserMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			LoserMaterial->Name = "LoserLogo";
+			LoserMaterial->MatShader = scene->BaseShader;
+			LoserMaterial->Texture = LoserTex;
+			LoserMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr ReplayMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			ReplayMaterial->Name = "Replay Text";
+			ReplayMaterial->MatShader = scene->BaseShader;
+			ReplayMaterial->Texture = ReplayTex;
+			ReplayMaterial->Shininess = 2.0f;
 		}
 
 		// Create some lights for our scene
@@ -1623,6 +1667,20 @@ int main() {
 			renderer->SetMaterial(ResumeMaterial);
 		}
 
+		GameObject::Sptr ReplayText = scene->CreateGameObject("ReplayText");
+		{
+			// Set position in the scene
+			ReplayText->SetPostion(glm::vec3(1.0f, 8.0f, 6.1f));
+			// Scale down the plane
+			ReplayText->SetScale(glm::vec3(2.0f, 0.4f, 0.5f));
+			ReplayText->SetRotation(glm::vec3(80.0f, 0.f, -180.f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = ReplayText->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(ReplayMaterial);
+		}
+
 		GameObject::Sptr MainMenuText = scene->CreateGameObject("MainMenuText");
 		{
 			// Set position in the scene
@@ -1650,6 +1708,36 @@ int main() {
 			RenderComponent::Sptr renderer = PauseLogo->Add<RenderComponent>();
 			renderer->SetMesh(planeMesh);
 			renderer->SetMaterial(PauseMaterial);
+		}
+
+		GameObject::Sptr WinnerLogo = scene->CreateGameObject("WinnerLogo");
+		{
+			// Set position in the scene
+			WinnerLogo->SetPostion(glm::vec3(1.f, 5.75f, 8.f));
+			// Scale down the plane
+			WinnerLogo->SetScale(glm::vec3(3.927f, 1.96f, 0.5f));
+			//Rotate Logo
+			WinnerLogo->SetRotation(glm::vec3(80.f, 0.f, 180.f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = WinnerLogo->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(WinnerMaterial);
+		}
+
+		GameObject::Sptr LoserLogo = scene->CreateGameObject("LoserLogo");
+		{
+			// Set position in the scene
+			LoserLogo->SetPostion(glm::vec3(1.f, 5.75f, 8.f));
+			// Scale down the plane
+			LoserLogo->SetScale(glm::vec3(3.927f, 1.96f, 0.5f));
+			//Rotate Logo
+			LoserLogo->SetRotation(glm::vec3(80.f, 0.f, 180.f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = LoserLogo->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(LoserMaterial);
 		}
 
 		GameObject::Sptr PanelPause = scene->CreateGameObject("PanelPause");
@@ -2915,7 +3003,45 @@ int main() {
 
 			}
 
-			if (paused != true)
+			if (playerLose == true)
+			{
+				scene->FindObjectByName("PanelPause")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6, 6.5));
+				scene->FindObjectByName("ButtonBack1")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6.25, 6.0));
+				scene->FindObjectByName("ButtonBack2")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6.5, 5.0));
+				scene->FindObjectByName("ReplayText")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 8, 6.1));
+				scene->FindObjectByName("MainMenuText")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 8, 5.4));
+				scene->FindObjectByName("LoserLogo")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 5.75, 8.0));
+
+				if (index == 1)
+				{
+					scene->FindObjectByName("Filter")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6.26, 6.0));
+				}
+				else if (index == 2)
+				{
+					scene->FindObjectByName("Filter")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6.51, 5.0));
+				}
+			}
+
+			if (playerWin == true)
+			{
+				scene->FindObjectByName("PanelPause")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6, 6.5));
+				scene->FindObjectByName("ButtonBack1")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6.25, 6.0));
+				scene->FindObjectByName("ButtonBack2")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6.5, 5.0));
+				scene->FindObjectByName("ReplayText")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 8, 6.1));
+				scene->FindObjectByName("MainMenuText")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 8, 5.4));
+				scene->FindObjectByName("WinnerLogo")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 5.75, 8.0));
+
+				if (index == 1)
+				{
+					scene->FindObjectByName("Filter")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6.26, 6.0));
+				}
+				else if (index == 2)
+				{
+					scene->FindObjectByName("Filter")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6.51, 5.0));
+				}
+			}
+
+			if (paused != true && playerLose != true && playerWin != true)
 			{
 				scene->FindObjectByName("PanelPause")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, -15, 6.5));
 				scene->FindObjectByName("ButtonBack1")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, -15, 6.0));
@@ -2924,6 +3050,9 @@ int main() {
 				scene->FindObjectByName("MainMenuText")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, -15, 5.4));
 				scene->FindObjectByName("PauseLogo")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, -15, 8.0));
 				scene->FindObjectByName("Filter")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, -15, 8.0));
+				scene->FindObjectByName("LoserLogo")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, -15, 8.0));
+				scene->FindObjectByName("ReplayText")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, -15, 6.1));
+				scene->FindObjectByName("WinnerLogo")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, -15, 6.1));
 			}
 
 			scene->FindObjectByName("Main Camera")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 11.480, 6.290)); // makes the camera follow the player
@@ -2954,12 +3083,20 @@ int main() {
 				std::cout << "colision detected";
 				playerCollision.hitEntered = false;
 				playerMove = false;
+				playerLose = true;
 			}
 			//JumpBehaviour test;
 			//test.Update();
 
 			playerCollision.update(scene->FindObjectByName("player")->GetPosition()); // to update
 			scene->FindObjectByName("player")->Get<JumpBehaviour>()->getPlayerCoords(scene->FindObjectByName("player")->GetPosition()); //send the players coordinates to JumpBehavior so we know when the player is on the ground
+
+			if (scene->FindObjectByName("player")->GetPosition().x < -400)
+			{
+				scene->FindObjectByName("player")->SetPostion(glm::vec3(6.f, 0.f, scene->FindObjectByName("player")->GetPosition().z));
+				playerMove = false;
+				playerWin = true;
+			}
 
 		}
 		else
