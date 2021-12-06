@@ -1744,6 +1744,22 @@ int main() {
 			// physics bodies attached!
 		}
 
+		GameObject::Sptr ButtonBackground3 = scene->CreateGameObject("ButtonBackground3");
+		{
+			// Set position in the scene
+			ButtonBackground3->SetPostion(glm::vec3(1.0f, -0.2f, 3.0f));
+			// Scale down the plane
+			ButtonBackground3->SetScale(glm::vec3(1.25f, 0.250f, 1.0f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = ButtonBackground3->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(ButtonBackMaterial);
+
+			// This object is a renderable only, it doesn't have any behaviours or
+			// physics bodies attached!
+		}
+
 		GameObject::Sptr StartButton = scene->CreateGameObject("StartButton");
 		{
 			// Set position in the scene
@@ -1763,7 +1779,7 @@ int main() {
 		GameObject::Sptr BackButton = scene->CreateGameObject("BackButton");
 		{
 			// Set position in the scene
-			BackButton->SetPostion(glm::vec3(0.750f, 0.11f, 3.5f));
+			BackButton->SetPostion(glm::vec3(0.750f, -0.15f, 3.5f));
 			// Scale down the plane
 			BackButton->SetScale(glm::vec3(0.5f, 0.125f, 1.0f));
 
@@ -1782,6 +1798,167 @@ int main() {
 		scene->Save("menu.json");
 
 		}
+
+										//// Making a 'Control' Scene ////
+
+		{
+		// Create our OpenGL resources
+		Shader::Sptr uboShader = ResourceManager::CreateAsset<Shader>(std::unordered_map<ShaderPartType, std::string>{
+			{ ShaderPartType::Vertex, "shaders/vertex_shader.glsl" },
+			{ ShaderPartType::Fragment, "shaders/frag_blinn_phong_textured.glsl" }
+		});
+
+		Texture2D::Sptr    boxTexture = ResourceManager::CreateAsset<Texture2D>("textures/box-diffuse.png");
+		Texture2D::Sptr    grassTexture = ResourceManager::CreateAsset<Texture2D>("textures/grass.png");
+		Texture2D::Sptr    monkeyTex = ResourceManager::CreateAsset<Texture2D>("textures/monkey-uvMap.png");
+		Texture2D::Sptr    MenuTex = ResourceManager::CreateAsset<Texture2D>("textures/ControlsMenu.png");
+
+		// Textures for UI
+
+		Texture2D::Sptr    ButtonBackTex = ResourceManager::CreateAsset<Texture2D>("textures/Button Background.png");
+		Texture2D::Sptr    BackTextTex = ResourceManager::CreateAsset<Texture2D>("textures/Back Text.png");
+
+		// Create an empty scene
+		scene = std::make_shared<Scene>();
+
+		// I hate this
+		scene->BaseShader = uboShader;
+
+		// Create our materials
+		Material::Sptr boxMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			boxMaterial->Name = "Box";
+			boxMaterial->MatShader = scene->BaseShader;
+			boxMaterial->Texture = boxTexture;
+			boxMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr grassMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			grassMaterial->Name = "Grass";
+			grassMaterial->MatShader = scene->BaseShader;
+			grassMaterial->Texture = grassTexture;
+			grassMaterial->Shininess = 2.0f;
+		}
+
+
+		Material::Sptr MenuMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			MenuMaterial->Name = "Menu";
+			MenuMaterial->MatShader = scene->BaseShader;
+			MenuMaterial->Texture = MenuTex;
+			MenuMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr ButtonBackMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			ButtonBackMaterial->Name = "ButtonBackground";
+			ButtonBackMaterial->MatShader = scene->BaseShader;
+			ButtonBackMaterial->Texture = ButtonBackTex;
+			ButtonBackMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr BackTextMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			BackTextMaterial->Name = "Back Button Text";
+			BackTextMaterial->MatShader = scene->BaseShader;
+			BackTextMaterial->Texture = BackTextTex;
+			BackTextMaterial->Shininess = 2.0f;
+		}
+
+		// Create some lights for our scene
+		scene->Lights.resize(4);
+		scene->Lights[0].Position = glm::vec3(3.0f, 3.0f, 3.0f);
+		scene->Lights[0].Color = glm::vec3(0.892f, 1.0f, 0.882f);
+		scene->Lights[0].Range = 10.0f;
+
+		scene->Lights[1].Position = glm::vec3(3.0f, -3.0f, 3.0f);
+		scene->Lights[1].Color = glm::vec3(0.892f, 1.0f, 0.882f);
+		scene->Lights[1].Range = 10.0f;
+
+		scene->Lights[2].Position = glm::vec3(-3.0f, 3.0f, 3.0f);
+		scene->Lights[2].Color = glm::vec3(0.892f, 1.0f, 0.882f);
+		scene->Lights[2].Range = 10.0f;
+
+		scene->Lights[3].Position = glm::vec3(-3.0f, -3.0f, 3.0f);
+		scene->Lights[3].Color = glm::vec3(0.892f, 1.0f, 0.882f);
+		scene->Lights[3].Range = 10.0f;
+
+		// We'll create a mesh that is a simple plane that we can resize later
+		MeshResource::Sptr planeMesh = ResourceManager::CreateAsset<MeshResource>();
+		MeshResource::Sptr cubeMesh = ResourceManager::CreateAsset<MeshResource>("cube.obj");
+		planeMesh->AddParam(MeshBuilderParam::CreatePlane(ZERO, UNIT_Z, UNIT_X, glm::vec2(1.0f)));
+		planeMesh->GenerateMesh();
+
+		// Set up the scene's camera
+		GameObject::Sptr camera = scene->CreateGameObject("Main Camera");
+		{
+			camera->SetPostion(glm::vec3(0, 0, 5));
+			camera->SetRotation(glm::vec3(0, -0, 0));
+
+			Camera::Sptr cam = camera->Add<Camera>();
+
+			// Make sure that the camera is set as the scene's main camera!
+			scene->MainCamera = cam;
+		}
+
+		// Set up all our sample objects
+		GameObject::Sptr plane = scene->CreateGameObject("Plane");
+		{
+			// Scale up the plane
+			plane->SetScale(glm::vec3(10.0F));
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = plane->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(MenuMaterial);
+
+			// Attach a plane collider that extends infinitely along the X/Y axis
+			RigidBody::Sptr physics = plane->Add<RigidBody>(/*static by default*/);
+			physics->AddCollider(PlaneCollider::Create());
+		}
+
+		GameObject::Sptr ButtonBackground2 = scene->CreateGameObject("ButtonBackground2");
+		{
+			// Set position in the scene
+			ButtonBackground2->SetPostion(glm::vec3(0.0f, -1.5f, 3.0f));
+			// Scale down the plane
+			ButtonBackground2->SetScale(glm::vec3(1.25f, 0.250f, 1.0f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = ButtonBackground2->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(ButtonBackMaterial);
+
+			// This object is a renderable only, it doesn't have any behaviours or
+			// physics bodies attached!
+		}
+
+
+		GameObject::Sptr BackButton = scene->CreateGameObject("BackButton");
+		{
+			// Set position in the scene
+			BackButton->SetPostion(glm::vec3(0.f, -1.12f, 3.5f));
+			// Scale down the plane
+			BackButton->SetScale(glm::vec3(0.5f, 0.125f, 1.0f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = BackButton->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(BackTextMaterial);
+
+			// This object is a renderable only, it doesn't have any behaviours or
+			// physics bodies attached!
+		}
+
+		// Save the asset manifest for all the resources we just loaded
+		ResourceManager::SaveManifest("manifest.json");
+		// Save the scene to a JSON file
+		scene->Save("CS.json");
+
+		}
+
+
 
 												//// Level Select Scene ////
 
