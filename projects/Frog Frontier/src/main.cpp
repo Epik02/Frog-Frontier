@@ -167,6 +167,8 @@ bool initGLAD() {
 	return true;
 }
 
+int index = 1;
+
 /// <summary>
 /// Draws a widget for saving or loading our scene
 /// </summary>
@@ -191,8 +193,39 @@ bool DrawSaveLoadImGui(Scene::Sptr& scene, std::string& path) {
 
 		return true;
 	}
+
+	
+
+	if (glfwGetKey(window, GLFW_KEY_ENTER) && scene->FindObjectByName("player") == NULL && scene->FindObjectByName("Filter") != NULL) {
+
+		switch (index) {
+		case 1:
+			path = "Level.json";
+			SceneLoad(scene, path);
+			break;
+		case 2:
+			path = "CS.json";
+			SceneLoad(scene, path);
+			break;
+		case 3:
+			return 0;
+			break;
+		}
+
+		return true;
+	}
+	else if (glfwGetKey(window, GLFW_KEY_ENTER) && scene->FindObjectByName("player") == NULL && scene->FindObjectByName("Filter") == NULL)
+	{
+		path = "menu.json";
+		SceneLoad(scene, path);
+
+		return true;
+	}
+
 	return false;
 }
+
+
 
 /// <summary>
 /// Draws some ImGui controls for the given light
@@ -286,15 +319,62 @@ bool playerFlying = false;
 bool playerMove = false;
 int clickCount = 0;
 bool playerJumping = false;
+bool performedtask = false;
 
 //secoundary keyboard function for controls when on the menu or level select screen, possibly when paused?
 // currently used for testing
 void SceneChanger()
 {
-	if (glfwGetKey(window, GLFW_KEY_0) == GLFW_PRESS) {
-		//SceneLoad();
-
+	if (glfwGetKey(window, GLFW_KEY_UP) && performedtask == false) {
+		if (index - 1 < 1)
+		{
+			index = 3;
+			std::cout << index << std::endl;
+			performedtask = true;
+		}
+		else
+		{
+			index -= 1;
+			std::cout << index << std::endl;
+			performedtask = true;
+		}
 	}
+	else if (glfwGetKey(window, GLFW_KEY_DOWN) && performedtask == false) {
+		if (index + 1 > 3)
+		{
+			index = 1;
+			std::cout << index << std::endl;
+			performedtask = true;
+		}
+		else
+		{
+			index += 1;
+			std::cout << index << std::endl;
+			performedtask = true;
+		}
+	}
+	
+	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_RELEASE && glfwGetKey(window, GLFW_KEY_UP) == GLFW_RELEASE)
+	{
+		performedtask = false;
+	}
+
+	if (scene->FindObjectByName("Filter") != NULL)
+	{
+		if (index == 1)
+		{
+			scene->FindObjectByName("Filter")->SetPostion(glm::vec3(1.f, 0.5f, 3.01f));
+		}
+		else if (index == 2)
+		{
+			scene->FindObjectByName("Filter")->SetPostion(glm::vec3(1.f, 0.15f, 3.01f));
+		}
+		else if (index == 3)
+		{
+			scene->FindObjectByName("Filter")->SetPostion(glm::vec3(1.f, -0.2f, 3.01f));
+		}
+	}
+
 }
 
 void keyboard() {
@@ -1544,6 +1624,7 @@ int main() {
 		Texture2D::Sptr    grassTexture = ResourceManager::CreateAsset<Texture2D>("textures/grass.png");
 		Texture2D::Sptr    monkeyTex = ResourceManager::CreateAsset<Texture2D>("textures/monkey-uvMap.png");
 		Texture2D::Sptr    MenuTex = ResourceManager::CreateAsset<Texture2D>("textures/Game Poster 3.png");
+	
 		
 		// Textures for UI
 
@@ -1553,6 +1634,7 @@ int main() {
 		Texture2D::Sptr    FFLogoTex = ResourceManager::CreateAsset<Texture2D>("textures/Frog Frontier Logo.png");
 		Texture2D::Sptr    BackTextTex = ResourceManager::CreateAsset<Texture2D>("textures/Exit Text.png");
 		Texture2D::Sptr    StartTextTex = ResourceManager::CreateAsset<Texture2D>("textures/Start Text.png");
+		Texture2D::Sptr    FilterTex = ResourceManager::CreateAsset<Texture2D>("textures/Button Filter.png");
 
 		// Create an empty scene
 		scene = std::make_shared<Scene>();
@@ -1642,6 +1724,13 @@ int main() {
 			StartTextMaterial->Shininess = 2.0f;
 		}
 
+		Material::Sptr FilterMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			FilterMaterial->Name = "Button Filter";
+			FilterMaterial->MatShader = scene->BaseShader;
+			FilterMaterial->Texture = FilterTex;
+			FilterMaterial->Shininess = 2.0f;
+		}
 
 		// Create some lights for our scene
 		scene->Lights.resize(4);
@@ -1787,6 +1876,22 @@ int main() {
 			RenderComponent::Sptr renderer = BackButton->Add<RenderComponent>();
 			renderer->SetMesh(planeMesh);
 			renderer->SetMaterial(BackTextMaterial);
+
+			// This object is a renderable only, it doesn't have any behaviours or
+			// physics bodies attached!
+		}
+
+		GameObject::Sptr Filter = scene->CreateGameObject("Filter");
+		{
+			// Set position in the scene
+			Filter->SetPostion(glm::vec3(1.0f, 0.5f, 3.010f));
+			// Scale down the plane
+			Filter->SetScale(glm::vec3(1.25f, 0.25f, 1.0f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = Filter->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(FilterMaterial);
 
 			// This object is a renderable only, it doesn't have any behaviours or
 			// physics bodies attached!
@@ -2533,6 +2638,7 @@ int main() {
 
 	bool paused = false;
 	bool isEscapePressed = false;
+	std::string goTo = "menu.json";
 
 	///// Game loop /////
 	while (!glfwWindowShouldClose(window)) {
