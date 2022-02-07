@@ -432,11 +432,16 @@ void keyboard() {
 			if (index == 1)
 			{
 				index = 2;
+				std::cout << index << std::endl;
+				performedtask = true;
 			}
 			else if (index == 2)
 			{
 				index = 1;
+				std::cout << index << std::endl;
+				performedtask = true;
 			}
+			
 		}
 
 		if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS && index == 1)
