@@ -409,7 +409,8 @@ void SceneChanger()
 
 }
 
-void keyboard() {
+void keyboard() 
+{
 
 	if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS && performedtask == false)
 	{
@@ -428,7 +429,7 @@ void keyboard() {
 
 	if (paused == true || playerLose == true || playerWin == true)
 	{
-		if ((glfwGetKey(window, GLFW_KEY_UP) && performedtask == false) || (glfwGetKey(window, GLFW_KEY_DOWN) && performedtask == false)) {
+		if ((glfwGetKey(window, GLFW_KEY_UP) || glfwGetKey(window, GLFW_KEY_DOWN)) && performedtask == false) {
 			if (index == 1)
 			{
 				index = 2;
@@ -463,12 +464,9 @@ void keyboard() {
 				playerMove = true;
 			}
 		}
-
-
-
 	}
 
-	if (glfwGetKey(window, GLFW_KEY_P) == GLFW_RELEASE)
+	if (glfwGetKey(window, GLFW_KEY_P) == GLFW_RELEASE && glfwGetKey(window, GLFW_KEY_UP) == GLFW_RELEASE && glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_RELEASE)
 	{
 		performedtask = false;
 	}
