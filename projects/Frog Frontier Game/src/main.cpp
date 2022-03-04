@@ -352,6 +352,7 @@ bool playerFlying = false;
 bool playerMove = false;
 int clickCount = 0;
 bool playerJumping = false;
+bool soundprompt = false;
 
 //secoundary keyboard function for controls when on the menu or level select screen, possibly when paused?
 // currently used for testing
@@ -674,7 +675,7 @@ int main() {
 	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 
 	FMOD::System* system;
-	FMOD::Sound* sound1, * sound2, * sound3;
+	FMOD::Sound* sound1, * sound2, * sound3, *sound4;
 	FMOD::Channel* channel = 0;
 	FMOD_RESULT       result;
 	void* extradriverdata = 0;
@@ -683,11 +684,13 @@ int main() {
 
 	result = system->init(32, FMOD_INIT_NORMAL, extradriverdata);
 
-	result = system->createSound("media/Pop.wav", FMOD_DEFAULT, 0, &sound1);
+	result = system->createSound("media/Click.wav", FMOD_DEFAULT, 0, &sound1);
 
-	result = system->createSound("media/Click.wav", FMOD_DEFAULT, 0, &sound2);
+	result = system->createSound("media/Pop1.wav", FMOD_DEFAULT, 0, &sound2);
 
-	result = system->createSound("media/Sound_Effect.wav", FMOD_DEFAULT, 0, &sound3);
+	result = system->createSound("media/Pop2.wav", FMOD_DEFAULT, 0, &sound3);
+
+	result = system->createSound("media/bensound-funnysong.wav", FMOD_LOOP_NORMAL, 0, &sound4);
 
 	bool loadScene = false;
 	// For now we can use a toggle to generate our scene vs load from file
@@ -3302,7 +3305,7 @@ int main() {
 	nlohmann::json editorSceneState;
 
 
-	
+	result = system->playSound(sound4, 0, false, &channel);
 	bool isEscapePressed = false;
 
 	///// Game loop /////
@@ -3328,6 +3331,8 @@ int main() {
 		}
 
 
+	
+
 		/// with this change to the check, switching between scenes using scenePath no longer causes the game to crash since if the scene doesn't have a player it wont prompt commands
 		if (scene->FindObjectByName("player") != NULL)
 		{
@@ -3350,6 +3355,8 @@ int main() {
 				}
 
 			}
+			
+			
 
 			if (playerLose == true)
 			{
@@ -3379,14 +3386,14 @@ int main() {
 				scene->FindObjectByName("MainMenuText")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 8, 5.4));
 				scene->FindObjectByName("WinnerLogo")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 5.75, 8.0));
 
-				if (index == 1)
-				{
-					scene->FindObjectByName("Filter")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6.26, 6.0));
-				}
-				else if (index == 2)
-				{
-					scene->FindObjectByName("Filter")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6.51, 5.0));
-				}
+if (index == 1)
+{
+	scene->FindObjectByName("Filter")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6.26, 6.0));
+}
+else if (index == 2)
+{
+	scene->FindObjectByName("Filter")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6.51, 5.0));
+}
 			}
 
 			if (paused != true && playerLose != true && playerWin != true)
@@ -3404,6 +3411,27 @@ int main() {
 				scene->FindObjectByName("WinnerLogo")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, -29, 6.1));
 			}
 
+			if (paused == true || playerLose == true || playerWin == true)
+			{
+				if (((glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) || (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)) && soundprompt == false)
+				{
+					result = system->playSound(sound1, 0, false, &channel);
+					soundprompt = true;
+				}
+
+				if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_RELEASE && glfwGetKey(window, GLFW_KEY_UP) == GLFW_RELEASE && glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_RELEASE && glfwGetKey(window, GLFW_KEY_P) == GLFW_RELEASE && glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_RELEASE)
+				{
+					soundprompt = false;
+				}
+
+				if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS && soundprompt == false)
+				{
+					result = system->playSound(sound2, 0, false, &channel);
+					soundprompt = true;
+				}
+			}
+
+
 			scene->FindObjectByName("Main Camera")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 11.480, 6.290)); // makes the camera follow the player
 			scene->FindObjectByName("Main Camera")->SetRotation(glm::vec3(84, 0, -180)); //angled view
 			scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x, 0.f, scene->FindObjectByName("player")->GetPosition().z)); // makes the camera follow the player
@@ -3412,6 +3440,16 @@ int main() {
 			scene->FindObjectByName("player")->SetRotation(glm::vec3(90.f, scene->FindObjectByName("player")->GetRotation().y, 0.f));
 
 			keyboard();
+			if (soundprompt == false && glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS && (paused != true && playerLose != true && playerWin != true))
+			{
+				result = system->playSound(sound3, 0, false, &channel);
+				soundprompt = true;
+			}
+			else if(glfwGetKey(window, GLFW_KEY_UP) == GLFW_RELEASE && (paused != true && playerLose != true && playerWin != true))
+			{
+				soundprompt = false;
+			}
+
 
 			//collisions system
 			for (std::vector<int>::size_type i = 0; i != collisions.size(); i++) {
@@ -3450,7 +3488,25 @@ int main() {
 		}
 		else
 		{
-			SceneChanger();
+		SceneChanger();
+
+		if (((glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) || (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)) && soundprompt == false)
+		{
+			result = system->playSound(sound1, 0, false, &channel);
+			soundprompt = true;
+		}
+
+		if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_RELEASE && glfwGetKey(window, GLFW_KEY_UP) == GLFW_RELEASE && glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_RELEASE)
+		{
+			soundprompt = false;
+		}
+
+		if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS && soundprompt == false)
+		{
+			result = system->playSound(sound2, 0, false, &channel);
+			soundprompt = true;
+		}
+
 		}
 		
 		// Calculate the time since our last frame (dt)
