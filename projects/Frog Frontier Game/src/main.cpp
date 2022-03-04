@@ -61,6 +61,8 @@
 #include "Graphics/DebugDraw.h"
 #include "Gameplay/Physics/CollisionRect.h"
 
+#include "fmod.hpp"
+
 //#define LOG_GL_NOTIFICATIONS
 
 /*
@@ -351,8 +353,6 @@ bool playerMove = false;
 int clickCount = 0;
 bool playerJumping = false;
 
-
-
 //secoundary keyboard function for controls when on the menu or level select screen, possibly when paused?
 // currently used for testing
 void SceneChanger()
@@ -625,6 +625,9 @@ glm::vec3 useSEEK(glm::vec3 gameObject, glm::vec3 seekObject)//make pass by refe
 	}
 }
 
+
+
+
 int main() {
 	Logger::Init(); // We'll borrow the logger from the toolkit, but we need to initialize it
 
@@ -669,6 +672,22 @@ int main() {
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glCullFace(GL_BACK);
 	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+
+	FMOD::System* system;
+	FMOD::Sound* sound1, * sound2, * sound3;
+	FMOD::Channel* channel = 0;
+	FMOD_RESULT       result;
+	void* extradriverdata = 0;
+	
+	result = FMOD::System_Create(&system);
+
+	result = system->init(32, FMOD_INIT_NORMAL, extradriverdata);
+
+	result = system->createSound("media/Pop.wav", FMOD_DEFAULT, 0, &sound1);
+
+	result = system->createSound("media/Click.wav", FMOD_DEFAULT, 0, &sound2);
+
+	result = system->createSound("media/Sound_Effect.wav", FMOD_DEFAULT, 0, &sound3);
 
 	bool loadScene = false;
 	// For now we can use a toggle to generate our scene vs load from file
@@ -1056,6 +1075,7 @@ int main() {
 		Texture2D::Sptr    frogTex = ResourceManager::CreateAsset<Texture2D>("textures/froguv.png");
 		Texture2D::Sptr    tmTex = ResourceManager::CreateAsset<Texture2D>("textures/tmuv.png");
 		Texture2D::Sptr    bmTex = ResourceManager::CreateAsset<Texture2D>("textures/bmuv.png");
+		Texture2D::Sptr    PBTex = ResourceManager::CreateAsset<Texture2D>("textures/PauseButton.png");
 
 		// Create an empty scene
 		scene = std::make_shared<Scene>();
@@ -1310,6 +1330,14 @@ int main() {
 			bmMaterial->Shininess = 2.0f;
 		}
 
+		Material::Sptr PBMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			PBMaterial->Name = "PauseButton";
+			PBMaterial->MatShader = scene->BaseShader;
+			PBMaterial->Texture = PBTex;
+			PBMaterial->Shininess = 2.0f;
+		}
+
 		// Create some lights for our scene
 		scene->Lights.resize(18);
 		scene->Lights[0].Position = glm::vec3(0.0f, 1.0f, 40.0f);
@@ -1404,6 +1432,9 @@ int main() {
 
 		MeshResource::Sptr tmMesh = ResourceManager::CreateAsset<MeshResource>("tm.obj");
 		MeshResource::Sptr bmMesh = ResourceManager::CreateAsset<MeshResource>("bm.obj");
+
+		MeshResource::Sptr PBMesh = ResourceManager::CreateAsset<MeshResource>("PB.obj");
+
 		planeMesh->AddParam(MeshBuilderParam::CreatePlane(ZERO, UNIT_Z, UNIT_X, glm::vec2(1.0f)));
 		planeMesh->GenerateMesh();
 
@@ -3279,9 +3310,22 @@ int main() {
 		glfwPollEvents();
 		ImGuiHelper::StartFrame();
 
-		/// check for scene change validity
-
-		
+		/// test FMOD
+		if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS)
+			{
+			result = system->playSound(sound1, 0, false, &channel);
+			std::cout << "K pressed" << std::endl;
+			}
+		if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS)
+		{
+			result = system->playSound(sound2, 0, false, &channel);
+			std::cout << "J pressed" << std::endl;
+		}
+		if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS)
+		{
+			result = system->playSound(sound3, 0, false, &channel);
+			std::cout << "H pressed" << std::endl;
+		}
 
 
 		/// with this change to the check, switching between scenes using scenePath no longer causes the game to crash since if the scene doesn't have a player it wont prompt commands
