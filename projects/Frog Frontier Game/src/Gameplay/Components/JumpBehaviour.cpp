@@ -48,6 +48,9 @@ void JumpBehaviour::getPlayerCoords(glm::vec3 position) {
 
 void JumpBehaviour::Update(float deltaTime) {
 	//_body->OnEnteredTrigger
+
+	float jumpbugfix = 60.00 / 165.00; 
+
 	_body->SetLinearDamping(-10.f);
 	float test = _body->GetMass();
 	//std::cout << test;
@@ -58,7 +61,7 @@ void JumpBehaviour::Update(float deltaTime) {
 			_body->ApplyImpulse(glm::vec3(0.0f, 0.0f, _impulse));
 			//_body->ApplyForce(glm::vec3(0.0f, 0.0f, -10.f));
 
-			_body->ApplyForce(glm::vec3(0.0f, 0.0f, 1000.f));
+			_body->ApplyForce(glm::vec3(0.0f, 0.0f, 500.f));
 		}
 		_isPressed = pressed;
 	}
@@ -71,7 +74,7 @@ void JumpBehaviour::Update(float deltaTime) {
 			_body->ApplyImpulse(glm::vec3(0.0f, 0.0f, _impulse));
 			//_body->ApplyForce(glm::vec3(0.0f, 0.0f, -10.f));
 
-			_body->ApplyForce(glm::vec3(0.0f, 0.0f, 1200.f));
+			_body->ApplyForce(glm::vec3(0.0f, 0.0f, 600.f));
 		}
 		_isUPPressed = UPpressed;
 
@@ -85,11 +88,11 @@ void JumpBehaviour::Update(float deltaTime) {
 			if (currentHeight > 8.f) {
 				if (currentHeight < 10.f) {
 					_body->ApplyImpulse(glm::vec3(0.0f, 0.0f, _impulse));
-					_body->ApplyForce(glm::vec3(0.0f, 0.0f, 50.f));
+					_body->ApplyForce(glm::vec3(0.0f, 0.0f, 60.f));
 				}
 				else {
 					//_body->ApplyImpulse(glm::vec3(0.0f, 0.0f, -_impulse));
-					_body->ApplyForce(glm::vec3(0.0f, 0.0f, -50.f));
+					_body->ApplyForce(glm::vec3(0.0f, 0.0f, -60.f));
 				}
 			}
 		}
