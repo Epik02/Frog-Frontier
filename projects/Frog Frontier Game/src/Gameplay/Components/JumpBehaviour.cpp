@@ -50,7 +50,7 @@ void JumpBehaviour::Update(float deltaTime) {
 	//_body->OnEnteredTrigger
 	_body->SetLinearDamping(-10.f);
 	float test = _body->GetMass();
-	std::cout << test;
+	//std::cout << test;
 	pressed = glfwGetKey(GetGameObject()->GetScene()->Window, GLFW_KEY_SPACE);
 	UPpressed = glfwGetKey(GetGameObject()->GetScene()->Window, GLFW_KEY_UP);
 	if (pressed) {
