@@ -1368,6 +1368,422 @@ int main() {
 			scene->MainCamera = cam;
 		}
 
+		// Set up all our sample objects
+		GameObject::Sptr plane = scene->CreateGameObject("Plane");
+		{
+			// Scale up the plane
+			plane->SetPostion(glm::vec3(0.060f, 3.670f, -0.430f));
+			plane->SetScale(glm::vec3(47.880f, 23.7f, 48.38f));
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = plane->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(grassMaterial);
+
+			// Attach a plane collider that extends infinitely along the X/Y axis
+			RigidBody::Sptr physics = plane->Add<RigidBody>(/*static by default*/);
+			physics->AddCollider(PlaneCollider::Create());
+		}
+		GameObject::Sptr plane2 = scene->CreateGameObject("Plane2");
+		{
+			// Scale up the plane
+			plane2->SetPostion(glm::vec3(-47.820f, 3.670f, -0.430f));
+			plane2->SetScale(glm::vec3(47.880f, 23.7f, 48.38f));
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = plane2->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(grassMaterial);
+
+			// Attach a plane collider that extends infinitely along the X/Y axis
+			RigidBody::Sptr physics = plane2->Add<RigidBody>(/*static by default*/);
+			physics->AddCollider(PlaneCollider::Create());
+		}
+		GameObject::Sptr ground3 = scene->CreateGameObject("Ground3");
+		{
+			//ground 3
+			// Scale up the plane
+			ground3->SetPostion(glm::vec3(-95.680f, 3.670f, -0.430f));
+			ground3->SetScale(glm::vec3(47.880f, 23.7f, 48.38f));
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = ground3->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(grassMaterial);
+		}
+
+		GameObject::Sptr ground4 = scene->CreateGameObject("Ground4");
+		{
+			//ground 4
+			// Scale up the plane
+			ground4->SetPostion(glm::vec3(-143.54f, 3.670f, -0.430f));
+			ground4->SetScale(glm::vec3(47.880f, 23.7f, 48.38f));
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = ground4->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(grassMaterial);
+		}
+
+		GameObject::Sptr ground5 = scene->CreateGameObject("Ground5");
+		{
+			//ground 5
+			// Scale up the plane
+			ground5->SetPostion(glm::vec3(-191.4f, 3.670f, -0.430f));
+			ground5->SetScale(glm::vec3(47.880f, 23.7f, 48.38f));
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = ground5->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(grassMaterial);
+		}
+
+		GameObject::Sptr ground6 = scene->CreateGameObject("Ground6");
+		{
+			//ground 6
+			// Scale up the plane
+			ground6->SetPostion(glm::vec3(-239.26f, 3.670f, -0.430f));
+			ground6->SetScale(glm::vec3(47.880f, 23.7f, 48.38f));
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = ground6->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(grassMaterial);
+		}
+
+		GameObject::Sptr ground7 = scene->CreateGameObject("Ground7");
+		{
+			//ground 7
+			// Scale up the plane
+			ground7->SetPostion(glm::vec3(-287.12f, 3.670f, -0.430f));
+			ground7->SetScale(glm::vec3(47.880f, 23.7f, 48.38f));
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = ground7->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(grassMaterial);
+		}
+
+		GameObject::Sptr ground8 = scene->CreateGameObject("Ground8");
+		{
+			//ground 8
+			// Scale up the plane
+			ground8->SetPostion(glm::vec3(-334.98f, 3.670f, -0.430f));
+			ground8->SetScale(glm::vec3(47.880f, 23.7f, 48.38f));
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = ground8->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(grassMaterial);
+		}
+
+		GameObject::Sptr ground9 = scene->CreateGameObject("Ground9");
+		{
+			//ground 9
+			// Scale up the plane
+			ground9->SetPostion(glm::vec3(-382.84f, 3.670f, -0.430f));
+			ground9->SetScale(glm::vec3(47.880f, 23.7f, 48.38f));
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = ground9->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(grassMaterial);
+		}
+
+		GameObject::Sptr ground10 = scene->CreateGameObject("Ground10");
+		{
+			//ground 10
+			// Scale up the plane
+			ground10->SetPostion(glm::vec3(-430.7f, 3.670f, -0.430f));
+			ground10->SetScale(glm::vec3(47.880f, 23.7f, 48.38f));
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = ground10->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(grassMaterial);
+		}
+
+		GameObject::Sptr ground0 = scene->CreateGameObject("Ground0");
+		{
+			//ground 0
+			// Scale up the plane
+			ground0->SetPostion(glm::vec3(47.92f, 3.670f, -0.430f));
+			ground0->SetScale(glm::vec3(47.880f, 23.7f, 48.38f));
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = ground0->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(grassMaterial);
+		}
+
+		GameObject::Sptr wall0 = scene->CreateGameObject("Wall0");
+		{
+			//wall 1
+			// Scale up the plane
+			wall0->SetPostion(glm::vec3(55.900f, -7.540f, 13.3f));
+			wall0->SetRotation(glm::vec3(87.0F, 0.f, -180.0f));
+			wall0->SetScale(glm::vec3(63.390F, 24.f, 52.54f));
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = wall0->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(bgMaterial);
+
+			// Attach a plane collider that extends infinitely along the X/Y axis
+			RigidBody::Sptr physics = wall0->Add<RigidBody>(/*static by default*/);
+			physics->AddCollider(PlaneCollider::Create());
+		}
+
+		GameObject::Sptr wall1 = scene->CreateGameObject("Wall1");
+		{
+			//wall 1
+			// Scale up the plane
+			wall1->SetPostion(glm::vec3(-7.500f, -7.540f, 13.3f));
+			wall1->SetRotation(glm::vec3(87.0F, 0.f, -180.0f));
+			wall1->SetScale(glm::vec3(63.390F, 24.f, 52.54f));
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = wall1->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(bgMaterial);
+
+			// Attach a plane collider that extends infinitely along the X/Y axis
+			RigidBody::Sptr physics = wall1->Add<RigidBody>(/*static by default*/);
+			physics->AddCollider(PlaneCollider::Create());
+		}
+		GameObject::Sptr wall2 = scene->CreateGameObject("Wall2");
+		{
+			//wall 2
+			// Scale up the plane
+			wall2->SetPostion(glm::vec3(-70.9f, -7.540f, 13.3f));
+			wall2->SetRotation(glm::vec3(87.0F, 0.f, -180.0f));
+			wall2->SetScale(glm::vec3(63.390F, 24.f, 52.54f));
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = wall2->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(bgMaterial);
+
+			// Attach a plane collider that extends infinitely along the X/Y axis
+			RigidBody::Sptr physics = wall2->Add<RigidBody>(/*static by default*/);
+			physics->AddCollider(PlaneCollider::Create());
+		}
+
+		GameObject::Sptr wall3 = scene->CreateGameObject("Wall3");
+		{
+			//wall 1
+			// Scale up the plane
+			wall3->SetPostion(glm::vec3(-134.3f, -7.540f, 13.3f));
+			wall3->SetRotation(glm::vec3(87.0F, 0.f, -180.0f));
+			wall3->SetScale(glm::vec3(63.390F, 24.f, 52.54f));
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = wall3->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(bgMaterial);
+
+			// Attach a plane collider that extends infinitely along the X/Y axis
+			RigidBody::Sptr physics = wall3->Add<RigidBody>(/*static by default*/);
+			physics->AddCollider(PlaneCollider::Create());
+		}
+
+		GameObject::Sptr wall4 = scene->CreateGameObject("Wall4");
+		{
+			//wall 1
+			// Scale up the plane
+			wall4->SetPostion(glm::vec3(-197.7f, -7.540f, 13.3f));
+			wall4->SetRotation(glm::vec3(87.0F, 0.f, -180.0f));
+			wall4->SetScale(glm::vec3(63.390F, 24.f, 52.54f));
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = wall4->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(bgMaterial);
+
+			// Attach a plane collider that extends infinitely along the X/Y axis
+			RigidBody::Sptr physics = wall4->Add<RigidBody>(/*static by default*/);
+			physics->AddCollider(PlaneCollider::Create());
+		}
+
+		GameObject::Sptr wall5 = scene->CreateGameObject("Wall5");
+		{
+			//wall 5
+			// Scale up the plane
+			wall5->SetPostion(glm::vec3(-261.1f, -7.540f, 13.3f));
+			wall5->SetRotation(glm::vec3(87.0F, 0.f, -180.0f));
+			wall5->SetScale(glm::vec3(63.390F, 24.f, 52.54f));
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = wall5->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(bgMaterial);
+
+			// Attach a plane collider that extends infinitely along the X/Y axis
+			RigidBody::Sptr physics = wall5->Add<RigidBody>(/*static by default*/);
+			physics->AddCollider(PlaneCollider::Create());
+		}
+
+		GameObject::Sptr wall6 = scene->CreateGameObject("Wall6");
+		{
+			//wall 6
+			// Scale up the plane
+			wall6->SetPostion(glm::vec3(-324.5f, -7.540f, 13.3f));
+			wall6->SetRotation(glm::vec3(87.0F, 0.f, -180.0f));
+			wall6->SetScale(glm::vec3(63.390F, 24.f, 52.54f));
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = wall6->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(bgMaterial);
+
+			// Attach a plane collider that extends infinitely along the X/Y axis
+			RigidBody::Sptr physics = wall6->Add<RigidBody>(/*static by default*/);
+			physics->AddCollider(PlaneCollider::Create());
+		}
+
+		GameObject::Sptr wall7 = scene->CreateGameObject("Wall7");
+		{
+			//wall 7
+			// Scale up the plane
+			wall7->SetPostion(glm::vec3(-387.9f, -7.540f, 13.3f));
+			wall7->SetRotation(glm::vec3(87.0F, 0.f, -180.0f));
+			wall7->SetScale(glm::vec3(63.390F, 24.f, 52.54f));
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = wall7->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(bgMaterial);
+
+			// Attach a plane collider that extends infinitely along the X/Y axis
+			RigidBody::Sptr physics = wall7->Add<RigidBody>(/*static by default*/);
+			physics->AddCollider(PlaneCollider::Create());
+		}
+
+		GameObject::Sptr wall8 = scene->CreateGameObject("Wall8");
+		{
+			//wall 8
+			// Scale up the plane
+			wall8->SetPostion(glm::vec3(-451.3f, -7.540f, 13.3f));
+			wall8->SetRotation(glm::vec3(87.0F, 0.f, -180.0f));
+			wall8->SetScale(glm::vec3(63.390F, 24.f, 52.54f));
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = wall8->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(bgMaterial);
+
+			// Attach a plane collider that extends infinitely along the X/Y axis
+			RigidBody::Sptr physics = wall8->Add<RigidBody>(/*static by default*/);
+			physics->AddCollider(PlaneCollider::Create());
+		}
+
+		GameObject::Sptr wall9 = scene->CreateGameObject("Wall9");
+		{
+			//wall 9
+			// Scale up the plane
+			wall9->SetPostion(glm::vec3(-0.130f, -7.200f, 10.210f));
+			wall9->SetRotation(glm::vec3(70.0F, 0.f, -180.0f));
+			wall9->SetScale(glm::vec3(63.390F, 24.f, 52.54f));
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = wall9->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(ForegroundMaterial);
+		}
+		GameObject::Sptr wall10 = scene->CreateGameObject("wall10");
+		{
+			//wall 9
+			// Scale up the plane
+			wall10->SetPostion(glm::vec3(-63.f, -7.200f, 10.210f));
+			wall10->SetRotation(glm::vec3(70.0F, 0.f, -180.0f));
+			wall10->SetScale(glm::vec3(63.390F, 24.f, 52.54f));
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = wall10->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(ForegroundMaterial);
+		}
+		GameObject::Sptr wall11 = scene->CreateGameObject("wall11");
+		{
+			//wall 9
+			// Scale up the plane
+			wall11->SetPostion(glm::vec3(-125.87f, -7.200f, 10.210f));
+			wall11->SetRotation(glm::vec3(70.0F, 0.f, -180.0f));
+			wall11->SetScale(glm::vec3(63.390F, 24.f, 52.54f));
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = wall11->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(ForegroundMaterial);
+		}
+		GameObject::Sptr wall12 = scene->CreateGameObject("wall12");
+		{
+			//wall 9
+			// Scale up the plane
+			wall12->SetPostion(glm::vec3(-188.74f, -7.200f, 10.210f));
+			wall12->SetRotation(glm::vec3(70.0F, 0.f, -180.0f));
+			wall12->SetScale(glm::vec3(63.390F, 24.f, 52.54f));
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = wall12->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(ForegroundMaterial);
+		}
+		GameObject::Sptr wall13 = scene->CreateGameObject("wall13");
+		{
+			//wall 9
+			// Scale up the plane
+			wall13->SetPostion(glm::vec3(-251.61f, -7.200f, 10.210f));
+			wall13->SetRotation(glm::vec3(70.0F, 0.f, -180.0f));
+			wall13->SetScale(glm::vec3(63.390F, 24.f, 52.54f));
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = wall13->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(ForegroundMaterial);
+		}
+		GameObject::Sptr wall14 = scene->CreateGameObject("wall14");
+		{
+			//wall 9
+			// Scale up the plane
+			wall14->SetPostion(glm::vec3(-314.48f, -7.200f, 10.210f));
+			wall14->SetRotation(glm::vec3(70.0F, 0.f, -180.0f));
+			wall14->SetScale(glm::vec3(63.390F, 24.f, 52.54f));
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = wall14->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(ForegroundMaterial);
+		}
+		GameObject::Sptr wall15 = scene->CreateGameObject("wall15");
+		{
+			//wall 9
+			// Scale up the plane
+			wall15->SetPostion(glm::vec3(-377.35f, -7.200f, 10.210f));
+			wall15->SetRotation(glm::vec3(70.0F, 0.f, -180.0f));
+			wall15->SetScale(glm::vec3(63.390F, 24.f, 52.54f));
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = wall15->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(ForegroundMaterial);
+		}
+		GameObject::Sptr wall16 = scene->CreateGameObject("wall16");
+		{
+			//wall 9
+			// Scale up the plane
+			wall16->SetPostion(glm::vec3(-440.22f, -7.200f, 10.210f));
+			wall16->SetRotation(glm::vec3(70.0F, 0.f, -180.0f));
+			wall16->SetScale(glm::vec3(63.390F, 24.f, 52.54f));
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = wall16->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(ForegroundMaterial);
+		}
+
+
+
 		GameObject::Sptr plane5 = scene->CreateGameObject("plane5");
 		{
 			//under 1
@@ -1581,7 +1997,7 @@ int main() {
 			// This object is a renderable only, it doesn't have any behaviours or
 			// physics bodies attached!
 		}
-
+		/*
 		// Creates Ground Collisions
 		GameObject::Sptr plane = scene->CreateGameObject("Plane");
 		{
@@ -1595,9 +2011,10 @@ int main() {
 			renderer->SetMaterial(BlankMaterial);
 
 			// Attach a plane collider that extends infinitely along the X/Y axis
-			RigidBody::Sptr physics = plane->Add<RigidBody>(/*static by default*/);
+			RigidBody::Sptr physics = plane->Add<RigidBody>(/*static by default*);
 			physics->AddCollider(PlaneCollider::Create());
 		}
+		*/
 
 		// Kinematic rigid bodies are those controlled by some outside controller
 		// and ONLY collide with dynamic objects
@@ -2963,7 +3380,7 @@ else if (index == 2)
 			std::cout << GLFW_REFRESH_RATE;
 
 			scene->FindObjectByName("Main Camera")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 11.480, 6.290)); // makes the camera follow the player
-			scene->FindObjectByName("Main Camera")->SetRotation(glm::vec3(73.6, 0, -180)); //angled view (stops camera from rotating)
+			scene->FindObjectByName("Main Camera")->SetRotation(glm::vec3(84, 0, -180)); //angled view (stops camera from rotating)
 			scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x, 0.f, scene->FindObjectByName("player")->GetPosition().z)); // makes the camera follow the player
 
 			//Stops the player from rotating
