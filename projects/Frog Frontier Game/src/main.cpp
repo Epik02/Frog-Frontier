@@ -986,6 +986,7 @@ int main() {
 		Texture2D::Sptr    BGTex = ResourceManager::CreateAsset<Texture2D>("textures/BackgroundUV.png");
 		Texture2D::Sptr    BGGrassTex = ResourceManager::CreateAsset<Texture2D>("textures/grassuv.png");
 		Texture2D::Sptr    ProgressTex = ResourceManager::CreateAsset<Texture2D>("textures/progressbar.png");
+		Texture2D::Sptr    PbarbugTex = ResourceManager::CreateAsset<Texture2D>("textures/progressmeter.png");
 
 		// Create an empty scene
 		scene = std::make_shared<Scene>();
@@ -1000,6 +1001,14 @@ int main() {
 			boxMaterial->MatShader = scene->BaseShader;
 			boxMaterial->Texture = boxTexture;
 			boxMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr PbarbugMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			PbarbugMaterial->Name = "minibug";
+			PbarbugMaterial->MatShader = scene->BaseShader;
+			PbarbugMaterial->Texture = PbarbugTex;
+			PbarbugMaterial->Shininess = 2.0f;
 		}
 
 		Material::Sptr greenMaterial = ResourceManager::CreateAsset<Material>();
@@ -1739,22 +1748,37 @@ int main() {
 			renderer->SetMaterial(MainMenuMaterial);
 		}
 
-		//GameObject::Sptr PBar = scene->CreateGameObject("ProgressBarGO");
-		//{
-		//	// Scale up the plane
-		//	PBar->SetPostion(glm::vec3(0.060f, 3.670f, -0.510f));
-		//	PBar->SetRotation(glm::vec3(-104.f, -180.0f, 0.0f));
-		//	PBar->SetScale(glm::vec3(14.040f, 1.620f, 47.950f));
+		GameObject::Sptr PBar = scene->CreateGameObject("ProgressBarGO");
+		{
+			// Scale up the plane
+			PBar->SetPostion(glm::vec3(0.060f, 3.670f, -0.510f));
+			PBar->SetRotation(glm::vec3(-90, -180.0f, 0.0f));
+			PBar->SetScale(glm::vec3(15.f, 1.620f, 47.950f));
 
-		//	// Create and attach a RenderComponent to the object to draw our mesh
-		//	RenderComponent::Sptr renderer = PBar->Add<RenderComponent>();
-		//	renderer->SetMesh(planeMesh);
-		//	renderer->SetMaterial(ProgressBarMaterial);
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = PBar->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(ProgressBarMaterial);
 
-		//	// Attach a plane collider that extends infinitely along the X/Y axis
-		//	RigidBody::Sptr physics = PBar->Add<RigidBody>(/*static by default*/);
-		//	physics->AddCollider(PlaneCollider::Create());
-		//}
+			// Attach a plane collider that extends infinitely along the X/Y axis
+			RigidBody::Sptr physics = PBar->Add<RigidBody>(/*static by default*/);
+		}
+
+		GameObject::Sptr PBug = scene->CreateGameObject("ProgressBarProgress");
+		{
+			// Scale up the plane
+			PBug->SetPostion(glm::vec3(0.060f, 3.670f, -0.510f));
+			PBug->SetRotation(glm::vec3(-90, -180.0f, 0.0f));
+			PBug->SetScale(glm::vec3(1.5f, 1.5f, 1.5f));
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = PBug->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(PbarbugMaterial);
+
+			// Attach a plane collider that extends infinitely along the X/Y axis
+			RigidBody::Sptr physics = PBug->Add<RigidBody>(/*static by default*/);
+		}
 
 		//Objects with transparency need to be loaded in last otherwise it creates issues
 		GameObject::Sptr PanelPause = scene->CreateGameObject("PanelPause");
@@ -2881,6 +2905,12 @@ int main() {
 	result = system->playSound(sound4, 0, false, &channel);
 	bool isEscapePressed = false;
 
+	float ProgressBarTime = 0; //will calculate the time from the beginning to the end of the level
+	float ProgressBarTemp = 0; //temp value so we can calculate time elapsed from beginning to end of level
+	float ProgressBarTempPaused = 0;
+	float ProgressBarTempPaused2 = 0;
+	float ProgressBarPaused = 0;
+
 	///// Game loop /////
 	while (!glfwWindowShouldClose(window)) {
 		glfwPollEvents();
@@ -2919,6 +2949,8 @@ int main() {
 				scene->FindObjectByName("ResumeText")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 8, 6.1));
 				scene->FindObjectByName("MainMenuText")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 8, 5.4));
 				scene->FindObjectByName("PauseLogo")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 5.75, 8.0));
+				ProgressBarTempPaused = ProgressBarTime;
+
 
 				if (index == 1)
 				{
@@ -2941,6 +2973,7 @@ int main() {
 				scene->FindObjectByName("ReplayText")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 8, 6.1));
 				scene->FindObjectByName("MainMenuText")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 8, 5.4));
 				scene->FindObjectByName("LoserLogo")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 5.75, 8.0));
+				ProgressBarTemp = glfwGetTime();
 
 				if (index == 1)
 				{
@@ -2960,6 +2993,7 @@ int main() {
 				scene->FindObjectByName("ReplayText")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 8, 6.1));
 				scene->FindObjectByName("MainMenuText")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 8, 5.4));
 				scene->FindObjectByName("WinnerLogo")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 5.75, 8.0));
+				ProgressBarTemp = glfwGetTime();
 
 if (index == 1)
 {
@@ -3005,13 +3039,20 @@ else if (index == 2)
 					soundprompt = true;
 				}
 			}
-			std::cout << GLFW_REFRESH_RATE;
+			//std::cout << GLFW_REFRESH_RATE;
+			if (paused == false) {
+				ProgressBarTime = glfwGetTime() - ProgressBarTemp;
+				ProgressBarTime = ProgressBarTime / 2.5;
+			}
+			std::cout << ProgressBarTime << "\n";
 
 			scene->FindObjectByName("Main Camera")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 11.480, 6.290)); // makes the camera follow the player
 			scene->FindObjectByName("Main Camera")->SetRotation(glm::vec3(84, 0, -180)); //angled view (stops camera from rotating)
 			scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x, 0.f, scene->FindObjectByName("player")->GetPosition().z)); // makes the camera follow the player
 
-			//scene->FindObjectByName("ProgressBarGO")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 1.620, 10)); //makes progress bar follow the player
+			scene->FindObjectByName("ProgressBarGO")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 1.620, 13)); //makes progress bar follow the player
+			scene->FindObjectByName("ProgressBarProgress")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x + 2 - ProgressBarTime, 1.7, 12.75)); //Makes Progress of progress bar follow the player
+
 
 			//Stops the player from rotating
 			scene->FindObjectByName("player")->SetRotation(glm::vec3(90.f, scene->FindObjectByName("player")->GetRotation().y, 0.f));
