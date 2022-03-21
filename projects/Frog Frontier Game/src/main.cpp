@@ -249,13 +249,16 @@ bool DrawSaveLoadImGui(Scene::Sptr& scene, std::string& path) {
 	{
 		switch (index) {
 		case 1:
-			path = "Level.json";
+			path = "Level1.json";
 			SceneLoad(scene, path);
 			scenevalue = 1;
 			index = 1;
 			break;
 		case 2:
-			return 0;
+			path = "Level.json";
+			SceneLoad(scene, path);
+			scenevalue = 2;
+			index = 1;
 			break;
 		case 3:
 			return 0;
@@ -779,9 +782,20 @@ void keyboard()
 		}
 	}
 
-	if (scene->FindObjectByName("player")->GetPosition().x < -400.f) {
-		playerMove = false;
+	if (scenevalue == 1)
+	{
+		if (scene->FindObjectByName("player")->GetPosition().x < -800.f) {
+			playerMove = false;
+		}
 	}
+	else if (scenevalue == 2)
+	{
+		if (scene->FindObjectByName("player")->GetPosition().x < -400.f) {
+			playerMove = false;
+		}
+	}
+
+	
 }
 
 glm::vec3 keypoints[4];
@@ -1054,8 +1068,7 @@ int main() {
 
 
 
-								/// Working Level ///
-
+								/// Working Level ///									//////		Level 2		///////////
 		{
 	
 		// Create an empty scene
@@ -2040,7 +2053,7 @@ int main() {
 
 		}
 
-		/// Working Level ///									//////		Level 1		//////////
+		                       /// Working Level ///									//////		Level 1		//////////
 
 		{
 		// Create an empty scene
@@ -2385,82 +2398,51 @@ int main() {
 
 		// Create some lights for our scene
 		scene->Lights.resize(18);
-		scene->Lights[0].Position = glm::vec3(0.0f, 1.0f, 40.0f);
+		scene->Lights[0].Position = glm::vec3(-400.0f, 1.0f, 40.0f);
 		scene->Lights[0].Color = glm::vec3(1.f, 1.f, 1.f);
 		scene->Lights[0].Range = 1000.0f;
 
-		scene->Lights[1].Position = glm::vec3(-50.f, 0.0f, 3.0f);
+		scene->Lights[1].Position = glm::vec3(-450.f, 0.0f, 3.0f);
 		scene->Lights[1].Color = glm::vec3(1.f, 1.f, 1.f);
 
-		scene->Lights[2].Position = glm::vec3(-100.f, 1.0f, 3.0f);
+		scene->Lights[2].Position = glm::vec3(-500.f, 1.0f, 3.0f);
 		scene->Lights[2].Color = glm::vec3(1.f, 1.f, 1.f);
 
-		scene->Lights[3].Position = glm::vec3(-150.0f, 1.0f, 40.0f);
+		scene->Lights[3].Position = glm::vec3(-550.0f, 1.0f, 40.0f);
 		scene->Lights[3].Color = glm::vec3(1.f, 1.f, 1.f);
 		scene->Lights[3].Range = 1000.0f;
 
-		//scene->Lights[4].Position = glm::vec3(-200.0f, 1.0f, 40.0f);
-		//scene->Lights[4].Color = glm::vec3(1.f, 1.f, 1.f);
-		//scene->Lights[4].Range = 1000.0f;
-
-		//scene->Lights[5].Position = glm::vec3(-250.0f, 1.0f, 40.0f);
-		//scene->Lights[5].Color = glm::vec3(1.f, 1.f, 1.f);
-		//scene->Lights[5].Range = 1000.0f;
-
-		//scene->Lights[6].Position = glm::vec3(-300.0f, 1.0f, 40.0f);
-		//scene->Lights[6].Color = glm::vec3(1.f, 1.f, 1.f);
-		//scene->Lights[6].Range = 1000.0f;
-
-		//scene->Lights[7].Position = glm::vec3(-350.0f, 1.0f, 40.0f);
-		//scene->Lights[7].Color = glm::vec3(1.f, 1.f, 1.f);
-		//scene->Lights[7].Range = 1000.0f;
-
-		//scene->Lights[8].Position = glm::vec3(-200.0f, 1.0f, 40.0f);
-		//scene->Lights[8].Color = glm::vec3(1.f, 1.f, 1.f);
-		//scene->Lights[8].Range = 1000.0f;
-
-		scene->Lights[4].Position = glm::vec3(-240.0f, 1.0f, 40.0f);
+		scene->Lights[4].Position = glm::vec3(-500.0f, 1.0f, 40.0f);
 		scene->Lights[4].Color = glm::vec3(1.f, 1.f, 1.f);
 		scene->Lights[4].Range = 1000.0f;
 
-		scene->Lights[5].Position = glm::vec3(-280.0f, 1.0f, 40.0f);
+		scene->Lights[5].Position = glm::vec3(-550.0f, 1.0f, 40.0f);
 		scene->Lights[5].Color = glm::vec3(1.f, 1.f, 1.f);
 		scene->Lights[5].Range = 1000.0f;
 
-		scene->Lights[6].Position = glm::vec3(-320.0f, 1.0f, 40.0f);
+		scene->Lights[6].Position = glm::vec3(-600.0f, 1.0f, 40.0f);
 		scene->Lights[6].Color = glm::vec3(1.f, 1.f, 1.f);
 		scene->Lights[6].Range = 1000.0f;
 
-		scene->Lights[7].Position = glm::vec3(-360.0f, 1.0f, 40.0f);
+		scene->Lights[7].Position = glm::vec3(-650.0f, 1.0f, 40.0f);
 		scene->Lights[7].Color = glm::vec3(1.f, 1.f, 1.f);
 		scene->Lights[7].Range = 1000.0f;
 
-		scene->Lights[8].Position = glm::vec3(-400.0f, 1.0f, 40.0f);
+		scene->Lights[8].Position = glm::vec3(-700.0f, 1.0f, 40.0f);
 		scene->Lights[8].Color = glm::vec3(1.f, 1.f, 1.f);
 		scene->Lights[8].Range = 1000.0f;
-
-		scene->Lights[9].Position = glm::vec3(-200.0f, 1.0f, 40.0f);
-		scene->Lights[9].Color = glm::vec3(0.2f, 0.8f, 0.1f);
-		scene->Lights[9].Range = 1000.0f;
-
-		scene->Lights[10].Position = glm::vec3(-201.0f, 0.0f, 3.0f);
-		scene->Lights[10].Color = glm::vec3(0.2f, 0.8f, 0.1f);
-
-		scene->Lights[11].Position = glm::vec3(-400.0f, 1.0f, 40.0f);
-		scene->Lights[11].Color = glm::vec3(0.2f, 0.8f, 0.1f);
-		scene->Lights[11].Range = 1000.0f;
-
-		scene->Lights[12].Position = glm::vec3(-401.0f, 0.0f, 3.0f);
-		scene->Lights[12].Color = glm::vec3(0.2f, 0.8f, 0.1f);
 
 		// We'll create a mesh that is a simple plane that we can resize later
 		MeshResource::Sptr planeMesh = ResourceManager::CreateAsset<MeshResource>();
 		MeshResource::Sptr cubeMesh = ResourceManager::CreateAsset<MeshResource>("cube.obj");
-		MeshResource::Sptr mushroomMesh = ResourceManager::CreateAsset<MeshResource>("Mushroom.obj");
-		MeshResource::Sptr vinesMesh = ResourceManager::CreateAsset<MeshResource>("Vines.obj");
-		MeshResource::Sptr cobwebMesh = ResourceManager::CreateAsset<MeshResource>("Cobweb.obj");
-		MeshResource::Sptr ladybugMesh = ResourceManager::CreateAsset<MeshResource>("lbo.obj");
 
+		MeshResource::Sptr mushroomMesh = ResourceManager::CreateAsset<MeshResource>("Mushroom.obj");
+		MeshResource::Sptr tmMesh = ResourceManager::CreateAsset<MeshResource>("tm.obj");
+		MeshResource::Sptr bmMesh = ResourceManager::CreateAsset<MeshResource>("bm.obj");
+		MeshResource::Sptr ToadMesh = ResourceManager::CreateAsset<MeshResource>("ToadStool.obj");
+
+		
+		MeshResource::Sptr cobwebMesh = ResourceManager::CreateAsset<MeshResource>("Cobweb.obj");
 		MeshResource::Sptr BranchMesh = ResourceManager::CreateAsset<MeshResource>("Branch.obj");
 		MeshResource::Sptr LogMesh = ResourceManager::CreateAsset<MeshResource>("Log.obj");
 		MeshResource::Sptr Plant1Mesh = ResourceManager::CreateAsset<MeshResource>("PLANT.obj");
@@ -2468,17 +2450,16 @@ int main() {
 		MeshResource::Sptr Plant3Mesh = ResourceManager::CreateAsset<MeshResource>("Plant3.obj");
 
 		MeshResource::Sptr SunflowerMesh = ResourceManager::CreateAsset<MeshResource>("Sunflower.obj");
-		MeshResource::Sptr ToadMesh = ResourceManager::CreateAsset<MeshResource>("ToadStool.obj");
+		
 		MeshResource::Sptr Rock1Mesh = ResourceManager::CreateAsset<MeshResource>("Rock1.obj");
 		MeshResource::Sptr Rock2Mesh = ResourceManager::CreateAsset<MeshResource>("Rock2.obj");
 		MeshResource::Sptr Rock3Mesh = ResourceManager::CreateAsset<MeshResource>("Rock3.obj");
 		MeshResource::Sptr twigMesh = ResourceManager::CreateAsset<MeshResource>("Twig.obj");
+		MeshResource::Sptr vinesMesh = ResourceManager::CreateAsset<MeshResource>("Vines.obj");
+
+		MeshResource::Sptr ladybugMesh = ResourceManager::CreateAsset<MeshResource>("lbo.obj");
 		MeshResource::Sptr frogMesh = ResourceManager::CreateAsset<MeshResource>("frog.obj");
 
-		MeshResource::Sptr tmMesh = ResourceManager::CreateAsset<MeshResource>("tm.obj");
-		MeshResource::Sptr bmMesh = ResourceManager::CreateAsset<MeshResource>("bm.obj");
-
-		MeshResource::Sptr PBMesh = ResourceManager::CreateAsset<MeshResource>("PB.obj");
 		MeshResource::Sptr BGMesh = ResourceManager::CreateAsset<MeshResource>("Background.obj");
 		MeshResource::Sptr ExitTreeMesh = ResourceManager::CreateAsset<MeshResource>("ExitTree.obj");
 
@@ -2488,221 +2469,135 @@ int main() {
 
 
 		//Background Assets
-		createBackgroundAsset("1", glm::vec3(-1.f, 5.0f, -0.f), 0.5, glm::vec3(83.f, 5.0f, 0.0f), BranchMesh, BranchMaterial);
-		createBackgroundAsset("2", glm::vec3(-200.f, 5.0f, -0.f), 0.5, glm::vec3(83.f, 5.0f, 0.0f), BranchMesh, BranchMaterial);
+		createBackgroundAsset("1", glm::vec3(-401.f, 5.0f, -0.f), 0.5, glm::vec3(83.f, 5.0f, 0.0f), BranchMesh, BranchMaterial);
+		createBackgroundAsset("2", glm::vec3(-600.f, 5.0f, -0.f), 0.5, glm::vec3(83.f, 5.0f, 0.0f), BranchMesh, BranchMaterial);
 
-		createBackgroundAsset("3", glm::vec3(-186.f, 4.0f, -0.660), 3, glm::vec3(83.f, 5.0f, 0.0f), LogMesh, LogMaterial);
-		createBackgroundAsset("4", glm::vec3(-20.f, 0.0f, -0.660), 0.5, glm::vec3(400.f, 5.0f, 0.0f), LogMesh, LogMaterial);
+		createBackgroundAsset("3", glm::vec3(-586.f, 4.0f, -0.660), 3, glm::vec3(83.f, 5.0f, 0.0f), LogMesh, LogMaterial);
+		createBackgroundAsset("4", glm::vec3(-420.f, 0.0f, -0.660), 0.5, glm::vec3(400.f, 5.0f, 0.0f), LogMesh, LogMaterial);
 
-		createBackgroundAsset("5", glm::vec3(-54.5, 5.470f, -0.330), 6.0, glm::vec3(83.f, 5.0f, 0.0f), Plant1Mesh, PlantMaterial);
-		createBackgroundAsset("6", glm::vec3(-140.5, 5.470f, -0.330), 6.0, glm::vec3(83.f, 5.0f, 0.0f), Plant2Mesh, PlantMaterial);
-		createBackgroundAsset("7", glm::vec3(-240.5, 5.470f, -0.330), 6.0, glm::vec3(83.f, 5.0f, 0.0f), Plant3Mesh, PlantMaterial);
+		createBackgroundAsset("5", glm::vec3(-454.5, 5.470f, -0.330), 6.0, glm::vec3(83.f, 5.0f, 0.0f), Plant1Mesh, PlantMaterial);
+		createBackgroundAsset("6", glm::vec3(-540.5, 5.470f, -0.330), 6.0, glm::vec3(83.f, 5.0f, 0.0f), Plant2Mesh, PlantMaterial);
+		createBackgroundAsset("7", glm::vec3(-640.5, 5.470f, -0.330), 6.0, glm::vec3(83.f, 5.0f, 0.0f), Plant3Mesh, PlantMaterial);
 
-		createBackgroundAsset("8", glm::vec3(-20.f, 0.0f, -0.660), 6.0, glm::vec3(83.f, 5.0f, 0.0f), SunflowerMesh, SunflowerMaterial);
+		createBackgroundAsset("8", glm::vec3(-420.f, 0.0f, -0.660), 6.0, glm::vec3(83.f, 5.0f, 0.0f), SunflowerMesh, SunflowerMaterial);
 
-		createBackgroundAsset("9", glm::vec3(-13.f, 5.0f, -0.430), 0.5, glm::vec3(83.f, 5.0f, 90.0f), ToadMesh, ToadMaterial);
-		createBackgroundAsset("10", glm::vec3(-90.f, 5.0f, -0.430), 0.5, glm::vec3(83.f, 5.0f, 90.0f), ToadMesh, ToadMaterial);
-		createBackgroundAsset("11", glm::vec3(-330.f, 5.0f, -0.430), 0.5, glm::vec3(83.f, 5.0f, 90.0f), ToadMesh, ToadMaterial);
+		createBackgroundAsset("9", glm::vec3(-413.f, 5.0f, -0.430), 0.5, glm::vec3(83.f, 5.0f, 90.0f), ToadMesh, ToadMaterial);
+		createBackgroundAsset("10", glm::vec3(-490.f, 5.0f, -0.430), 0.5, glm::vec3(83.f, 5.0f, 90.0f), ToadMesh, ToadMaterial);
+		createBackgroundAsset("11", glm::vec3(-730.f, 5.0f, -0.430), 0.5, glm::vec3(83.f, 5.0f, 90.0f), ToadMesh, ToadMaterial);
 
-		createBackgroundAsset("12", glm::vec3(-20.f, 0.0f, -0.660), 0.5, glm::vec3(83.f, 5.0f, 90.0f), Rock1Mesh, boxMaterial);
-		createBackgroundAsset("13", glm::vec3(-20.f, 0.0f, -0.660), 0.5, glm::vec3(83.f, 5.0f, 90.0f), Rock2Mesh, rockMaterial);
-		createBackgroundAsset("14", glm::vec3(-20.f, 0.0f, -0.660), 0.5, glm::vec3(83.f, 5.0f, 90.0f), Rock3Mesh, rockMaterial);
+		createBackgroundAsset("12", glm::vec3(-420.f, 0.0f, -0.660), 0.5, glm::vec3(83.f, 5.0f, 90.0f), Rock1Mesh, boxMaterial);
+		createBackgroundAsset("13", glm::vec3(-420.f, 0.0f, -0.660), 0.5, glm::vec3(83.f, 5.0f, 90.0f), Rock2Mesh, rockMaterial);
+		createBackgroundAsset("14", glm::vec3(-420.f, 0.0f, -0.660), 0.5, glm::vec3(83.f, 5.0f, 90.0f), Rock3Mesh, rockMaterial);
 
-		createBackgroundAsset("15", glm::vec3(-20.f, 6.0f, -0.660), 0.5, glm::vec3(83.f, 5.0f, 90.0f), twigMesh, twigMaterial);
-		createBackgroundAsset("16", glm::vec3(13.060f, 1.530f, 0.550), 0.05, glm::vec3(83.f, -7.0f, 90.0f), frogMesh, frogMaterial);
+		createBackgroundAsset("15", glm::vec3(-420.f, 6.0f, -0.660), 0.5, glm::vec3(83.f, 5.0f, 90.0f), twigMesh, twigMaterial);
+		createBackgroundAsset("16", glm::vec3(-387.060f, 1.530f, 0.550), 0.05, glm::vec3(83.f, -7.0f, 90.0f), frogMesh, frogMaterial);
 
-		createBackgroundAsset("17", glm::vec3(7.5f, 4.6f, -1.8), 0.5, glm::vec3(83.f, -7.0f, 90.0f), bmMesh, bmMaterial);
-		createBackgroundAsset("18", glm::vec3(-6.f, -12.660f, 0.400), 0.05, glm::vec3(83.f, -7.0f, 90.0f), tmMesh, tmMaterial);
+		createBackgroundAsset("17", glm::vec3(-392.5f, 4.6f, -1.8), 0.5, glm::vec3(83.f, -7.0f, 90.0f), bmMesh, bmMaterial);
+		createBackgroundAsset("18", glm::vec3(-406.f, -12.660f, 0.400), 0.05, glm::vec3(83.f, -7.0f, 90.0f), tmMesh, tmMaterial);
 
 		//Obstacles
-		createGroundObstacle("2", glm::vec3(-20.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 1 (small jump)
-		createGroundObstacle("3", glm::vec3(-60.f, 0.0f, 3.0), glm::vec3(1.f, 1.f, 1.f), glm::vec3(90.f, 0.0f, 73.f), vinesMesh, vinesMaterial); // vine 1 (jump blocking)
-		createGroundObstacle("4", glm::vec3(-110.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 1 (tall jump)
-		createGroundObstacle("5", glm::vec3(-45.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 2
-		createGroundObstacle("6", glm::vec3(-150.f, 5.530f, 0.250f), glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(90.f, 0.0f, -25.f), vinesMesh, vinesMaterial); // vine 2 (squish blocking)
-		createGroundObstacle("7", glm::vec3(-150.240f, 0.f, 7.88f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, 84.f), cobwebMesh, cobwebMaterial); //cobweb 2 (squish Blocking 2)
+		
+		//createGroundObstacle("18", glm::vec3(-320.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 8 (small jump)
+		//createGroundObstacle("20", glm::vec3(-340.f, 0.0f, 3.0), glm::vec3(1.f, 1.f, 1.f), glm::vec3(90.f, 0.0f, 73.f), vinesMesh, vinesMaterial); // vine 6 (jump blocking)
+		//createGroundObstacle("24", glm::vec3(-380.f, 5.530f, 0.250f), glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(90.f, 0.0f, -25.f), vinesMesh, vinesMaterial); // vine 8 (squish blocking)
+		//createGroundObstacle("26", glm::vec3(-395.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 9 (tall jump)
 
-		createGroundObstacle("8", glm::vec3(-170.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 3 (small jump)
-		createGroundObstacle("9", glm::vec3(-200.f, 0.0f, 3.0), glm::vec3(1.f, 1.f, 1.f), glm::vec3(90.f, 0.0f, 73.f), vinesMesh, vinesMaterial); // vine 3 (jump blocking)
-		createGroundObstacle("10", glm::vec3(-220.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 3 (tall jump)
-		createGroundObstacle("11", glm::vec3(-230.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 4 (small jump)
-		createGroundObstacle("12", glm::vec3(-250.f, 0.0f, 3.0), glm::vec3(1.f, 1.f, 1.f), glm::vec3(90.f, 0.0f, 73.f), vinesMesh, vinesMaterial); // vine 4 (jump blocking)
-		createGroundObstacle("13", glm::vec3(-275.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 5 (small jump)
-		createGroundObstacle("14", glm::vec3(-300.f, 5.530f, 0.250f), glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(90.f, 0.0f, -25.f), vinesMesh, vinesMaterial); // vine 5 (squish blocking)
-		createGroundObstacle("15", glm::vec3(-300.240f, 0.f, 7.88f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, 84.f), cobwebMesh, cobwebMaterial); //cobweb 4 (squish Blocking 2)
+		createGroundObstacle("1", glm::vec3(-720.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 8 (small jump)
+		createGroundObstacle("2", glm::vec3(-720.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), tmMesh, tmMaterial); //mushroom 8 (small jump)
+		createGroundObstacle("3", glm::vec3(-720.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), bmMesh, bmMaterial); //mushroom 8 (small jump)
+		createGroundObstacle("4", glm::vec3(-720.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), ToadMesh, ToadMaterial); //mushroom 8 (small jump)
 
-		createGroundObstacle("16", glm::vec3(-310.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 6 (small jump)
-		createGroundObstacle("17", glm::vec3(-315.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 7 (small jump)
-		createGroundObstacle("18", glm::vec3(-320.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 8 (small jump)
-		createGroundObstacle("19", glm::vec3(-325.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 5 (tall jump)
-		createGroundObstacle("20", glm::vec3(-340.f, 0.0f, 3.0), glm::vec3(1.f, 1.f, 1.f), glm::vec3(90.f, 0.0f, 73.f), vinesMesh, vinesMaterial); // vine 6 (jump blocking)
-		createGroundObstacle("21", glm::vec3(-345.f, 5.530f, 0.250f), glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(90.f, 0.0f, -25.f), vinesMesh, vinesMaterial); // vine 7 (squish blocking)
-		createGroundObstacle("22", glm::vec3(-345.240f, 0.f, 7.88f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, 84.f), cobwebMesh, cobwebMaterial); //cobweb 6 (squish Blocking 2)
-		createGroundObstacle("23", glm::vec3(-360.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 7 (tall jump)
-		createGroundObstacle("24", glm::vec3(-380.f, 5.530f, 0.250f), glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(90.f, 0.0f, -25.f), vinesMesh, vinesMaterial); // vine 8 (squish blocking)
-		createGroundObstacle("25", glm::vec3(-380.240f, 0.f, 7.88f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, 84.f), cobwebMesh, cobwebMaterial); //cobweb 8 (squish Blocking 2)
-		createGroundObstacle("26", glm::vec3(-395.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 9 (tall jump)
+		createGroundObstacle("5", glm::vec3(-720.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), LogMesh, LogMaterial); //mushroom 8 (small jump)
+		createGroundObstacle("6", glm::vec3(-720.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), Rock1Mesh, rockMaterial); //mushroom 8 (small jump)
+		createGroundObstacle("7", glm::vec3(-720.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), Rock2Mesh, rockMaterial); //mushroom 8 (small jump)
+		createGroundObstacle("8", glm::vec3(-720.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), Rock3Mesh, rockMaterial); //mushroom 8 (small jump)
 
-		//3D Backgrounds
-		createGroundObstacle("27", glm::vec3(107.7f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
-		createGroundObstacle("28", glm::vec3(0.f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
-		createGroundObstacle("29", glm::vec3(-107.7f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
-
-		createGroundObstacle("30", glm::vec3(-215.4f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
-		createGroundObstacle("31", glm::vec3(-323.1f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
-		createGroundObstacle("32", glm::vec3(-430.8f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
-
-		//2DBackGrounds
-		createGroundObstacle("33", glm::vec3(350.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, bgMaterial);
-		createGroundObstacle("34", glm::vec3(-50.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, bgMaterial);
-		createGroundObstacle("35", glm::vec3(-425.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, bgMaterial);
-		createGroundObstacle("36", glm::vec3(-1225.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, bgMaterial);
-		createGroundObstacle("37", glm::vec3(-1650.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, bgMaterial);
-
-		//Grass
-		createGroundObstacle("38", glm::vec3(-18.170f, -38.230f, 5.250f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass1Material);
-		createGroundObstacle("39", glm::vec3(29.580f, 46.920f, 5.080f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass2Material);
-		createGroundObstacle("40", glm::vec3(2.090f, -47.360f, 5.090f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass3Material);
-		createGroundObstacle("41", glm::vec3(35.700f, -37.550f, 5.310f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass4Material);
-		createGroundObstacle("42", glm::vec3(-47.340f, -37.120f, 5.560f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass5Material);
-
-		createGroundObstacle("43", glm::vec3(-18.170f - 103.5f, -38.230f, 5.250f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass1Material);
-		createGroundObstacle("44", glm::vec3(29.580f - 103.5f, 46.920f, 5.080f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass2Material);
-		createGroundObstacle("45", glm::vec3(2.090f - 103.5f, -47.360f, 5.090f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass3Material);
-		createGroundObstacle("46", glm::vec3(35.700f - 103.5f, -37.550f, 5.310f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass4Material);
-		createGroundObstacle("47", glm::vec3(-47.340f - 103.5f, -37.120f, 5.560f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass5Material);
-
-		createGroundObstacle("48", glm::vec3(-18.170f - 103.5f - 103.5f, -38.230f, 5.250f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass1Material);
-		createGroundObstacle("49", glm::vec3(29.580f - 103.5f - 103.5f, 46.920f, 5.080f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass2Material);
-		createGroundObstacle("50", glm::vec3(2.090f - 103.5f - 103.5f, -47.360f, 5.090f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass3Material);
-		createGroundObstacle("51", glm::vec3(35.700f - 103.5f - 103.5f, -37.550f, 5.310f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass4Material);
-		createGroundObstacle("52", glm::vec3(-47.340f - 103.5f - 103.5f, -37.120f, 5.560f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass5Material);
-
-		createGroundObstacle("53", glm::vec3(-18.170f - 103.5f - 103.5f - 103.5f, -38.230f, 5.250f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass1Material);
-		createGroundObstacle("54", glm::vec3(29.580f - 103.5f - 103.5f - 103.5f, 46.920f, 5.080f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass2Material);
-		createGroundObstacle("55", glm::vec3(2.090f - 103.5f - 103.5f - 103.5f, -47.360f, 5.090f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass3Material);
-		createGroundObstacle("56", glm::vec3(35.700f - 103.5f - 103.5f - 103.5f, -37.550f, 5.310f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass4Material);
-		createGroundObstacle("57", glm::vec3(-47.340f - 103.5f - 103.5f - 103.5f, -37.120f, 5.560f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass5Material);
-
-		//Exit Tree
-		createGroundObstacle("58", glm::vec3(-409.f, -3.380f, -0.340f), glm::vec3(3.0f, 3.0f, 3.0f), glm::vec3(90.0f, 0.0f, 140.f), ExitTreeMesh, ExitTreeMaterial);
-
-		//Foreground Grass
-		createGroundObstacle("59", glm::vec3(40.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
-		createGroundObstacle("60", glm::vec3(0.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
-		createGroundObstacle("61", glm::vec3(-40.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
-		createGroundObstacle("62", glm::vec3(-80.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
-		createGroundObstacle("63", glm::vec3(-120.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
-		createGroundObstacle("64", glm::vec3(-160.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
-
-		createGroundObstacle("65", glm::vec3(-200.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
-		createGroundObstacle("66", glm::vec3(-240.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
-		createGroundObstacle("67", glm::vec3(-280.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
-		createGroundObstacle("68", glm::vec3(-320.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
-		createGroundObstacle("69", glm::vec3(-360.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
-		createGroundObstacle("70", glm::vec3(-400.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
-
+		createGroundObstacle("9", glm::vec3(-720.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), twigMesh, twigMaterial); //mushroom 8 (small jump)
 
 		//Collisions
 
-		//mushroom 1 collision
-		createCollision("2", -19.660f, 1.560f, 1.f, 1.f);
-		createCollision("3", -20.410f, 1.560f, 1.f, 1.f);
-		createCollision("4", -19.970f, 1.860f, 1.f, 1.f);
-		createCollision("5", -20.190f, 0.450f, 1.f, 1.f);
-
-		//mushroom 2 collision
-		createCollision("6", -44.660f, 1.560f, 1.f, 1.f);
-		createCollision("7", -45.410f, 1.560f, 1.f, 1.f);
-		createCollision("8", -44.970f, 1.860f, 1.f, 1.f);
-		createCollision("9", -45.190f, 0.450f, 1.f, 1.f);
-
-		// vine 1 collisions
-		createCollision("10", -53.30f, 11.f, 0.5f, 5.5f);
-		createCollision("11", -60.30f, 11.f, 0.5f, 5.5f);
-		createCollision("12", -56.8f, 6.f, 4.0f, 0.5f);
-		createCollision("13", -56.8f, 17.f, 4.0f, 0.5f);
-
-		//cobweb collisions
-		createCollision("14", -110.f, 1.63f, 1.f, 7.f);
-
-		// squish collision
-		createCollision("15", -149.780f, 10.4f, 0.420f, 10.f);
-
-		//mushroom 3 collision
-		createCollision("16", -169.660f, 1.560f, 1.f, 1.f);
-		createCollision("17", -170.410f, 1.560f, 1.f, 1.f);
-		createCollision("18", -169.970f, 1.860f, 1.f, 1.f);
-		createCollision("19", -170.190f, 0.450f, 1.f, 1.f);
-
-		// vine 3 collisions
-		createCollision("20", -193.30f, 11.f, 0.5f, 5.5f);
-		createCollision("21", -200.30f, 11.f, 0.5f, 5.5f);
-		createCollision("22", -196.8f, 6.f, 4.0f, 0.5f);
-		createCollision("23", -196.8f, 17.f, 4.0f, 0.5f);
-
-		//cobweb collisions
-		createCollision("24", -220.f, 1.63f, 1.f, 7.f);
-
-		//mushroom 4 collision
-		createCollision("25", -229.660f, 1.560f, 1.f, 1.f);
-		createCollision("26", -230.410f, 1.560f, 1.f, 1.f);
-		createCollision("27", -229.970f, 1.860f, 1.f, 1.f);
-		createCollision("28", -230.190f, 0.450f, 1.f, 1.f);
-
-		// vine 4 collisions
-		createCollision("29", -243.30f, 11.f, 0.5f, 5.5f);
-		createCollision("30", -250.30f, 11.f, 0.5f, 5.5f);
-		createCollision("31", -246.8f, 6.f, 4.0f, 0.5f);
-		createCollision("32", -246.8f, 17.f, 4.0f, 0.5f);
-
-		//mushroom 5 collision
-		createCollision("33", -274.660f, 1.560f, 1.f, 1.f);
-		createCollision("34", -275.410f, 1.560f, 1.f, 1.f);
-		createCollision("35", -274.970f, 1.860f, 1.f, 1.f);
-		createCollision("36", -275.190f, 0.450f, 1.f, 1.f);
-
-		// squish collision
-		createCollision("37", -299.780f, 10.4f, 0.420f, 10.f);
-
-		//mushroom 6 collision
-		createCollision("38", -309.660f, 1.560f, 1.f, 1.f);
-		createCollision("39", -310.410f, 1.560f, 1.f, 1.f);
-		createCollision("40", -309.970f, 1.860f, 1.f, 1.f);
-		createCollision("41", -310.190f, 0.450f, 1.f, 1.f);
-
-		//mushroom 7 collision
-		createCollision("42", -314.660f, 1.560f, 1.f, 1.f);
-		createCollision("43", -315.410f, 1.560f, 1.f, 1.f);
-		createCollision("44", -314.970f, 1.860f, 1.f, 1.f);
-		createCollision("45", -315.190f, 0.450f, 1.f, 1.f);
-
 		//mushroom 8 collision
-		createCollision("46", -319.660f, 1.560f, 1.f, 1.f);
-		createCollision("47", -320.410f, 1.560f, 1.f, 1.f);
-		createCollision("48", -319.970f, 1.860f, 1.f, 1.f);
-		createCollision("49", -320.190f, 0.450f, 1.f, 1.f);
-
-		//cobweb collisions
-		createCollision("50", -325.f, 1.63f, 1.f, 7.f);
+		createCollision("101", -719.660f, 1.560f, 1.f, 1.f);
+		createCollision("102", -720.410f, 1.560f, 1.f, 1.f);
+		createCollision("103", -719.970f, 1.860f, 1.f, 1.f);
+		createCollision("104", -720.190f, 0.450f, 1.f, 1.f);
 
 		// vine 6 collisions
-		createCollision("51", -333.30f, 11.f, 0.5f, 5.5f);
-		createCollision("52", -340.30f, 11.f, 0.5f, 5.5f);
-		createCollision("53", -336.8f, 6.f, 4.0f, 0.5f);
-		createCollision("54", -336.8f, 17.f, 4.0f, 0.5f);
+		//createCollision("51", -333.30f, 11.f, 0.5f, 5.5f);
+		//createCollision("52", -340.30f, 11.f, 0.5f, 5.5f);
+		//createCollision("53", -336.8f, 6.f, 4.0f, 0.5f);
+		//createCollision("54", -336.8f, 17.f, 4.0f, 0.5f);
 
 		// squish collision
-		createCollision("55", -344.780f, 10.4f, 0.420f, 10.f);
+		//createCollision("57", -379.780f, 10.4f, 0.420f, 10.f);
 
 		//cobweb collisions
-		createCollision("56", -360.f, 1.63f, 1.f, 7.f);
+		//createCollision("58", -395.f, 1.63f, 1.f, 7.f);
 
-		// squish collision
-		createCollision("57", -379.780f, 10.4f, 0.420f, 10.f);
 
-		//cobweb collisions
-		createCollision("58", -395.f, 1.63f, 1.f, 7.f);
+
+
+		//3D Backgrounds
+		createGroundObstacle("27", glm::vec3(-292.3f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
+		createGroundObstacle("28", glm::vec3(-400.f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
+		createGroundObstacle("29", glm::vec3(-507.7f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
+
+		createGroundObstacle("30", glm::vec3(-615.4f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
+		createGroundObstacle("31", glm::vec3(-723.1f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
+		createGroundObstacle("32", glm::vec3(-830.8f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
+
+		//2DBackGrounds
+		createGroundObstacle("33", glm::vec3(-50.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, bgMaterial);
+		createGroundObstacle("34", glm::vec3(-450.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, bgMaterial);
+		createGroundObstacle("35", glm::vec3(-825.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, bgMaterial);
+		createGroundObstacle("36", glm::vec3(-1625.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, bgMaterial);
+		createGroundObstacle("37", glm::vec3(-2150.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, bgMaterial);
+
+		//Grass
+		createGroundObstacle("38", glm::vec3(-418.170f, -38.230f, 5.250f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass1Material);
+		createGroundObstacle("39", glm::vec3(-370.42f, 46.920f, 5.080f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass2Material);
+		createGroundObstacle("40", glm::vec3(-397.91f, -47.360f, 5.090f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass3Material);
+		createGroundObstacle("41", glm::vec3(-364.3f, -37.550f, 5.310f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass4Material);
+		createGroundObstacle("42", glm::vec3(-447.340f, -37.120f, 5.560f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass5Material);
+
+		createGroundObstacle("43", glm::vec3(-418.170f - 103.5f, -38.230f, 5.250f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass1Material);
+		createGroundObstacle("44", glm::vec3(-370.42f - 103.5f, 46.920f, 5.080f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass2Material);
+		createGroundObstacle("45", glm::vec3(-397.91f - 103.5f, -47.360f, 5.090f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass3Material);
+		createGroundObstacle("46", glm::vec3(-364.3f - 103.5f, -37.550f, 5.310f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass4Material);
+		createGroundObstacle("47", glm::vec3(-47.340f - 103.5f - 400.f, -37.120f, 5.560f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass5Material);
+
+		createGroundObstacle("48", glm::vec3(-18.170f - 103.5f - 103.5f -400.f, -38.230f, 5.250f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass1Material);
+		createGroundObstacle("49", glm::vec3(29.580f - 103.5f - 103.5f - 400.f, 46.920f, 5.080f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass2Material);
+		createGroundObstacle("50", glm::vec3(2.090f - 103.5f - 103.5f - 400.f, -47.360f, 5.090f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass3Material);
+		createGroundObstacle("51", glm::vec3(35.700f - 103.5f - 103.5f - 400.f, -37.550f, 5.310f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass4Material);
+		createGroundObstacle("52", glm::vec3(-47.340f - 103.5f - 103.5f - 400.f, -37.120f, 5.560f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass5Material);
+
+		createGroundObstacle("53", glm::vec3(-18.170f - 103.5f - 103.5f - 103.5f - 400.f, -38.230f, 5.250f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass1Material);
+		createGroundObstacle("54", glm::vec3(29.580f - 103.5f - 103.5f - 103.5f - 400.f, 46.920f, 5.080f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass2Material);
+		createGroundObstacle("55", glm::vec3(2.090f - 103.5f - 103.5f - 103.5f - 400.f, -47.360f, 5.090f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass3Material);
+		createGroundObstacle("56", glm::vec3(35.700f - 103.5f - 103.5f - 103.5f - 400.f, -37.550f, 5.310f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass4Material);
+		createGroundObstacle("57", glm::vec3(-47.340f - 103.5f - 103.5f - 103.5f - 400.f, -37.120f, 5.560f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass5Material);
+
+		//Exit Tree
+		createGroundObstacle("58", glm::vec3(-409.f - 400.f, -3.380f, -0.340f), glm::vec3(3.0f, 3.0f, 3.0f), glm::vec3(90.0f, 0.0f, 140.f), ExitTreeMesh, ExitTreeMaterial);
+
+		//Foreground Grass
+		createGroundObstacle("59", glm::vec3(40.f - 400.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+		createGroundObstacle("60", glm::vec3(0.f - 400.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+		createGroundObstacle("61", glm::vec3(-40.f - 400.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+		createGroundObstacle("62", glm::vec3(-80.f - 400.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+		createGroundObstacle("63", glm::vec3(-120.f - 400.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+		createGroundObstacle("64", glm::vec3(-160.f - 400.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+
+		createGroundObstacle("65", glm::vec3(-200.f - 400.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+		createGroundObstacle("66", glm::vec3(-240.f - 400.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+		createGroundObstacle("67", glm::vec3(-280.f - 400.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+		createGroundObstacle("68", glm::vec3(-320.f - 400.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+		createGroundObstacle("69", glm::vec3(-360.f - 400.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+		createGroundObstacle("70", glm::vec3(-400.f - 400.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+
+
+		
 
 		// Set up the scene's camera
 		GameObject::Sptr camera = scene->CreateGameObject("Main Camera");
@@ -2739,7 +2634,7 @@ int main() {
 		GameObject::Sptr player = scene->CreateGameObject("player");
 		{
 			// Set position in the scene
-			player->SetPostion(glm::vec3(6.f, 0.0f, 1.0f));
+			player->SetPostion(glm::vec3(-406.f, 0.0f, 1.0f));
 			player->SetScale(glm::vec3(1.0f, 1.0f, 1.0f));
 			player->SetScale(glm::vec3(0.5f, 0.5f, 0.5f));
 
@@ -4046,8 +3941,6 @@ int main() {
 
 			}
 			
-			
-
 			if (playerLose == true)
 			{
 				scene->FindObjectByName("PanelPause")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6, 6.5));
@@ -4181,7 +4074,16 @@ int main() {
 			}
 
 			if (playerCollision.hitEntered == true) {
-				scene->FindObjectByName("player")->SetPostion(glm::vec3(6.f, 0.f, scene->FindObjectByName("player")->GetPosition().z));
+
+				if (scenevalue == 1)
+				{
+					scene->FindObjectByName("player")->SetPostion(glm::vec3(-406.f, 0.f, scene->FindObjectByName("player")->GetPosition().z));
+				}
+				else if (scenevalue == 2)
+				{
+					scene->FindObjectByName("player")->SetPostion(glm::vec3(6.f, 0.f, scene->FindObjectByName("player")->GetPosition().z));
+				}
+				
 				std::cout << "colision detected";
 				playerCollision.hitEntered = false;
 				playerMove = false;
@@ -4193,12 +4095,25 @@ int main() {
 			playerCollision.update(scene->FindObjectByName("player")->GetPosition()); // to update
 			scene->FindObjectByName("player")->Get<JumpBehaviour>()->getPlayerCoords(scene->FindObjectByName("player")->GetPosition()); //send the players coordinates to JumpBehavior so we know when the player is on the ground
 
-			if (scene->FindObjectByName("player")->GetPosition().x < -400)
+			if (scenevalue == 1)
 			{
-				scene->FindObjectByName("player")->SetPostion(glm::vec3(6.f, 0.f, scene->FindObjectByName("player")->GetPosition().z));
-				playerMove = false;
-				playerWin = true;
+				if (scene->FindObjectByName("player")->GetPosition().x < -800)
+				{
+					scene->FindObjectByName("player")->SetPostion(glm::vec3(6.f, 0.f, scene->FindObjectByName("player")->GetPosition().z));
+					playerMove = false;
+					playerWin = true;
+				}
 			}
+			else if (scenevalue == 2)
+			{
+				if (scene->FindObjectByName("player")->GetPosition().x < -400)
+				{
+					scene->FindObjectByName("player")->SetPostion(glm::vec3(6.f, 0.f, scene->FindObjectByName("player")->GetPosition().z));
+					playerMove = false;
+					playerWin = true;
+				}
+			}
+			
 
 		}
 		else
