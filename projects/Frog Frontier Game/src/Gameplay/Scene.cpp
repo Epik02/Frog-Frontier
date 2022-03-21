@@ -59,7 +59,7 @@ namespace Gameplay {
 
 	void Scene::SetAmbientLight(const glm::vec3& value) {
 		_ambientLight = value;
-		BaseShader->SetUniform("u_AmbientCol", glm::vec3(0.1f));
+		BaseShader->SetUniform("u_AmbientCol", glm::vec3(value));
 	}
 
 	const glm::vec3& Scene::GetAmbientLight() const { 

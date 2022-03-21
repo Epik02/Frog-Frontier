@@ -353,6 +353,11 @@ bool playerMove = false;
 int clickCount = 0;
 bool playerJumping = false;
 bool soundprompt = false;
+//Gonna make a scenevalue to tell the keyboards what to do or some other scene specific update changes
+// So 11 is main menu, 12 is controls, 13 is levelselect
+// and then the actual levels can just have their value
+int scenevalue = 11;
+
 
 //secoundary keyboard function for controls when on the menu or level select screen, possibly when paused?
 // currently used for testing
@@ -675,7 +680,7 @@ int main() {
 	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 
 	FMOD::System* system;
-	FMOD::Sound* sound1, * sound2, * sound3, *sound4;
+	FMOD::Sound* sound1, * sound2, * sound3, * sound4, * sound5;
 	FMOD::Channel* channel = 0;
 	FMOD_RESULT       result;
 	void* extradriverdata = 0;
@@ -691,6 +696,8 @@ int main() {
 	result = system->createSound("media/Pop2.wav", FMOD_DEFAULT, 0, &sound3);
 
 	result = system->createSound("media/bensound-funnysong.wav", FMOD_LOOP_NORMAL, 0, &sound4);
+
+	result = system->createSound("media/Pitched-Pop.wav", FMOD_LOOP_NORMAL, 0, &sound5);
 
 	bool loadScene = false;
 	// For now we can use a toggle to generate our scene vs load from file
@@ -1945,13 +1952,8 @@ int main() {
 			{ ShaderPartType::Fragment, "shaders/frag_blinn_phong_textured.glsl" }
 		});
 
-		MeshResource::Sptr monkeyMesh = ResourceManager::CreateAsset<MeshResource>("Monkey.obj");
-		Texture2D::Sptr    boxTexture = ResourceManager::CreateAsset<Texture2D>("textures/box-diffuse.png");
-		Texture2D::Sptr    grassTexture = ResourceManager::CreateAsset<Texture2D>("textures/grass.png");
-		Texture2D::Sptr    monkeyTex = ResourceManager::CreateAsset<Texture2D>("textures/monkey-uvMap.png");
 		Texture2D::Sptr    MenuTex = ResourceManager::CreateAsset<Texture2D>("textures/Game Poster 3.png");
 	
-		
 		// Textures for UI
 
 		Texture2D::Sptr    ButtonBackTex = ResourceManager::CreateAsset<Texture2D>("textures/Button Background.png");
@@ -1960,40 +1962,15 @@ int main() {
 		Texture2D::Sptr    FFLogoTex = ResourceManager::CreateAsset<Texture2D>("textures/Frog Frontier Logo.png");
 		Texture2D::Sptr    BackTextTex = ResourceManager::CreateAsset<Texture2D>("textures/Exit Text.png");
 		Texture2D::Sptr    StartTextTex = ResourceManager::CreateAsset<Texture2D>("textures/Start Text.png");
-		Texture2D::Sptr    FilterTex = ResourceManager::CreateAsset<Texture2D>("textures/Button Filter.png");
 		Texture2D::Sptr    ControlsTex = ResourceManager::CreateAsset<Texture2D>("textures/ControlsText.png");
+		Texture2D::Sptr    FilterTex = ResourceManager::CreateAsset<Texture2D>("textures/Button Filter.png");
+		
 
 		// Create an empty scene
 		scene = std::make_shared<Scene>();
 
 		// I hate this
 		scene->BaseShader = uboShader;
-
-		// Create our materials
-		Material::Sptr boxMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			boxMaterial->Name = "Box";
-			boxMaterial->MatShader = scene->BaseShader;
-			boxMaterial->Texture = boxTexture;
-			boxMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr grassMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			grassMaterial->Name = "Grass";
-			grassMaterial->MatShader = scene->BaseShader;
-			grassMaterial->Texture = grassTexture;
-			grassMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr monkeyMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			monkeyMaterial->Name = "Monkey";
-			monkeyMaterial->MatShader = scene->BaseShader;
-			monkeyMaterial->Texture = monkeyTex;
-			monkeyMaterial->Shininess = 256.0f;
-
-		}
 
 		Material::Sptr MenuMaterial = ResourceManager::CreateAsset<Material>();
 		{
@@ -2264,9 +2241,6 @@ int main() {
 			{ ShaderPartType::Fragment, "shaders/frag_blinn_phong_textured.glsl" }
 		});
 
-		Texture2D::Sptr    boxTexture = ResourceManager::CreateAsset<Texture2D>("textures/box-diffuse.png");
-		Texture2D::Sptr    grassTexture = ResourceManager::CreateAsset<Texture2D>("textures/grass.png");
-		Texture2D::Sptr    monkeyTex = ResourceManager::CreateAsset<Texture2D>("textures/monkey-uvMap.png");
 		Texture2D::Sptr    MenuTex = ResourceManager::CreateAsset<Texture2D>("textures/ControlsMenu.png");
 
 		// Textures for UI
@@ -2279,24 +2253,6 @@ int main() {
 
 		// I hate this
 		scene->BaseShader = uboShader;
-
-		// Create our materials
-		Material::Sptr boxMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			boxMaterial->Name = "Box";
-			boxMaterial->MatShader = scene->BaseShader;
-			boxMaterial->Texture = boxTexture;
-			boxMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr grassMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			grassMaterial->Name = "Grass";
-			grassMaterial->MatShader = scene->BaseShader;
-			grassMaterial->Texture = grassTexture;
-			grassMaterial->Shininess = 2.0f;
-		}
-
 
 		Material::Sptr MenuMaterial = ResourceManager::CreateAsset<Material>();
 		{
@@ -2425,10 +2381,6 @@ int main() {
 			{ ShaderPartType::Fragment, "shaders/frag_blinn_phong_textured.glsl" }
 		});
 
-		MeshResource::Sptr monkeyMesh = ResourceManager::CreateAsset<MeshResource>("Monkey.obj");
-		Texture2D::Sptr    boxTexture = ResourceManager::CreateAsset<Texture2D>("textures/box-diffuse.png");
-		Texture2D::Sptr    grassTexture = ResourceManager::CreateAsset<Texture2D>("textures/grass.png");
-		Texture2D::Sptr    monkeyTex = ResourceManager::CreateAsset<Texture2D>("textures/monkey-uvMap.png");
 		Texture2D::Sptr    MenuTex = ResourceManager::CreateAsset<Texture2D>("textures/Game Poster 2 Extended.png");
 		
 		Texture2D::Sptr    LSButtonTex = ResourceManager::CreateAsset<Texture2D>("textures/Level Button Background 1.png");
@@ -2452,32 +2404,6 @@ int main() {
 
 		// I hate this
 		scene->BaseShader = uboShader;
-
-		// Create our materials
-		Material::Sptr boxMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			boxMaterial->Name = "Box";
-			boxMaterial->MatShader = scene->BaseShader;
-			boxMaterial->Texture = boxTexture;
-			boxMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr grassMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			grassMaterial->Name = "Grass";
-			grassMaterial->MatShader = scene->BaseShader;
-			grassMaterial->Texture = grassTexture;
-			grassMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr monkeyMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			monkeyMaterial->Name = "Monkey";
-			monkeyMaterial->MatShader = scene->BaseShader;
-			monkeyMaterial->Texture = monkeyTex;
-			monkeyMaterial->Shininess = 256.0f;
-
-		}
 
 		Material::Sptr MenuMaterial = ResourceManager::CreateAsset<Material>();
 		{
@@ -3006,19 +2932,17 @@ int main() {
 		/// test FMOD
 		if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS)
 			{
-			result = system->playSound(sound1, 0, false, &channel);
+			scene->SetAmbientLight(glm::vec3(0.1f));
 			std::cout << "K pressed" << std::endl;
 			}
 		if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS)
 		{
-			result = system->playSound(sound2, 0, false, &channel);
+			scene->SetAmbientLight(glm::vec3(0.2f));
 			std::cout << "J pressed" << std::endl;
 		}
-		if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS)
-		{
-			result = system->playSound(sound3, 0, false, &channel);
-			std::cout << "H pressed" << std::endl;
-		}
+
+		
+
 
 
 	
