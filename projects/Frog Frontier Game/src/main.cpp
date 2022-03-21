@@ -2410,27 +2410,33 @@ int main() {
 
 		scene->Lights[3].Position = glm::vec3(-550.0f, 1.0f, 40.0f);
 		scene->Lights[3].Color = glm::vec3(1.f, 1.f, 1.f);
-		scene->Lights[3].Range = 1000.0f;
+		
 
 		scene->Lights[4].Position = glm::vec3(-500.0f, 1.0f, 40.0f);
 		scene->Lights[4].Color = glm::vec3(1.f, 1.f, 1.f);
-		scene->Lights[4].Range = 1000.0f;
+		
 
 		scene->Lights[5].Position = glm::vec3(-550.0f, 1.0f, 40.0f);
 		scene->Lights[5].Color = glm::vec3(1.f, 1.f, 1.f);
-		scene->Lights[5].Range = 1000.0f;
+		
 
 		scene->Lights[6].Position = glm::vec3(-600.0f, 1.0f, 40.0f);
 		scene->Lights[6].Color = glm::vec3(1.f, 1.f, 1.f);
-		scene->Lights[6].Range = 1000.0f;
+		
 
 		scene->Lights[7].Position = glm::vec3(-650.0f, 1.0f, 40.0f);
 		scene->Lights[7].Color = glm::vec3(1.f, 1.f, 1.f);
-		scene->Lights[7].Range = 1000.0f;
+		
 
 		scene->Lights[8].Position = glm::vec3(-700.0f, 1.0f, 40.0f);
 		scene->Lights[8].Color = glm::vec3(1.f, 1.f, 1.f);
-		scene->Lights[8].Range = 1000.0f;
+		//scene->Lights[8].Range = 1000.0f;
+
+		scene->Lights[9].Position = glm::vec3(-750.0f, 1.0f, 40.0f);
+		scene->Lights[9].Color = glm::vec3(1.f, 1.f, 1.f);
+
+		scene->Lights[10].Position = glm::vec3(-800.0f, 1.0f, 40.0f);
+		scene->Lights[10].Color = glm::vec3(1.f, 1.f, 1.f);
 
 		// We'll create a mesh that is a simple plane that we can resize later
 		MeshResource::Sptr planeMesh = ResourceManager::CreateAsset<MeshResource>();
@@ -2502,25 +2508,24 @@ int main() {
 		//createGroundObstacle("24", glm::vec3(-380.f, 5.530f, 0.250f), glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(90.f, 0.0f, -25.f), vinesMesh, vinesMaterial); // vine 8 (squish blocking)
 		//createGroundObstacle("26", glm::vec3(-395.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 9 (tall jump)
 
-		createGroundObstacle("1", glm::vec3(-720.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 8 (small jump)
-		createGroundObstacle("2", glm::vec3(-720.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), tmMesh, tmMaterial); //mushroom 8 (small jump)
-		createGroundObstacle("3", glm::vec3(-720.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), bmMesh, bmMaterial); //mushroom 8 (small jump)
-		createGroundObstacle("4", glm::vec3(-720.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), ToadMesh, ToadMaterial); //mushroom 8 (small jump)
+		createGroundObstacle("1", glm::vec3(-450.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //red mushroom 1 (small jump)
+		createGroundObstacle("2", glm::vec3(-500.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //red mushroom 2 (small jump)
+		createGroundObstacle("3", glm::vec3(-550.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), tmMesh, tmMaterial); // tall mushroom 1 (small jump)
+		createGroundObstacle("4", glm::vec3(-600.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), bmMesh, bmMaterial); //branch mushroom 1 (small jump)
 
-		createGroundObstacle("5", glm::vec3(-720.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), LogMesh, LogMaterial); //mushroom 8 (small jump)
-		createGroundObstacle("6", glm::vec3(-720.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), Rock1Mesh, rockMaterial); //mushroom 8 (small jump)
-		createGroundObstacle("7", glm::vec3(-720.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), Rock2Mesh, rockMaterial); //mushroom 8 (small jump)
-		createGroundObstacle("8", glm::vec3(-720.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), Rock3Mesh, rockMaterial); //mushroom 8 (small jump)
-
-		createGroundObstacle("9", glm::vec3(-720.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), twigMesh, twigMaterial); //mushroom 8 (small jump)
+		createGroundObstacle("5", glm::vec3(-650.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //red mushroom 3 (small jump)
+		createGroundObstacle("6", glm::vec3(-680.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //red mushroom 4 (small jump)
+		
+		createGroundObstacle("7", glm::vec3(-710.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //red mushroom 5 (small jump)
+		createGroundObstacle("8", glm::vec3(-750.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), bmMesh, bmMaterial); //branch mushroom 2 (small jump)
 
 		//Collisions
 
 		//mushroom 8 collision
-		createCollision("101", -719.660f, 1.560f, 1.f, 1.f);
-		createCollision("102", -720.410f, 1.560f, 1.f, 1.f);
-		createCollision("103", -719.970f, 1.860f, 1.f, 1.f);
-		createCollision("104", -720.190f, 0.450f, 1.f, 1.f);
+	//	createCollision("101", -19.660f, 1.560f, 1.f, 1.f);
+	//	createCollision("102", -20.410f, 1.560f, 1.f, 1.f);
+	//	createCollision("103", -19.970f, 1.860f, 1.f, 1.f);
+	//	createCollision("104", -20.190f, 0.450f, 1.f, 1.f);
 
 		// vine 6 collisions
 		//createCollision("51", -333.30f, 11.f, 0.5f, 5.5f);
@@ -2535,7 +2540,7 @@ int main() {
 		//createCollision("58", -395.f, 1.63f, 1.f, 7.f);
 
 
-
+		
 
 		//3D Backgrounds
 		createGroundObstacle("27", glm::vec3(-292.3f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
@@ -2596,6 +2601,58 @@ int main() {
 		createGroundObstacle("69", glm::vec3(-360.f - 400.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
 		createGroundObstacle("70", glm::vec3(-400.f - 400.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
 
+		//red mushroom 1
+		createCollision("101", -19.660f - 430.f, 1.560f, 1.f, 1.f);
+		createCollision("102", -20.410f - 430.f, 1.560f, 1.f, 1.f);
+		createCollision("103", -19.970f - 430.f, 1.860f, 1.f, 1.f);
+		createCollision("104", -20.190f - 430.f, 0.450f, 1.f, 1.f);
+
+		//red mushroom 2
+		createCollision("111", -19.660f - 480.f, 1.560f, 1.f, 1.f);
+		createCollision("111", -20.410f - 480.f, 1.560f, 1.f, 1.f);
+		createCollision("111", -19.970f - 480.f, 1.860f, 1.f, 1.f);
+		createCollision("111", -20.190f - 480.f, 0.450f, 1.f, 1.f);
+
+		//tall mushroom
+		createCollision("121", -19.660f - 530.f, 1.560f, 1.f, 1.f);
+		createCollision("122", -20.410f - 530.f, 1.560f, 1.f, 1.f);
+		createCollision("123", -19.970f - 530.f, 1.860f, 1.f, 1.f);
+		createCollision("124", -20.190f - 530.f, 0.450f, 1.f, 1.f);
+		createCollision("125", -550.f, 3.430f, 2.f, 4.f);
+
+		//big mushroom
+		createCollision("131", -19.660f - 580.f, 1.560f, 1.f, 1.f);
+		createCollision("132", -20.410f - 580.f, 1.560f, 1.f, 1.f);
+		createCollision("133", -19.970f - 580.f, 1.860f, 1.f, 1.f);
+		createCollision("134", -20.190f - 580.f, 0.450f, 1.f, 1.f);
+		createCollision("135", -600.f, 3.080f, 3.f, 4.f);
+		createCollision("136", -600.f, 3.22f, 4.f, 2.f);
+
+		//red mushroom 3
+		createCollision("141", -19.660f - 630.f, 1.560f, 1.f, 1.f);
+		createCollision("142", -20.410f - 630.f, 1.560f, 1.f, 1.f);
+		createCollision("143", -19.970f - 630.f, 1.860f, 1.f, 1.f);
+		createCollision("144", -20.190f - 630.f, 0.450f, 1.f, 1.f);
+
+		//red mushroom 4
+		createCollision("151", -19.660f - 660.f, 1.560f, 1.f, 1.f);
+		createCollision("152", -20.410f - 660.f, 1.560f, 1.f, 1.f);
+		createCollision("153", -19.970f - 660.f, 1.860f, 1.f, 1.f);
+		createCollision("154", -20.190f - 660.f, 0.450f, 1.f, 1.f);
+
+		//red mushroom 5
+		createCollision("161", -19.660f - 690.f, 1.560f, 1.f, 1.f);
+		createCollision("162", -20.410f - 690.f, 1.560f, 1.f, 1.f);
+		createCollision("163", -19.970f - 690.f, 1.860f, 1.f, 1.f);
+		createCollision("164", -20.190f - 690.f, 0.450f, 1.f, 1.f);
+
+		//big mushroom 2
+		createCollision("171", -19.660f - 730.f, 1.560f, 1.f, 1.f);
+		createCollision("172", -20.410f - 730.f, 1.560f, 1.f, 1.f);
+		createCollision("173", -19.970f - 730.f, 1.860f, 1.f, 1.f);
+		createCollision("174", -20.190f - 730.f, 0.450f, 1.f, 1.f);
+		createCollision("175", -750.f, 3.080f, 3.f, 4.f);
+		createCollision("176", -750.f, 3.22f, 4.f, 2.f);
 
 		
 
