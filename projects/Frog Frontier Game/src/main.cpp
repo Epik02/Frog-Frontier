@@ -951,259 +951,11 @@ int main() {
 	// For now we can use a toggle to generate our scene vs load from file
 	if (loadScene) {
 		ResourceManager::LoadManifest("manifest.json");
-		scene = Scene::Load("scene.json");
+		scene = Scene::Load("menu.json");
 	} 
 	else {
-	
-									/// Makes scene 1 ///
-		{
-// Create our OpenGL resources
-			Shader::Sptr uboShader = ResourceManager::CreateAsset<Shader>(std::unordered_map<ShaderPartType, std::string>{
-				{ ShaderPartType::Vertex, "shaders/vertex_shader.glsl" },
-				{ ShaderPartType::Fragment, "shaders/frag_blinn_phong_textured.glsl" }
-			});
 
-			MeshResource::Sptr monkeyMesh = ResourceManager::CreateAsset<MeshResource>("Monkey.obj");
-			Texture2D::Sptr    boxTexture = ResourceManager::CreateAsset<Texture2D>("textures/box-diffuse.png");
-			Texture2D::Sptr    mushroomTexture = ResourceManager::CreateAsset<Texture2D>("textures/MushroomUV.png");
-			Texture2D::Sptr    vinesTexture = ResourceManager::CreateAsset<Texture2D>("textures/VinesUV.png");
-			Texture2D::Sptr    cobwebTexture = ResourceManager::CreateAsset<Texture2D>("textures/CobwebUV.png");
-			Texture2D::Sptr    rockTexture = ResourceManager::CreateAsset<Texture2D>("textures/grey.png");
-			Texture2D::Sptr    grassTexture = ResourceManager::CreateAsset<Texture2D>("textures/ground.png");
-			Texture2D::Sptr    winTexture = ResourceManager::CreateAsset<Texture2D>("textures/win.png");
-			Texture2D::Sptr    ladybugTexture = ResourceManager::CreateAsset<Texture2D>("textures/lbuv.png");
-			Texture2D::Sptr    bgTexture = ResourceManager::CreateAsset<Texture2D>("textures/bg.png");
-			Texture2D::Sptr    monkeyTex = ResourceManager::CreateAsset<Texture2D>("textures/monkey-uvMap.png");
-			Texture2D::Sptr    greenTex = ResourceManager::CreateAsset<Texture2D>("textures/green.png");
-
-			// Create an empty scene
-			scene = std::make_shared<Scene>();
-
-			// I hate this
-			scene->BaseShader = uboShader;
-
-			// Create our materials
-			Material::Sptr boxMaterial = ResourceManager::CreateAsset<Material>();
-			{
-				boxMaterial->Name = "Box";
-				boxMaterial->MatShader = scene->BaseShader;
-				boxMaterial->Texture = boxTexture;
-				boxMaterial->Shininess = 2.0f;
-			}
-
-			Material::Sptr greenMaterial = ResourceManager::CreateAsset<Material>();
-			{
-				greenMaterial->Name = "green";
-				greenMaterial->MatShader = scene->BaseShader;
-				greenMaterial->Texture = greenTex;
-				greenMaterial->Shininess = 2.0f;
-			}
-
-			Material::Sptr bgMaterial = ResourceManager::CreateAsset<Material>();
-			{
-				bgMaterial->Name = "bg";
-				bgMaterial->MatShader = scene->BaseShader;
-				bgMaterial->Texture = bgTexture;
-				bgMaterial->Shininess = 2.0f;
-			}
-
-			Material::Sptr grassMaterial = ResourceManager::CreateAsset<Material>();
-			{
-				grassMaterial->Name = "Grass";
-				grassMaterial->MatShader = scene->BaseShader;
-				grassMaterial->Texture = grassTexture;
-				grassMaterial->Shininess = 2.0f;
-			}
-
-			Material::Sptr winMaterial = ResourceManager::CreateAsset<Material>();
-			{
-				winMaterial->Name = "win";
-				winMaterial->MatShader = scene->BaseShader;
-				winMaterial->Texture = winTexture;
-				winMaterial->Shininess = 2.0f;
-			}
-
-			Material::Sptr ladybugMaterial = ResourceManager::CreateAsset<Material>();
-			{
-				ladybugMaterial->Name = "lbo";
-				ladybugMaterial->MatShader = scene->BaseShader;
-				ladybugMaterial->Texture = ladybugTexture;
-				ladybugMaterial->Shininess = 2.0f;
-			}
-
-			Material::Sptr monkeyMaterial = ResourceManager::CreateAsset<Material>();
-			{
-				monkeyMaterial->Name = "Monkey";
-				monkeyMaterial->MatShader = scene->BaseShader;
-				monkeyMaterial->Texture = monkeyTex;
-				monkeyMaterial->Shininess = 256.0f;
-
-			}
-
-			Material::Sptr mushroomMaterial = ResourceManager::CreateAsset<Material>();
-			{
-				mushroomMaterial->Name = "Mushroom";
-				mushroomMaterial->MatShader = scene->BaseShader;
-				mushroomMaterial->Texture = mushroomTexture;
-				mushroomMaterial->Shininess = 256.0f;
-
-			}
-
-			Material::Sptr vinesMaterial = ResourceManager::CreateAsset<Material>();
-			{
-				vinesMaterial->Name = "vines";
-				vinesMaterial->MatShader = scene->BaseShader;
-				vinesMaterial->Texture = vinesTexture;
-				vinesMaterial->Shininess = 256.0f;
-
-			}
-
-			Material::Sptr cobwebMaterial = ResourceManager::CreateAsset<Material>();
-			{
-				cobwebMaterial->Name = "cobweb";
-				cobwebMaterial->MatShader = scene->BaseShader;
-				cobwebMaterial->Texture = cobwebTexture;
-				cobwebMaterial->Shininess = 256.0f;
-
-			}
-
-			// Create some lights for our scene
-			scene->Lights.resize(5);
-			scene->Lights[0].Position = glm::vec3(0.0f, 1.0f, 40.0f);
-			scene->Lights[0].Color = glm::vec3(0.2f, 0.8f, 0.1f);
-			scene->Lights[0].Range = 1000.0f;
-
-			scene->Lights[1].Position = glm::vec3(1.0f, 0.0f, 3.0f);
-			scene->Lights[1].Color = glm::vec3(0.2f, 0.8f, 0.1f);
-
-			scene->Lights[2].Position = glm::vec3(0.0f, 1.0f, 3.0f);
-			scene->Lights[2].Color = glm::vec3(1.0f, 0.2f, 0.1f);
-
-			scene->Lights[3].Position = glm::vec3(-40.0f, 1.0f, 40.0f);
-			scene->Lights[3].Color = glm::vec3(1.f, 1.f, 1.f);
-			scene->Lights[3].Range = 1000.0f;
-
-			scene->Lights[4].Position = glm::vec3(-20.0f, 1.0f, 40.0f);
-			scene->Lights[4].Color = glm::vec3(1.f, 1.f, 1.f);
-			scene->Lights[4].Range = 1000.0f;
-
-			// We'll create a mesh that is a simple plane that we can resize later
-			MeshResource::Sptr planeMesh = ResourceManager::CreateAsset<MeshResource>();
-			MeshResource::Sptr cubeMesh = ResourceManager::CreateAsset<MeshResource>("cube.obj");
-			MeshResource::Sptr mushroomMesh = ResourceManager::CreateAsset<MeshResource>("Mushroom.obj");
-			MeshResource::Sptr vinesMesh = ResourceManager::CreateAsset<MeshResource>("Vines.obj");
-			MeshResource::Sptr cobwebMesh = ResourceManager::CreateAsset<MeshResource>("Cobweb.obj");
-			MeshResource::Sptr ladybugMesh = ResourceManager::CreateAsset<MeshResource>("lbo.obj"); //change to lbo.obj
-			planeMesh->AddParam(MeshBuilderParam::CreatePlane(ZERO, UNIT_Z, UNIT_X, glm::vec2(1.0f)));
-			planeMesh->GenerateMesh();
-
-			// Set up the scene's camera
-			GameObject::Sptr camera = scene->CreateGameObject("Main Camera");
-			{
-				camera->SetPostion(glm::vec3(0, 6.8, 2));
-				camera->SetRotation(glm::vec3(90, 0, -180));
-				camera->SetScale(glm::vec3(0.8f, 0.8f, 0.8f));
-				camera->LookAt(glm::vec3(0.0f));
-
-				Camera::Sptr cam = camera->Add<Camera>();
-
-				// Make sure that the camera is set as the scene's main camera!
-				scene->MainCamera = cam;
-			}
-
-			GameObject::Sptr plane5 = scene->CreateGameObject("plane5");
-			{
-				// Scale up the plane
-				plane5->SetPostion(glm::vec3(-48.f, 0.f, -7.f));
-				plane5->SetScale(glm::vec3(50.0F));
-
-				// Create and attach a RenderComponent to the object to draw our mesh
-				RenderComponent::Sptr renderer = plane5->Add<RenderComponent>();
-				renderer->SetMesh(planeMesh);
-				renderer->SetMaterial(winMaterial);
-
-				// Attach a plane collider that extends infinitely along the X/Y axis
-				RigidBody::Sptr physics = plane5->Add<RigidBody>(/*static by default*/);
-				physics->AddCollider(PlaneCollider::Create());
-			}
-
-			GameObject::Sptr player = scene->CreateGameObject("player");
-			{
-				// Set position in the scene
-				player->SetPostion(glm::vec3(6.f, 0.0f, 1.0f));
-				player->SetScale(glm::vec3(1.0f, 1.0f, 1.0f));
-				player->SetScale(glm::vec3(0.5f, 0.5f, 0.5f));
-
-				// Add some behaviour that relies on the physics body
-				player->Add<JumpBehaviour>(player->GetPosition());
-				//player->Get<JumpBehaviour>(player->GetPosition());
-				// Create and attach a renderer for the monkey
-				RenderComponent::Sptr renderer = player->Add<RenderComponent>();
-				renderer->SetMesh(ladybugMesh);
-				renderer->SetMaterial(ladybugMaterial);
-
-				collisions.push_back(CollisionRect(player->GetPosition(), 1.0f, 1.0f, 0));
-
-				// Add a dynamic rigid body to this monkey
-				RigidBody::Sptr physics = player->Add<RigidBody>(RigidBodyType::Dynamic);
-				physics->AddCollider(ConvexMeshCollider::Create());
-
-
-				// We'll add a behaviour that will interact with our trigger volumes
-				MaterialSwapBehaviour::Sptr triggerInteraction = player->Add<MaterialSwapBehaviour>();
-				triggerInteraction->EnterMaterial = boxMaterial;
-				triggerInteraction->ExitMaterial = monkeyMaterial;
-			}
-			GameObject::Sptr jumpingObstacle = scene->CreateGameObject("Trigger2");
-			{
-				// Set and rotation position in the scene
-				jumpingObstacle->SetPostion(glm::vec3(40.f, 0.0f, 1.0f));
-				jumpingObstacle->SetRotation(glm::vec3(0.0f, 0.0f, 0.0f));
-				jumpingObstacle->SetScale(glm::vec3(0.5f, 0.5f, 0.5f));
-
-				// Add a render component
-				RenderComponent::Sptr renderer = jumpingObstacle->Add<RenderComponent>();
-				renderer->SetMesh(cubeMesh);
-				renderer->SetMaterial(boxMaterial);
-
-				collisions.push_back(CollisionRect(jumpingObstacle->GetPosition(), 1.0f, 1.0f, 1));
-
-				//// This is an example of attaching a component and setting some parameters
-				//RotatingBehaviour::Sptr behaviour = jumpingObstacle->Add<RotatingBehaviour>();
-				//behaviour->RotationSpeed = glm::vec3(0.0f, 0.0f, -90.0f);
-			}
-
-			// Kinematic rigid bodies are those controlled by some outside controller
-			// and ONLY collide with dynamic objects
-			RigidBody::Sptr physics = jumpingObstacle->Add<RigidBody>(RigidBodyType::Kinematic);
-			physics->AddCollider(ConvexMeshCollider::Create());
-
-			//Obstacles
-			createGroundObstacle("2", glm::vec3(-15.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial);
-			createGroundObstacle("3", glm::vec3(-37.930f, 0.0f, -0.750), glm::vec3(1.2f, 1.2f, 1.2f), glm::vec3(90.f, 0.0f, 73.f), vinesMesh, vinesMaterial);
-			createGroundObstacle("4", glm::vec3(-55.970f, 0.0f, 1.730f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.0f, 0.0f, -45.f), cobwebMesh, cobwebMaterial);
-
-			//Collisions
-			//createCollision("2", -14.660f, 1.560f, 1.f, 1.f);
-			//createCollision("3", -15.410f, 1.560f, 1.f, 1.f);
-			//createCollision("4", -14.970f, 1.860f, 1.f, 1.f);
-			//createCollision("5", -15.190f, 0.450f, 1.f, 1.f);
-
-			// Save the asset manifest for all the resources we just loaded
-			ResourceManager::SaveManifest("manifest.json");
-			// Save the scene to a JSON file
-			scene->Save("scene.json");
-		}
-
-								/// Working Level ///
-
-		{
-		// Create our OpenGL resources
-		Shader::Sptr uboShader = ResourceManager::CreateAsset<Shader>(std::unordered_map<ShaderPartType, std::string>{
-			{ ShaderPartType::Vertex, "shaders/vertex_shader.glsl" },
-			{ ShaderPartType::Fragment, "shaders/frag_blinn_phong_textured.glsl" }
-		});
-
+		//load all our objects once for all scenes
 		MeshResource::Sptr monkeyMesh = ResourceManager::CreateAsset<MeshResource>("Monkey.obj");
 		Texture2D::Sptr    boxTexture = ResourceManager::CreateAsset<Texture2D>("textures/box-diffuse.png");
 		Texture2D::Sptr    mushroomTexture = ResourceManager::CreateAsset<Texture2D>("textures/MushroomUV.png");
@@ -1249,6 +1001,41 @@ int main() {
 		Texture2D::Sptr    Grass5Tex = ResourceManager::CreateAsset<Texture2D>("textures/Grass5.png");
 		Texture2D::Sptr    ExitTreeTex = ResourceManager::CreateAsset<Texture2D>("textures/ExitTreeUV.png");
 		Texture2D::Sptr    LStextTex = ResourceManager::CreateAsset<Texture2D>("textures/LSText.png");
+
+		//
+		Texture2D::Sptr    ButtonBackTex = ResourceManager::CreateAsset<Texture2D>("textures/Button Background.png");
+		Texture2D::Sptr    ButtonStartTex = ResourceManager::CreateAsset<Texture2D>("textures/Start Text.png");
+		Texture2D::Sptr    ButtonExitTex = ResourceManager::CreateAsset<Texture2D>("textures/Exit Text.png");
+		Texture2D::Sptr    FFLogoTex = ResourceManager::CreateAsset<Texture2D>("textures/Frog Frontier Logo.png");
+		Texture2D::Sptr    BackTextTex = ResourceManager::CreateAsset<Texture2D>("textures/Exit Text.png");
+		Texture2D::Sptr    StartTextTex = ResourceManager::CreateAsset<Texture2D>("textures/Start Text.png");
+		Texture2D::Sptr    ControlsTex = ResourceManager::CreateAsset<Texture2D>("textures/ControlsText.png");
+
+		Texture2D::Sptr    MenuTex = ResourceManager::CreateAsset<Texture2D>("textures/Game Poster 2 Extended.png");
+
+		Texture2D::Sptr    LSButtonTex = ResourceManager::CreateAsset<Texture2D>("textures/Level Button Background 1.png");
+		Texture2D::Sptr    LSLogoTex = ResourceManager::CreateAsset<Texture2D>("textures/Frog Frontier Logo Side Scroller.png");
+		Texture2D::Sptr    BackTex = ResourceManager::CreateAsset<Texture2D>("textures/Back Text.png");
+
+		Texture2D::Sptr    Tex1 = ResourceManager::CreateAsset<Texture2D>("textures/1.png");
+		Texture2D::Sptr    Tex2 = ResourceManager::CreateAsset<Texture2D>("textures/2.png");
+		Texture2D::Sptr    Tex3 = ResourceManager::CreateAsset<Texture2D>("textures/3.png");
+		Texture2D::Sptr    Tex4 = ResourceManager::CreateAsset<Texture2D>("textures/4.png");
+		Texture2D::Sptr    Tex5 = ResourceManager::CreateAsset<Texture2D>("textures/5.png");
+		Texture2D::Sptr    Tex6 = ResourceManager::CreateAsset<Texture2D>("textures/6.png");
+		Texture2D::Sptr    Tex7 = ResourceManager::CreateAsset<Texture2D>("textures/7.png");
+		Texture2D::Sptr    Tex8 = ResourceManager::CreateAsset<Texture2D>("textures/8.png");
+		Texture2D::Sptr    Tex9 = ResourceManager::CreateAsset<Texture2D>("textures/9.png");
+		Texture2D::Sptr    Tex10 = ResourceManager::CreateAsset<Texture2D>("textures/10.png");
+
+								/// Working Level ///
+
+		{
+		// Create our OpenGL resources
+		Shader::Sptr uboShader = ResourceManager::CreateAsset<Shader>(std::unordered_map<ShaderPartType, std::string>{
+			{ ShaderPartType::Vertex, "shaders/vertex_shader.glsl" },
+			{ ShaderPartType::Fragment, "shaders/frag_blinn_phong_textured.glsl" }
+		});
 
 		// Create an empty scene
 		scene = std::make_shared<Scene>();
@@ -2232,6 +2019,1001 @@ int main() {
 
 		}
 
+		/// Working Level ///									//////		Level 1		//////////
+
+		{
+		// Create our OpenGL resources
+		Shader::Sptr uboShader = ResourceManager::CreateAsset<Shader>(std::unordered_map<ShaderPartType, std::string>{
+			{ ShaderPartType::Vertex, "shaders/vertex_shader.glsl" },
+			{ ShaderPartType::Fragment, "shaders/frag_blinn_phong_textured.glsl" }
+		});
+
+		// Create an empty scene
+		scene = std::make_shared<Scene>();
+
+		// I hate this
+		scene->BaseShader = uboShader;
+
+		// Create our materials
+		Material::Sptr boxMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			boxMaterial->Name = "Box";
+			boxMaterial->MatShader = scene->BaseShader;
+			boxMaterial->Texture = boxTexture;
+			boxMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr PbarbugMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			PbarbugMaterial->Name = "minibug";
+			PbarbugMaterial->MatShader = scene->BaseShader;
+			PbarbugMaterial->Texture = PbarbugTex;
+			PbarbugMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr greenMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			greenMaterial->Name = "green";
+			greenMaterial->MatShader = scene->BaseShader;
+			greenMaterial->Texture = greenTex;
+			greenMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr bgMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			bgMaterial->Name = "bg";
+			bgMaterial->MatShader = scene->BaseShader;
+			bgMaterial->Texture = bgTexture;
+			bgMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr grassMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			grassMaterial->Name = "Grass";
+			grassMaterial->MatShader = scene->BaseShader;
+			grassMaterial->Texture = grassTexture;
+			grassMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr winMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			winMaterial->Name = "win";
+			winMaterial->MatShader = scene->BaseShader;
+			winMaterial->Texture = winTexture;
+			winMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr ladybugMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			ladybugMaterial->Name = "lbo";
+			ladybugMaterial->MatShader = scene->BaseShader;
+			ladybugMaterial->Texture = ladybugTexture;
+			ladybugMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr monkeyMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			monkeyMaterial->Name = "Monkey";
+			monkeyMaterial->MatShader = scene->BaseShader;
+			monkeyMaterial->Texture = monkeyTex;
+			monkeyMaterial->Shininess = 256.0f;
+
+		}
+
+		Material::Sptr mushroomMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			mushroomMaterial->Name = "Mushroom";
+			mushroomMaterial->MatShader = scene->BaseShader;
+			mushroomMaterial->Texture = mushroomTexture;
+			mushroomMaterial->Shininess = 256.0f;
+
+		}
+
+		Material::Sptr vinesMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			vinesMaterial->Name = "vines";
+			vinesMaterial->MatShader = scene->BaseShader;
+			vinesMaterial->Texture = vinesTexture;
+			vinesMaterial->Shininess = 256.0f;
+
+		}
+
+		Material::Sptr cobwebMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			cobwebMaterial->Name = "cobweb";
+			cobwebMaterial->MatShader = scene->BaseShader;
+			cobwebMaterial->Texture = cobwebTexture;
+			cobwebMaterial->Shininess = 256.0f;
+
+		}
+
+		Material::Sptr PanelMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			PanelMaterial->Name = "Panel";
+			PanelMaterial->MatShader = scene->BaseShader;
+			PanelMaterial->Texture = PanelTex;
+			PanelMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr ResumeMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			ResumeMaterial->Name = "Resume";
+			ResumeMaterial->MatShader = scene->BaseShader;
+			ResumeMaterial->Texture = ResumeTex;
+			ResumeMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr MainMenuMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			MainMenuMaterial->Name = "Main Menu";
+			MainMenuMaterial->MatShader = scene->BaseShader;
+			MainMenuMaterial->Texture = MainMenuTex;
+			MainMenuMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr PauseMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			PauseMaterial->Name = "Pause";
+			PauseMaterial->MatShader = scene->BaseShader;
+			PauseMaterial->Texture = PauseTex;
+			PauseMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr ButtonMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			ButtonMaterial->Name = "Button";
+			ButtonMaterial->MatShader = scene->BaseShader;
+			ButtonMaterial->Texture = ButtonTex;
+			ButtonMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr FilterMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			FilterMaterial->Name = "Button Filter";
+			FilterMaterial->MatShader = scene->BaseShader;
+			FilterMaterial->Texture = FilterTex;
+			FilterMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr WinnerMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			WinnerMaterial->Name = "WinnerLogo";
+			WinnerMaterial->MatShader = scene->BaseShader;
+			WinnerMaterial->Texture = WinnerTex;
+			WinnerMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr LoserMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			LoserMaterial->Name = "LoserLogo";
+			LoserMaterial->MatShader = scene->BaseShader;
+			LoserMaterial->Texture = LoserTex;
+			LoserMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr ReplayMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			ReplayMaterial->Name = "Replay Text";
+			ReplayMaterial->MatShader = scene->BaseShader;
+			ReplayMaterial->Texture = ReplayTex;
+			ReplayMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr BranchMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			BranchMaterial->Name = "Branch";
+			BranchMaterial->MatShader = scene->BaseShader;
+			BranchMaterial->Texture = BranchTex;
+			BranchMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr LogMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			LogMaterial->Name = "Log";
+			LogMaterial->MatShader = scene->BaseShader;
+			LogMaterial->Texture = LogTex;
+			LogMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr PlantMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			PlantMaterial->Name = "Plant";
+			PlantMaterial->MatShader = scene->BaseShader;
+			PlantMaterial->Texture = PlantTex;
+			PlantMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr SunflowerMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			SunflowerMaterial->Name = "Sunflower";
+			SunflowerMaterial->MatShader = scene->BaseShader;
+			SunflowerMaterial->Texture = SunflowerTex;
+			SunflowerMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr ToadMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			ToadMaterial->Name = "Toad";
+			ToadMaterial->MatShader = scene->BaseShader;
+			ToadMaterial->Texture = ToadTex;
+			ToadMaterial->Shininess = 2.0f;
+		}
+		Material::Sptr BlankMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			BlankMaterial->Name = "Blank";
+			BlankMaterial->MatShader = scene->BaseShader;
+			BlankMaterial->Texture = BlankTex;
+			BlankMaterial->Shininess = 2.0f;
+		}
+		Material::Sptr ForegroundMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			ForegroundMaterial->Name = "Foreground";
+			ForegroundMaterial->MatShader = scene->BaseShader;
+			ForegroundMaterial->Texture = ForegroundTex;
+			ForegroundMaterial->Shininess = 2.0f;
+		}
+		Material::Sptr rockMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			rockMaterial->Name = "Rock";
+			rockMaterial->MatShader = scene->BaseShader;
+			rockMaterial->Texture = RockTex;
+			rockMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr twigMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			twigMaterial->Name = "twig";
+			twigMaterial->MatShader = scene->BaseShader;
+			twigMaterial->Texture = twigTex;
+			twigMaterial->Shininess = 2.0f;
+		}
+		Material::Sptr frogMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			frogMaterial->Name = "frog";
+			frogMaterial->MatShader = scene->BaseShader;
+			frogMaterial->Texture = frogTex;
+			frogMaterial->Shininess = 2.0f;
+		}
+		Material::Sptr tmMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			tmMaterial->Name = "tallmushroom";
+			tmMaterial->MatShader = scene->BaseShader;
+			tmMaterial->Texture = tmTex;
+			tmMaterial->Shininess = 2.0f;
+		}
+		Material::Sptr bmMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			bmMaterial->Name = "branchmushroom";
+			bmMaterial->MatShader = scene->BaseShader;
+			bmMaterial->Texture = bmTex;
+			bmMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr PBMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			PBMaterial->Name = "PauseButton";
+			PBMaterial->MatShader = scene->BaseShader;
+			PBMaterial->Texture = PBTex;
+			PBMaterial->Shininess = 2.0f;
+		}
+		Material::Sptr BGMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			BGMaterial->Name = "BG";
+			BGMaterial->MatShader = scene->BaseShader;
+			BGMaterial->Texture = BGTex;
+			BGMaterial->Shininess = 2.0f;
+		}
+		Material::Sptr BGGrassMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			BGGrassMaterial->Name = "BGGrass";
+			BGGrassMaterial->MatShader = scene->BaseShader;
+			BGGrassMaterial->Texture = BGGrassTex;
+			BGGrassMaterial->Shininess = 2.0f;
+		}
+		Material::Sptr ProgressBarMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			ProgressBarMaterial->Name = "ProgressBar";
+			ProgressBarMaterial->MatShader = scene->BaseShader;
+			ProgressBarMaterial->Texture = ProgressTex;
+			ProgressBarMaterial->Shininess = 2.0f;
+		}
+		Material::Sptr grass1Material = ResourceManager::CreateAsset<Material>();
+		{
+			grass1Material->Name = "grass1";
+			grass1Material->MatShader = scene->BaseShader;
+			grass1Material->Texture = Grass1Tex;
+			grass1Material->Shininess = 2.0f;
+		}
+		Material::Sptr grass2Material = ResourceManager::CreateAsset<Material>();
+		{
+			grass2Material->Name = "grass2";
+			grass2Material->MatShader = scene->BaseShader;
+			grass2Material->Texture = Grass2Tex;
+			grass2Material->Shininess = 2.0f;
+		}
+		Material::Sptr grass3Material = ResourceManager::CreateAsset<Material>();
+		{
+			grass3Material->Name = "grass3";
+			grass3Material->MatShader = scene->BaseShader;
+			grass3Material->Texture = Grass3Tex;
+			grass3Material->Shininess = 2.0f;
+		}
+		Material::Sptr grass4Material = ResourceManager::CreateAsset<Material>();
+		{
+			grass4Material->Name = "grass4";
+			grass4Material->MatShader = scene->BaseShader;
+			grass4Material->Texture = Grass4Tex;
+			grass4Material->Shininess = 2.0f;
+		}
+		Material::Sptr grass5Material = ResourceManager::CreateAsset<Material>();
+		{
+			grass5Material->Name = "grass5";
+			grass5Material->MatShader = scene->BaseShader;
+			grass5Material->Texture = Grass5Tex;
+			grass5Material->Shininess = 2.0f;
+		}
+		Material::Sptr ExitTreeMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			ExitTreeMaterial->Name = "ExitTree";
+			ExitTreeMaterial->MatShader = scene->BaseShader;
+			ExitTreeMaterial->Texture = ExitTreeTex;
+			ExitTreeMaterial->Shininess = 2.0f;
+		}
+		Material::Sptr LStextMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			LStextMaterial->Name = "LStext";
+			LStextMaterial->MatShader = scene->BaseShader;
+			LStextMaterial->Texture = LStextTex;
+			LStextMaterial->Shininess = 2.0f;
+		}
+
+
+		// Create some lights for our scene
+		scene->Lights.resize(18);
+		scene->Lights[0].Position = glm::vec3(0.0f, 1.0f, 40.0f);
+		scene->Lights[0].Color = glm::vec3(1.f, 1.f, 1.f);
+		scene->Lights[0].Range = 1000.0f;
+
+		scene->Lights[1].Position = glm::vec3(-50.f, 0.0f, 3.0f);
+		scene->Lights[1].Color = glm::vec3(1.f, 1.f, 1.f);
+
+		scene->Lights[2].Position = glm::vec3(-100.f, 1.0f, 3.0f);
+		scene->Lights[2].Color = glm::vec3(1.f, 1.f, 1.f);
+
+		scene->Lights[3].Position = glm::vec3(-150.0f, 1.0f, 40.0f);
+		scene->Lights[3].Color = glm::vec3(1.f, 1.f, 1.f);
+		scene->Lights[3].Range = 1000.0f;
+
+		//scene->Lights[4].Position = glm::vec3(-200.0f, 1.0f, 40.0f);
+		//scene->Lights[4].Color = glm::vec3(1.f, 1.f, 1.f);
+		//scene->Lights[4].Range = 1000.0f;
+
+		//scene->Lights[5].Position = glm::vec3(-250.0f, 1.0f, 40.0f);
+		//scene->Lights[5].Color = glm::vec3(1.f, 1.f, 1.f);
+		//scene->Lights[5].Range = 1000.0f;
+
+		//scene->Lights[6].Position = glm::vec3(-300.0f, 1.0f, 40.0f);
+		//scene->Lights[6].Color = glm::vec3(1.f, 1.f, 1.f);
+		//scene->Lights[6].Range = 1000.0f;
+
+		//scene->Lights[7].Position = glm::vec3(-350.0f, 1.0f, 40.0f);
+		//scene->Lights[7].Color = glm::vec3(1.f, 1.f, 1.f);
+		//scene->Lights[7].Range = 1000.0f;
+
+		//scene->Lights[8].Position = glm::vec3(-200.0f, 1.0f, 40.0f);
+		//scene->Lights[8].Color = glm::vec3(1.f, 1.f, 1.f);
+		//scene->Lights[8].Range = 1000.0f;
+
+		scene->Lights[4].Position = glm::vec3(-240.0f, 1.0f, 40.0f);
+		scene->Lights[4].Color = glm::vec3(1.f, 1.f, 1.f);
+		scene->Lights[4].Range = 1000.0f;
+
+		scene->Lights[5].Position = glm::vec3(-280.0f, 1.0f, 40.0f);
+		scene->Lights[5].Color = glm::vec3(1.f, 1.f, 1.f);
+		scene->Lights[5].Range = 1000.0f;
+
+		scene->Lights[6].Position = glm::vec3(-320.0f, 1.0f, 40.0f);
+		scene->Lights[6].Color = glm::vec3(1.f, 1.f, 1.f);
+		scene->Lights[6].Range = 1000.0f;
+
+		scene->Lights[7].Position = glm::vec3(-360.0f, 1.0f, 40.0f);
+		scene->Lights[7].Color = glm::vec3(1.f, 1.f, 1.f);
+		scene->Lights[7].Range = 1000.0f;
+
+		scene->Lights[8].Position = glm::vec3(-400.0f, 1.0f, 40.0f);
+		scene->Lights[8].Color = glm::vec3(1.f, 1.f, 1.f);
+		scene->Lights[8].Range = 1000.0f;
+
+		scene->Lights[9].Position = glm::vec3(-200.0f, 1.0f, 40.0f);
+		scene->Lights[9].Color = glm::vec3(0.2f, 0.8f, 0.1f);
+		scene->Lights[9].Range = 1000.0f;
+
+		scene->Lights[10].Position = glm::vec3(-201.0f, 0.0f, 3.0f);
+		scene->Lights[10].Color = glm::vec3(0.2f, 0.8f, 0.1f);
+
+		scene->Lights[11].Position = glm::vec3(-400.0f, 1.0f, 40.0f);
+		scene->Lights[11].Color = glm::vec3(0.2f, 0.8f, 0.1f);
+		scene->Lights[11].Range = 1000.0f;
+
+		scene->Lights[12].Position = glm::vec3(-401.0f, 0.0f, 3.0f);
+		scene->Lights[12].Color = glm::vec3(0.2f, 0.8f, 0.1f);
+
+		// We'll create a mesh that is a simple plane that we can resize later
+		MeshResource::Sptr planeMesh = ResourceManager::CreateAsset<MeshResource>();
+		MeshResource::Sptr cubeMesh = ResourceManager::CreateAsset<MeshResource>("cube.obj");
+		MeshResource::Sptr mushroomMesh = ResourceManager::CreateAsset<MeshResource>("Mushroom.obj");
+		MeshResource::Sptr vinesMesh = ResourceManager::CreateAsset<MeshResource>("Vines.obj");
+		MeshResource::Sptr cobwebMesh = ResourceManager::CreateAsset<MeshResource>("Cobweb.obj");
+		MeshResource::Sptr ladybugMesh = ResourceManager::CreateAsset<MeshResource>("lbo.obj");
+
+		MeshResource::Sptr BranchMesh = ResourceManager::CreateAsset<MeshResource>("Branch.obj");
+		MeshResource::Sptr LogMesh = ResourceManager::CreateAsset<MeshResource>("Log.obj");
+		MeshResource::Sptr Plant1Mesh = ResourceManager::CreateAsset<MeshResource>("PLANT.obj");
+		MeshResource::Sptr Plant2Mesh = ResourceManager::CreateAsset<MeshResource>("Plant2.obj");
+		MeshResource::Sptr Plant3Mesh = ResourceManager::CreateAsset<MeshResource>("Plant3.obj");
+
+		MeshResource::Sptr SunflowerMesh = ResourceManager::CreateAsset<MeshResource>("Sunflower.obj");
+		MeshResource::Sptr ToadMesh = ResourceManager::CreateAsset<MeshResource>("ToadStool.obj");
+		MeshResource::Sptr Rock1Mesh = ResourceManager::CreateAsset<MeshResource>("Rock1.obj");
+		MeshResource::Sptr Rock2Mesh = ResourceManager::CreateAsset<MeshResource>("Rock2.obj");
+		MeshResource::Sptr Rock3Mesh = ResourceManager::CreateAsset<MeshResource>("Rock3.obj");
+		MeshResource::Sptr twigMesh = ResourceManager::CreateAsset<MeshResource>("Twig.obj");
+		MeshResource::Sptr frogMesh = ResourceManager::CreateAsset<MeshResource>("frog.obj");
+
+		MeshResource::Sptr tmMesh = ResourceManager::CreateAsset<MeshResource>("tm.obj");
+		MeshResource::Sptr bmMesh = ResourceManager::CreateAsset<MeshResource>("bm.obj");
+
+		MeshResource::Sptr PBMesh = ResourceManager::CreateAsset<MeshResource>("PB.obj");
+		MeshResource::Sptr BGMesh = ResourceManager::CreateAsset<MeshResource>("Background.obj");
+		MeshResource::Sptr ExitTreeMesh = ResourceManager::CreateAsset<MeshResource>("ExitTree.obj");
+
+		planeMesh->AddParam(MeshBuilderParam::CreatePlane(ZERO, UNIT_Z, UNIT_X, glm::vec2(1.0f)));
+		planeMesh->GenerateMesh();
+
+
+
+		//Background Assets
+		createBackgroundAsset("1", glm::vec3(-1.f, 5.0f, -0.f), 0.5, glm::vec3(83.f, 5.0f, 0.0f), BranchMesh, BranchMaterial);
+		createBackgroundAsset("2", glm::vec3(-200.f, 5.0f, -0.f), 0.5, glm::vec3(83.f, 5.0f, 0.0f), BranchMesh, BranchMaterial);
+
+		createBackgroundAsset("3", glm::vec3(-186.f, 4.0f, -0.660), 3, glm::vec3(83.f, 5.0f, 0.0f), LogMesh, LogMaterial);
+		createBackgroundAsset("4", glm::vec3(-20.f, 0.0f, -0.660), 0.5, glm::vec3(400.f, 5.0f, 0.0f), LogMesh, LogMaterial);
+
+		createBackgroundAsset("5", glm::vec3(-54.5, 5.470f, -0.330), 6.0, glm::vec3(83.f, 5.0f, 0.0f), Plant1Mesh, PlantMaterial);
+		createBackgroundAsset("6", glm::vec3(-140.5, 5.470f, -0.330), 6.0, glm::vec3(83.f, 5.0f, 0.0f), Plant2Mesh, PlantMaterial);
+		createBackgroundAsset("7", glm::vec3(-240.5, 5.470f, -0.330), 6.0, glm::vec3(83.f, 5.0f, 0.0f), Plant3Mesh, PlantMaterial);
+
+		createBackgroundAsset("8", glm::vec3(-20.f, 0.0f, -0.660), 6.0, glm::vec3(83.f, 5.0f, 0.0f), SunflowerMesh, SunflowerMaterial);
+
+		createBackgroundAsset("9", glm::vec3(-13.f, 5.0f, -0.430), 0.5, glm::vec3(83.f, 5.0f, 90.0f), ToadMesh, ToadMaterial);
+		createBackgroundAsset("10", glm::vec3(-90.f, 5.0f, -0.430), 0.5, glm::vec3(83.f, 5.0f, 90.0f), ToadMesh, ToadMaterial);
+		createBackgroundAsset("11", glm::vec3(-330.f, 5.0f, -0.430), 0.5, glm::vec3(83.f, 5.0f, 90.0f), ToadMesh, ToadMaterial);
+
+		createBackgroundAsset("12", glm::vec3(-20.f, 0.0f, -0.660), 0.5, glm::vec3(83.f, 5.0f, 90.0f), Rock1Mesh, boxMaterial);
+		createBackgroundAsset("13", glm::vec3(-20.f, 0.0f, -0.660), 0.5, glm::vec3(83.f, 5.0f, 90.0f), Rock2Mesh, rockMaterial);
+		createBackgroundAsset("14", glm::vec3(-20.f, 0.0f, -0.660), 0.5, glm::vec3(83.f, 5.0f, 90.0f), Rock3Mesh, rockMaterial);
+
+		createBackgroundAsset("15", glm::vec3(-20.f, 6.0f, -0.660), 0.5, glm::vec3(83.f, 5.0f, 90.0f), twigMesh, twigMaterial);
+		createBackgroundAsset("16", glm::vec3(13.060f, 1.530f, 0.550), 0.05, glm::vec3(83.f, -7.0f, 90.0f), frogMesh, frogMaterial);
+
+		createBackgroundAsset("17", glm::vec3(7.5f, 4.6f, -1.8), 0.5, glm::vec3(83.f, -7.0f, 90.0f), bmMesh, bmMaterial);
+		createBackgroundAsset("18", glm::vec3(-6.f, -12.660f, 0.400), 0.05, glm::vec3(83.f, -7.0f, 90.0f), tmMesh, tmMaterial);
+
+		//Obstacles
+		createGroundObstacle("2", glm::vec3(-20.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 1 (small jump)
+		createGroundObstacle("3", glm::vec3(-60.f, 0.0f, 3.0), glm::vec3(1.f, 1.f, 1.f), glm::vec3(90.f, 0.0f, 73.f), vinesMesh, vinesMaterial); // vine 1 (jump blocking)
+		createGroundObstacle("4", glm::vec3(-110.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 1 (tall jump)
+		createGroundObstacle("5", glm::vec3(-45.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 2
+		createGroundObstacle("6", glm::vec3(-150.f, 5.530f, 0.250f), glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(90.f, 0.0f, -25.f), vinesMesh, vinesMaterial); // vine 2 (squish blocking)
+		createGroundObstacle("7", glm::vec3(-150.240f, 0.f, 7.88f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, 84.f), cobwebMesh, cobwebMaterial); //cobweb 2 (squish Blocking 2)
+
+		createGroundObstacle("8", glm::vec3(-170.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 3 (small jump)
+		createGroundObstacle("9", glm::vec3(-200.f, 0.0f, 3.0), glm::vec3(1.f, 1.f, 1.f), glm::vec3(90.f, 0.0f, 73.f), vinesMesh, vinesMaterial); // vine 3 (jump blocking)
+		createGroundObstacle("10", glm::vec3(-220.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 3 (tall jump)
+		createGroundObstacle("11", glm::vec3(-230.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 4 (small jump)
+		createGroundObstacle("12", glm::vec3(-250.f, 0.0f, 3.0), glm::vec3(1.f, 1.f, 1.f), glm::vec3(90.f, 0.0f, 73.f), vinesMesh, vinesMaterial); // vine 4 (jump blocking)
+		createGroundObstacle("13", glm::vec3(-275.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 5 (small jump)
+		createGroundObstacle("14", glm::vec3(-300.f, 5.530f, 0.250f), glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(90.f, 0.0f, -25.f), vinesMesh, vinesMaterial); // vine 5 (squish blocking)
+		createGroundObstacle("15", glm::vec3(-300.240f, 0.f, 7.88f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, 84.f), cobwebMesh, cobwebMaterial); //cobweb 4 (squish Blocking 2)
+
+		createGroundObstacle("16", glm::vec3(-310.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 6 (small jump)
+		createGroundObstacle("17", glm::vec3(-315.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 7 (small jump)
+		createGroundObstacle("18", glm::vec3(-320.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 8 (small jump)
+		createGroundObstacle("19", glm::vec3(-325.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 5 (tall jump)
+		createGroundObstacle("20", glm::vec3(-340.f, 0.0f, 3.0), glm::vec3(1.f, 1.f, 1.f), glm::vec3(90.f, 0.0f, 73.f), vinesMesh, vinesMaterial); // vine 6 (jump blocking)
+		createGroundObstacle("21", glm::vec3(-345.f, 5.530f, 0.250f), glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(90.f, 0.0f, -25.f), vinesMesh, vinesMaterial); // vine 7 (squish blocking)
+		createGroundObstacle("22", glm::vec3(-345.240f, 0.f, 7.88f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, 84.f), cobwebMesh, cobwebMaterial); //cobweb 6 (squish Blocking 2)
+		createGroundObstacle("23", glm::vec3(-360.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 7 (tall jump)
+		createGroundObstacle("24", glm::vec3(-380.f, 5.530f, 0.250f), glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(90.f, 0.0f, -25.f), vinesMesh, vinesMaterial); // vine 8 (squish blocking)
+		createGroundObstacle("25", glm::vec3(-380.240f, 0.f, 7.88f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, 84.f), cobwebMesh, cobwebMaterial); //cobweb 8 (squish Blocking 2)
+		createGroundObstacle("26", glm::vec3(-395.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 9 (tall jump)
+
+		//3D Backgrounds
+		createGroundObstacle("27", glm::vec3(107.7f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
+		createGroundObstacle("28", glm::vec3(0.f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
+		createGroundObstacle("29", glm::vec3(-107.7f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
+
+		createGroundObstacle("30", glm::vec3(-215.4f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
+		createGroundObstacle("31", glm::vec3(-323.1f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
+		createGroundObstacle("32", glm::vec3(-430.8f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
+
+		//2DBackGrounds
+		createGroundObstacle("33", glm::vec3(350.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, bgMaterial);
+		createGroundObstacle("34", glm::vec3(-50.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, bgMaterial);
+		createGroundObstacle("35", glm::vec3(-425.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, bgMaterial);
+		createGroundObstacle("36", glm::vec3(-1225.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, bgMaterial);
+		createGroundObstacle("37", glm::vec3(-1650.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, bgMaterial);
+
+		//Grass
+		createGroundObstacle("38", glm::vec3(-18.170f, -38.230f, 5.250f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass1Material);
+		createGroundObstacle("39", glm::vec3(29.580f, 46.920f, 5.080f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass2Material);
+		createGroundObstacle("40", glm::vec3(2.090f, -47.360f, 5.090f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass3Material);
+		createGroundObstacle("41", glm::vec3(35.700f, -37.550f, 5.310f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass4Material);
+		createGroundObstacle("42", glm::vec3(-47.340f, -37.120f, 5.560f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass5Material);
+
+		createGroundObstacle("43", glm::vec3(-18.170f - 103.5f, -38.230f, 5.250f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass1Material);
+		createGroundObstacle("44", glm::vec3(29.580f - 103.5f, 46.920f, 5.080f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass2Material);
+		createGroundObstacle("45", glm::vec3(2.090f - 103.5f, -47.360f, 5.090f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass3Material);
+		createGroundObstacle("46", glm::vec3(35.700f - 103.5f, -37.550f, 5.310f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass4Material);
+		createGroundObstacle("47", glm::vec3(-47.340f - 103.5f, -37.120f, 5.560f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass5Material);
+
+		createGroundObstacle("48", glm::vec3(-18.170f - 103.5f - 103.5f, -38.230f, 5.250f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass1Material);
+		createGroundObstacle("49", glm::vec3(29.580f - 103.5f - 103.5f, 46.920f, 5.080f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass2Material);
+		createGroundObstacle("50", glm::vec3(2.090f - 103.5f - 103.5f, -47.360f, 5.090f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass3Material);
+		createGroundObstacle("51", glm::vec3(35.700f - 103.5f - 103.5f, -37.550f, 5.310f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass4Material);
+		createGroundObstacle("52", glm::vec3(-47.340f - 103.5f - 103.5f, -37.120f, 5.560f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass5Material);
+
+		createGroundObstacle("53", glm::vec3(-18.170f - 103.5f - 103.5f - 103.5f, -38.230f, 5.250f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass1Material);
+		createGroundObstacle("54", glm::vec3(29.580f - 103.5f - 103.5f - 103.5f, 46.920f, 5.080f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass2Material);
+		createGroundObstacle("55", glm::vec3(2.090f - 103.5f - 103.5f - 103.5f, -47.360f, 5.090f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass3Material);
+		createGroundObstacle("56", glm::vec3(35.700f - 103.5f - 103.5f - 103.5f, -37.550f, 5.310f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass4Material);
+		createGroundObstacle("57", glm::vec3(-47.340f - 103.5f - 103.5f - 103.5f, -37.120f, 5.560f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass5Material);
+
+		//Exit Tree
+		createGroundObstacle("58", glm::vec3(-409.f, -3.380f, -0.340f), glm::vec3(3.0f, 3.0f, 3.0f), glm::vec3(90.0f, 0.0f, 140.f), ExitTreeMesh, ExitTreeMaterial);
+
+		//Foreground Grass
+		createGroundObstacle("59", glm::vec3(40.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+		createGroundObstacle("60", glm::vec3(0.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+		createGroundObstacle("61", glm::vec3(-40.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+		createGroundObstacle("62", glm::vec3(-80.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+		createGroundObstacle("63", glm::vec3(-120.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+		createGroundObstacle("64", glm::vec3(-160.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+
+		createGroundObstacle("65", glm::vec3(-200.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+		createGroundObstacle("66", glm::vec3(-240.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+		createGroundObstacle("67", glm::vec3(-280.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+		createGroundObstacle("68", glm::vec3(-320.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+		createGroundObstacle("69", glm::vec3(-360.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+		createGroundObstacle("70", glm::vec3(-400.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+
+
+		//Collisions
+
+		//mushroom 1 collision
+		createCollision("2", -19.660f, 1.560f, 1.f, 1.f);
+		createCollision("3", -20.410f, 1.560f, 1.f, 1.f);
+		createCollision("4", -19.970f, 1.860f, 1.f, 1.f);
+		createCollision("5", -20.190f, 0.450f, 1.f, 1.f);
+
+		//mushroom 2 collision
+		createCollision("6", -44.660f, 1.560f, 1.f, 1.f);
+		createCollision("7", -45.410f, 1.560f, 1.f, 1.f);
+		createCollision("8", -44.970f, 1.860f, 1.f, 1.f);
+		createCollision("9", -45.190f, 0.450f, 1.f, 1.f);
+
+		// vine 1 collisions
+		createCollision("10", -53.30f, 11.f, 0.5f, 5.5f);
+		createCollision("11", -60.30f, 11.f, 0.5f, 5.5f);
+		createCollision("12", -56.8f, 6.f, 4.0f, 0.5f);
+		createCollision("13", -56.8f, 17.f, 4.0f, 0.5f);
+
+		//cobweb collisions
+		createCollision("14", -110.f, 1.63f, 1.f, 7.f);
+
+		// squish collision
+		createCollision("15", -149.780f, 10.4f, 0.420f, 10.f);
+
+		//mushroom 3 collision
+		createCollision("16", -169.660f, 1.560f, 1.f, 1.f);
+		createCollision("17", -170.410f, 1.560f, 1.f, 1.f);
+		createCollision("18", -169.970f, 1.860f, 1.f, 1.f);
+		createCollision("19", -170.190f, 0.450f, 1.f, 1.f);
+
+		// vine 3 collisions
+		createCollision("20", -193.30f, 11.f, 0.5f, 5.5f);
+		createCollision("21", -200.30f, 11.f, 0.5f, 5.5f);
+		createCollision("22", -196.8f, 6.f, 4.0f, 0.5f);
+		createCollision("23", -196.8f, 17.f, 4.0f, 0.5f);
+
+		//cobweb collisions
+		createCollision("24", -220.f, 1.63f, 1.f, 7.f);
+
+		//mushroom 4 collision
+		createCollision("25", -229.660f, 1.560f, 1.f, 1.f);
+		createCollision("26", -230.410f, 1.560f, 1.f, 1.f);
+		createCollision("27", -229.970f, 1.860f, 1.f, 1.f);
+		createCollision("28", -230.190f, 0.450f, 1.f, 1.f);
+
+		// vine 4 collisions
+		createCollision("29", -243.30f, 11.f, 0.5f, 5.5f);
+		createCollision("30", -250.30f, 11.f, 0.5f, 5.5f);
+		createCollision("31", -246.8f, 6.f, 4.0f, 0.5f);
+		createCollision("32", -246.8f, 17.f, 4.0f, 0.5f);
+
+		//mushroom 5 collision
+		createCollision("33", -274.660f, 1.560f, 1.f, 1.f);
+		createCollision("34", -275.410f, 1.560f, 1.f, 1.f);
+		createCollision("35", -274.970f, 1.860f, 1.f, 1.f);
+		createCollision("36", -275.190f, 0.450f, 1.f, 1.f);
+
+		// squish collision
+		createCollision("37", -299.780f, 10.4f, 0.420f, 10.f);
+
+		//mushroom 6 collision
+		createCollision("38", -309.660f, 1.560f, 1.f, 1.f);
+		createCollision("39", -310.410f, 1.560f, 1.f, 1.f);
+		createCollision("40", -309.970f, 1.860f, 1.f, 1.f);
+		createCollision("41", -310.190f, 0.450f, 1.f, 1.f);
+
+		//mushroom 7 collision
+		createCollision("42", -314.660f, 1.560f, 1.f, 1.f);
+		createCollision("43", -315.410f, 1.560f, 1.f, 1.f);
+		createCollision("44", -314.970f, 1.860f, 1.f, 1.f);
+		createCollision("45", -315.190f, 0.450f, 1.f, 1.f);
+
+		//mushroom 8 collision
+		createCollision("46", -319.660f, 1.560f, 1.f, 1.f);
+		createCollision("47", -320.410f, 1.560f, 1.f, 1.f);
+		createCollision("48", -319.970f, 1.860f, 1.f, 1.f);
+		createCollision("49", -320.190f, 0.450f, 1.f, 1.f);
+
+		//cobweb collisions
+		createCollision("50", -325.f, 1.63f, 1.f, 7.f);
+
+		// vine 6 collisions
+		createCollision("51", -333.30f, 11.f, 0.5f, 5.5f);
+		createCollision("52", -340.30f, 11.f, 0.5f, 5.5f);
+		createCollision("53", -336.8f, 6.f, 4.0f, 0.5f);
+		createCollision("54", -336.8f, 17.f, 4.0f, 0.5f);
+
+		// squish collision
+		createCollision("55", -344.780f, 10.4f, 0.420f, 10.f);
+
+		//cobweb collisions
+		createCollision("56", -360.f, 1.63f, 1.f, 7.f);
+
+		// squish collision
+		createCollision("57", -379.780f, 10.4f, 0.420f, 10.f);
+
+		//cobweb collisions
+		createCollision("58", -395.f, 1.63f, 1.f, 7.f);
+
+		// Set up the scene's camera
+		GameObject::Sptr camera = scene->CreateGameObject("Main Camera");
+		{
+			camera->SetPostion(glm::vec3(0, 6.8, 2));
+			camera->SetRotation(glm::vec3(90, 0, -180));
+			camera->SetScale(glm::vec3(0.8f, 0.8f, 0.8f));
+			camera->LookAt(glm::vec3(0.0f));
+
+			Camera::Sptr cam = camera->Add<Camera>();
+
+			// Make sure that the camera is set as the scene's main camera!
+			scene->MainCamera = cam;
+		}
+
+		GameObject::Sptr plane5 = scene->CreateGameObject("plane5");
+		{
+			//under 1
+			// Scale up the plane
+			plane5->SetPostion(glm::vec3(-48.f, 0.f, -7.f));
+			plane5->SetScale(glm::vec3(50.0F));
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = plane5->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(winMaterial);
+
+			// Attach a plane collider that extends infinitely along the X/Y axis
+			RigidBody::Sptr physics = plane5->Add<RigidBody>(/*static by default*/);
+			physics->AddCollider(PlaneCollider::Create());
+		}
+
+
+		GameObject::Sptr player = scene->CreateGameObject("player");
+		{
+			// Set position in the scene
+			player->SetPostion(glm::vec3(6.f, 0.0f, 1.0f));
+			player->SetScale(glm::vec3(1.0f, 1.0f, 1.0f));
+			player->SetScale(glm::vec3(0.5f, 0.5f, 0.5f));
+
+			// Add some behaviour that relies on the physics body
+			player->Add<JumpBehaviour>(player->GetPosition());
+			//player->Get<JumpBehaviour>(player->GetPosition());
+			// Create and attach a renderer for the monkey
+			RenderComponent::Sptr renderer = player->Add<RenderComponent>();
+			renderer->SetMesh(ladybugMesh);
+			renderer->SetMaterial(ladybugMaterial);
+
+			collisions.push_back(CollisionRect(player->GetPosition(), 1.0f, 1.0f, 0));
+
+			// Add a dynamic rigid body to this monkey
+			RigidBody::Sptr physics = player->Add<RigidBody>(RigidBodyType::Dynamic);
+			physics->AddCollider(ConvexMeshCollider::Create());
+
+
+			// We'll add a behaviour that will interact with our trigger volumes
+			MaterialSwapBehaviour::Sptr triggerInteraction = player->Add<MaterialSwapBehaviour>();
+			triggerInteraction->EnterMaterial = boxMaterial;
+			triggerInteraction->ExitMaterial = monkeyMaterial;
+		}
+		GameObject::Sptr jumpingObstacle = scene->CreateGameObject("Trigger2");
+		{
+			// Set and rotation position in the scene
+			jumpingObstacle->SetPostion(glm::vec3(40.f, 0.0f, 1.0f));
+			jumpingObstacle->SetRotation(glm::vec3(0.0f, 0.0f, 0.0f));
+			jumpingObstacle->SetScale(glm::vec3(0.5f, 0.5f, 0.5f));
+
+			// Add a render component
+			RenderComponent::Sptr renderer = jumpingObstacle->Add<RenderComponent>();
+			renderer->SetMesh(cubeMesh);
+			renderer->SetMaterial(boxMaterial);
+
+			collisions.push_back(CollisionRect(jumpingObstacle->GetPosition(), 1.0f, 1.0f, 1));
+
+			//// This is an example of attaching a component and setting some parameters
+			//RotatingBehaviour::Sptr behaviour = jumpingObstacle->Add<RotatingBehaviour>();
+			//behaviour->RotationSpeed = glm::vec3(0.0f, 0.0f, -90.0f);
+		}
+
+		//Objects with transparency need to be loaded in last otherwise it creates issues
+		GameObject::Sptr PanelPause = scene->CreateGameObject("PanelPause");
+		{
+			// Set position in the scene
+			PanelPause->SetPostion(glm::vec3(1.f, -15.f, 6.5f));
+			// Scale down the plane
+			PanelPause->SetScale(glm::vec3(10.0f, 10.0f, 10.0f));
+			// Rotate panel
+			PanelPause->SetRotation(glm::vec3(-80.f, 0.f, 0.f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = PanelPause->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(PanelMaterial);
+		}
+
+		GameObject::Sptr ButtonBack1 = scene->CreateGameObject("ButtonBack1");
+		{
+			// Set position in the scene
+			ButtonBack1->SetPostion(glm::vec3(1.f, 6.25f, 6.f));
+			// Scale down the plane
+			ButtonBack1->SetScale(glm::vec3(3.0f, 0.8f, 0.5f));
+			//set rotateee
+			ButtonBack1->SetRotation(glm::vec3(-80.f, 0.f, 0.f));
+
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = ButtonBack1->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(ButtonMaterial);
+		}
+
+		GameObject::Sptr ButtonBack2 = scene->CreateGameObject("ButtonBack2");
+		{
+			// Set position in the scene
+			ButtonBack2->SetPostion(glm::vec3(1.f, 6.5f, 5.f));
+			// Scale down the plane
+			ButtonBack2->SetScale(glm::vec3(3.0f, 0.8f, 0.5f));
+			//spin things
+			ButtonBack2->SetRotation(glm::vec3(-80.0f, 0.f, 0.f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = ButtonBack2->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(ButtonMaterial);
+		}
+
+		GameObject::Sptr ButtonBack3 = scene->CreateGameObject("ButtonBack3");
+		{
+			// Set position in the scene
+			ButtonBack3->SetPostion(glm::vec3(1.f, 6.5f, 5.f));
+			// Scale down the plane
+			ButtonBack3->SetScale(glm::vec3(3.0f, 0.8f, 0.5f));
+			//spin things
+			ButtonBack3->SetRotation(glm::vec3(-80.0f, 0.f, 0.f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = ButtonBack3->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(ButtonMaterial);
+		}
+
+		GameObject::Sptr PBar = scene->CreateGameObject("ProgressBarGO");
+		{
+			// Scale up the plane
+			PBar->SetPostion(glm::vec3(0.060f, 3.670f, -0.510f));
+			PBar->SetRotation(glm::vec3(-90, -180.0f, 0.0f));
+			PBar->SetScale(glm::vec3(15.f, 1.620f, 47.950f));
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = PBar->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(ProgressBarMaterial);
+
+			// Attach a plane collider that extends infinitely along the X/Y axis
+			RigidBody::Sptr physics = PBar->Add<RigidBody>(/*static by default*/);
+		}
+
+		GameObject::Sptr PBug = scene->CreateGameObject("ProgressBarProgress");
+		{
+			// Scale up the plane
+			PBug->SetPostion(glm::vec3(0.060f, 3.670f, -0.510f));
+			PBug->SetRotation(glm::vec3(-90, -180.0f, 0.0f));
+			PBug->SetScale(glm::vec3(1.5f, 1.5f, 1.5f));
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = PBug->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(PbarbugMaterial);
+
+			// Attach a plane collider that extends infinitely along the X/Y axis
+			RigidBody::Sptr physics = PBug->Add<RigidBody>(/*static by default*/);
+		}
+
+		GameObject::Sptr PauseLogo = scene->CreateGameObject("PauseLogo");
+		{
+			// Set position in the scene
+			PauseLogo->SetPostion(glm::vec3(1.f, 5.75f, 8.f));
+			// Scale down the plane
+			PauseLogo->SetScale(glm::vec3(3.927f, 1.96f, 0.5f));
+			//Rotate Logo
+			PauseLogo->SetRotation(glm::vec3(80.f, 0.f, 180.f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = PauseLogo->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(PauseMaterial);
+		}
+
+		GameObject::Sptr WinnerLogo = scene->CreateGameObject("WinnerLogo");
+		{
+			// Set position in the scene
+			WinnerLogo->SetPostion(glm::vec3(1.f, 5.75f, 8.f));
+			// Scale down the plane
+			WinnerLogo->SetScale(glm::vec3(3.927f, 1.96f, 0.5f));
+			//Rotate Logo
+			WinnerLogo->SetRotation(glm::vec3(80.f, 0.f, 180.f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = WinnerLogo->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(WinnerMaterial);
+		}
+
+		GameObject::Sptr LoserLogo = scene->CreateGameObject("LoserLogo");
+		{
+			// Set position in the scene
+			LoserLogo->SetPostion(glm::vec3(1.f, 5.75f, 8.f));
+			// Scale down the plane
+			LoserLogo->SetScale(glm::vec3(3.927f, 1.96f, 0.5f));
+			//Rotate Logo
+			LoserLogo->SetRotation(glm::vec3(80.f, 0.f, 180.f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = LoserLogo->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(LoserMaterial);
+		}
+
+		GameObject::Sptr Filter = scene->CreateGameObject("Filter");
+		{
+			// Set position in the scene
+			Filter->SetPostion(glm::vec3(1.0f, 6.51f, 5.f));
+			// Scale down the plane
+			Filter->SetScale(glm::vec3(3.0f, 0.8f, 1.0f));
+			Filter->SetRotation(glm::vec3(-80.f, 0.0f, 0.0f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = Filter->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(FilterMaterial);
+
+			// This object is a renderable only, it doesn't have any behaviours or
+			// physics bodies attached!
+		}
+
+		// Creates Ground Collisions
+		GameObject::Sptr plane = scene->CreateGameObject("Plane");
+		{
+			// Scale up the plane
+			plane->SetPostion(glm::vec3(0.060f, 3.670f, -0.510f));
+			plane->SetScale(glm::vec3(47.880f, 23.7f, 48.38f));
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = plane->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(BlankMaterial);
+
+			// Attach a plane collider that extends infinitely along the X/Y axis
+			RigidBody::Sptr physics = plane->Add<RigidBody>(/*static by default*/);
+			physics->AddCollider(PlaneCollider::Create());
+		}
+
+		GameObject::Sptr ReplayText = scene->CreateGameObject("ReplayText");
+		{
+			// Set position in the scene
+			ReplayText->SetPostion(glm::vec3(1.0f, 8.0f, 6.1f));
+			// Scale down the plane
+			ReplayText->SetScale(glm::vec3(2.0f, 0.4f, 0.5f));
+			ReplayText->SetRotation(glm::vec3(80.0f, 0.f, -180.f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = ReplayText->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(ReplayMaterial);
+		}
+
+		GameObject::Sptr MainMenuText = scene->CreateGameObject("MainMenuText");
+		{
+			// Set position in the scene
+			MainMenuText->SetPostion(glm::vec3(1.0f, 8.0f, 5.4f));
+			// Scale down the plane
+			MainMenuText->SetScale(glm::vec3(2.0f, 0.4f, 0.5f));
+			MainMenuText->SetRotation(glm::vec3(80.0f, 0.f, -180.f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = MainMenuText->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(MainMenuMaterial);
+		}
+
+		GameObject::Sptr ResumeText = scene->CreateGameObject("ResumeText");
+		{
+			// Set position in the scene
+			ResumeText->SetPostion(glm::vec3(1.0f, 8.0f, 6.1f));
+			// Scale down the plane
+			ResumeText->SetScale(glm::vec3(2.0f, 0.4f, 0.5f));
+			ResumeText->SetRotation(glm::vec3(80.0f, 0.f, -180.f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = ResumeText->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(ResumeMaterial);
+		}
+
+		GameObject::Sptr LSText = scene->CreateGameObject("LSText");
+		{
+			// Set position in the scene
+			LSText->SetPostion(glm::vec3(1.0f, 8.0f, 6.1f));
+			// Scale down the plane
+			LSText->SetScale(glm::vec3(2.0f, 0.4f, 0.5f));
+			LSText->SetRotation(glm::vec3(80.0f, 0.f, -180.f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = LSText->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(LStextMaterial);
+		}
+
+		scene->SetAmbientLight(glm::vec3(0.2f));
+
+		// Kinematic rigid bodies are those controlled by some outside controller
+		// and ONLY collide with dynamic objects
+		RigidBody::Sptr physics = jumpingObstacle->Add<RigidBody>(RigidBodyType::Kinematic);
+		physics->AddCollider(ConvexMeshCollider::Create());
+
+		// Save the asset manifest for all the resources we just loaded
+		ResourceManager::SaveManifest("manifest.json");
+		// Save the scene to a JSON file
+		scene->Save("Level1.json");
+
+		}
+
+
+
+
+
 																	//// Making a 'Menu' Scene ////
 
 		{
@@ -2242,18 +3024,12 @@ int main() {
 		});
 
 		Texture2D::Sptr    MenuTex = ResourceManager::CreateAsset<Texture2D>("textures/Game Poster 3.png");
-	
+
 		// Textures for UI
 
-		Texture2D::Sptr    ButtonBackTex = ResourceManager::CreateAsset<Texture2D>("textures/Button Background.png");
-		Texture2D::Sptr    ButtonStartTex = ResourceManager::CreateAsset<Texture2D>("textures/Start Text.png");
-		Texture2D::Sptr    ButtonExitTex = ResourceManager::CreateAsset<Texture2D>("textures/Exit Text.png");
-		Texture2D::Sptr    FFLogoTex = ResourceManager::CreateAsset<Texture2D>("textures/Frog Frontier Logo.png");
-		Texture2D::Sptr    BackTextTex = ResourceManager::CreateAsset<Texture2D>("textures/Exit Text.png");
-		Texture2D::Sptr    StartTextTex = ResourceManager::CreateAsset<Texture2D>("textures/Start Text.png");
-		Texture2D::Sptr    ControlsTex = ResourceManager::CreateAsset<Texture2D>("textures/ControlsText.png");
-		Texture2D::Sptr    FilterTex = ResourceManager::CreateAsset<Texture2D>("textures/Button Filter.png");
 		
+
+
 
 		// Create an empty scene
 		scene = std::make_shared<Scene>();
@@ -2526,138 +3302,133 @@ int main() {
 										//// Making a 'Control' Scene ////
 
 		{
-		// Create our OpenGL resources
-		Shader::Sptr uboShader = ResourceManager::CreateAsset<Shader>(std::unordered_map<ShaderPartType, std::string>{
-			{ ShaderPartType::Vertex, "shaders/vertex_shader.glsl" },
-			{ ShaderPartType::Fragment, "shaders/frag_blinn_phong_textured.glsl" }
-		});
+			// Create our OpenGL resources
+			Shader::Sptr uboShader = ResourceManager::CreateAsset<Shader>(std::unordered_map<ShaderPartType, std::string>{
+				{ ShaderPartType::Vertex, "shaders/vertex_shader.glsl" },
+				{ ShaderPartType::Fragment, "shaders/frag_blinn_phong_textured.glsl" }
+			});
 
-		Texture2D::Sptr    MenuTex = ResourceManager::CreateAsset<Texture2D>("textures/ControlsMenu.png");
+			Texture2D::Sptr    MenuTex = ResourceManager::CreateAsset<Texture2D>("textures/ControlsMenu.png");
 
-		// Textures for UI
+			// Create an empty scene
+			scene = std::make_shared<Scene>();
 
-		Texture2D::Sptr    ButtonBackTex = ResourceManager::CreateAsset<Texture2D>("textures/Button Background.png");
-		Texture2D::Sptr    BackTextTex = ResourceManager::CreateAsset<Texture2D>("textures/Back Text.png");
+			// I hate this
+			scene->BaseShader = uboShader;
 
-		// Create an empty scene
-		scene = std::make_shared<Scene>();
+			Material::Sptr MenuMaterial = ResourceManager::CreateAsset<Material>();
+			{
+				MenuMaterial->Name = "Menu";
+				MenuMaterial->MatShader = scene->BaseShader;
+				MenuMaterial->Texture = MenuTex;
+				MenuMaterial->Shininess = 2.0f;
+			}
 
-		// I hate this
-		scene->BaseShader = uboShader;
+			Material::Sptr ButtonBackMaterial = ResourceManager::CreateAsset<Material>();
+			{
+				ButtonBackMaterial->Name = "ButtonBackground";
+				ButtonBackMaterial->MatShader = scene->BaseShader;
+				ButtonBackMaterial->Texture = ButtonBackTex;
+				ButtonBackMaterial->Shininess = 2.0f;
+			}
 
-		Material::Sptr MenuMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			MenuMaterial->Name = "Menu";
-			MenuMaterial->MatShader = scene->BaseShader;
-			MenuMaterial->Texture = MenuTex;
-			MenuMaterial->Shininess = 2.0f;
-		}
+			Material::Sptr BackTextMaterial = ResourceManager::CreateAsset<Material>();
+			{
+				BackTextMaterial->Name = "Back Button Text";
+				BackTextMaterial->MatShader = scene->BaseShader;
+				BackTextMaterial->Texture = BackTextTex;
+				BackTextMaterial->Shininess = 2.0f;
+			}
 
-		Material::Sptr ButtonBackMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			ButtonBackMaterial->Name = "ButtonBackground";
-			ButtonBackMaterial->MatShader = scene->BaseShader;
-			ButtonBackMaterial->Texture = ButtonBackTex;
-			ButtonBackMaterial->Shininess = 2.0f;
-		}
+			// Create some lights for our scene
+			scene->Lights.resize(4);
+			scene->Lights[0].Position = glm::vec3(3.0f, 3.0f, 3.0f);
+			scene->Lights[0].Color = glm::vec3(0.892f, 1.0f, 0.882f);
+			scene->Lights[0].Range = 10.0f;
 
-		Material::Sptr BackTextMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			BackTextMaterial->Name = "Back Button Text";
-			BackTextMaterial->MatShader = scene->BaseShader;
-			BackTextMaterial->Texture = BackTextTex;
-			BackTextMaterial->Shininess = 2.0f;
-		}
+			scene->Lights[1].Position = glm::vec3(3.0f, -3.0f, 3.0f);
+			scene->Lights[1].Color = glm::vec3(0.892f, 1.0f, 0.882f);
+			scene->Lights[1].Range = 10.0f;
 
-		// Create some lights for our scene
-		scene->Lights.resize(4);
-		scene->Lights[0].Position = glm::vec3(3.0f, 3.0f, 3.0f);
-		scene->Lights[0].Color = glm::vec3(0.892f, 1.0f, 0.882f);
-		scene->Lights[0].Range = 10.0f;
+			scene->Lights[2].Position = glm::vec3(-3.0f, 3.0f, 3.0f);
+			scene->Lights[2].Color = glm::vec3(0.892f, 1.0f, 0.882f);
+			scene->Lights[2].Range = 10.0f;
 
-		scene->Lights[1].Position = glm::vec3(3.0f, -3.0f, 3.0f);
-		scene->Lights[1].Color = glm::vec3(0.892f, 1.0f, 0.882f);
-		scene->Lights[1].Range = 10.0f;
+			scene->Lights[3].Position = glm::vec3(-3.0f, -3.0f, 3.0f);
+			scene->Lights[3].Color = glm::vec3(0.892f, 1.0f, 0.882f);
+			scene->Lights[3].Range = 10.0f;
 
-		scene->Lights[2].Position = glm::vec3(-3.0f, 3.0f, 3.0f);
-		scene->Lights[2].Color = glm::vec3(0.892f, 1.0f, 0.882f);
-		scene->Lights[2].Range = 10.0f;
+			// We'll create a mesh that is a simple plane that we can resize later
+			MeshResource::Sptr planeMesh = ResourceManager::CreateAsset<MeshResource>();
+			MeshResource::Sptr cubeMesh = ResourceManager::CreateAsset<MeshResource>("cube.obj");
+			planeMesh->AddParam(MeshBuilderParam::CreatePlane(ZERO, UNIT_Z, UNIT_X, glm::vec2(1.0f)));
+			planeMesh->GenerateMesh();
 
-		scene->Lights[3].Position = glm::vec3(-3.0f, -3.0f, 3.0f);
-		scene->Lights[3].Color = glm::vec3(0.892f, 1.0f, 0.882f);
-		scene->Lights[3].Range = 10.0f;
+			// Set up the scene's camera
+			GameObject::Sptr camera = scene->CreateGameObject("Main Camera");
+			{
+				camera->SetPostion(glm::vec3(0, 0, 5));
+				camera->SetRotation(glm::vec3(0, -0, 0));
 
-		// We'll create a mesh that is a simple plane that we can resize later
-		MeshResource::Sptr planeMesh = ResourceManager::CreateAsset<MeshResource>();
-		MeshResource::Sptr cubeMesh = ResourceManager::CreateAsset<MeshResource>("cube.obj");
-		planeMesh->AddParam(MeshBuilderParam::CreatePlane(ZERO, UNIT_Z, UNIT_X, glm::vec2(1.0f)));
-		planeMesh->GenerateMesh();
+				Camera::Sptr cam = camera->Add<Camera>();
 
-		// Set up the scene's camera
-		GameObject::Sptr camera = scene->CreateGameObject("Main Camera");
-		{
-			camera->SetPostion(glm::vec3(0, 0, 5));
-			camera->SetRotation(glm::vec3(0, -0, 0));
+				// Make sure that the camera is set as the scene's main camera!
+				scene->MainCamera = cam;
+			}
 
-			Camera::Sptr cam = camera->Add<Camera>();
+			// Set up all our sample objects
+			GameObject::Sptr plane = scene->CreateGameObject("Plane");
+			{
+				// Scale up the plane
+				plane->SetScale(glm::vec3(10.0F));
 
-			// Make sure that the camera is set as the scene's main camera!
-			scene->MainCamera = cam;
-		}
+				// Create and attach a RenderComponent to the object to draw our mesh
+				RenderComponent::Sptr renderer = plane->Add<RenderComponent>();
+				renderer->SetMesh(planeMesh);
+				renderer->SetMaterial(MenuMaterial);
 
-		// Set up all our sample objects
-		GameObject::Sptr plane = scene->CreateGameObject("Plane");
-		{
-			// Scale up the plane
-			plane->SetScale(glm::vec3(10.0F));
+				// Attach a plane collider that extends infinitely along the X/Y axis
+				RigidBody::Sptr physics = plane->Add<RigidBody>(/*static by default*/);
+				physics->AddCollider(PlaneCollider::Create());
+			}
 
-			// Create and attach a RenderComponent to the object to draw our mesh
-			RenderComponent::Sptr renderer = plane->Add<RenderComponent>();
-			renderer->SetMesh(planeMesh);
-			renderer->SetMaterial(MenuMaterial);
+			GameObject::Sptr ButtonBackground2 = scene->CreateGameObject("ButtonBackground2");
+			{
+				// Set position in the scene
+				ButtonBackground2->SetPostion(glm::vec3(0.0f, -1.5f, 3.0f));
+				// Scale down the plane
+				ButtonBackground2->SetScale(glm::vec3(1.25f, 0.250f, 1.0f));
 
-			// Attach a plane collider that extends infinitely along the X/Y axis
-			RigidBody::Sptr physics = plane->Add<RigidBody>(/*static by default*/);
-			physics->AddCollider(PlaneCollider::Create());
-		}
+				// Create and attach a render component
+				RenderComponent::Sptr renderer = ButtonBackground2->Add<RenderComponent>();
+				renderer->SetMesh(planeMesh);
+				renderer->SetMaterial(ButtonBackMaterial);
 
-		GameObject::Sptr ButtonBackground2 = scene->CreateGameObject("ButtonBackground2");
-		{
-			// Set position in the scene
-			ButtonBackground2->SetPostion(glm::vec3(0.0f, -1.5f, 3.0f));
-			// Scale down the plane
-			ButtonBackground2->SetScale(glm::vec3(1.25f, 0.250f, 1.0f));
-
-			// Create and attach a render component
-			RenderComponent::Sptr renderer = ButtonBackground2->Add<RenderComponent>();
-			renderer->SetMesh(planeMesh);
-			renderer->SetMaterial(ButtonBackMaterial);
-
-			// This object is a renderable only, it doesn't have any behaviours or
-			// physics bodies attached!
-		}
+				// This object is a renderable only, it doesn't have any behaviours or
+				// physics bodies attached!
+			}
 
 
-		GameObject::Sptr BackButton = scene->CreateGameObject("BackButton");
-		{
-			// Set position in the scene
-			BackButton->SetPostion(glm::vec3(0.f, -1.12f, 3.5f));
-			// Scale down the plane
-			BackButton->SetScale(glm::vec3(0.5f, 0.125f, 1.0f));
+			GameObject::Sptr BackButton = scene->CreateGameObject("BackButton");
+			{
+				// Set position in the scene
+				BackButton->SetPostion(glm::vec3(0.f, -1.12f, 3.5f));
+				// Scale down the plane
+				BackButton->SetScale(glm::vec3(0.5f, 0.125f, 1.0f));
 
-			// Create and attach a render component
-			RenderComponent::Sptr renderer = BackButton->Add<RenderComponent>();
-			renderer->SetMesh(planeMesh);
-			renderer->SetMaterial(BackTextMaterial);
+				// Create and attach a render component
+				RenderComponent::Sptr renderer = BackButton->Add<RenderComponent>();
+				renderer->SetMesh(planeMesh);
+				renderer->SetMaterial(BackTextMaterial);
 
-			// This object is a renderable only, it doesn't have any behaviours or
-			// physics bodies attached!
-		}
+				// This object is a renderable only, it doesn't have any behaviours or
+				// physics bodies attached!
+			}
 
-		// Save the asset manifest for all the resources we just loaded
-		ResourceManager::SaveManifest("manifest.json");
-		// Save the scene to a JSON file
-		scene->Save("CS.json");
+			// Save the asset manifest for all the resources we just loaded
+			ResourceManager::SaveManifest("manifest.json");
+			// Save the scene to a JSON file
+			scene->Save("CS.json");
 
 		}
 
@@ -2666,546 +3437,526 @@ int main() {
 												//// Level Select Scene ////
 
 		{
-		// Create our OpenGL resources
-		Shader::Sptr uboShader = ResourceManager::CreateAsset<Shader>(std::unordered_map<ShaderPartType, std::string>{
-			{ ShaderPartType::Vertex, "shaders/vertex_shader.glsl" },
-			{ ShaderPartType::Fragment, "shaders/frag_blinn_phong_textured.glsl" }
-		});
-
-		Texture2D::Sptr    MenuTex = ResourceManager::CreateAsset<Texture2D>("textures/Game Poster 2 Extended.png");
-		
-		Texture2D::Sptr    LSButtonTex = ResourceManager::CreateAsset<Texture2D>("textures/Level Button Background 1.png");
-		Texture2D::Sptr    LSLogoTex = ResourceManager::CreateAsset<Texture2D>("textures/Frog Frontier Logo Side Scroller.png");
-		Texture2D::Sptr    ButtonBackTex = ResourceManager::CreateAsset<Texture2D>("textures/Button Background.png");
-		Texture2D::Sptr    BackTex = ResourceManager::CreateAsset<Texture2D>("textures/Back Text.png");
-		Texture2D::Sptr    FilterTex = ResourceManager::CreateAsset<Texture2D>("textures/Button Filter.png");
-
-		Texture2D::Sptr    Tex1 = ResourceManager::CreateAsset<Texture2D>("textures/1.png");
-		Texture2D::Sptr    Tex2 = ResourceManager::CreateAsset<Texture2D>("textures/2.png");
-		Texture2D::Sptr    Tex3 = ResourceManager::CreateAsset<Texture2D>("textures/3.png");
-		Texture2D::Sptr    Tex4 = ResourceManager::CreateAsset<Texture2D>("textures/4.png");
-		Texture2D::Sptr    Tex5 = ResourceManager::CreateAsset<Texture2D>("textures/5.png");
-		Texture2D::Sptr    Tex6 = ResourceManager::CreateAsset<Texture2D>("textures/6.png");
-		Texture2D::Sptr    Tex7 = ResourceManager::CreateAsset<Texture2D>("textures/7.png");
-		Texture2D::Sptr    Tex8 = ResourceManager::CreateAsset<Texture2D>("textures/8.png");
-		Texture2D::Sptr    Tex9 = ResourceManager::CreateAsset<Texture2D>("textures/9.png");
-		Texture2D::Sptr    Tex10 = ResourceManager::CreateAsset<Texture2D>("textures/10.png");
-
-
-		// Create an empty scene
-		scene = std::make_shared<Scene>();
-
-		// I hate this
-		scene->BaseShader = uboShader;
-
-		Material::Sptr MenuMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			MenuMaterial->Name = "Menu";
-			MenuMaterial->MatShader = scene->BaseShader;
-			MenuMaterial->Texture = MenuTex;
-			MenuMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr LSButtonMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			LSButtonMaterial->Name = "LSButton";
-			LSButtonMaterial->MatShader = scene->BaseShader;
-			LSButtonMaterial->Texture = LSButtonTex;
-			LSButtonMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr LSLogoMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			LSLogoMaterial->Name = "LSLogo";
-			LSLogoMaterial->MatShader = scene->BaseShader;
-			LSLogoMaterial->Texture = LSLogoTex;
-			LSLogoMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr ButtonBackMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			ButtonBackMaterial->Name = "ButtonBackground";
-			ButtonBackMaterial->MatShader = scene->BaseShader;
-			ButtonBackMaterial->Texture = ButtonBackTex;
-			ButtonBackMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr BackMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			BackMaterial->Name = "Back";
-			BackMaterial->MatShader = scene->BaseShader;
-			BackMaterial->Texture = BackTex;
-			BackMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr FilterMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			FilterMaterial->Name = "Button Filter";
-			FilterMaterial->MatShader = scene->BaseShader;
-			FilterMaterial->Texture = FilterTex;
-			FilterMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr Material1 = ResourceManager::CreateAsset<Material>();
-		{
-			Material1->Name = "1";
-			Material1->MatShader = scene->BaseShader;
-			Material1->Texture = Tex1;
-			Material1->Shininess = 2.0f;
-		}
-
-		Material::Sptr Material2 = ResourceManager::CreateAsset<Material>();
-		{
-			Material2->Name = "2";
-			Material2->MatShader = scene->BaseShader;
-			Material2->Texture = Tex2;
-			Material2->Shininess = 2.0f;
-		}
-
-		Material::Sptr Material3 = ResourceManager::CreateAsset<Material>();
-		{
-			Material3->Name = "3";
-			Material3->MatShader = scene->BaseShader;
-			Material3->Texture = Tex3;
-			Material3->Shininess = 2.0f;
-		}
-
-		Material::Sptr Material4 = ResourceManager::CreateAsset<Material>();
-		{
-			Material4->Name = "4";
-			Material4->MatShader = scene->BaseShader;
-			Material4->Texture = Tex4;
-			Material4->Shininess = 2.0f;
-		}
-
-		Material::Sptr Material5 = ResourceManager::CreateAsset<Material>();
-		{
-			Material5->Name = "5";
-			Material5->MatShader = scene->BaseShader;
-			Material5->Texture = Tex5;
-			Material5->Shininess = 2.0f;
-		}
-
-		Material::Sptr Material6 = ResourceManager::CreateAsset<Material>();
-		{
-			Material6->Name = "6";
-			Material6->MatShader = scene->BaseShader;
-			Material6->Texture = Tex6;
-			Material6->Shininess = 2.0f;
-		}
-
-		Material::Sptr Material7 = ResourceManager::CreateAsset<Material>();
-		{
-			Material7->Name = "7";
-			Material7->MatShader = scene->BaseShader;
-			Material7->Texture = Tex7;
-			Material7->Shininess = 2.0f;
-		}
-
-		Material::Sptr Material8 = ResourceManager::CreateAsset<Material>();
-		{
-			Material8->Name = "8";
-			Material8->MatShader = scene->BaseShader;
-			Material8->Texture = Tex8;
-			Material8->Shininess = 2.0f;
-		}
-		
-		Material::Sptr Material9 = ResourceManager::CreateAsset<Material>();
-		{
-			Material9->Name = "9";
-			Material9->MatShader = scene->BaseShader;
-			Material9->Texture = Tex9;
-			Material9->Shininess = 2.0f;
-		}
-
-		Material::Sptr Material10 = ResourceManager::CreateAsset<Material>();
-		{
-			Material10->Name = "10";
-			Material10->MatShader = scene->BaseShader;
-			Material10->Texture = Tex10;
-			Material10->Shininess = 2.0f;
-		}
-
-		// Create some lights for our scene
-		scene->Lights.resize(4);
-		scene->Lights[0].Position = glm::vec3(3.0f, 3.0f, 3.0f);
-		scene->Lights[0].Color = glm::vec3(0.892f, 1.0f, 0.882f);
-		scene->Lights[0].Range = 10.0f;
-
-		scene->Lights[1].Position = glm::vec3(3.0f, -3.0f, 3.0f);
-		scene->Lights[1].Color = glm::vec3(0.892f, 1.0f, 0.882f);
-		scene->Lights[1].Range = 10.0f;
-
-		scene->Lights[2].Position = glm::vec3(-3.0f, 3.0f, 3.0f);
-		scene->Lights[2].Color = glm::vec3(0.892f, 1.0f, 0.882f);
-		scene->Lights[2].Range = 10.0f;
-
-		scene->Lights[3].Position = glm::vec3(-3.0f, -3.0f, 3.0f);
-		scene->Lights[3].Color = glm::vec3(0.892f, 1.0f, 0.882f);
-		scene->Lights[3].Range = 10.0f;
-
-		// We'll create a mesh that is a simple plane that we can resize later
-		MeshResource::Sptr planeMesh = ResourceManager::CreateAsset<MeshResource>();
-		MeshResource::Sptr cubeMesh = ResourceManager::CreateAsset<MeshResource>("cube.obj");
-		planeMesh->AddParam(MeshBuilderParam::CreatePlane(ZERO, UNIT_Z, UNIT_X, glm::vec2(1.0f)));
-		planeMesh->GenerateMesh();
-
-		// Set up the scene's camera
-		GameObject::Sptr camera = scene->CreateGameObject("Main Camera");
-		{
-			camera->SetPostion(glm::vec3(0, 0, 5));
-			camera->SetRotation(glm::vec3(0, -0, 0));
-
-			Camera::Sptr cam = camera->Add<Camera>();
-
-			// Make sure that the camera is set as the scene's main camera!
-			scene->MainCamera = cam;
-		}
-
-		// Set up all our sample objects
-		GameObject::Sptr plane = scene->CreateGameObject("Plane");
-		{
-			// Scale up the plane
-			plane->SetScale(glm::vec3(15.0F, 10.0f, 10.0f));
-
-			// Create and attach a RenderComponent to the object to draw our mesh
-			RenderComponent::Sptr renderer = plane->Add<RenderComponent>();
-			renderer->SetMesh(planeMesh);
-			renderer->SetMaterial(MenuMaterial);
-
-			// Attach a plane collider that extends infinitely along the X/Y axis
-			RigidBody::Sptr physics = plane->Add<RigidBody>(/*static by default*/);
-			physics->AddCollider(PlaneCollider::Create());
-		}
-
-		
-
-		GameObject::Sptr LsButton1 = scene->CreateGameObject("LSButton1");
-		{
-			// Set position in the scene
-			LsButton1->SetPostion(glm::vec3(0.3f, 0.5f, 3.0f));
-			// Scale down the plane
-			LsButton1->SetScale(glm::vec3(0.5f));
-
-			// Create and attach a render component
-			RenderComponent::Sptr renderer = LsButton1->Add<RenderComponent>();
-			renderer->SetMesh(planeMesh);
-			renderer->SetMaterial(LSButtonMaterial);
-
-			// This object is a renderable only, it doesn't have any behaviours or
-			// physics bodies attached!
-		}
-
-		GameObject::Sptr LsButton2 = scene->CreateGameObject("LSButton2");
-		{
-			// Set position in the scene
-			LsButton2->SetPostion(glm::vec3(0.9f, 0.5f, 3.0f));
-			// Scale down the plane
-			LsButton2->SetScale(glm::vec3(0.5f));
-
-			// Create and attach a render component
-			RenderComponent::Sptr renderer = LsButton2->Add<RenderComponent>();
-			renderer->SetMesh(planeMesh);
-			renderer->SetMaterial(LSButtonMaterial);
-
-			// This object is a renderable only, it doesn't have any behaviours or
-			// physics bodies attached!
-		}
-
-		GameObject::Sptr LsButton3 = scene->CreateGameObject("LSButton3");
-		{
-			// Set position in the scene
-			LsButton3->SetPostion(glm::vec3(1.5f, 0.5f, 3.0f));
-			// Scale down the plane
-			LsButton3->SetScale(glm::vec3(0.5f));
-
-			// Create and attach a render component
-			RenderComponent::Sptr renderer = LsButton3->Add<RenderComponent>();
-			renderer->SetMesh(planeMesh);
-			renderer->SetMaterial(LSButtonMaterial);
-
-			// This object is a renderable only, it doesn't have any behaviours or
-			// physics bodies attached!
-		}
-
-		GameObject::Sptr LsButton4 = scene->CreateGameObject("LSButton4");
-		{
-			// Set position in the scene
-			LsButton4->SetPostion(glm::vec3(2.1f, 0.5f, 3.0f));
-			// Scale down the plane
-			LsButton4->SetScale(glm::vec3(0.5f));
-
-			// Create and attach a render component
-			RenderComponent::Sptr renderer = LsButton4->Add<RenderComponent>();
-			renderer->SetMesh(planeMesh);
-			renderer->SetMaterial(LSButtonMaterial);
-
-			// This object is a renderable only, it doesn't have any behaviours or
-			// physics bodies attached!
-		}
-
-		GameObject::Sptr LsButton5 = scene->CreateGameObject("LSButton5");
-		{
-			// Set position in the scene
-			LsButton5->SetPostion(glm::vec3(2.7f, 0.5f, 3.0f));
-			// Scale down the plane
-			LsButton5->SetScale(glm::vec3(0.5f));
-
-			// Create and attach a render component
-			RenderComponent::Sptr renderer = LsButton5->Add<RenderComponent>();
-			renderer->SetMesh(planeMesh);
-			renderer->SetMaterial(LSButtonMaterial);
-
-			// This object is a renderable only, it doesn't have any behaviours or
-			// physics bodies attached!
-		}
-
-		GameObject::Sptr LsButton6 = scene->CreateGameObject("LSButton6");
-		{
-			// Set position in the scene
-			LsButton6->SetPostion(glm::vec3(0.3f,-0.1f, 3.0f));
-			// Scale down the plane
-			LsButton6->SetScale(glm::vec3(0.5f));
-
-			// Create and attach a render component
-			RenderComponent::Sptr renderer = LsButton6->Add<RenderComponent>();
-			renderer->SetMesh(planeMesh);
-			renderer->SetMaterial(LSButtonMaterial);
-
-			// This object is a renderable only, it doesn't have any behaviours or
-			// physics bodies attached!
-		}
-
-		GameObject::Sptr LsButton7 = scene->CreateGameObject("LSButton7");
-		{
-			// Set position in the scene
-			LsButton7->SetPostion(glm::vec3(0.9f, -0.1f, 3.0f));
-			// Scale down the plane
-			LsButton7->SetScale(glm::vec3(0.5f));
-
-			// Create and attach a render component
-			RenderComponent::Sptr renderer = LsButton7->Add<RenderComponent>();
-			renderer->SetMesh(planeMesh);
-			renderer->SetMaterial(LSButtonMaterial);
-
-			// This object is a renderable only, it doesn't have any behaviours or
-			// physics bodies attached!
-		}
-
-		GameObject::Sptr LsButton8 = scene->CreateGameObject("LSButton8");
-		{
-			// Set position in the scene
-			LsButton8->SetPostion(glm::vec3(1.5f, -0.1f, 3.0f));
-			// Scale down the plane
-			LsButton8->SetScale(glm::vec3(0.5f));
-
-			// Create and attach a render component
-			RenderComponent::Sptr renderer = LsButton8->Add<RenderComponent>();
-			renderer->SetMesh(planeMesh);
-			renderer->SetMaterial(LSButtonMaterial);
-
-			// This object is a renderable only, it doesn't have any behaviours or
-			// physics bodies attached!
-		}
-
-		GameObject::Sptr LsButton9 = scene->CreateGameObject("LSButton9");
-		{
-			// Set position in the scene
-			LsButton9->SetPostion(glm::vec3(2.1f, -0.1f, 3.0f));
-			// Scale down the plane
-			LsButton9->SetScale(glm::vec3(0.5f));
-
-			// Create and attach a render component
-			RenderComponent::Sptr renderer = LsButton9->Add<RenderComponent>();
-			renderer->SetMesh(planeMesh);
-			renderer->SetMaterial(LSButtonMaterial);
-
-			// This object is a renderable only, it doesn't have any behaviours or
-			// physics bodies attached!
-		}
-
-		GameObject::Sptr LsButton10 = scene->CreateGameObject("LSButton10");
-		{
-			// Set position in the scene
-			LsButton10->SetPostion(glm::vec3(2.7f, -0.1f, 3.0f));
-			// Scale down the plane
-			LsButton10->SetScale(glm::vec3(0.5f));
-
-			// Create and attach a render component
-			RenderComponent::Sptr renderer = LsButton10->Add<RenderComponent>();
-			renderer->SetMesh(planeMesh);
-			renderer->SetMaterial(LSButtonMaterial);
-
-			// This object is a renderable only, it doesn't have any behaviours or
-			// physics bodies attached!
-		}
-
-		GameObject::Sptr BackButtonBack = scene->CreateGameObject("BackButtonBack");
-		{
-			// Set position in the scene
-			BackButtonBack->SetPostion(glm::vec3(1.75f, -1.0f, 3.0f));
-			// Scale down the plane
-			BackButtonBack->SetScale(glm::vec3(2.0f, 0.4f, 0.5f));
-
-			// Create and attach a render component
-			RenderComponent::Sptr renderer = BackButtonBack->Add<RenderComponent>();
-			renderer->SetMesh(planeMesh);
-			renderer->SetMaterial(ButtonBackMaterial);
-
-			// This object is a renderable only, it doesn't have any behaviours or
-			// physics bodies attached!
-		}
-
-		GameObject::Sptr Filter = scene->CreateGameObject("Filter");
-		{
-			// Set position in the scene
-			Filter->SetPostion(glm::vec3(1.0f, 0.5f, 3.010f));
-			// Scale down the plane
-			Filter->SetScale(glm::vec3(1.25f, 0.25f, 1.0f));
-
-			// Create and attach a render component
-			RenderComponent::Sptr renderer = Filter->Add<RenderComponent>();
-			renderer->SetMesh(planeMesh);
-			renderer->SetMaterial(FilterMaterial);
-
-			// This object is a renderable only, it doesn't have any behaviours or
-			// physics bodies attached!
-		}
-
-		GameObject::Sptr LsLogo = scene->CreateGameObject("LSLogo");
-		{
-			// Set position in the scene
-			LsLogo->SetPostion(glm::vec3(1.5f, 1.25f, 3.0f));
-			// Scale down the plane
-			LsLogo->SetScale(glm::vec3(2.75f, 1.0f, 0.5f));
-
-			// Create and attach a render component
-			RenderComponent::Sptr renderer = LsLogo->Add<RenderComponent>();
-			renderer->SetMesh(planeMesh);
-			renderer->SetMaterial(LSLogoMaterial);
-
-			// This object is a renderable only, it doesn't have any behaviours or
-			// physics bodies attached!
-		}
-		
-		GameObject::Sptr Back = scene->CreateGameObject("Back");
-		{
-			Back->SetPostion(glm::vec3(1.3f, -0.75f, 3.5f));
-			Back->SetScale(glm::vec3(0.5f, 0.125f, 0.5f));
-
-			RenderComponent::Sptr renderer = Back->Add<RenderComponent>();
-			renderer->SetMesh(planeMesh);
-			renderer->SetMaterial(BackMaterial);
-		}
-
-		GameObject::Sptr Num1 = scene->CreateGameObject("Num1");
-		{
-			Num1->SetPostion(glm::vec3(0.225f, 0.375f, 3.5f));
-			Num1->SetScale(glm::vec3(0.25f));
-
-			RenderComponent::Sptr renderer = Num1->Add<RenderComponent>();
-			renderer->SetMesh(planeMesh);
-			renderer->SetMaterial(Material1);
-		}
-
-		GameObject::Sptr Num2 = scene->CreateGameObject("Num2");
-		{
-			Num2->SetPostion(glm::vec3(0.675f, 0.375f, 3.5f));
-			Num2->SetScale(glm::vec3(0.25f));
-
-			RenderComponent::Sptr renderer = Num2->Add<RenderComponent>();
-			renderer->SetMesh(planeMesh);
-			renderer->SetMaterial(Material2);
-		}
-
-		GameObject::Sptr Num3 = scene->CreateGameObject("Num3");
-		{
-			Num3->SetPostion(glm::vec3(1.125f, 0.375f, 3.5f));
-			Num3->SetScale(glm::vec3(0.25f));
-
-			RenderComponent::Sptr renderer = Num3->Add<RenderComponent>();
-			renderer->SetMesh(planeMesh);
-			renderer->SetMaterial(Material3);
-		}
-
-		GameObject::Sptr Num4 = scene->CreateGameObject("Num4");
-		{
-			Num4->SetPostion(glm::vec3(1.575f, 0.375f, 3.5f));
-			Num4->SetScale(glm::vec3(0.25f));
-
-			RenderComponent::Sptr renderer = Num4->Add<RenderComponent>();
-			renderer->SetMesh(planeMesh);
-			renderer->SetMaterial(Material4);
-		}
-
-		GameObject::Sptr Num5 = scene->CreateGameObject("Num5");
-		{
-			Num5->SetPostion(glm::vec3(2.025f, 0.375f, 3.5f));
-			Num5->SetScale(glm::vec3(0.25f));
-
-			RenderComponent::Sptr renderer = Num5->Add<RenderComponent>();
-			renderer->SetMesh(planeMesh);
-			renderer->SetMaterial(Material5);
-		}
-
-		GameObject::Sptr Num6 = scene->CreateGameObject("Num6");
-		{
-			Num6->SetPostion(glm::vec3(0.225f, -0.075f, 3.5f));
-			Num6->SetScale(glm::vec3(0.25f));
-
-			RenderComponent::Sptr renderer = Num6->Add<RenderComponent>();
-			renderer->SetMesh(planeMesh);
-			renderer->SetMaterial(Material6);
-		}
-
-		GameObject::Sptr Num7 = scene->CreateGameObject("Num7");
-		{
-			Num7->SetPostion(glm::vec3(0.675f, -0.075f, 3.5f));
-			Num7->SetScale(glm::vec3(0.25f));
-
-			RenderComponent::Sptr renderer = Num7->Add<RenderComponent>();
-			renderer->SetMesh(planeMesh);
-			renderer->SetMaterial(Material7);
-		}
-
-		GameObject::Sptr Num8 = scene->CreateGameObject("Num8");
-		{
-			Num8->SetPostion(glm::vec3(1.125f, -0.075f, 3.5f));
-			Num8->SetScale(glm::vec3(0.25f));
-
-			RenderComponent::Sptr renderer = Num8->Add<RenderComponent>();
-			renderer->SetMesh(planeMesh);
-			renderer->SetMaterial(Material8);
-		}
-
-		GameObject::Sptr Num9 = scene->CreateGameObject("Num9");
-		{
-			Num9->SetPostion(glm::vec3(1.575f, -0.075f, 3.5f));
-			Num9->SetScale(glm::vec3(0.25f));
-
-			RenderComponent::Sptr renderer = Num9->Add<RenderComponent>();
-			renderer->SetMesh(planeMesh);
-			renderer->SetMaterial(Material9);
-		}
-
-		GameObject::Sptr Num10 = scene->CreateGameObject("Num10");
-		{
-			Num10->SetPostion(glm::vec3(2.025f, -0.075f, 3.5f));
-			Num10->SetScale(glm::vec3(0.25f));
-
-			RenderComponent::Sptr renderer = Num10->Add<RenderComponent>();
-			renderer->SetMesh(planeMesh);
-			renderer->SetMaterial(Material10);
-		}
-
-
-
-		scene->SetAmbientLight(glm::vec3(0.2f));
-
-		// Save the asset manifest for all the resources we just loaded
-		ResourceManager::SaveManifest("manifest.json");
-		// Save the scene to a JSON file
-		scene->Save("LS.json");
+			// Create our OpenGL resources
+			Shader::Sptr uboShader = ResourceManager::CreateAsset<Shader>(std::unordered_map<ShaderPartType, std::string>{
+				{ ShaderPartType::Vertex, "shaders/vertex_shader.glsl" },
+				{ ShaderPartType::Fragment, "shaders/frag_blinn_phong_textured.glsl" }
+			});
+
+			// Create an empty scene
+			scene = std::make_shared<Scene>();
+
+			// I hate this
+			scene->BaseShader = uboShader;
+
+			Material::Sptr MenuMaterial = ResourceManager::CreateAsset<Material>();
+			{
+				MenuMaterial->Name = "Menu";
+				MenuMaterial->MatShader = scene->BaseShader;
+				MenuMaterial->Texture = MenuTex;
+				MenuMaterial->Shininess = 2.0f;
+			}
+
+			Material::Sptr LSButtonMaterial = ResourceManager::CreateAsset<Material>();
+			{
+				LSButtonMaterial->Name = "LSButton";
+				LSButtonMaterial->MatShader = scene->BaseShader;
+				LSButtonMaterial->Texture = LSButtonTex;
+				LSButtonMaterial->Shininess = 2.0f;
+			}
+
+			Material::Sptr LSLogoMaterial = ResourceManager::CreateAsset<Material>();
+			{
+				LSLogoMaterial->Name = "LSLogo";
+				LSLogoMaterial->MatShader = scene->BaseShader;
+				LSLogoMaterial->Texture = LSLogoTex;
+				LSLogoMaterial->Shininess = 2.0f;
+			}
+
+			Material::Sptr ButtonBackMaterial = ResourceManager::CreateAsset<Material>();
+			{
+				ButtonBackMaterial->Name = "ButtonBackground";
+				ButtonBackMaterial->MatShader = scene->BaseShader;
+				ButtonBackMaterial->Texture = ButtonBackTex;
+				ButtonBackMaterial->Shininess = 2.0f;
+			}
+
+			Material::Sptr BackMaterial = ResourceManager::CreateAsset<Material>();
+			{
+				BackMaterial->Name = "Back";
+				BackMaterial->MatShader = scene->BaseShader;
+				BackMaterial->Texture = BackTex;
+				BackMaterial->Shininess = 2.0f;
+			}
+
+			Material::Sptr FilterMaterial = ResourceManager::CreateAsset<Material>();
+			{
+				FilterMaterial->Name = "Button Filter";
+				FilterMaterial->MatShader = scene->BaseShader;
+				FilterMaterial->Texture = FilterTex;
+				FilterMaterial->Shininess = 2.0f;
+			}
+
+			Material::Sptr Material1 = ResourceManager::CreateAsset<Material>();
+			{
+				Material1->Name = "1";
+				Material1->MatShader = scene->BaseShader;
+				Material1->Texture = Tex1;
+				Material1->Shininess = 2.0f;
+			}
+
+			Material::Sptr Material2 = ResourceManager::CreateAsset<Material>();
+			{
+				Material2->Name = "2";
+				Material2->MatShader = scene->BaseShader;
+				Material2->Texture = Tex2;
+				Material2->Shininess = 2.0f;
+			}
+
+			Material::Sptr Material3 = ResourceManager::CreateAsset<Material>();
+			{
+				Material3->Name = "3";
+				Material3->MatShader = scene->BaseShader;
+				Material3->Texture = Tex3;
+				Material3->Shininess = 2.0f;
+			}
+
+			Material::Sptr Material4 = ResourceManager::CreateAsset<Material>();
+			{
+				Material4->Name = "4";
+				Material4->MatShader = scene->BaseShader;
+				Material4->Texture = Tex4;
+				Material4->Shininess = 2.0f;
+			}
+
+			Material::Sptr Material5 = ResourceManager::CreateAsset<Material>();
+			{
+				Material5->Name = "5";
+				Material5->MatShader = scene->BaseShader;
+				Material5->Texture = Tex5;
+				Material5->Shininess = 2.0f;
+			}
+
+			Material::Sptr Material6 = ResourceManager::CreateAsset<Material>();
+			{
+				Material6->Name = "6";
+				Material6->MatShader = scene->BaseShader;
+				Material6->Texture = Tex6;
+				Material6->Shininess = 2.0f;
+			}
+
+			Material::Sptr Material7 = ResourceManager::CreateAsset<Material>();
+			{
+				Material7->Name = "7";
+				Material7->MatShader = scene->BaseShader;
+				Material7->Texture = Tex7;
+				Material7->Shininess = 2.0f;
+			}
+
+			Material::Sptr Material8 = ResourceManager::CreateAsset<Material>();
+			{
+				Material8->Name = "8";
+				Material8->MatShader = scene->BaseShader;
+				Material8->Texture = Tex8;
+				Material8->Shininess = 2.0f;
+			}
+
+			Material::Sptr Material9 = ResourceManager::CreateAsset<Material>();
+			{
+				Material9->Name = "9";
+				Material9->MatShader = scene->BaseShader;
+				Material9->Texture = Tex9;
+				Material9->Shininess = 2.0f;
+			}
+
+			Material::Sptr Material10 = ResourceManager::CreateAsset<Material>();
+			{
+				Material10->Name = "10";
+				Material10->MatShader = scene->BaseShader;
+				Material10->Texture = Tex10;
+				Material10->Shininess = 2.0f;
+			}
+
+			// Create some lights for our scene
+			scene->Lights.resize(4);
+			scene->Lights[0].Position = glm::vec3(3.0f, 3.0f, 3.0f);
+			scene->Lights[0].Color = glm::vec3(0.892f, 1.0f, 0.882f);
+			scene->Lights[0].Range = 10.0f;
+
+			scene->Lights[1].Position = glm::vec3(3.0f, -3.0f, 3.0f);
+			scene->Lights[1].Color = glm::vec3(0.892f, 1.0f, 0.882f);
+			scene->Lights[1].Range = 10.0f;
+
+			scene->Lights[2].Position = glm::vec3(-3.0f, 3.0f, 3.0f);
+			scene->Lights[2].Color = glm::vec3(0.892f, 1.0f, 0.882f);
+			scene->Lights[2].Range = 10.0f;
+
+			scene->Lights[3].Position = glm::vec3(-3.0f, -3.0f, 3.0f);
+			scene->Lights[3].Color = glm::vec3(0.892f, 1.0f, 0.882f);
+			scene->Lights[3].Range = 10.0f;
+
+			// We'll create a mesh that is a simple plane that we can resize later
+			MeshResource::Sptr planeMesh = ResourceManager::CreateAsset<MeshResource>();
+			MeshResource::Sptr cubeMesh = ResourceManager::CreateAsset<MeshResource>("cube.obj");
+			planeMesh->AddParam(MeshBuilderParam::CreatePlane(ZERO, UNIT_Z, UNIT_X, glm::vec2(1.0f)));
+			planeMesh->GenerateMesh();
+
+			// Set up the scene's camera
+			GameObject::Sptr camera = scene->CreateGameObject("Main Camera");
+			{
+				camera->SetPostion(glm::vec3(0, 0, 5));
+				camera->SetRotation(glm::vec3(0, -0, 0));
+
+				Camera::Sptr cam = camera->Add<Camera>();
+
+				// Make sure that the camera is set as the scene's main camera!
+				scene->MainCamera = cam;
+			}
+
+			// Set up all our sample objects
+			GameObject::Sptr plane = scene->CreateGameObject("Plane");
+			{
+				// Scale up the plane
+				plane->SetScale(glm::vec3(15.0F, 10.0f, 10.0f));
+
+				// Create and attach a RenderComponent to the object to draw our mesh
+				RenderComponent::Sptr renderer = plane->Add<RenderComponent>();
+				renderer->SetMesh(planeMesh);
+				renderer->SetMaterial(MenuMaterial);
+
+				// Attach a plane collider that extends infinitely along the X/Y axis
+				RigidBody::Sptr physics = plane->Add<RigidBody>(/*static by default*/);
+				physics->AddCollider(PlaneCollider::Create());
+			}
+
+
+
+			GameObject::Sptr LsButton1 = scene->CreateGameObject("LSButton1");
+			{
+				// Set position in the scene
+				LsButton1->SetPostion(glm::vec3(0.3f, 0.5f, 3.0f));
+				// Scale down the plane
+				LsButton1->SetScale(glm::vec3(0.5f));
+
+				// Create and attach a render component
+				RenderComponent::Sptr renderer = LsButton1->Add<RenderComponent>();
+				renderer->SetMesh(planeMesh);
+				renderer->SetMaterial(LSButtonMaterial);
+
+				// This object is a renderable only, it doesn't have any behaviours or
+				// physics bodies attached!
+			}
+
+			GameObject::Sptr LsButton2 = scene->CreateGameObject("LSButton2");
+			{
+				// Set position in the scene
+				LsButton2->SetPostion(glm::vec3(0.9f, 0.5f, 3.0f));
+				// Scale down the plane
+				LsButton2->SetScale(glm::vec3(0.5f));
+
+				// Create and attach a render component
+				RenderComponent::Sptr renderer = LsButton2->Add<RenderComponent>();
+				renderer->SetMesh(planeMesh);
+				renderer->SetMaterial(LSButtonMaterial);
+
+				// This object is a renderable only, it doesn't have any behaviours or
+				// physics bodies attached!
+			}
+
+			GameObject::Sptr LsButton3 = scene->CreateGameObject("LSButton3");
+			{
+				// Set position in the scene
+				LsButton3->SetPostion(glm::vec3(1.5f, 0.5f, 3.0f));
+				// Scale down the plane
+				LsButton3->SetScale(glm::vec3(0.5f));
+
+				// Create and attach a render component
+				RenderComponent::Sptr renderer = LsButton3->Add<RenderComponent>();
+				renderer->SetMesh(planeMesh);
+				renderer->SetMaterial(LSButtonMaterial);
+
+				// This object is a renderable only, it doesn't have any behaviours or
+				// physics bodies attached!
+			}
+
+			GameObject::Sptr LsButton4 = scene->CreateGameObject("LSButton4");
+			{
+				// Set position in the scene
+				LsButton4->SetPostion(glm::vec3(2.1f, 0.5f, 3.0f));
+				// Scale down the plane
+				LsButton4->SetScale(glm::vec3(0.5f));
+
+				// Create and attach a render component
+				RenderComponent::Sptr renderer = LsButton4->Add<RenderComponent>();
+				renderer->SetMesh(planeMesh);
+				renderer->SetMaterial(LSButtonMaterial);
+
+				// This object is a renderable only, it doesn't have any behaviours or
+				// physics bodies attached!
+			}
+
+			GameObject::Sptr LsButton5 = scene->CreateGameObject("LSButton5");
+			{
+				// Set position in the scene
+				LsButton5->SetPostion(glm::vec3(2.7f, 0.5f, 3.0f));
+				// Scale down the plane
+				LsButton5->SetScale(glm::vec3(0.5f));
+
+				// Create and attach a render component
+				RenderComponent::Sptr renderer = LsButton5->Add<RenderComponent>();
+				renderer->SetMesh(planeMesh);
+				renderer->SetMaterial(LSButtonMaterial);
+
+				// This object is a renderable only, it doesn't have any behaviours or
+				// physics bodies attached!
+			}
+
+			GameObject::Sptr LsButton6 = scene->CreateGameObject("LSButton6");
+			{
+				// Set position in the scene
+				LsButton6->SetPostion(glm::vec3(0.3f, -0.1f, 3.0f));
+				// Scale down the plane
+				LsButton6->SetScale(glm::vec3(0.5f));
+
+				// Create and attach a render component
+				RenderComponent::Sptr renderer = LsButton6->Add<RenderComponent>();
+				renderer->SetMesh(planeMesh);
+				renderer->SetMaterial(LSButtonMaterial);
+
+				// This object is a renderable only, it doesn't have any behaviours or
+				// physics bodies attached!
+			}
+
+			GameObject::Sptr LsButton7 = scene->CreateGameObject("LSButton7");
+			{
+				// Set position in the scene
+				LsButton7->SetPostion(glm::vec3(0.9f, -0.1f, 3.0f));
+				// Scale down the plane
+				LsButton7->SetScale(glm::vec3(0.5f));
+
+				// Create and attach a render component
+				RenderComponent::Sptr renderer = LsButton7->Add<RenderComponent>();
+				renderer->SetMesh(planeMesh);
+				renderer->SetMaterial(LSButtonMaterial);
+
+				// This object is a renderable only, it doesn't have any behaviours or
+				// physics bodies attached!
+			}
+
+			GameObject::Sptr LsButton8 = scene->CreateGameObject("LSButton8");
+			{
+				// Set position in the scene
+				LsButton8->SetPostion(glm::vec3(1.5f, -0.1f, 3.0f));
+				// Scale down the plane
+				LsButton8->SetScale(glm::vec3(0.5f));
+
+				// Create and attach a render component
+				RenderComponent::Sptr renderer = LsButton8->Add<RenderComponent>();
+				renderer->SetMesh(planeMesh);
+				renderer->SetMaterial(LSButtonMaterial);
+
+				// This object is a renderable only, it doesn't have any behaviours or
+				// physics bodies attached!
+			}
+
+			GameObject::Sptr LsButton9 = scene->CreateGameObject("LSButton9");
+			{
+				// Set position in the scene
+				LsButton9->SetPostion(glm::vec3(2.1f, -0.1f, 3.0f));
+				// Scale down the plane
+				LsButton9->SetScale(glm::vec3(0.5f));
+
+				// Create and attach a render component
+				RenderComponent::Sptr renderer = LsButton9->Add<RenderComponent>();
+				renderer->SetMesh(planeMesh);
+				renderer->SetMaterial(LSButtonMaterial);
+
+				// This object is a renderable only, it doesn't have any behaviours or
+				// physics bodies attached!
+			}
+
+			GameObject::Sptr LsButton10 = scene->CreateGameObject("LSButton10");
+			{
+				// Set position in the scene
+				LsButton10->SetPostion(glm::vec3(2.7f, -0.1f, 3.0f));
+				// Scale down the plane
+				LsButton10->SetScale(glm::vec3(0.5f));
+
+				// Create and attach a render component
+				RenderComponent::Sptr renderer = LsButton10->Add<RenderComponent>();
+				renderer->SetMesh(planeMesh);
+				renderer->SetMaterial(LSButtonMaterial);
+
+				// This object is a renderable only, it doesn't have any behaviours or
+				// physics bodies attached!
+			}
+
+			GameObject::Sptr BackButtonBack = scene->CreateGameObject("BackButtonBack");
+			{
+				// Set position in the scene
+				BackButtonBack->SetPostion(glm::vec3(1.75f, -1.0f, 3.0f));
+				// Scale down the plane
+				BackButtonBack->SetScale(glm::vec3(2.0f, 0.4f, 0.5f));
+
+				// Create and attach a render component
+				RenderComponent::Sptr renderer = BackButtonBack->Add<RenderComponent>();
+				renderer->SetMesh(planeMesh);
+				renderer->SetMaterial(ButtonBackMaterial);
+
+				// This object is a renderable only, it doesn't have any behaviours or
+				// physics bodies attached!
+			}
+
+			GameObject::Sptr Filter = scene->CreateGameObject("Filter");
+			{
+				// Set position in the scene
+				Filter->SetPostion(glm::vec3(1.0f, 0.5f, 3.010f));
+				// Scale down the plane
+				Filter->SetScale(glm::vec3(1.25f, 0.25f, 1.0f));
+
+				// Create and attach a render component
+				RenderComponent::Sptr renderer = Filter->Add<RenderComponent>();
+				renderer->SetMesh(planeMesh);
+				renderer->SetMaterial(FilterMaterial);
+
+				// This object is a renderable only, it doesn't have any behaviours or
+				// physics bodies attached!
+			}
+
+			GameObject::Sptr LsLogo = scene->CreateGameObject("LSLogo");
+			{
+				// Set position in the scene
+				LsLogo->SetPostion(glm::vec3(1.5f, 1.25f, 3.0f));
+				// Scale down the plane
+				LsLogo->SetScale(glm::vec3(2.75f, 1.0f, 0.5f));
+
+				// Create and attach a render component
+				RenderComponent::Sptr renderer = LsLogo->Add<RenderComponent>();
+				renderer->SetMesh(planeMesh);
+				renderer->SetMaterial(LSLogoMaterial);
+
+				// This object is a renderable only, it doesn't have any behaviours or
+				// physics bodies attached!
+			}
+
+			GameObject::Sptr Back = scene->CreateGameObject("Back");
+			{
+				Back->SetPostion(glm::vec3(1.3f, -0.75f, 3.5f));
+				Back->SetScale(glm::vec3(0.5f, 0.125f, 0.5f));
+
+				RenderComponent::Sptr renderer = Back->Add<RenderComponent>();
+				renderer->SetMesh(planeMesh);
+				renderer->SetMaterial(BackMaterial);
+			}
+
+			GameObject::Sptr Num1 = scene->CreateGameObject("Num1");
+			{
+				Num1->SetPostion(glm::vec3(0.225f, 0.375f, 3.5f));
+				Num1->SetScale(glm::vec3(0.25f));
+
+				RenderComponent::Sptr renderer = Num1->Add<RenderComponent>();
+				renderer->SetMesh(planeMesh);
+				renderer->SetMaterial(Material1);
+			}
+
+			GameObject::Sptr Num2 = scene->CreateGameObject("Num2");
+			{
+				Num2->SetPostion(glm::vec3(0.675f, 0.375f, 3.5f));
+				Num2->SetScale(glm::vec3(0.25f));
+
+				RenderComponent::Sptr renderer = Num2->Add<RenderComponent>();
+				renderer->SetMesh(planeMesh);
+				renderer->SetMaterial(Material2);
+			}
+
+			GameObject::Sptr Num3 = scene->CreateGameObject("Num3");
+			{
+				Num3->SetPostion(glm::vec3(1.125f, 0.375f, 3.5f));
+				Num3->SetScale(glm::vec3(0.25f));
+
+				RenderComponent::Sptr renderer = Num3->Add<RenderComponent>();
+				renderer->SetMesh(planeMesh);
+				renderer->SetMaterial(Material3);
+			}
+
+			GameObject::Sptr Num4 = scene->CreateGameObject("Num4");
+			{
+				Num4->SetPostion(glm::vec3(1.575f, 0.375f, 3.5f));
+				Num4->SetScale(glm::vec3(0.25f));
+
+				RenderComponent::Sptr renderer = Num4->Add<RenderComponent>();
+				renderer->SetMesh(planeMesh);
+				renderer->SetMaterial(Material4);
+			}
+
+			GameObject::Sptr Num5 = scene->CreateGameObject("Num5");
+			{
+				Num5->SetPostion(glm::vec3(2.025f, 0.375f, 3.5f));
+				Num5->SetScale(glm::vec3(0.25f));
+
+				RenderComponent::Sptr renderer = Num5->Add<RenderComponent>();
+				renderer->SetMesh(planeMesh);
+				renderer->SetMaterial(Material5);
+			}
+
+			GameObject::Sptr Num6 = scene->CreateGameObject("Num6");
+			{
+				Num6->SetPostion(glm::vec3(0.225f, -0.075f, 3.5f));
+				Num6->SetScale(glm::vec3(0.25f));
+
+				RenderComponent::Sptr renderer = Num6->Add<RenderComponent>();
+				renderer->SetMesh(planeMesh);
+				renderer->SetMaterial(Material6);
+			}
+
+			GameObject::Sptr Num7 = scene->CreateGameObject("Num7");
+			{
+				Num7->SetPostion(glm::vec3(0.675f, -0.075f, 3.5f));
+				Num7->SetScale(glm::vec3(0.25f));
+
+				RenderComponent::Sptr renderer = Num7->Add<RenderComponent>();
+				renderer->SetMesh(planeMesh);
+				renderer->SetMaterial(Material7);
+			}
+
+			GameObject::Sptr Num8 = scene->CreateGameObject("Num8");
+			{
+				Num8->SetPostion(glm::vec3(1.125f, -0.075f, 3.5f));
+				Num8->SetScale(glm::vec3(0.25f));
+
+				RenderComponent::Sptr renderer = Num8->Add<RenderComponent>();
+				renderer->SetMesh(planeMesh);
+				renderer->SetMaterial(Material8);
+			}
+
+			GameObject::Sptr Num9 = scene->CreateGameObject("Num9");
+			{
+				Num9->SetPostion(glm::vec3(1.575f, -0.075f, 3.5f));
+				Num9->SetScale(glm::vec3(0.25f));
+
+				RenderComponent::Sptr renderer = Num9->Add<RenderComponent>();
+				renderer->SetMesh(planeMesh);
+				renderer->SetMaterial(Material9);
+			}
+
+			GameObject::Sptr Num10 = scene->CreateGameObject("Num10");
+			{
+				Num10->SetPostion(glm::vec3(2.025f, -0.075f, 3.5f));
+				Num10->SetScale(glm::vec3(0.25f));
+
+				RenderComponent::Sptr renderer = Num10->Add<RenderComponent>();
+				renderer->SetMesh(planeMesh);
+				renderer->SetMaterial(Material10);
+			}
+
+
+
+			scene->SetAmbientLight(glm::vec3(0.2f));
+
+			// Save the asset manifest for all the resources we just loaded
+			ResourceManager::SaveManifest("manifest.json");
+			// Save the scene to a JSON file
+			scene->Save("LS.json");
 
 		}
 
@@ -3263,8 +4014,6 @@ int main() {
 			scene->SetAmbientLight(glm::vec3(0.2f));
 			std::cout << "J pressed" << std::endl;
 		}
-
-		
 
 
 
