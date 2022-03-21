@@ -962,42 +962,45 @@ int main() {
 		Texture2D::Sptr    monkeyTex = ResourceManager::CreateAsset<Texture2D>("textures/monkey-uvMap.png");
 		Texture2D::Sptr    boxTexture = ResourceManager::CreateAsset<Texture2D>("textures/box-diffuse.png");
 
-		Texture2D::Sptr    mushroomTexture = ResourceManager::CreateAsset<Texture2D>("textures/MushroomUV.png");
-		Texture2D::Sptr    vinesTexture = ResourceManager::CreateAsset<Texture2D>("textures/VinesUV.png");
-		Texture2D::Sptr    cobwebTexture = ResourceManager::CreateAsset<Texture2D>("textures/CobwebUV.png");
-		Texture2D::Sptr    rockTexture = ResourceManager::CreateAsset<Texture2D>("textures/grey.png");
-		Texture2D::Sptr    grassTexture = ResourceManager::CreateAsset<Texture2D>("textures/ground.png");
-		Texture2D::Sptr    ladybugTexture = ResourceManager::CreateAsset<Texture2D>("textures/lbuv.png");
-		Texture2D::Sptr    bgTexture = ResourceManager::CreateAsset<Texture2D>("textures/bg.png");
-		Texture2D::Sptr    greenTex = ResourceManager::CreateAsset<Texture2D>("textures/green.png");
-		Texture2D::Sptr    ReplayTex = ResourceManager::CreateAsset<Texture2D>("textures/ReplayText.png");
-		Texture2D::Sptr    BranchTex = ResourceManager::CreateAsset<Texture2D>("textures/BranchUV.png");
-		Texture2D::Sptr    LogTex = ResourceManager::CreateAsset<Texture2D>("textures/logUV.png");
-		Texture2D::Sptr    PlantTex = ResourceManager::CreateAsset<Texture2D>("textures/Plantuv.png");
-		Texture2D::Sptr    SunflowerTex = ResourceManager::CreateAsset<Texture2D>("textures/SunflowerUV.png");
-		Texture2D::Sptr    twigTex = ResourceManager::CreateAsset<Texture2D>("textures/TwigUV.png");
-		Texture2D::Sptr    ToadTex = ResourceManager::CreateAsset<Texture2D>("textures/Toad.png");
-		Texture2D::Sptr    BlankTex = ResourceManager::CreateAsset<Texture2D>("textures/blank.png");
-		Texture2D::Sptr    ForegroundTex = ResourceManager::CreateAsset<Texture2D>("textures/fg1.png");
-		Texture2D::Sptr    RockTex = ResourceManager::CreateAsset<Texture2D>("textures/rockTexture.png");
-		Texture2D::Sptr    frogTex = ResourceManager::CreateAsset<Texture2D>("textures/froguv.png");
-		Texture2D::Sptr    tmTex = ResourceManager::CreateAsset<Texture2D>("textures/tmuv.png");
-		Texture2D::Sptr    bmTex = ResourceManager::CreateAsset<Texture2D>("textures/bmuv.png");
-		Texture2D::Sptr    PBTex = ResourceManager::CreateAsset<Texture2D>("textures/PauseButton.png");
+		//png sorted by alphabetical
 		Texture2D::Sptr    BGTex = ResourceManager::CreateAsset<Texture2D>("textures/BackgroundUV.png");
+		Texture2D::Sptr    bgTexture = ResourceManager::CreateAsset<Texture2D>("textures/bg.png");
+		Texture2D::Sptr    BlankTex = ResourceManager::CreateAsset<Texture2D>("textures/blank.png");
+		Texture2D::Sptr    bmTex = ResourceManager::CreateAsset<Texture2D>("textures/bmuv.png");
+		Texture2D::Sptr    BranchTex = ResourceManager::CreateAsset<Texture2D>("textures/BranchUV.png");
+		Texture2D::Sptr    CampfireTex = ResourceManager::CreateAsset<Texture2D>("textures/CampfireUVFrame.png");
+		Texture2D::Sptr    cobwebTexture = ResourceManager::CreateAsset<Texture2D>("textures/CobwebUV.png");
+		Texture2D::Sptr    cobweb2Texture = ResourceManager::CreateAsset<Texture2D>("textures/CobwebUVFrame.png");
+		Texture2D::Sptr    ExitRockTexture = ResourceManager::CreateAsset<Texture2D>("textures/ExitRockUV.png");
+		Texture2D::Sptr    ExitTreeTex = ResourceManager::CreateAsset<Texture2D>("textures/ExitTreeUV.png");
+		Texture2D::Sptr    ForegroundTex = ResourceManager::CreateAsset<Texture2D>("textures/fg1.png");
+		Texture2D::Sptr    frogTex = ResourceManager::CreateAsset<Texture2D>("textures/froguv.png");
 		Texture2D::Sptr    BGGrassTex = ResourceManager::CreateAsset<Texture2D>("textures/grassuv.png");
 		Texture2D::Sptr    Grass1Tex = ResourceManager::CreateAsset<Texture2D>("textures/Grass1.png");
 		Texture2D::Sptr    Grass2Tex = ResourceManager::CreateAsset<Texture2D>("textures/Grass2.png");
 		Texture2D::Sptr    Grass3Tex = ResourceManager::CreateAsset<Texture2D>("textures/Grass3.png");
 		Texture2D::Sptr    Grass4Tex = ResourceManager::CreateAsset<Texture2D>("textures/Grass4.png");
 		Texture2D::Sptr    Grass5Tex = ResourceManager::CreateAsset<Texture2D>("textures/Grass5.png");
-		Texture2D::Sptr    ExitTreeTex = ResourceManager::CreateAsset<Texture2D>("textures/ExitTreeUV.png");
-
+		Texture2D::Sptr    greenTex = ResourceManager::CreateAsset<Texture2D>("textures/green.png");
+		Texture2D::Sptr    rockTexture = ResourceManager::CreateAsset<Texture2D>("textures/grey.png");
+		Texture2D::Sptr    grassTexture = ResourceManager::CreateAsset<Texture2D>("textures/ground.png");
+		Texture2D::Sptr    ladybugTexture = ResourceManager::CreateAsset<Texture2D>("textures/lbuv.png");
+		Texture2D::Sptr    LogTex = ResourceManager::CreateAsset<Texture2D>("textures/logUV.png");
+		Texture2D::Sptr    MountainBackgroundTex = ResourceManager::CreateAsset<Texture2D>("textures/MountainBackgroundUV.png");
+		Texture2D::Sptr    mushroomTexture = ResourceManager::CreateAsset<Texture2D>("textures/MushroomUV.png");
+		Texture2D::Sptr    PlantTex = ResourceManager::CreateAsset<Texture2D>("textures/Plantuv.png");
+		Texture2D::Sptr    RockTex = ResourceManager::CreateAsset<Texture2D>("textures/rockTexture.png");
+		Texture2D::Sptr    RootTexture = ResourceManager::CreateAsset<Texture2D>("textures/RootUV.png");
+		Texture2D::Sptr    SunflowerTex = ResourceManager::CreateAsset<Texture2D>("textures/SunflowerUV.png");
+		Texture2D::Sptr    twigTex = ResourceManager::CreateAsset<Texture2D>("textures/TwigUV.png");
+		Texture2D::Sptr    ToadTex = ResourceManager::CreateAsset<Texture2D>("textures/Toad.png");
+		Texture2D::Sptr    tmTex = ResourceManager::CreateAsset<Texture2D>("textures/tmuv.png");
+		Texture2D::Sptr    vinesTexture = ResourceManager::CreateAsset<Texture2D>("textures/VinesUV.png");
+		
 		//Menu background
 		Texture2D::Sptr    LSMenuTex = ResourceManager::CreateAsset<Texture2D>("textures/Game Poster 2 Extended.png");
 		Texture2D::Sptr    MenuTex = ResourceManager::CreateAsset<Texture2D>("textures/Game Poster 3.png");
 		Texture2D::Sptr    ControlMenuTex = ResourceManager::CreateAsset<Texture2D>("textures/ControlsMenu.png");
-		//
 
 		//Button UI
 		Texture2D::Sptr    ButtonTex = ResourceManager::CreateAsset<Texture2D>("textures/Button Background.png");
@@ -1012,6 +1015,7 @@ int main() {
 		Texture2D::Sptr    PbarbugTex = ResourceManager::CreateAsset<Texture2D>("textures/progressmeter.png");
 		Texture2D::Sptr    FFLogoTex = ResourceManager::CreateAsset<Texture2D>("textures/Frog Frontier Logo.png");
 		Texture2D::Sptr    LSLogoTex = ResourceManager::CreateAsset<Texture2D>("textures/Frog Frontier Logo Side Scroller.png");
+		Texture2D::Sptr    PBTex = ResourceManager::CreateAsset<Texture2D>("textures/PauseButton.png");
 
 		//numbered button text
 		Texture2D::Sptr    Tex1 = ResourceManager::CreateAsset<Texture2D>("textures/1.png");
@@ -1035,6 +1039,7 @@ int main() {
 		Texture2D::Sptr    ControlsTex = ResourceManager::CreateAsset<Texture2D>("textures/ControlsText.png");
 		Texture2D::Sptr    BackTex = ResourceManager::CreateAsset<Texture2D>("textures/Back Text.png");
 		Texture2D::Sptr    LStextTex = ResourceManager::CreateAsset<Texture2D>("textures/LSText.png");
+		Texture2D::Sptr    ReplayTex = ResourceManager::CreateAsset<Texture2D>("textures/ReplayText.png");
 
 		//text
 		Texture2D::Sptr    winTexture = ResourceManager::CreateAsset<Texture2D>("textures/win.png");
