@@ -175,6 +175,10 @@ bool performedtask = false;
 bool enterclick = false;
 bool playerLose = false;
 bool playerWin = false;
+//Gonna make a scenevalue to tell the keyboards what to do or some other scene specific update changes
+// So 11 is main menu, 12 is controls, 13 is levelselect
+// and then the actual levels can just have their value
+int scenevalue = 11;
 
 /// <summary>
 /// Draws a widget for saving or loading our scene
@@ -208,16 +212,21 @@ bool DrawSaveLoadImGui(Scene::Sptr& scene, std::string& path) {
 		enterclick = false;
 	}
 
-	if (glfwGetKey(window, GLFW_KEY_ENTER) && scene->FindObjectByName("player") == NULL && scene->FindObjectByName("Filter") != NULL && enterclick == false) {
+	if (glfwGetKey(window, GLFW_KEY_ENTER) && scene->FindObjectByName("player") == NULL && scene->FindObjectByName("Filter") != NULL && enterclick == false && scenevalue == 11) //menu
+	{
 
 		switch (index) {
 		case 1:
-			path = "Level.json";
+			path = "LS.json";
 			SceneLoad(scene, path);
+			scenevalue = 13;
+			index = 1;
 			break;
 		case 2:
 			path = "CS.json";
 			SceneLoad(scene, path);
+			scenevalue = 12;
+			index = 1;
 			break;
 		case 3:
 			return 0;
@@ -227,20 +236,83 @@ bool DrawSaveLoadImGui(Scene::Sptr& scene, std::string& path) {
 		enterclick = true;
 		return true;
 	}
-	else if (glfwGetKey(window, GLFW_KEY_ENTER) && scene->FindObjectByName("player") == NULL && scene->FindObjectByName("Filter") == NULL && enterclick == false)
+	else if (glfwGetKey(window, GLFW_KEY_ENTER) && scene->FindObjectByName("player") == NULL && scene->FindObjectByName("Filter") == NULL && enterclick == false && scenevalue == 12) //controls
 	{
 		path = "menu.json";
 		SceneLoad(scene, path);
+		scenevalue = 11;
+		index = 1;
+		enterclick = true;
+		return true;
+	}
+	else if (glfwGetKey(window, GLFW_KEY_ENTER) && scene->FindObjectByName("player") == NULL && scene->FindObjectByName("Filter") != NULL && enterclick == false && scenevalue == 13) // level select
+	{
+		switch (index) {
+		case 1:
+			path = "Level.json";
+			SceneLoad(scene, path);
+			scenevalue = 1;
+			index = 1;
+			break;
+		case 2:
+			return 0;
+			break;
+		case 3:
+			return 0;
+			break;
+		case 4:
+			return 0;
+			break;
+		case 5:
+			return 0;
+			break;
+		case 6:
+			return 0;
+			break;
+		case 7:
+			return 0;
+			break;
+		case 8:
+			return 0;
+			break;
+		case 9:
+			return 0;
+			break;
+		case 10:
+			return 0;
+			break;
+		case 11:
+			path = "menu.json";
+			SceneLoad(scene, path);
+			scenevalue = 11;
+			index = 1;
+			break;
+		}
 		enterclick = true;
 		return true;
 	}
 
-	if (glfwGetKey(window, GLFW_KEY_ENTER) && scene->FindObjectByName("player") != NULL && (paused == true || playerLose == true || playerWin == true)&& index == 2 && enterclick == false)
+	if (glfwGetKey(window, GLFW_KEY_ENTER) && scene->FindObjectByName("player") != NULL && (paused == true || playerLose == true || playerWin == true) && enterclick == false) //pause
 	{
-		path = "menu.json";
-		SceneLoad(scene, path);
-		enterclick == true;
-		return true;
+		if (index == 2)
+		{
+			path = "LS.json";
+			SceneLoad(scene, path);
+			enterclick == true;
+			index = 1;
+			scenevalue = 13;
+			return true;
+		}
+		else if (index == 3)
+		{
+			path = "menu.json";
+			SceneLoad(scene, path);
+			enterclick == true;
+			index = 1;
+			scenevalue = 11;
+			return true;
+		}
+		
 	}
 
 	return false;
@@ -353,64 +425,215 @@ bool playerMove = false;
 int clickCount = 0;
 bool playerJumping = false;
 bool soundprompt = false;
-//Gonna make a scenevalue to tell the keyboards what to do or some other scene specific update changes
-// So 11 is main menu, 12 is controls, 13 is levelselect
-// and then the actual levels can just have their value
-int scenevalue = 11;
+
 
 
 //secoundary keyboard function for controls when on the menu or level select screen, possibly when paused?
 // currently used for testing
 void SceneChanger()
 {
-	if (glfwGetKey(window, GLFW_KEY_UP) && performedtask == false) {
-		if (index - 1 < 1)
-		{
-			index = 3;
-			std::cout << index << std::endl;
-			performedtask = true;
+	if (scenevalue == 11)
+	{
+		if (glfwGetKey(window, GLFW_KEY_UP) && performedtask == false) {
+			if (index - 1 < 1)
+			{
+				index = 3;
+				std::cout << index << std::endl;
+				performedtask = true;
+			}
+			else
+			{
+				index -= 1;
+				std::cout << index << std::endl;
+				performedtask = true;
+			}
 		}
-		else
-		{
-			index -= 1;
-			std::cout << index << std::endl;
-			performedtask = true;
+		else if (glfwGetKey(window, GLFW_KEY_DOWN) && performedtask == false) {
+			if (index + 1 > 3)
+			{
+				index = 1;
+				std::cout << index << std::endl;
+				performedtask = true;
+			}
+			else
+			{
+				index += 1;
+				std::cout << index << std::endl;
+				performedtask = true;
+			}
 		}
 	}
-	else if (glfwGetKey(window, GLFW_KEY_DOWN) && performedtask == false) {
-		if (index + 1 > 3)
-		{
-			index = 1;
-			std::cout << index << std::endl;
-			performedtask = true;
+	else if (scenevalue == 13)
+	{
+		if (glfwGetKey(window, GLFW_KEY_UP) && performedtask == false) {
+			if (index - 5 < 1)
+			{
+				index = 11;
+				std::cout << index << std::endl;
+				performedtask = true;
+			}
+			else
+			{
+				index -= 5;
+				std::cout << index << std::endl;
+				performedtask = true;
+			}
 		}
-		else
+		else if (glfwGetKey(window, GLFW_KEY_DOWN) && performedtask == false) {
+			if (index + 5 > 10)
+			{
+				index = 1;
+				std::cout << index << std::endl;
+				performedtask = true;
+			}
+			else
+			{
+				index += 5;
+				std::cout << index << std::endl;
+				performedtask = true;
+			}
+		}
+		else if (glfwGetKey(window, GLFW_KEY_LEFT) && performedtask == false)
 		{
-			index += 1;
-			std::cout << index << std::endl;
-			performedtask = true;
+			if (index - 1 == 0)
+			{
+				index = 5;
+				std::cout << index << std::endl;
+				performedtask = true;
+			}
+			else if (index - 1 == 5)
+			{
+				index = 10;
+				std::cout << index << std::endl;
+				performedtask = true;
+			}
+			else if (index - 1 == 10)
+			{
+				std::cout << index << std::endl;
+				performedtask = true;
+			}
+			else
+			{
+				index -= 1;
+				std::cout << index << std::endl;
+				performedtask = true;
+			}
+		}
+		else if (glfwGetKey(window, GLFW_KEY_RIGHT) && performedtask == false)
+		{
+			if (index + 1 == 6)
+			{
+				index = 1;
+				std::cout << index << std::endl;
+				performedtask = true;
+			}
+			else if (index + 1 == 11)
+			{
+				index = 5;
+				std::cout << index << std::endl;
+				performedtask = true;
+			}
+			else if (index + 1 == 12)
+			{
+				std::cout << index << std::endl;
+				performedtask = true;
+			}
+			else
+			{
+				index += 1;
+				std::cout << index << std::endl;
+				performedtask = true;
+			}
 		}
 	}
 	
-	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_RELEASE && glfwGetKey(window, GLFW_KEY_UP) == GLFW_RELEASE)
+	
+	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_RELEASE && glfwGetKey(window, GLFW_KEY_UP) == GLFW_RELEASE && glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_RELEASE && glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_RELEASE)
 	{
 		performedtask = false;
 	}
 
 	if (scene->FindObjectByName("Filter") != NULL)
 	{
-		if (index == 1)
+		if (scenevalue == 11)
 		{
-			scene->FindObjectByName("Filter")->SetPostion(glm::vec3(1.f, 0.5f, 3.01f));
+			if (index == 1)
+			{
+				scene->FindObjectByName("Filter")->SetPostion(glm::vec3(1.f, 0.5f, 3.01f));
+			}
+			else if (index == 2)
+			{
+				scene->FindObjectByName("Filter")->SetPostion(glm::vec3(1.f, 0.15f, 3.01f));
+			}
+			else if (index == 3)
+			{
+				scene->FindObjectByName("Filter")->SetPostion(glm::vec3(1.f, -0.2f, 3.01f));
+			}
 		}
-		else if (index == 2)
+
+		if (scenevalue == 13)
 		{
-			scene->FindObjectByName("Filter")->SetPostion(glm::vec3(1.f, 0.15f, 3.01f));
+
+			if (index == 1)
+			{
+				scene->FindObjectByName("Filter")->SetPostion(glm::vec3(0.3f, 0.5f, 3.01f));
+				scene->FindObjectByName("Filter")->SetScale(glm::vec3(0.5f));
+			}
+			else if (index == 2)
+			{
+				scene->FindObjectByName("Filter")->SetPostion(glm::vec3(0.9f, 0.5f, 3.01f));
+				scene->FindObjectByName("Filter")->SetScale(glm::vec3(0.5f));
+			}
+			else if (index == 3)
+			{
+				scene->FindObjectByName("Filter")->SetPostion(glm::vec3(1.5f, 0.5f, 3.01f));
+				scene->FindObjectByName("Filter")->SetScale(glm::vec3(0.5f));
+			}
+			else if (index == 4)
+			{
+				scene->FindObjectByName("Filter")->SetPostion(glm::vec3(2.1f, 0.5f, 3.01f));
+				scene->FindObjectByName("Filter")->SetScale(glm::vec3(0.5f));
+			}
+			else if (index == 5)
+			{
+				scene->FindObjectByName("Filter")->SetPostion(glm::vec3(2.7f, 0.5f, 3.01f));
+				scene->FindObjectByName("Filter")->SetScale(glm::vec3(0.5f));
+			}
+			else if (index == 6)
+			{
+				scene->FindObjectByName("Filter")->SetPostion(glm::vec3(0.3f, -0.1f, 3.01f));
+				scene->FindObjectByName("Filter")->SetScale(glm::vec3(0.5f));
+			}
+			else if (index == 7)
+			{
+				scene->FindObjectByName("Filter")->SetPostion(glm::vec3(0.9f, -0.1f, 3.01f));
+				scene->FindObjectByName("Filter")->SetScale(glm::vec3(0.5f));
+			}
+			else if (index == 8)
+			{
+				scene->FindObjectByName("Filter")->SetPostion(glm::vec3(1.5f, -0.1f, 3.01f));
+				scene->FindObjectByName("Filter")->SetScale(glm::vec3(0.5f));
+			}
+			else if (index == 9)
+			{
+				scene->FindObjectByName("Filter")->SetPostion(glm::vec3(2.1f, -0.1f, 3.01f));
+				scene->FindObjectByName("Filter")->SetScale(glm::vec3(0.5f));
+			}
+			else if (index == 10)
+			{
+				scene->FindObjectByName("Filter")->SetPostion(glm::vec3(2.6f, -0.1f, 3.01f));
+				scene->FindObjectByName("Filter")->SetScale(glm::vec3(0.5f));
+			}
+			else if (index == 11)
+			{
+				scene->FindObjectByName("Filter")->SetPostion(glm::vec3(1.75f, -1.f, 3.01f));
+				scene->FindObjectByName("Filter")->SetScale(glm::vec3(2.f, 0.4, 0.5));
+			}
+
+
+
 		}
-		else if (index == 3)
-		{
-			scene->FindObjectByName("Filter")->SetPostion(glm::vec3(1.f, -0.2f, 3.01f));
-		}
+	
 	}
 
 }
@@ -435,10 +658,10 @@ void keyboard()
 
 	if (paused == true || playerLose == true || playerWin == true)
 	{
-		if ((glfwGetKey(window, GLFW_KEY_UP) || glfwGetKey(window, GLFW_KEY_DOWN)) && performedtask == false) {
+		if ((glfwGetKey(window, GLFW_KEY_UP) && performedtask == false)) {
 			if (index == 1)
 			{
-				index = 2;
+				index = 3;
 				std::cout << index << std::endl;
 				performedtask = true;
 			}
@@ -448,7 +671,32 @@ void keyboard()
 				std::cout << index << std::endl;
 				performedtask = true;
 			}
-			
+			else if (index == 3)
+			{
+				index = 2;
+				std::cout << index << std::endl;
+				performedtask = true;
+			}
+		}
+		else if (glfwGetKey(window, GLFW_KEY_DOWN) && performedtask == false) {
+			if (index == 1)
+			{
+				index = 2;
+				std::cout << index << std::endl;
+				performedtask = true;
+			}
+			else if (index == 2)
+			{
+				index = 3;
+				std::cout << index << std::endl;
+				performedtask = true;
+			}
+			else if (index == 3)
+			{
+				index = 1;
+				std::cout << index << std::endl;
+				performedtask = true;
+			}
 		}
 
 		if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS && index == 1)
@@ -1000,6 +1248,7 @@ int main() {
 		Texture2D::Sptr    Grass4Tex = ResourceManager::CreateAsset<Texture2D>("textures/Grass4.png");
 		Texture2D::Sptr    Grass5Tex = ResourceManager::CreateAsset<Texture2D>("textures/Grass5.png");
 		Texture2D::Sptr    ExitTreeTex = ResourceManager::CreateAsset<Texture2D>("textures/ExitTreeUV.png");
+		Texture2D::Sptr    LStextTex = ResourceManager::CreateAsset<Texture2D>("textures/LSText.png");
 
 		// Create an empty scene
 		scene = std::make_shared<Scene>();
@@ -1332,6 +1581,13 @@ int main() {
 			ExitTreeMaterial->Texture = ExitTreeTex;
 			ExitTreeMaterial->Shininess = 2.0f;
 		}
+		Material::Sptr LStextMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			LStextMaterial->Name = "LStext";
+			LStextMaterial->MatShader = scene->BaseShader;
+			LStextMaterial->Texture = LStextTex;
+			LStextMaterial->Shininess = 2.0f;
+		}
 
 
 		// Create some lights for our scene
@@ -1436,50 +1692,7 @@ int main() {
 		planeMesh->AddParam(MeshBuilderParam::CreatePlane(ZERO, UNIT_Z, UNIT_X, glm::vec2(1.0f)));
 		planeMesh->GenerateMesh();
 
-		GameObject::Sptr PauseLogo = scene->CreateGameObject("PauseLogo");
-		{
-			// Set position in the scene
-			PauseLogo->SetPostion(glm::vec3(1.f, 5.75f, 8.f));
-			// Scale down the plane
-			PauseLogo->SetScale(glm::vec3(3.927f, 1.96f, 0.5f));
-			//Rotate Logo
-			PauseLogo->SetRotation(glm::vec3(80.f, 0.f, 180.f));
-
-			// Create and attach a render component
-			RenderComponent::Sptr renderer = PauseLogo->Add<RenderComponent>();
-			renderer->SetMesh(planeMesh);
-			renderer->SetMaterial(PauseMaterial);
-		}
-
-		GameObject::Sptr WinnerLogo = scene->CreateGameObject("WinnerLogo");
-		{
-			// Set position in the scene
-			WinnerLogo->SetPostion(glm::vec3(1.f, 5.75f, 8.f));
-			// Scale down the plane
-			WinnerLogo->SetScale(glm::vec3(3.927f, 1.96f, 0.5f));
-			//Rotate Logo
-			WinnerLogo->SetRotation(glm::vec3(80.f, 0.f, 180.f));
-
-			// Create and attach a render component
-			RenderComponent::Sptr renderer = WinnerLogo->Add<RenderComponent>();
-			renderer->SetMesh(planeMesh);
-			renderer->SetMaterial(WinnerMaterial);
-		}
-
-		GameObject::Sptr LoserLogo = scene->CreateGameObject("LoserLogo");
-		{
-			// Set position in the scene
-			LoserLogo->SetPostion(glm::vec3(1.f, 5.75f, 8.f));
-			// Scale down the plane
-			LoserLogo->SetScale(glm::vec3(3.927f, 1.96f, 0.5f));
-			//Rotate Logo
-			LoserLogo->SetRotation(glm::vec3(80.f, 0.f, 180.f));
-
-			// Create and attach a render component
-			RenderComponent::Sptr renderer = LoserLogo->Add<RenderComponent>();
-			renderer->SetMesh(planeMesh);
-			renderer->SetMaterial(LoserMaterial);
-		}
+	
 
 		//Background Assets
 		createBackgroundAsset("1", glm::vec3(-1.f, 5.0f, -0.f), 0.5, glm::vec3(83.f, 5.0f, 0.0f), BranchMesh, BranchMaterial);
@@ -1776,6 +1989,22 @@ int main() {
 			//behaviour->RotationSpeed = glm::vec3(0.0f, 0.0f, -90.0f);
 		}
 
+		//Objects with transparency need to be loaded in last otherwise it creates issues
+		GameObject::Sptr PanelPause = scene->CreateGameObject("PanelPause");
+		{
+			// Set position in the scene
+			PanelPause->SetPostion(glm::vec3(1.f, -15.f, 6.5f));
+			// Scale down the plane
+			PanelPause->SetScale(glm::vec3(10.0f, 10.0f, 10.0f));
+			// Rotate panel
+			PanelPause->SetRotation(glm::vec3(-80.f, 0.f, 0.f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = PanelPause->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(PanelMaterial);
+		}
+
 		GameObject::Sptr ButtonBack1 = scene->CreateGameObject("ButtonBack1");
 		{
 			// Set position in the scene
@@ -1807,46 +2036,19 @@ int main() {
 			renderer->SetMaterial(ButtonMaterial);
 		}
 
-		GameObject::Sptr ResumeText = scene->CreateGameObject("ResumeText");
+		GameObject::Sptr ButtonBack3 = scene->CreateGameObject("ButtonBack3");
 		{
 			// Set position in the scene
-			ResumeText->SetPostion(glm::vec3(1.0f, 8.0f, 6.1f));
+			ButtonBack3->SetPostion(glm::vec3(1.f, 6.5f, 5.f));
 			// Scale down the plane
-			ResumeText->SetScale(glm::vec3(2.0f, 0.4f, 0.5f));
-			ResumeText->SetRotation(glm::vec3(80.0f, 0.f, -180.f));
+			ButtonBack3->SetScale(glm::vec3(3.0f, 0.8f, 0.5f));
+			//spin things
+			ButtonBack3->SetRotation(glm::vec3(-80.0f, 0.f, 0.f));
 
 			// Create and attach a render component
-			RenderComponent::Sptr renderer = ResumeText->Add<RenderComponent>();
+			RenderComponent::Sptr renderer = ButtonBack3->Add<RenderComponent>();
 			renderer->SetMesh(planeMesh);
-			renderer->SetMaterial(ResumeMaterial);
-		}
-
-		GameObject::Sptr ReplayText = scene->CreateGameObject("ReplayText");
-		{
-			// Set position in the scene
-			ReplayText->SetPostion(glm::vec3(1.0f, 8.0f, 6.1f));
-			// Scale down the plane
-			ReplayText->SetScale(glm::vec3(2.0f, 0.4f, 0.5f));
-			ReplayText->SetRotation(glm::vec3(80.0f, 0.f, -180.f));
-
-			// Create and attach a render component
-			RenderComponent::Sptr renderer = ReplayText->Add<RenderComponent>();
-			renderer->SetMesh(planeMesh);
-			renderer->SetMaterial(ReplayMaterial);
-		}
-
-		GameObject::Sptr MainMenuText = scene->CreateGameObject("MainMenuText");
-		{
-			// Set position in the scene
-			MainMenuText->SetPostion(glm::vec3(1.0f, 8.0f, 5.4f));
-			// Scale down the plane
-			MainMenuText->SetScale(glm::vec3(2.0f, 0.4f, 0.5f));
-			MainMenuText->SetRotation(glm::vec3(80.0f, 0.f, -180.f));
-
-			// Create and attach a render component
-			RenderComponent::Sptr renderer = MainMenuText->Add<RenderComponent>();
-			renderer->SetMesh(planeMesh);
-			renderer->SetMaterial(MainMenuMaterial);
+			renderer->SetMaterial(ButtonMaterial);
 		}
 
 		GameObject::Sptr PBar = scene->CreateGameObject("ProgressBarGO");
@@ -1881,20 +2083,49 @@ int main() {
 			RigidBody::Sptr physics = PBug->Add<RigidBody>(/*static by default*/);
 		}
 
-		//Objects with transparency need to be loaded in last otherwise it creates issues
-		GameObject::Sptr PanelPause = scene->CreateGameObject("PanelPause");
+		GameObject::Sptr PauseLogo = scene->CreateGameObject("PauseLogo");
 		{
 			// Set position in the scene
-			PanelPause->SetPostion(glm::vec3(1.f, -15.f, 6.5f));
+			PauseLogo->SetPostion(glm::vec3(1.f, 5.75f, 8.f));
 			// Scale down the plane
-			PanelPause->SetScale(glm::vec3(10.0f, 10.0f, 10.0f));
-			// Rotate panel
-			PanelPause->SetRotation(glm::vec3(-80.f, 0.f, 0.f));
+			PauseLogo->SetScale(glm::vec3(3.927f, 1.96f, 0.5f));
+			//Rotate Logo
+			PauseLogo->SetRotation(glm::vec3(80.f, 0.f, 180.f));
 
 			// Create and attach a render component
-			RenderComponent::Sptr renderer = PanelPause->Add<RenderComponent>();
+			RenderComponent::Sptr renderer = PauseLogo->Add<RenderComponent>();
 			renderer->SetMesh(planeMesh);
-			renderer->SetMaterial(PanelMaterial);
+			renderer->SetMaterial(PauseMaterial);
+		}
+
+		GameObject::Sptr WinnerLogo = scene->CreateGameObject("WinnerLogo");
+		{
+			// Set position in the scene
+			WinnerLogo->SetPostion(glm::vec3(1.f, 5.75f, 8.f));
+			// Scale down the plane
+			WinnerLogo->SetScale(glm::vec3(3.927f, 1.96f, 0.5f));
+			//Rotate Logo
+			WinnerLogo->SetRotation(glm::vec3(80.f, 0.f, 180.f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = WinnerLogo->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(WinnerMaterial);
+		}
+
+		GameObject::Sptr LoserLogo = scene->CreateGameObject("LoserLogo");
+		{
+			// Set position in the scene
+			LoserLogo->SetPostion(glm::vec3(1.f, 5.75f, 8.f));
+			// Scale down the plane
+			LoserLogo->SetScale(glm::vec3(3.927f, 1.96f, 0.5f));
+			//Rotate Logo
+			LoserLogo->SetRotation(glm::vec3(80.f, 0.f, 180.f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = LoserLogo->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(LoserMaterial);
 		}
 
 		GameObject::Sptr Filter = scene->CreateGameObject("Filter");
@@ -1930,6 +2161,64 @@ int main() {
 			RigidBody::Sptr physics = plane->Add<RigidBody>(/*static by default*/);
 			physics->AddCollider(PlaneCollider::Create());
 		}
+
+		GameObject::Sptr ReplayText = scene->CreateGameObject("ReplayText");
+		{
+			// Set position in the scene
+			ReplayText->SetPostion(glm::vec3(1.0f, 8.0f, 6.1f));
+			// Scale down the plane
+			ReplayText->SetScale(glm::vec3(2.0f, 0.4f, 0.5f));
+			ReplayText->SetRotation(glm::vec3(80.0f, 0.f, -180.f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = ReplayText->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(ReplayMaterial);
+		}
+
+		GameObject::Sptr MainMenuText = scene->CreateGameObject("MainMenuText");
+		{
+			// Set position in the scene
+			MainMenuText->SetPostion(glm::vec3(1.0f, 8.0f, 5.4f));
+			// Scale down the plane
+			MainMenuText->SetScale(glm::vec3(2.0f, 0.4f, 0.5f));
+			MainMenuText->SetRotation(glm::vec3(80.0f, 0.f, -180.f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = MainMenuText->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(MainMenuMaterial);
+		}
+
+		GameObject::Sptr ResumeText = scene->CreateGameObject("ResumeText");
+		{
+			// Set position in the scene
+			ResumeText->SetPostion(glm::vec3(1.0f, 8.0f, 6.1f));
+			// Scale down the plane
+			ResumeText->SetScale(glm::vec3(2.0f, 0.4f, 0.5f));
+			ResumeText->SetRotation(glm::vec3(80.0f, 0.f, -180.f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = ResumeText->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(ResumeMaterial);
+		}
+
+		GameObject::Sptr LSText = scene->CreateGameObject("LSText");
+		{
+			// Set position in the scene
+			LSText->SetPostion(glm::vec3(1.0f, 8.0f, 6.1f));
+			// Scale down the plane
+			LSText->SetScale(glm::vec3(2.0f, 0.4f, 0.5f));
+			LSText->SetRotation(glm::vec3(80.0f, 0.f, -180.f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = LSText->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(LStextMaterial);
+		}
+
+		scene->SetAmbientLight(glm::vec3(0.2f));
 
 		// Kinematic rigid bodies are those controlled by some outside controller
 		// and ONLY collide with dynamic objects
@@ -2028,20 +2317,20 @@ int main() {
 			StartTextMaterial->Shininess = 2.0f;
 		}
 
-		Material::Sptr FilterMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			FilterMaterial->Name = "Button Filter";
-			FilterMaterial->MatShader = scene->BaseShader;
-			FilterMaterial->Texture = FilterTex;
-			FilterMaterial->Shininess = 2.0f;
-		}
-
 		Material::Sptr ControlsMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			ControlsMaterial->Name = "Controls Text";
 			ControlsMaterial->MatShader = scene->BaseShader;
 			ControlsMaterial->Texture = ControlsTex;
 			ControlsMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr FilterMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			FilterMaterial->Name = "Button Filter";
+			FilterMaterial->MatShader = scene->BaseShader;
+			FilterMaterial->Texture = FilterTex;
+			FilterMaterial->Shininess = 2.0f;
 		}
 
 		// Create some lights for our scene
@@ -2161,6 +2450,22 @@ int main() {
 			// physics bodies attached!
 		}
 
+		GameObject::Sptr Filter = scene->CreateGameObject("Filter");
+		{
+			// Set position in the scene
+			Filter->SetPostion(glm::vec3(1.0f, 0.5f, 3.010f));
+			// Scale down the plane
+			Filter->SetScale(glm::vec3(1.25f, 0.25f, 1.0f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = Filter->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(FilterMaterial);
+
+			// This object is a renderable only, it doesn't have any behaviours or
+			// physics bodies attached!
+		}
+
 		GameObject::Sptr StartButton = scene->CreateGameObject("StartButton");
 		{
 			// Set position in the scene
@@ -2209,21 +2514,7 @@ int main() {
 			// physics bodies attached!
 		}
 
-		GameObject::Sptr Filter = scene->CreateGameObject("Filter");
-		{
-			// Set position in the scene
-			Filter->SetPostion(glm::vec3(1.0f, 0.5f, 3.010f));
-			// Scale down the plane
-			Filter->SetScale(glm::vec3(1.25f, 0.25f, 1.0f));
 
-			// Create and attach a render component
-			RenderComponent::Sptr renderer = Filter->Add<RenderComponent>();
-			renderer->SetMesh(planeMesh);
-			renderer->SetMaterial(FilterMaterial);
-
-			// This object is a renderable only, it doesn't have any behaviours or
-			// physics bodies attached!
-		}
 
 		// Save the asset manifest for all the resources we just loaded
 		ResourceManager::SaveManifest("manifest.json");
@@ -2387,6 +2678,7 @@ int main() {
 		Texture2D::Sptr    LSLogoTex = ResourceManager::CreateAsset<Texture2D>("textures/Frog Frontier Logo Side Scroller.png");
 		Texture2D::Sptr    ButtonBackTex = ResourceManager::CreateAsset<Texture2D>("textures/Button Background.png");
 		Texture2D::Sptr    BackTex = ResourceManager::CreateAsset<Texture2D>("textures/Back Text.png");
+		Texture2D::Sptr    FilterTex = ResourceManager::CreateAsset<Texture2D>("textures/Button Filter.png");
 
 		Texture2D::Sptr    Tex1 = ResourceManager::CreateAsset<Texture2D>("textures/1.png");
 		Texture2D::Sptr    Tex2 = ResourceManager::CreateAsset<Texture2D>("textures/2.png");
@@ -2398,6 +2690,7 @@ int main() {
 		Texture2D::Sptr    Tex8 = ResourceManager::CreateAsset<Texture2D>("textures/8.png");
 		Texture2D::Sptr    Tex9 = ResourceManager::CreateAsset<Texture2D>("textures/9.png");
 		Texture2D::Sptr    Tex10 = ResourceManager::CreateAsset<Texture2D>("textures/10.png");
+
 
 		// Create an empty scene
 		scene = std::make_shared<Scene>();
@@ -2443,6 +2736,14 @@ int main() {
 			BackMaterial->MatShader = scene->BaseShader;
 			BackMaterial->Texture = BackTex;
 			BackMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr FilterMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			FilterMaterial->Name = "Button Filter";
+			FilterMaterial->MatShader = scene->BaseShader;
+			FilterMaterial->Texture = FilterTex;
+			FilterMaterial->Shininess = 2.0f;
 		}
 
 		Material::Sptr Material1 = ResourceManager::CreateAsset<Material>();
@@ -2576,6 +2877,8 @@ int main() {
 			RigidBody::Sptr physics = plane->Add<RigidBody>(/*static by default*/);
 			physics->AddCollider(PlaneCollider::Create());
 		}
+
+		
 
 		GameObject::Sptr LsButton1 = scene->CreateGameObject("LSButton1");
 		{
@@ -2753,6 +3056,22 @@ int main() {
 			// physics bodies attached!
 		}
 
+		GameObject::Sptr Filter = scene->CreateGameObject("Filter");
+		{
+			// Set position in the scene
+			Filter->SetPostion(glm::vec3(1.0f, 0.5f, 3.010f));
+			// Scale down the plane
+			Filter->SetScale(glm::vec3(1.25f, 0.25f, 1.0f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = Filter->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(FilterMaterial);
+
+			// This object is a renderable only, it doesn't have any behaviours or
+			// physics bodies attached!
+		}
+
 		GameObject::Sptr LsLogo = scene->CreateGameObject("LSLogo");
 		{
 			// Set position in the scene
@@ -2879,6 +3198,10 @@ int main() {
 			renderer->SetMaterial(Material10);
 		}
 
+
+
+		scene->SetAmbientLight(glm::vec3(0.2f));
+
 		// Save the asset manifest for all the resources we just loaded
 		ResourceManager::SaveManifest("manifest.json");
 		// Save the scene to a JSON file
@@ -2955,8 +3278,10 @@ int main() {
 				scene->FindObjectByName("PanelPause")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6, 6.5));
 				scene->FindObjectByName("ButtonBack1")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6.25, 6.0));
 				scene->FindObjectByName("ButtonBack2")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6.5, 5.0));
+				scene->FindObjectByName("ButtonBack3")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6.75, 4.0));
 				scene->FindObjectByName("ResumeText")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 8, 6.1));
-				scene->FindObjectByName("MainMenuText")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 8, 5.4));
+				scene->FindObjectByName("LSText")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 8, 5.4));
+				scene->FindObjectByName("MainMenuText")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 8.2, 4.7));
 				scene->FindObjectByName("PauseLogo")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 5.75, 8.0));
 				ProgressBarTempPaused = ProgressBarTime;
 
@@ -2969,6 +3294,10 @@ int main() {
 				{
 					scene->FindObjectByName("Filter")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6.51, 5.0));
 				}
+				else if (index == 3)
+				{
+					scene->FindObjectByName("Filter")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6.76, 4.0));
+				}
 
 			}
 			
@@ -2979,8 +3308,10 @@ int main() {
 				scene->FindObjectByName("PanelPause")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6, 6.5));
 				scene->FindObjectByName("ButtonBack1")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6.25, 6.0));
 				scene->FindObjectByName("ButtonBack2")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6.5, 5.0));
+				scene->FindObjectByName("ButtonBack3")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6.75, 4.0));
 				scene->FindObjectByName("ReplayText")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 8, 6.1));
-				scene->FindObjectByName("MainMenuText")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 8, 5.4));
+				scene->FindObjectByName("MainMenuText")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 8.2, 4.7));
+				scene->FindObjectByName("LSText")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 8, 5.4));
 				scene->FindObjectByName("LoserLogo")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 5.75, 8.0));
 				ProgressBarTemp = glfwGetTime();
 
@@ -2992,6 +3323,10 @@ int main() {
 				{
 					scene->FindObjectByName("Filter")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6.51, 5.0));
 				}
+				else if (index == 3)
+				{
+					scene->FindObjectByName("Filter")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6.76, 4.0));
+				}
 			}
 
 			if (playerWin == true)
@@ -2999,34 +3334,42 @@ int main() {
 				scene->FindObjectByName("PanelPause")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6, 6.5));
 				scene->FindObjectByName("ButtonBack1")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6.25, 6.0));
 				scene->FindObjectByName("ButtonBack2")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6.5, 5.0));
+				scene->FindObjectByName("ButtonBack3")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6.75, 4.0));
 				scene->FindObjectByName("ReplayText")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 8, 6.1));
-				scene->FindObjectByName("MainMenuText")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 8, 5.4));
+				scene->FindObjectByName("MainMenuText")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 8.2, 4.7));
+				scene->FindObjectByName("LSText")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 8, 5.4));
 				scene->FindObjectByName("WinnerLogo")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 5.75, 8.0));
 				ProgressBarTemp = glfwGetTime();
 
-if (index == 1)
-{
-	scene->FindObjectByName("Filter")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6.26, 6.0));
-}
-else if (index == 2)
-{
-	scene->FindObjectByName("Filter")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6.51, 5.0));
-}
+				if (index == 1)
+				{
+					scene->FindObjectByName("Filter")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6.26, 6.0));
+				}
+				else if (index == 2)
+				{
+					scene->FindObjectByName("Filter")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6.51, 5.0));
+				}
+				else if (index == 3)
+				{
+					scene->FindObjectByName("Filter")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6.76, 4.0));
+				}
 			}
 
 			if (paused != true && playerLose != true && playerWin != true)
 			{
 				//originally these were all back at -15 but idk if that makes the game more jank cause of overlap so i tried to spread em out
-				scene->FindObjectByName("PanelPause")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, -15, -25));
-				scene->FindObjectByName("ButtonBack1")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, -20, -26));
-				scene->FindObjectByName("ButtonBack2")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, -22, -27));
-				scene->FindObjectByName("ResumeText")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, -23, -28));
-				scene->FindObjectByName("MainMenuText")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 24, -15, -29));
-				scene->FindObjectByName("PauseLogo")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, -25, -30));
-				scene->FindObjectByName("Filter")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, -26, -31));
-				scene->FindObjectByName("LoserLogo")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, -27, -32));
-				scene->FindObjectByName("ReplayText")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, -28, -33));
-				scene->FindObjectByName("WinnerLogo")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, -29, -34));
+				scene->FindObjectByName("PanelPause")->SetPostion(glm::vec3(scene->FindObjectByName("Main Camera")->GetPosition().x , scene->FindObjectByName("Main Camera")->GetPosition().y + 1, 6.5));
+				scene->FindObjectByName("ButtonBack1")->SetPostion(glm::vec3(scene->FindObjectByName("Main Camera")->GetPosition().x, scene->FindObjectByName("Main Camera")->GetPosition().y + 2, 6));
+				scene->FindObjectByName("ButtonBack2")->SetPostion(glm::vec3(scene->FindObjectByName("Main Camera")->GetPosition().x, scene->FindObjectByName("Main Camera")->GetPosition().y + 3, 5));
+				scene->FindObjectByName("ButtonBack3")->SetPostion(glm::vec3(scene->FindObjectByName("Main Camera")->GetPosition().x, scene->FindObjectByName("Main Camera")->GetPosition().y + 4, 4));
+				scene->FindObjectByName("ResumeText")->SetPostion(glm::vec3(scene->FindObjectByName("Main Camera")->GetPosition().x, scene->FindObjectByName("Main Camera")->GetPosition().y + 5, 6.1));
+				scene->FindObjectByName("MainMenuText")->SetPostion(glm::vec3(scene->FindObjectByName("Main Camera")->GetPosition().x, scene->FindObjectByName("Main Camera")->GetPosition().y + 6, 4.7));
+				scene->FindObjectByName("LSText")->SetPostion(glm::vec3(scene->FindObjectByName("Main Camera")->GetPosition().x, scene->FindObjectByName("Main Camera")->GetPosition().y + 6, 5.4));
+				scene->FindObjectByName("PauseLogo")->SetPostion(glm::vec3(scene->FindObjectByName("Main Camera")->GetPosition().x, scene->FindObjectByName("Main Camera")->GetPosition().y + 7, 8));
+				scene->FindObjectByName("Filter")->SetPostion(glm::vec3(scene->FindObjectByName("Main Camera")->GetPosition().x, scene->FindObjectByName("Main Camera")->GetPosition().y + 8, 8));
+				scene->FindObjectByName("LoserLogo")->SetPostion(glm::vec3(scene->FindObjectByName("Main Camera")->GetPosition().x, scene->FindObjectByName("Main Camera")->GetPosition().y + 9, 8));
+				scene->FindObjectByName("ReplayText")->SetPostion(glm::vec3(scene->FindObjectByName("Main Camera")->GetPosition().x, scene->FindObjectByName("Main Camera")->GetPosition().y + 10, 6.1));
+				scene->FindObjectByName("WinnerLogo")->SetPostion(glm::vec3(scene->FindObjectByName("Main Camera")->GetPosition().x, scene->FindObjectByName("Main Camera")->GetPosition().y + 11, 6.1));
 			}
 
 			if (paused == true || playerLose == true || playerWin == true)
