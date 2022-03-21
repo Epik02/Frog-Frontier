@@ -956,26 +956,20 @@ int main() {
 	else {
 
 		//load all our objects once for all scenes
+
+		//questionable things to keep?
 		MeshResource::Sptr monkeyMesh = ResourceManager::CreateAsset<MeshResource>("Monkey.obj");
+		Texture2D::Sptr    monkeyTex = ResourceManager::CreateAsset<Texture2D>("textures/monkey-uvMap.png");
 		Texture2D::Sptr    boxTexture = ResourceManager::CreateAsset<Texture2D>("textures/box-diffuse.png");
+
 		Texture2D::Sptr    mushroomTexture = ResourceManager::CreateAsset<Texture2D>("textures/MushroomUV.png");
 		Texture2D::Sptr    vinesTexture = ResourceManager::CreateAsset<Texture2D>("textures/VinesUV.png");
 		Texture2D::Sptr    cobwebTexture = ResourceManager::CreateAsset<Texture2D>("textures/CobwebUV.png");
 		Texture2D::Sptr    rockTexture = ResourceManager::CreateAsset<Texture2D>("textures/grey.png");
 		Texture2D::Sptr    grassTexture = ResourceManager::CreateAsset<Texture2D>("textures/ground.png");
-		Texture2D::Sptr    winTexture = ResourceManager::CreateAsset<Texture2D>("textures/win.png");
 		Texture2D::Sptr    ladybugTexture = ResourceManager::CreateAsset<Texture2D>("textures/lbuv.png");
 		Texture2D::Sptr    bgTexture = ResourceManager::CreateAsset<Texture2D>("textures/bg.png");
-		Texture2D::Sptr    monkeyTex = ResourceManager::CreateAsset<Texture2D>("textures/monkey-uvMap.png");
 		Texture2D::Sptr    greenTex = ResourceManager::CreateAsset<Texture2D>("textures/green.png");
-		Texture2D::Sptr    PanelTex = ResourceManager::CreateAsset<Texture2D>("textures/Panel.png");
-		Texture2D::Sptr    ResumeTex = ResourceManager::CreateAsset<Texture2D>("textures/ResumeText.png");
-		Texture2D::Sptr    MainMenuTex = ResourceManager::CreateAsset<Texture2D>("textures/MainMenuText.png");
-		Texture2D::Sptr    ButtonTex = ResourceManager::CreateAsset<Texture2D>("textures/Button Background.png");
-		Texture2D::Sptr    PauseTex = ResourceManager::CreateAsset<Texture2D>("textures/Pause.png");
-		Texture2D::Sptr    FilterTex = ResourceManager::CreateAsset<Texture2D>("textures/Button Filter.png");
-		Texture2D::Sptr    WinnerTex = ResourceManager::CreateAsset<Texture2D>("textures/Winner.png");
-		Texture2D::Sptr    LoserTex = ResourceManager::CreateAsset<Texture2D>("textures/YouLose.png");
 		Texture2D::Sptr    ReplayTex = ResourceManager::CreateAsset<Texture2D>("textures/ReplayText.png");
 		Texture2D::Sptr    BranchTex = ResourceManager::CreateAsset<Texture2D>("textures/BranchUV.png");
 		Texture2D::Sptr    LogTex = ResourceManager::CreateAsset<Texture2D>("textures/logUV.png");
@@ -992,31 +986,34 @@ int main() {
 		Texture2D::Sptr    PBTex = ResourceManager::CreateAsset<Texture2D>("textures/PauseButton.png");
 		Texture2D::Sptr    BGTex = ResourceManager::CreateAsset<Texture2D>("textures/BackgroundUV.png");
 		Texture2D::Sptr    BGGrassTex = ResourceManager::CreateAsset<Texture2D>("textures/grassuv.png");
-		Texture2D::Sptr    ProgressTex = ResourceManager::CreateAsset<Texture2D>("textures/progressbar.png");
-		Texture2D::Sptr    PbarbugTex = ResourceManager::CreateAsset<Texture2D>("textures/progressmeter.png");
 		Texture2D::Sptr    Grass1Tex = ResourceManager::CreateAsset<Texture2D>("textures/Grass1.png");
 		Texture2D::Sptr    Grass2Tex = ResourceManager::CreateAsset<Texture2D>("textures/Grass2.png");
 		Texture2D::Sptr    Grass3Tex = ResourceManager::CreateAsset<Texture2D>("textures/Grass3.png");
 		Texture2D::Sptr    Grass4Tex = ResourceManager::CreateAsset<Texture2D>("textures/Grass4.png");
 		Texture2D::Sptr    Grass5Tex = ResourceManager::CreateAsset<Texture2D>("textures/Grass5.png");
 		Texture2D::Sptr    ExitTreeTex = ResourceManager::CreateAsset<Texture2D>("textures/ExitTreeUV.png");
-		Texture2D::Sptr    LStextTex = ResourceManager::CreateAsset<Texture2D>("textures/LSText.png");
 
+		//Menu background
+		Texture2D::Sptr    LSMenuTex = ResourceManager::CreateAsset<Texture2D>("textures/Game Poster 2 Extended.png");
+		Texture2D::Sptr    MenuTex = ResourceManager::CreateAsset<Texture2D>("textures/Game Poster 3.png");
+		Texture2D::Sptr    ControlMenuTex = ResourceManager::CreateAsset<Texture2D>("textures/ControlsMenu.png");
 		//
+
+		//Button UI
+		Texture2D::Sptr    ButtonTex = ResourceManager::CreateAsset<Texture2D>("textures/Button Background.png");
 		Texture2D::Sptr    ButtonBackTex = ResourceManager::CreateAsset<Texture2D>("textures/Button Background.png");
-		Texture2D::Sptr    ButtonStartTex = ResourceManager::CreateAsset<Texture2D>("textures/Start Text.png");
-		Texture2D::Sptr    ButtonExitTex = ResourceManager::CreateAsset<Texture2D>("textures/Exit Text.png");
-		Texture2D::Sptr    FFLogoTex = ResourceManager::CreateAsset<Texture2D>("textures/Frog Frontier Logo.png");
-		Texture2D::Sptr    BackTextTex = ResourceManager::CreateAsset<Texture2D>("textures/Exit Text.png");
-		Texture2D::Sptr    StartTextTex = ResourceManager::CreateAsset<Texture2D>("textures/Start Text.png");
-		Texture2D::Sptr    ControlsTex = ResourceManager::CreateAsset<Texture2D>("textures/ControlsText.png");
-
-		Texture2D::Sptr    MenuTex = ResourceManager::CreateAsset<Texture2D>("textures/Game Poster 2 Extended.png");
-
 		Texture2D::Sptr    LSButtonTex = ResourceManager::CreateAsset<Texture2D>("textures/Level Button Background 1.png");
-		Texture2D::Sptr    LSLogoTex = ResourceManager::CreateAsset<Texture2D>("textures/Frog Frontier Logo Side Scroller.png");
-		Texture2D::Sptr    BackTex = ResourceManager::CreateAsset<Texture2D>("textures/Back Text.png");
+		Texture2D::Sptr    FilterTex = ResourceManager::CreateAsset<Texture2D>("textures/Button Filter.png");
 
+		//UI textures
+		Texture2D::Sptr    PauseTex = ResourceManager::CreateAsset<Texture2D>("textures/Pause.png");
+		Texture2D::Sptr    PanelTex = ResourceManager::CreateAsset<Texture2D>("textures/Panel.png");
+		Texture2D::Sptr    ProgressTex = ResourceManager::CreateAsset<Texture2D>("textures/progressbar.png");
+		Texture2D::Sptr    PbarbugTex = ResourceManager::CreateAsset<Texture2D>("textures/progressmeter.png");
+		Texture2D::Sptr    FFLogoTex = ResourceManager::CreateAsset<Texture2D>("textures/Frog Frontier Logo.png");
+		Texture2D::Sptr    LSLogoTex = ResourceManager::CreateAsset<Texture2D>("textures/Frog Frontier Logo Side Scroller.png");
+
+		//numbered button text
 		Texture2D::Sptr    Tex1 = ResourceManager::CreateAsset<Texture2D>("textures/1.png");
 		Texture2D::Sptr    Tex2 = ResourceManager::CreateAsset<Texture2D>("textures/2.png");
 		Texture2D::Sptr    Tex3 = ResourceManager::CreateAsset<Texture2D>("textures/3.png");
@@ -1028,15 +1025,34 @@ int main() {
 		Texture2D::Sptr    Tex9 = ResourceManager::CreateAsset<Texture2D>("textures/9.png");
 		Texture2D::Sptr    Tex10 = ResourceManager::CreateAsset<Texture2D>("textures/10.png");
 
-								/// Working Level ///
+		//written text
+		Texture2D::Sptr    ResumeTex = ResourceManager::CreateAsset<Texture2D>("textures/ResumeText.png");
+		Texture2D::Sptr    MainMenuTex = ResourceManager::CreateAsset<Texture2D>("textures/MainMenuText.png");
+		Texture2D::Sptr    ButtonStartTex = ResourceManager::CreateAsset<Texture2D>("textures/Start Text.png");
+		Texture2D::Sptr    ButtonExitTex = ResourceManager::CreateAsset<Texture2D>("textures/Exit Text.png");
+		Texture2D::Sptr    BackTextTex = ResourceManager::CreateAsset<Texture2D>("textures/Exit Text.png");
+		Texture2D::Sptr    StartTextTex = ResourceManager::CreateAsset<Texture2D>("textures/Start Text.png");
+		Texture2D::Sptr    ControlsTex = ResourceManager::CreateAsset<Texture2D>("textures/ControlsText.png");
+		Texture2D::Sptr    BackTex = ResourceManager::CreateAsset<Texture2D>("textures/Back Text.png");
+		Texture2D::Sptr    LStextTex = ResourceManager::CreateAsset<Texture2D>("textures/LSText.png");
 
-		{
+		//text
+		Texture2D::Sptr    winTexture = ResourceManager::CreateAsset<Texture2D>("textures/win.png");
+		Texture2D::Sptr    WinnerTex = ResourceManager::CreateAsset<Texture2D>("textures/Winner.png");
+		Texture2D::Sptr    LoserTex = ResourceManager::CreateAsset<Texture2D>("textures/YouLose.png");
+		
 		// Create our OpenGL resources
 		Shader::Sptr uboShader = ResourceManager::CreateAsset<Shader>(std::unordered_map<ShaderPartType, std::string>{
 			{ ShaderPartType::Vertex, "shaders/vertex_shader.glsl" },
 			{ ShaderPartType::Fragment, "shaders/frag_blinn_phong_textured.glsl" }
 		});
 
+
+
+								/// Working Level ///
+
+		{
+	
 		// Create an empty scene
 		scene = std::make_shared<Scene>();
 
@@ -2022,12 +2038,6 @@ int main() {
 		/// Working Level ///									//////		Level 1		//////////
 
 		{
-		// Create our OpenGL resources
-		Shader::Sptr uboShader = ResourceManager::CreateAsset<Shader>(std::unordered_map<ShaderPartType, std::string>{
-			{ ShaderPartType::Vertex, "shaders/vertex_shader.glsl" },
-			{ ShaderPartType::Fragment, "shaders/frag_blinn_phong_textured.glsl" }
-		});
-
 		// Create an empty scene
 		scene = std::make_shared<Scene>();
 
@@ -3017,20 +3027,7 @@ int main() {
 																	//// Making a 'Menu' Scene ////
 
 		{
-		// Create our OpenGL resources
-		Shader::Sptr uboShader = ResourceManager::CreateAsset<Shader>(std::unordered_map<ShaderPartType, std::string>{
-			{ ShaderPartType::Vertex, "shaders/vertex_shader.glsl" },
-			{ ShaderPartType::Fragment, "shaders/frag_blinn_phong_textured.glsl" }
-		});
-
-		Texture2D::Sptr    MenuTex = ResourceManager::CreateAsset<Texture2D>("textures/Game Poster 3.png");
-
-		// Textures for UI
-
-		
-
-
-
+	
 		// Create an empty scene
 		scene = std::make_shared<Scene>();
 
@@ -3308,7 +3305,7 @@ int main() {
 				{ ShaderPartType::Fragment, "shaders/frag_blinn_phong_textured.glsl" }
 			});
 
-			Texture2D::Sptr    MenuTex = ResourceManager::CreateAsset<Texture2D>("textures/ControlsMenu.png");
+
 
 			// Create an empty scene
 			scene = std::make_shared<Scene>();
@@ -3320,7 +3317,7 @@ int main() {
 			{
 				MenuMaterial->Name = "Menu";
 				MenuMaterial->MatShader = scene->BaseShader;
-				MenuMaterial->Texture = MenuTex;
+				MenuMaterial->Texture = ControlMenuTex;
 				MenuMaterial->Shininess = 2.0f;
 			}
 
@@ -3437,12 +3434,6 @@ int main() {
 												//// Level Select Scene ////
 
 		{
-			// Create our OpenGL resources
-			Shader::Sptr uboShader = ResourceManager::CreateAsset<Shader>(std::unordered_map<ShaderPartType, std::string>{
-				{ ShaderPartType::Vertex, "shaders/vertex_shader.glsl" },
-				{ ShaderPartType::Fragment, "shaders/frag_blinn_phong_textured.glsl" }
-			});
-
 			// Create an empty scene
 			scene = std::make_shared<Scene>();
 
@@ -3453,7 +3444,7 @@ int main() {
 			{
 				MenuMaterial->Name = "Menu";
 				MenuMaterial->MatShader = scene->BaseShader;
-				MenuMaterial->Texture = MenuTex;
+				MenuMaterial->Texture = LSMenuTex;
 				MenuMaterial->Shininess = 2.0f;
 			}
 
