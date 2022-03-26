@@ -431,6 +431,9 @@ bool playerMove = false;
 int clickCount = 0;
 bool playerJumping = false;
 bool soundprompt = false;
+float flighttime = 0.0f;
+float jumptime = 0.0f;
+bool verticalinput = false;
 
 
 
@@ -742,11 +745,6 @@ void keyboard()
 			scene->FindObjectByName("player")->SetScale(glm::vec3(0.5f, 0.5f, 0.5f));
 		}
 
-		if (clickCount % 2 == 0) {
-			playerFlying = false;
-		}
-		//std::cout << clickCount;
-
 		if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
 			playerMove = true;
 		}
@@ -755,50 +753,75 @@ void keyboard()
 			scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 0.2f, scene->FindObjectByName("player")->GetPosition().y, scene->FindObjectByName("player")->GetPosition().z)); // makes the player move
 		}
 
+		//works as a descent flight just needs the actual flight time portion
 		if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
-			if (!isUpPressed) {
-				if (playerJumping == false) {
-					//ballxpos = xpos;
-				}
-				playerJumping = true;
-			}
-			isJumpPressed = true;
+			playerFlying = true;
 		}
 		else {
-			isJumpPressed = false;
-			playerJumping = false;
+			playerFlying = false;
+		}
+
+		//attempt at a jump button that still lets you fly coming out of it and stops you from jumping until you land
+		if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS) {
+			//if player can jump
+			//player rise to position at a rate of n
+			//playerJumping == false
+			//player should not fall during this time
+			//if player starts to fly override this control
+			if (isJumpPressed == false)
+			{
+				//scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x, scene->FindObjectByName("player")->GetPosition().y, scene->FindObjectByName("player")->GetPosition().z + 0.2));
+				playerJumping = true;
+				isJumpPressed = true;
+				jumptime = glfwGetTime() + 1.5;
+			}
 		}
 
 		if (playerJumping == true) {
-			if (scene->FindObjectByName("player")->GetPosition().z < 5.1) {
-				//scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x, scene->FindObjectByName("player")->GetPosition().y, (scene->FindObjectByName("player")->GetPosition().z) + 1.0));
-				scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x, scene->FindObjectByName("player")->GetPosition().y, scene->FindObjectByName("player")->GetPosition().z + 0.04));
-				clickCount = clickCount + 1;
+			if (scene->FindObjectByName("player")->GetPosition().z <= 6.4 && jumptime >= glfwGetTime()) {
+				scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x, scene->FindObjectByName("player")->GetPosition().y, scene->FindObjectByName("player")->GetPosition().z + 0.4));
 			}
-			else {
+			else if (scene->FindObjectByName("player")->GetPosition().z >= 6.4 && jumptime <= glfwGetTime())
+			{
 				playerJumping = false;
-				scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x, scene->FindObjectByName("player")->GetPosition().y, scene->FindObjectByName("player")->GetPosition().z - 0.04));
 			}
-			//else if (scene->FindObjectByName("player")->GetPosition().z >= 5) {
-			//	scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x, scene->FindObjectByName("player")->GetPosition().y, 5.1));
-			//}
 		}
-	}
 
-	if (scenevalue == 1)
-	{
-		if (scene->FindObjectByName("player")->GetPosition().x < -800.f) {
-			playerMove = false;
+		if (playerFlying == true) {
+			if (scene->FindObjectByName("player")->GetPosition().z < 10.1) {
+				//scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x, scene->FindObjectByName("player")->GetPosition().y, (scene->FindObjectByName("player")->GetPosition().z) + 1.0));
+				scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x, scene->FindObjectByName("player")->GetPosition().y, scene->FindObjectByName("player")->GetPosition().z + 0.2));
+			}
+			isJumpPressed = true;
+			playerJumping = false;
 		}
-	}
-	else if (scenevalue == 2)
-	{
-		if (scene->FindObjectByName("player")->GetPosition().x < -400.f) {
-			playerMove = false;
-		}
-	}
 
-	
+		if (playerJumping == false && playerFlying == false) {
+			if (scene->FindObjectByName("player")->GetPosition().z > 0.3) {
+				scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x, scene->FindObjectByName("player")->GetPosition().y, scene->FindObjectByName("player")->GetPosition().z - 0.4));
+			}
+			else if (scene->FindObjectByName("player")->GetPosition().z <= 0.3)
+			{
+				isJumpPressed = false;
+			}
+
+
+		}
+
+		if (scenevalue == 1)
+		{
+			if (scene->FindObjectByName("player")->GetPosition().x < -800.f) {
+				playerMove = false;
+			}
+		}
+		else if (scenevalue == 2)
+		{
+			if (scene->FindObjectByName("player")->GetPosition().x < -400.f) {
+				playerMove = false;
+			}
+		}
+
+	}
 }
 
 glm::vec3 keypoints[4];
@@ -4991,7 +5014,7 @@ int main() {
 				ProgressBarTime = glfwGetTime() - ProgressBarTemp;
 				ProgressBarTime = ProgressBarTime / 2.5;
 			}
-			std::cout << ProgressBarTime << "\n";
+			//std::cout << ProgressBarTime << "\n";
 
 			scene->FindObjectByName("Main Camera")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 11.480, 6.290)); // makes the camera follow the player
 			scene->FindObjectByName("Main Camera")->SetRotation(glm::vec3(84, 0, -180)); //angled view (stops camera from rotating)
@@ -5098,6 +5121,7 @@ int main() {
 		
 		// Calculate the time since our last frame (dt)
 		double thisFrame = glfwGetTime();
+		std::cout << glfwGetTime() << std::endl;
 		float dt = static_cast<float>(thisFrame - lastFrame);
 
 		// Showcasing how to use the imGui library!
