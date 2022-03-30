@@ -584,6 +584,13 @@ bool soundprompt = false;
 float flighttime = 0.0f;
 float jumptime = 0.0f;
 bool verticalinput = false;
+float jumpheight = 0.0000;
+float x = 0;
+float JTime = 0;
+float JTemp = 0;
+float FTime = 0;
+float FTemp = 0;
+bool jumpo = false;
 
 
 
@@ -887,64 +894,98 @@ void keyboard()
 	
 	if (paused == false)
 	{
-		//sliding
-		if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
-			scene->FindObjectByName("player")->SetScale(glm::vec3(0.5f, 0.25f, 0.5f));
+		//All Slide Code
+		{
+			if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+				scene->FindObjectByName("player")->SetScale(glm::vec3(0.5f, 0.25f, 0.5f));
 
-		}
-		else {
-			scene->FindObjectByName("player")->SetScale(glm::vec3(0.5f, 0.5f, 0.5f));
-		}
-
-		if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
-			playerMove = true;
+			}
+			else {
+				scene->FindObjectByName("player")->SetScale(glm::vec3(0.5f, 0.5f, 0.5f));
+			}
 		}
 
 		if (playerMove == true) {
 			scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 0.2f, scene->FindObjectByName("player")->GetPosition().y, scene->FindObjectByName("player")->GetPosition().z)); // makes the player move
 		}
 
+		////attempt at a jump button that still lets you fly coming out of it and stops you from jumping until you land
+		//if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS) {
+		//	//if player can jump
+		//	//player rise to position at a rate of n
+		//	//playerJumping == false
+		//	//player should not fall during this time
+		//	//if player starts to fly override this control
+		//	if (isJumpPressed == false)
+		//	{
+		//		//scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x, scene->FindObjectByName("player")->GetPosition().y, scene->FindObjectByName("player")->GetPosition().z + 0.2));
+		//		playerJumping = true;
+		//		isJumpPressed = true;
+		//		jumptime = glfwGetTime() + 1.5;
+		//	}
+		//}
+
 		//works as a descent flight just needs the actual flight time portion
-		if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
-			playerFlying = true;
-		}
-		else {
-			playerFlying = false;
-		}
+		{
+			if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
+				playerFlying = true;
+				jumpo = false;
+			}
 
-		//attempt at a jump button that still lets you fly coming out of it and stops you from jumping until you land
-		if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS) {
-			//if player can jump
-			//player rise to position at a rate of n
-			//playerJumping == false
-			//player should not fall during this time
-			//if player starts to fly override this control
-			if (isJumpPressed == false)
-			{
-				//scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x, scene->FindObjectByName("player")->GetPosition().y, scene->FindObjectByName("player")->GetPosition().z + 0.2));
-				playerJumping = true;
+			if (playerFlying == true) {
+				FTime = glfwGetTime() - FTemp;
+				FTime = (FTime / 2.5) * 8;
+
+				if (scene->FindObjectByName("player")->GetPosition().z < 10.1) {
+					//scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x, scene->FindObjectByName("player")->GetPosition().y, (scene->FindObjectByName("player")->GetPosition().z) + 1.0));
+					scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x, scene->FindObjectByName("player")->GetPosition().y, scene->FindObjectByName("player")->GetPosition().z + 0.2));
+				}
 				isJumpPressed = true;
-				jumptime = glfwGetTime() + 1.5;
-			}
-		}
-
-		if (playerJumping == true) {
-			if (scene->FindObjectByName("player")->GetPosition().z <= 6.4 && jumptime >= glfwGetTime()) {
-				scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x, scene->FindObjectByName("player")->GetPosition().y, scene->FindObjectByName("player")->GetPosition().z + 0.4));
-			}
-			else if (scene->FindObjectByName("player")->GetPosition().z >= 6.4 && jumptime <= glfwGetTime())
-			{
 				playerJumping = false;
 			}
+			else {
+				FTemp = glfwGetTime();
+			}
+
+			if (scene->FindObjectByName("player")->GetPosition().z > 7) {
+
+			}
+
+			if (FTime > 9) {
+				playerFlying = false;
+				if (scene->FindObjectByName("player")->GetPosition().z > 0.2) {
+					scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x, scene->FindObjectByName("player")->GetPosition().y, scene->FindObjectByName("player")->GetPosition().z - 0.2));
+				}
+			}
+			//useLERP(FTime)
+			std::cout << FTime << "\n";
 		}
 
-		if (playerFlying == true) {
-			if (scene->FindObjectByName("player")->GetPosition().z < 10.1) {
-				//scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x, scene->FindObjectByName("player")->GetPosition().y, (scene->FindObjectByName("player")->GetPosition().z) + 1.0));
-				scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x, scene->FindObjectByName("player")->GetPosition().y, scene->FindObjectByName("player")->GetPosition().z + 0.2));
+		//All Jump Code
+		{
+			if (glfwGetKey(window, GLFW_KEY_V) == GLFW_PRESS) {
+				jumpo = true;
 			}
-			isJumpPressed = true;
-			playerJumping = false;
+
+			if (jumpo == true) {
+				JTime = glfwGetTime() - JTemp;
+				JTime = JTime / 2.5;
+
+				scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x, scene->FindObjectByName("player")->GetPosition().y, jumpheight));
+			}
+			else {
+				JTemp = glfwGetTime();
+			}
+
+			x = JTime * 8; //Multiply to increase speed of jump
+			//std::cout << x << "\n" << jumpheight << "\n";
+
+			//parabola function so the jump will slow as it reaches the max height
+			jumpheight = (-8 * pow(x - 1, 2) + 8) + 0.2; //0.2 is currently the ladybugs starting point on z
+
+			if (jumpheight < 0) { //so the ladybug doesnt go through the ground
+				jumpo = false;
+			}
 		}
 
 		if (playerJumping == false && playerFlying == false) {
@@ -3030,7 +3071,7 @@ int main() {
 			player->SetScale(glm::vec3(0.5f, 0.5f, 0.5f));
 
 			// Add some behaviour that relies on the physics body
-			player->Add<JumpBehaviour>(player->GetPosition());
+			//player->Add<JumpBehaviour>(player->GetPosition());
 			//player->Get<JumpBehaviour>(player->GetPosition());
 			// Create and attach a renderer for the monkey
 			RenderComponent::Sptr renderer = player->Add<RenderComponent>();
