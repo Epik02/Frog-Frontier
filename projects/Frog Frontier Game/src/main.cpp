@@ -62,7 +62,6 @@
 #include "Gameplay/Physics/CollisionRect.h"
 
 #include "fmod.hpp"
-#include "math.h"
 
 //#define LOG_GL_NOTIFICATIONS
 
@@ -176,6 +175,10 @@ bool performedtask = false;
 bool enterclick = false;
 bool playerLose = false;
 bool playerWin = false;
+float transitiontimer = 0.0f;
+float transitionleft = 0.0f;
+bool transitioncomplete = true;
+bool DoTransition = false;
 //Gonna make a scenevalue to tell the keyboards what to do or some other scene specific update changes
 // So 11 is main menu, 12 is controls, 13 is levelselect
 // and then the actual levels can just have their value
@@ -213,26 +216,166 @@ bool DrawSaveLoadImGui(Scene::Sptr& scene, std::string& path) {
 		enterclick = false;
 	}
 
-	if (glfwGetKey(window, GLFW_KEY_ENTER) && scene->FindObjectByName("player") == NULL && scene->FindObjectByName("Filter") != NULL && enterclick == false && scenevalue == 11) //menu
-	{
+	//press enter starts timer
+	//when timer completes sets value to true
+	//transition scene
 
-		switch (index) {
-		case 1:
-			path = "LS.json";
-			SceneLoad(scene, path);
-			scenevalue = 13;
-			index = 1;
-			break;
-		case 2:
-			path = "CS.json";
-			SceneLoad(scene, path);
-			scenevalue = 12;
-			index = 1;
-			break;
-		case 3:
-			return 0;
-			break;
+	if (glfwGetKey(window, GLFW_KEY_ENTER) && DoTransition == false && scene->FindObjectByName("Main Camera") != NULL && scene->FindObjectByName("Filter") != NULL && enterclick == false && (scenevalue == 11 || scenevalue == 12 || scenevalue == 13)) //menu
+	{
+		DoTransition = true;
+		transitiontimer = glfwGetTime() + 2.0;
+		transitioncomplete = false;	
+	//	scene->FindObjectByName("FrogBody")->SetPostion(glm::vec3(scene->FindObjectByName("Main Camera")->GetPosition().x - 0.2f, scene->FindObjectByName("Main Camera")->GetPosition().y, scene->FindObjectByName("Main Camera")->GetPosition().z - 1.4));
+
+		scene->FindObjectByName("FrogBody")->SetPostion(glm::vec3(scene->FindObjectByName("Main Camera")->GetPosition().x - 3.4, scene->FindObjectByName("Main Camera")->GetPosition().y - 1.05, scene->FindObjectByName("Main Camera")->GetPosition().z - 1.4));
+		scene->FindObjectByName("FrogHeadTop")->SetPostion(glm::vec3(scene->FindObjectByName("Main Camera")->GetPosition().x - 3.4, scene->FindObjectByName("Main Camera")->GetPosition().y - 1.05, scene->FindObjectByName("Main Camera")->GetPosition().z - 1.38));
+		scene->FindObjectByName("FrogHeadBot")->SetPostion(glm::vec3(scene->FindObjectByName("Main Camera")->GetPosition().x - 3.4, scene->FindObjectByName("Main Camera")->GetPosition().y - 1.05, scene->FindObjectByName("Main Camera")->GetPosition().z - 1.39));
+		scene->FindObjectByName("FrogTongue")->SetPostion(glm::vec3(scene->FindObjectByName("Main Camera")->GetPosition().x - 3.4, scene->FindObjectByName("Main Camera")->GetPosition().y - 1.05, scene->FindObjectByName("Main Camera")->GetPosition().z - 1.41));
+		scene->FindObjectByName("BushTransition")->SetPostion(glm::vec3(scene->FindObjectByName("Main Camera")->GetPosition().x + 5, scene->FindObjectByName("Main Camera")->GetPosition().y, scene->FindObjectByName("Main Camera")->GetPosition().z - 1.2));
+	}
+	/*
+	if (glfwGetKey(window, GLFW_KEY_ENTER) && DoTransition == false && scene->FindObjectByName("Main Camera") != NULL && scene->FindObjectByName("Filter") != NULL && enterclick == false && (scenevalue == 1 || scenevalue == 2 || scenevalue == 3) && (index == 2|| index == 3) && (paused == true || playerLose == true || playerWin == true)) //menu
+	{
+		DoTransition = true;
+		transitiontimer = glfwGetTime() + 2.0;
+		transitioncomplete = false;
+		//	scene->FindObjectByName("FrogBody")->SetPostion(glm::vec3(scene->FindObjectByName("Main Camera")->GetPosition().x - 0.2f, scene->FindObjectByName("Main Camera")->GetPosition().y, scene->FindObjectByName("Main Camera")->GetPosition().z - 1.4));
+
+		scene->FindObjectByName("FrogBody")->SetPostion(glm::vec3(scene->FindObjectByName("Main Camera")->GetPosition().x - 3.4, scene->FindObjectByName("Main Camera")->GetPosition().y - 1.05, scene->FindObjectByName("Main Camera")->GetPosition().z - 1.4));
+		scene->FindObjectByName("FrogHeadTop")->SetPostion(glm::vec3(scene->FindObjectByName("Main Camera")->GetPosition().x - 3.4, scene->FindObjectByName("Main Camera")->GetPosition().y - 1.05, scene->FindObjectByName("Main Camera")->GetPosition().z - 1.38));
+		scene->FindObjectByName("FrogHeadBot")->SetPostion(glm::vec3(scene->FindObjectByName("Main Camera")->GetPosition().x - 3.4, scene->FindObjectByName("Main Camera")->GetPosition().y - 1.05, scene->FindObjectByName("Main Camera")->GetPosition().z - 1.39));
+		scene->FindObjectByName("FrogTongue")->SetPostion(glm::vec3(scene->FindObjectByName("Main Camera")->GetPosition().x - 3.4, scene->FindObjectByName("Main Camera")->GetPosition().y - 1.05, scene->FindObjectByName("Main Camera")->GetPosition().z - 1.41));
+		scene->FindObjectByName("BushTransition")->SetPostion(glm::vec3(scene->FindObjectByName("Main Camera")->GetPosition().x + 5, scene->FindObjectByName("Main Camera")->GetPosition().y, scene->FindObjectByName("Main Camera")->GetPosition().z - 1.2));
+	}
+	*/
+
+	if (DoTransition == true && transitioncomplete == false)
+	{
+		//movement test
+		//scene->FindObjectByName("FrogBody")->SetPostion(glm::vec3(scene->FindObjectByName("FrogBody")->GetPosition().x - 0.2f, scene->FindObjectByName("FrogBody")->GetPosition().y, scene->FindObjectByName("FrogBody")->GetPosition().z));
+		if (transitiontimer >= glfwGetTime())
+		{
+			transitionleft = transitiontimer - glfwGetTime();
+			if (transitionleft >= 1.68 && transitionleft <= 2.0) //start jump
+			{
+				scene->FindObjectByName("FrogBody")->SetPostion(glm::vec3(scene->FindObjectByName("FrogBody")->GetPosition().x + 0.04051f, scene->FindObjectByName("FrogBody")->GetPosition().y + 0.015625, scene->FindObjectByName("FrogBody")->GetPosition().z));
+				scene->FindObjectByName("FrogHeadTop")->SetPostion(glm::vec3(scene->FindObjectByName("FrogHeadTop")->GetPosition().x + 0.04051f, scene->FindObjectByName("FrogHeadTop")->GetPosition().y + 0.015625, scene->FindObjectByName("FrogHeadTop")->GetPosition().z));
+				scene->FindObjectByName("FrogHeadBot")->SetPostion(glm::vec3(scene->FindObjectByName("FrogHeadBot")->GetPosition().x + 0.04051f, scene->FindObjectByName("FrogHeadBot")->GetPosition().y + 0.015625, scene->FindObjectByName("FrogHeadBot")->GetPosition().z));
+				scene->FindObjectByName("FrogTongue")->SetPostion(glm::vec3(scene->FindObjectByName("FrogTongue")->GetPosition().x + 0.04051f, scene->FindObjectByName("FrogTongue")->GetPosition().y + 0.015625, scene->FindObjectByName("FrogTongue")->GetPosition().z));
+
+				scene->FindObjectByName("FrogBody")->SetScale(glm::vec3(1.5f, scene->FindObjectByName("FrogBody")->GetScale().y - 0.0052, 1.0f));
+				scene->FindObjectByName("FrogHeadTop")->SetScale(glm::vec3(1.5f, scene->FindObjectByName("FrogHeadTop")->GetScale().y - 0.0052, 1.0f));
+				scene->FindObjectByName("FrogHeadBot")->SetScale(glm::vec3(1.5f, scene->FindObjectByName("FrogHeadBot")->GetScale().y - 0.0052, 1.0f));
+			}
+			else if (transitionleft >= 1.44) // start falling
+			{
+				scene->FindObjectByName("FrogBody")->SetPostion(glm::vec3(scene->FindObjectByName("FrogBody")->GetPosition().x + 0.04051f, scene->FindObjectByName("FrogBody")->GetPosition().y - 0.015625, scene->FindObjectByName("FrogBody")->GetPosition().z));
+				scene->FindObjectByName("FrogHeadTop")->SetPostion(glm::vec3(scene->FindObjectByName("FrogHeadTop")->GetPosition().x + 0.04051f, scene->FindObjectByName("FrogHeadTop")->GetPosition().y - 0.015625, scene->FindObjectByName("FrogHeadTop")->GetPosition().z));
+				scene->FindObjectByName("FrogHeadBot")->SetPostion(glm::vec3(scene->FindObjectByName("FrogHeadBot")->GetPosition().x + 0.04051f, scene->FindObjectByName("FrogHeadBot")->GetPosition().y - 0.015625, scene->FindObjectByName("FrogHeadBot")->GetPosition().z));
+				scene->FindObjectByName("FrogTongue")->SetPostion(glm::vec3(scene->FindObjectByName("FrogTongue")->GetPosition().x + 0.04051f, scene->FindObjectByName("FrogTongue")->GetPosition().y - 0.015625, scene->FindObjectByName("FrogTongue")->GetPosition().z));
+
+				scene->FindObjectByName("FrogBody")->SetScale(glm::vec3(1.5f, scene->FindObjectByName("FrogBody")->GetScale().y - 0.0052, 1.0f));
+				scene->FindObjectByName("FrogHeadTop")->SetScale(glm::vec3(1.5f, scene->FindObjectByName("FrogHeadTop")->GetScale().y - 0.0052, 1.0f));
+				scene->FindObjectByName("FrogHeadBot")->SetScale(glm::vec3(1.5f, scene->FindObjectByName("FrogHeadBot")->GetScale().y - 0.0052, 1.0f));
+			}
+			else if (transitionleft >= 1.36) //squish land
+			{
+				scene->FindObjectByName("FrogBody")->SetPostion(glm::vec3(scene->FindObjectByName("FrogBody")->GetPosition().x, scene->FindObjectByName("FrogBody")->GetPosition().y - 0.015625, scene->FindObjectByName("FrogBody")->GetPosition().z));
+				scene->FindObjectByName("FrogHeadTop")->SetPostion(glm::vec3(scene->FindObjectByName("FrogHeadTop")->GetPosition().x, scene->FindObjectByName("FrogHeadTop")->GetPosition().y - 0.015625, scene->FindObjectByName("FrogHeadTop")->GetPosition().z));
+				scene->FindObjectByName("FrogHeadBot")->SetPostion(glm::vec3(scene->FindObjectByName("FrogHeadBot")->GetPosition().x, scene->FindObjectByName("FrogHeadBot")->GetPosition().y - 0.015625, scene->FindObjectByName("FrogHeadBot")->GetPosition().z));
+				scene->FindObjectByName("FrogTongue")->SetPostion(glm::vec3(scene->FindObjectByName("FrogTongue")->GetPosition().x, scene->FindObjectByName("FrogTongue")->GetPosition().y - 0.015625, scene->FindObjectByName("FrogTongue")->GetPosition().z));
+
+				scene->FindObjectByName("FrogBody")->SetScale(glm::vec3(1.5f, scene->FindObjectByName("FrogBody")->GetScale().y - 0.0052, 1.0f));
+				scene->FindObjectByName("FrogHeadTop")->SetScale(glm::vec3(1.5f, scene->FindObjectByName("FrogHeadTop")->GetScale().y - 0.0052, 1.0f));
+				scene->FindObjectByName("FrogHeadBot")->SetScale(glm::vec3(1.5f, scene->FindObjectByName("FrogHeadBot")->GetScale().y - 0.0052, 1.0f));
+
+			}
+			else if (transitionleft >= 1.28) //standing
+			{
+				scene->FindObjectByName("FrogBody")->SetPostion(glm::vec3(scene->FindObjectByName("FrogBody")->GetPosition().x, scene->FindObjectByName("FrogBody")->GetPosition().y + 0.015625, scene->FindObjectByName("FrogBody")->GetPosition().z));
+				scene->FindObjectByName("FrogHeadTop")->SetPostion(glm::vec3(scene->FindObjectByName("FrogHeadTop")->GetPosition().x, scene->FindObjectByName("FrogHeadTop")->GetPosition().y + 0.015625, scene->FindObjectByName("FrogHeadTop")->GetPosition().z));
+				scene->FindObjectByName("FrogHeadBot")->SetPostion(glm::vec3(scene->FindObjectByName("FrogHeadBot")->GetPosition().x, scene->FindObjectByName("FrogHeadBot")->GetPosition().y + 0.015625, scene->FindObjectByName("FrogHeadBot")->GetPosition().z));
+				scene->FindObjectByName("FrogTongue")->SetPostion(glm::vec3(scene->FindObjectByName("FrogTongue")->GetPosition().x, scene->FindObjectByName("FrogTongue")->GetPosition().y + 0.015625, scene->FindObjectByName("FrogTongue")->GetPosition().z));
+				//scaleup
+
+				scene->FindObjectByName("FrogBody")->SetScale(glm::vec3(1.5f, scene->FindObjectByName("FrogBody")->GetScale().y + 0.046875, 1.0f));
+				scene->FindObjectByName("FrogHeadTop")->SetScale(glm::vec3(1.5f, scene->FindObjectByName("FrogHeadTop")->GetScale().y + 0.046875, 1.0f));
+				scene->FindObjectByName("FrogHeadBot")->SetScale(glm::vec3(1.5f, scene->FindObjectByName("FrogHeadBot")->GetScale().y + 0.046875, 1.0f));
+			}
+			else if (transitionleft >= 1.2) //tongue out
+			{
+				scene->FindObjectByName("FrogHeadBot")->SetRotation(glm::vec3(0.0f, 0.0f, scene->FindObjectByName("FrogHeadBot")->GetRotation().z - 18));
+				scene->FindObjectByName("FrogTongue")->SetRotation(glm::vec3(0.0f, 0.0f, 18.0f));
+				scene->FindObjectByName("FrogTongue")->SetScale(glm::vec3(scene->FindObjectByName("FrogTongue")->GetScale().x + 4.5, 0.1, 1));
+				//mouth open
+				//tongue starts going
+			}
+			else if (transitionleft >= 1.0) //tongue grabbed
+			{
+				scene->FindObjectByName("FrogTongue")->SetScale(glm::vec3(scene->FindObjectByName("FrogTongue")->GetScale().x + 0.2375, 0.1, 1));
+				//body doesnt move
+				//tongue reaches other side of screen
+			}
+			else if (transitionleft >= 0.76) //tongue pulling
+			{
+				scene->FindObjectByName("BushTransition")->SetPostion(glm::vec3(scene->FindObjectByName("BushTransition")->GetPosition().x - 0.07, 0, 3.8));
+				std::cout << "initial move";
+				//body doesnt move
+				//bush transition starts moving
+			}
+			else if (transitionleft >= 0.2) //tongue pulled
+			{
+				scene->FindObjectByName("FrogBody")->SetPostion(glm::vec3(scene->FindObjectByName("FrogBody")->GetPosition().x - 0.05, scene->FindObjectByName("FrogBody")->GetPosition().y, scene->FindObjectByName("FrogBody")->GetPosition().z));
+				scene->FindObjectByName("FrogHeadTop")->SetPostion(glm::vec3(scene->FindObjectByName("FrogHeadTop")->GetPosition().x - 0.05, scene->FindObjectByName("FrogHeadTop")->GetPosition().y, scene->FindObjectByName("FrogHeadTop")->GetPosition().z));
+				scene->FindObjectByName("FrogHeadBot")->SetPostion(glm::vec3(scene->FindObjectByName("FrogHeadBot")->GetPosition().x - 0.05, scene->FindObjectByName("FrogHeadBot")->GetPosition().y, scene->FindObjectByName("FrogHeadBot")->GetPosition().z));
+				scene->FindObjectByName("FrogTongue")->SetPostion(glm::vec3(scene->FindObjectByName("FrogTongue")->GetPosition().x - 0.05, scene->FindObjectByName("FrogTongue")->GetPosition().y, scene->FindObjectByName("FrogTongue")->GetPosition().z));
+
+				scene->FindObjectByName("FrogTongue")->SetScale(glm::vec3(scene->FindObjectByName("FrogTongue")->GetScale().x - 0.36, 0.1, 1));
+				scene->FindObjectByName("BushTransition")->SetPostion(glm::vec3(scene->FindObjectByName("BushTransition")->GetPosition().x - 0.12, 0, 3.8));
+				//body slides offscreen
+				//almost blackout
+				std::cout << "tongue pulled";
+			}
+			else if (transitionleft > 0.0) //finshing
+			{
+				scene->FindObjectByName("BushTransition")->SetPostion(glm::vec3(scene->FindObjectByName("BushTransition")->GetPosition().x - 0.05, 0, 3.8));
+				std::cout << "finish";
+				//complete blackout
+			}
+
+			
 		}
+		
+		if (transitiontimer <= glfwGetTime())
+		{
+			transitioncomplete = true;
+		}
+	}
+
+	if (DoTransition == true && transitioncomplete == true && scene->FindObjectByName("player") == NULL && scene->FindObjectByName("Filter") != NULL && enterclick == false && scenevalue == 11) //menu
+	{
+			switch (index) {
+			case 1:
+				path = "LS.json";
+				SceneLoad(scene, path);
+				scenevalue = 13;
+				index = 1;
+				DoTransition = false;
+				break;
+			case 2:
+				path = "CS.json";
+				SceneLoad(scene, path);
+				scenevalue = 12;
+				index = 1;
+				DoTransition = false;
+				break;
+			case 3:
+				glfwDestroyWindow(window);
+				glfwTerminate();
+				exit(EXIT_SUCCESS);
+				break;
+			}
+		
 
 		enterclick = true;
 		return true;
@@ -244,6 +387,7 @@ bool DrawSaveLoadImGui(Scene::Sptr& scene, std::string& path) {
 		scenevalue = 11;
 		index = 1;
 		enterclick = true;
+		DoTransition = false;
 		return true;
 	}
 	else if (glfwGetKey(window, GLFW_KEY_ENTER) && scene->FindObjectByName("player") == NULL && scene->FindObjectByName("Filter") != NULL && enterclick == false && scenevalue == 13) // level select
@@ -254,18 +398,21 @@ bool DrawSaveLoadImGui(Scene::Sptr& scene, std::string& path) {
 			SceneLoad(scene, path);
 			scenevalue = 1;
 			index = 1;
+			DoTransition = false;
 			break;
 		case 2:
 			path = "Level.json";
 			SceneLoad(scene, path);
 			scenevalue = 2;
 			index = 1;
+			DoTransition = false;
 			break;
 		case 3:
 			path = "Level3.json";
 			SceneLoad(scene, path);
 			scenevalue = 3;
 			index = 1;
+			DoTransition = false;
 			break;
 		case 4:
 			return 0;
@@ -308,6 +455,7 @@ bool DrawSaveLoadImGui(Scene::Sptr& scene, std::string& path) {
 			enterclick == true;
 			index = 1;
 			scenevalue = 13;
+			DoTransition = false;
 			return true;
 		}
 		else if (index == 3)
@@ -317,6 +465,7 @@ bool DrawSaveLoadImGui(Scene::Sptr& scene, std::string& path) {
 			enterclick == true;
 			index = 1;
 			scenevalue = 11;
+			DoTransition = false;
 			return true;
 		}
 		
@@ -435,13 +584,7 @@ bool soundprompt = false;
 float flighttime = 0.0f;
 float jumptime = 0.0f;
 bool verticalinput = false;
-float jumpheight = 0.0000;
-float x = 0;
-float JTime = 0;
-float JTemp = 0;
-float FTime = 0;
-float FTemp = 0;
-bool jumpo = false;
+
 
 
 
@@ -576,15 +719,15 @@ void SceneChanger()
 		{
 			if (index == 1)
 			{
-				scene->FindObjectByName("Filter")->SetPostion(glm::vec3(1.f, 0.5f, 3.01f));
+				scene->FindObjectByName("Filter")->SetPostion(glm::vec3(1.75f, 0.1f, 3.01f));
 			}
 			else if (index == 2)
 			{
-				scene->FindObjectByName("Filter")->SetPostion(glm::vec3(1.f, 0.15f, 3.01f));
+				scene->FindObjectByName("Filter")->SetPostion(glm::vec3(1.75f, -0.35f, 3.01f));
 			}
 			else if (index == 3)
 			{
-				scene->FindObjectByName("Filter")->SetPostion(glm::vec3(1.f, -0.2f, 3.01f));
+				scene->FindObjectByName("Filter")->SetPostion(glm::vec3(1.75f, -0.8f, 3.01f));
 			}
 		}
 
@@ -741,108 +884,70 @@ void keyboard()
 	{
 		performedtask = false;
 	}
-
-	//std::cout << glfwGetTime() << "\n";
 	
 	if (paused == false)
 	{
+		//sliding
+		if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+			scene->FindObjectByName("player")->SetScale(glm::vec3(0.5f, 0.25f, 0.5f));
 
-		//All Slide Code
-		{
-			if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
-				scene->FindObjectByName("player")->SetScale(glm::vec3(0.5f, 0.25f, 0.5f));
+		}
+		else {
+			scene->FindObjectByName("player")->SetScale(glm::vec3(0.5f, 0.5f, 0.5f));
+		}
 
-			}
-			else {
-				scene->FindObjectByName("player")->SetScale(glm::vec3(0.5f, 0.5f, 0.5f));
-			}
+		if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
+			playerMove = true;
 		}
 
 		if (playerMove == true) {
 			scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 0.2f, scene->FindObjectByName("player")->GetPosition().y, scene->FindObjectByName("player")->GetPosition().z)); // makes the player move
 		}
 
-		////attempt at a jump button that still lets you fly coming out of it and stops you from jumping until you land
-		//if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS) {
-		//	//if player can jump
-		//	//player rise to position at a rate of n
-		//	//playerJumping == false
-		//	//player should not fall during this time
-		//	//if player starts to fly override this control
-		//	if (isJumpPressed == false)
-		//	{
-		//		//scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x, scene->FindObjectByName("player")->GetPosition().y, scene->FindObjectByName("player")->GetPosition().z + 0.2));
-		//		playerJumping = true;
-		//		isJumpPressed = true;
-		//		jumptime = glfwGetTime() + 1.5;
-		//	}
-		//}
-
 		//works as a descent flight just needs the actual flight time portion
-		{
-			if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
-				playerFlying = true;
-				jumpo = false;
-			}
-
-			if (playerFlying == true) {
-				FTime = glfwGetTime() - FTemp;
-				FTime = (FTime / 2.5) * 8;
-
-				if (scene->FindObjectByName("player")->GetPosition().z < 10.1) {
-					//scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x, scene->FindObjectByName("player")->GetPosition().y, (scene->FindObjectByName("player")->GetPosition().z) + 1.0));
-					scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x, scene->FindObjectByName("player")->GetPosition().y, scene->FindObjectByName("player")->GetPosition().z + 0.2));
-				}
-				isJumpPressed = true;
-				playerJumping = false;
-			}
-			else {
-				FTemp = glfwGetTime();
-			}
-
-			if (scene->FindObjectByName("player")->GetPosition().z > 7) {
-
-			}
-
-			if (FTime > 9) {
-				playerFlying = false;
-				if (scene->FindObjectByName("player")->GetPosition().z > 0.2) {
-					scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x, scene->FindObjectByName("player")->GetPosition().y, scene->FindObjectByName("player")->GetPosition().z - 0.2));
-				}
-			}
-			//useLERP(FTime)
-			std::cout << FTime << "\n";
+		if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
+			playerFlying = true;
+		}
+		else {
+			playerFlying = false;
 		}
 
-		//All Jump Code
-		{
-			if (glfwGetKey(window, GLFW_KEY_V) == GLFW_PRESS) {
-				jumpo = true;
+		//attempt at a jump button that still lets you fly coming out of it and stops you from jumping until you land
+		if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS) {
+			//if player can jump
+			//player rise to position at a rate of n
+			//playerJumping == false
+			//player should not fall during this time
+			//if player starts to fly override this control
+			if (isJumpPressed == false)
+			{
+				//scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x, scene->FindObjectByName("player")->GetPosition().y, scene->FindObjectByName("player")->GetPosition().z + 0.2));
+				playerJumping = true;
+				isJumpPressed = true;
+				jumptime = glfwGetTime() + 1.5;
 			}
+		}
 
-			if (jumpo == true) {
-				JTime = glfwGetTime() - JTemp;
-				JTime = JTime / 2.5;
-
-				scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x, scene->FindObjectByName("player")->GetPosition().y, jumpheight));
+		if (playerJumping == true) {
+			if (scene->FindObjectByName("player")->GetPosition().z <= 6.4 && jumptime >= glfwGetTime()) {
+				scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x, scene->FindObjectByName("player")->GetPosition().y, scene->FindObjectByName("player")->GetPosition().z + 0.4));
 			}
-			else {
-				JTemp = glfwGetTime();
+			else if (scene->FindObjectByName("player")->GetPosition().z >= 6.4 && jumptime <= glfwGetTime())
+			{
+				playerJumping = false;
 			}
+		}
 
-			x = JTime * 8; //Multiply to increase speed of jump
-			//std::cout << x << "\n" << jumpheight << "\n";
-
-			//parabola function so the jump will slow as it reaches the max height
-			jumpheight = (-8 * pow(x - 1, 2) + 8) + 0.2; //0.2 is currently the ladybugs starting point on z
-
-			if (jumpheight < 0) { //so the ladybug doesnt go through the ground
-				jumpo = false;
+		if (playerFlying == true) {
+			if (scene->FindObjectByName("player")->GetPosition().z < 10.1) {
+				//scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x, scene->FindObjectByName("player")->GetPosition().y, (scene->FindObjectByName("player")->GetPosition().z) + 1.0));
+				scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x, scene->FindObjectByName("player")->GetPosition().y, scene->FindObjectByName("player")->GetPosition().z + 0.2));
 			}
+			isJumpPressed = true;
+			playerJumping = false;
 		}
 
 		if (playerJumping == false && playerFlying == false) {
-			//std::cout << "test" << "\n";
 			if (scene->FindObjectByName("player")->GetPosition().z > 0.3) {
 				scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x, scene->FindObjectByName("player")->GetPosition().y, scene->FindObjectByName("player")->GetPosition().z - 0.4));
 			}
@@ -1131,6 +1236,13 @@ int main() {
 		Texture2D::Sptr    winTexture = ResourceManager::CreateAsset<Texture2D>("textures/win.png");
 		Texture2D::Sptr    WinnerTex = ResourceManager::CreateAsset<Texture2D>("textures/Winner.png");
 		Texture2D::Sptr    LoserTex = ResourceManager::CreateAsset<Texture2D>("textures/YouLose.png");
+
+		//menu animation stuff
+		Texture2D::Sptr    FrogBodyTex = ResourceManager::CreateAsset<Texture2D>("textures/Frog Body copy.png");
+		Texture2D::Sptr    FrogHeadTopTex = ResourceManager::CreateAsset<Texture2D>("textures/Frog Head Top.png");
+		Texture2D::Sptr    FrogHeadBotTex = ResourceManager::CreateAsset<Texture2D>("textures/Frog Head Bottom.png");
+		Texture2D::Sptr    FrogTongueTex = ResourceManager::CreateAsset<Texture2D>("textures/Tongue.png");
+		Texture2D::Sptr    BushTransitionTex = ResourceManager::CreateAsset<Texture2D>("textures/Bush Transition.png");
 		
 		// Create our OpenGL resources
 		Shader::Sptr uboShader = ResourceManager::CreateAsset<Shader>(std::unordered_map<ShaderPartType, std::string>{
@@ -1482,6 +1594,45 @@ int main() {
 			LStextMaterial->Shininess = 2.0f;
 		}
 
+		Material::Sptr FrogBodyMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			FrogBodyMaterial->Name = "FrogBody";
+			FrogBodyMaterial->MatShader = scene->BaseShader;
+			FrogBodyMaterial->Texture = FrogBodyTex;
+			FrogBodyMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr FrogHeadTopMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			FrogHeadTopMaterial->Name = "FrogHeadTop";
+			FrogHeadTopMaterial->MatShader = scene->BaseShader;
+			FrogHeadTopMaterial->Texture = FrogHeadTopTex;
+			FrogHeadTopMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr FrogHeadBotMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			FrogHeadBotMaterial->Name = "FrogHeadBot";
+			FrogHeadBotMaterial->MatShader = scene->BaseShader;
+			FrogHeadBotMaterial->Texture = FrogHeadBotTex;
+			FrogHeadBotMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr FrogTongueMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			FrogTongueMaterial->Name = "FrogTongue";
+			FrogTongueMaterial->MatShader = scene->BaseShader;
+			FrogTongueMaterial->Texture = FrogTongueTex;
+			FrogTongueMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr BushTransitionMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			BushTransitionMaterial->Name = "BushTransition";
+			BushTransitionMaterial->MatShader = scene->BaseShader;
+			BushTransitionMaterial->Texture = BushTransitionTex;
+			BushTransitionMaterial->Shininess = 2.0f;
+		}
 
 		// Create some lights for our scene
 		scene->Lights.resize(18);
@@ -2111,6 +2262,72 @@ int main() {
 			renderer->SetMaterial(LStextMaterial);
 		}
 
+		GameObject::Sptr FrogTongue = scene->CreateGameObject("FrogTongue");
+		{
+			// Set position in the scene
+			FrogTongue->SetPostion(glm::vec3(-3.4f, -1.05f, 3.59f));
+			// Scale down the plane
+			FrogTongue->SetScale(glm::vec3(1.0f, 0.1f, 1.0f));
+			FrogTongue->SetRotation(glm::vec3(0.0f, 0.0f, 45.0f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = FrogTongue->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(FrogTongueMaterial);
+		}
+
+		GameObject::Sptr FrogBody = scene->CreateGameObject("FrogBody");
+		{
+			// Set position in the scene
+			FrogBody->SetPostion(glm::vec3(-3.4f, -1.05f, 3.6f));
+			// Scale down the plane
+			FrogBody->SetScale(glm::vec3(1.5f, 1.5f, 1.0f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = FrogBody->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(FrogBodyMaterial);
+		}
+
+		GameObject::Sptr FrogHeadBot = scene->CreateGameObject("FrogHeadBot");
+		{
+			// Set position in the scene
+			FrogHeadBot->SetPostion(glm::vec3(-3.4f, -1.05f, 3.61f));
+			// Scale down the plane
+			FrogHeadBot->SetScale(glm::vec3(1.5f, 1.5f, 1.0f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = FrogHeadBot->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(FrogHeadBotMaterial);
+		}
+
+		GameObject::Sptr FrogHeadTop = scene->CreateGameObject("FrogHeadTop");
+		{
+			// Set position in the scene
+			FrogHeadTop->SetPostion(glm::vec3(-3.4f, -1.05f, 3.62f));
+			// Scale down the plane
+			FrogHeadTop->SetScale(glm::vec3(1.5f, 1.5f, 1.0f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = FrogHeadTop->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(FrogHeadTopMaterial);
+		}
+
+		GameObject::Sptr BushTransition = scene->CreateGameObject("BushTransition");
+		{
+			// Set position in the scene
+			BushTransition->SetPostion(glm::vec3(5.f, 0.0f, 3.8f));
+			// Scale down the plane
+			BushTransition->SetScale(glm::vec3(5.8f, 2.5f, 1.0f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = BushTransition->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(BushTransitionMaterial);
+		}
+
 		scene->SetAmbientLight(glm::vec3(0.2f));
 
 		// Kinematic rigid bodies are those controlled by some outside controller
@@ -2468,6 +2685,47 @@ int main() {
 		}
 
 
+		Material::Sptr FrogBodyMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			FrogBodyMaterial->Name = "FrogBody";
+			FrogBodyMaterial->MatShader = scene->BaseShader;
+			FrogBodyMaterial->Texture = FrogBodyTex;
+			FrogBodyMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr FrogHeadTopMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			FrogHeadTopMaterial->Name = "FrogHeadTop";
+			FrogHeadTopMaterial->MatShader = scene->BaseShader;
+			FrogHeadTopMaterial->Texture = FrogHeadTopTex;
+			FrogHeadTopMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr FrogHeadBotMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			FrogHeadBotMaterial->Name = "FrogHeadBot";
+			FrogHeadBotMaterial->MatShader = scene->BaseShader;
+			FrogHeadBotMaterial->Texture = FrogHeadBotTex;
+			FrogHeadBotMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr FrogTongueMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			FrogTongueMaterial->Name = "FrogTongue";
+			FrogTongueMaterial->MatShader = scene->BaseShader;
+			FrogTongueMaterial->Texture = FrogTongueTex;
+			FrogTongueMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr BushTransitionMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			BushTransitionMaterial->Name = "BushTransition";
+			BushTransitionMaterial->MatShader = scene->BaseShader;
+			BushTransitionMaterial->Texture = BushTransitionTex;
+			BushTransitionMaterial->Shininess = 2.0f;
+		}
+
+
 		// Create some lights for our scene
 		scene->Lights.resize(18);
 		scene->Lights[0].Position = glm::vec3(-400.0f, 1.0f, 40.0f);
@@ -2779,7 +3037,6 @@ int main() {
 			renderer->SetMesh(ladybugMesh);
 			renderer->SetMaterial(ladybugMaterial);
 
-
 			collisions.push_back(CollisionRect(player->GetPosition(), 1.0f, 1.0f, 0));
 
 			// Add a dynamic rigid body to this monkey
@@ -3038,6 +3295,73 @@ int main() {
 			RenderComponent::Sptr renderer = LSText->Add<RenderComponent>();
 			renderer->SetMesh(planeMesh);
 			renderer->SetMaterial(LStextMaterial);
+		}
+
+
+		GameObject::Sptr FrogTongue = scene->CreateGameObject("FrogTongue");
+		{
+			// Set position in the scene
+			FrogTongue->SetPostion(glm::vec3(-3.4f, -1.05f, 3.59f));
+			// Scale down the plane
+			FrogTongue->SetScale(glm::vec3(1.0f, 0.1f, 1.0f));
+			FrogTongue->SetRotation(glm::vec3(0.0f, 0.0f, 45.0f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = FrogTongue->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(FrogTongueMaterial);
+		}
+
+		GameObject::Sptr FrogBody = scene->CreateGameObject("FrogBody");
+		{
+			// Set position in the scene
+			FrogBody->SetPostion(glm::vec3(-3.4f, -1.05f, 3.6f));
+			// Scale down the plane
+			FrogBody->SetScale(glm::vec3(1.5f, 1.5f, 1.0f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = FrogBody->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(FrogBodyMaterial);
+		}
+
+		GameObject::Sptr FrogHeadBot = scene->CreateGameObject("FrogHeadBot");
+		{
+			// Set position in the scene
+			FrogHeadBot->SetPostion(glm::vec3(-3.4f, -1.05f, 3.61f));
+			// Scale down the plane
+			FrogHeadBot->SetScale(glm::vec3(1.5f, 1.5f, 1.0f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = FrogHeadBot->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(FrogHeadBotMaterial);
+		}
+
+		GameObject::Sptr FrogHeadTop = scene->CreateGameObject("FrogHeadTop");
+		{
+			// Set position in the scene
+			FrogHeadTop->SetPostion(glm::vec3(-3.4f, -1.05f, 3.62f));
+			// Scale down the plane
+			FrogHeadTop->SetScale(glm::vec3(1.5f, 1.5f, 1.0f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = FrogHeadTop->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(FrogHeadTopMaterial);
+		}
+
+		GameObject::Sptr BushTransition = scene->CreateGameObject("BushTransition");
+		{
+			// Set position in the scene
+			BushTransition->SetPostion(glm::vec3(5.f, 0.0f, 3.8f));
+			// Scale down the plane
+			BushTransition->SetScale(glm::vec3(5.8f, 2.5f, 1.0f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = BushTransition->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(BushTransitionMaterial);
 		}
 
 		scene->SetAmbientLight(glm::vec3(0.2f));
@@ -3405,6 +3729,46 @@ int main() {
 		}
 
 
+		Material::Sptr FrogBodyMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			FrogBodyMaterial->Name = "FrogBody";
+			FrogBodyMaterial->MatShader = scene->BaseShader;
+			FrogBodyMaterial->Texture = FrogBodyTex;
+			FrogBodyMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr FrogHeadTopMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			FrogHeadTopMaterial->Name = "FrogHeadTop";
+			FrogHeadTopMaterial->MatShader = scene->BaseShader;
+			FrogHeadTopMaterial->Texture = FrogHeadTopTex;
+			FrogHeadTopMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr FrogHeadBotMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			FrogHeadBotMaterial->Name = "FrogHeadBot";
+			FrogHeadBotMaterial->MatShader = scene->BaseShader;
+			FrogHeadBotMaterial->Texture = FrogHeadBotTex;
+			FrogHeadBotMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr FrogTongueMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			FrogTongueMaterial->Name = "FrogTongue";
+			FrogTongueMaterial->MatShader = scene->BaseShader;
+			FrogTongueMaterial->Texture = FrogTongueTex;
+			FrogTongueMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr BushTransitionMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			BushTransitionMaterial->Name = "BushTransition";
+			BushTransitionMaterial->MatShader = scene->BaseShader;
+			BushTransitionMaterial->Texture = BushTransitionTex;
+			BushTransitionMaterial->Shininess = 2.0f;
+		}
+
 		// Create some lights for our scene
 		scene->Lights.resize(18);
 		scene->Lights[0].Position = glm::vec3(-400.0f, 1.0f, 40.0f);
@@ -3662,7 +4026,7 @@ int main() {
 			player->SetScale(glm::vec3(0.5f, 0.5f, 0.5f));
 
 			// Add some behaviour that relies on the physics body
-			//player->Add<JumpBehaviour>(player->GetPosition());
+			player->Add<JumpBehaviour>(player->GetPosition());
 			//player->Get<JumpBehaviour>(player->GetPosition());
 			// Create and attach a renderer for the monkey
 			RenderComponent::Sptr renderer = player->Add<RenderComponent>();
@@ -3929,6 +4293,73 @@ int main() {
 			renderer->SetMaterial(LStextMaterial);
 		}
 
+
+		GameObject::Sptr FrogTongue = scene->CreateGameObject("FrogTongue");
+		{
+			// Set position in the scene
+			FrogTongue->SetPostion(glm::vec3(-3.4f, -1.05f, 3.59f));
+			// Scale down the plane
+			FrogTongue->SetScale(glm::vec3(1.0f, 0.1f, 1.0f));
+			FrogTongue->SetRotation(glm::vec3(0.0f, 0.0f, 45.0f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = FrogTongue->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(FrogTongueMaterial);
+		}
+
+		GameObject::Sptr FrogBody = scene->CreateGameObject("FrogBody");
+		{
+			// Set position in the scene
+			FrogBody->SetPostion(glm::vec3(-3.4f, -1.05f, 3.6f));
+			// Scale down the plane
+			FrogBody->SetScale(glm::vec3(1.5f, 1.5f, 1.0f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = FrogBody->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(FrogBodyMaterial);
+		}
+
+		GameObject::Sptr FrogHeadBot = scene->CreateGameObject("FrogHeadBot");
+		{
+			// Set position in the scene
+			FrogHeadBot->SetPostion(glm::vec3(-3.4f, -1.05f, 3.61f));
+			// Scale down the plane
+			FrogHeadBot->SetScale(glm::vec3(1.5f, 1.5f, 1.0f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = FrogHeadBot->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(FrogHeadBotMaterial);
+		}
+
+		GameObject::Sptr FrogHeadTop = scene->CreateGameObject("FrogHeadTop");
+		{
+			// Set position in the scene
+			FrogHeadTop->SetPostion(glm::vec3(-3.4f, -1.05f, 3.62f));
+			// Scale down the plane
+			FrogHeadTop->SetScale(glm::vec3(1.5f, 1.5f, 1.0f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = FrogHeadTop->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(FrogHeadTopMaterial);
+		}
+
+		GameObject::Sptr BushTransition = scene->CreateGameObject("BushTransition");
+		{
+			// Set position in the scene
+			BushTransition->SetPostion(glm::vec3(5.f, 0.0f, 3.8f));
+			// Scale down the plane
+			BushTransition->SetScale(glm::vec3(5.8f, 2.5f, 1.0f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = BushTransition->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(BushTransitionMaterial);
+		}
+
 		scene->SetAmbientLight(glm::vec3(0.2f));
 
 		// Kinematic rigid bodies are those controlled by some outside controller
@@ -3949,7 +4380,7 @@ int main() {
 																	//// Making a 'Menu' Scene ////
 
 		{
-	
+	 
 		// Create an empty scene
 		scene = std::make_shared<Scene>();
 
@@ -4028,23 +4459,79 @@ int main() {
 			FilterMaterial->Shininess = 2.0f;
 		}
 
+		Material::Sptr FrogBodyMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			FrogBodyMaterial->Name = "FrogBody";
+			FrogBodyMaterial->MatShader = scene->BaseShader;
+			FrogBodyMaterial->Texture = FrogBodyTex;
+			FrogBodyMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr FrogHeadTopMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			FrogHeadTopMaterial->Name = "FrogHeadTop";
+			FrogHeadTopMaterial->MatShader = scene->BaseShader;
+			FrogHeadTopMaterial->Texture = FrogHeadTopTex;
+			FrogHeadTopMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr FrogHeadBotMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			FrogHeadBotMaterial->Name = "FrogHeadBot";
+			FrogHeadBotMaterial->MatShader = scene->BaseShader;
+			FrogHeadBotMaterial->Texture = FrogHeadBotTex;
+			FrogHeadBotMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr FrogTongueMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			FrogTongueMaterial->Name = "FrogTongue";
+			FrogTongueMaterial->MatShader = scene->BaseShader;
+			FrogTongueMaterial->Texture = FrogTongueTex;
+			FrogTongueMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr BushTransitionMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			BushTransitionMaterial->Name = "BushTransition";
+			BushTransitionMaterial->MatShader = scene->BaseShader;
+			BushTransitionMaterial->Texture = BushTransitionTex;
+			BushTransitionMaterial->Shininess = 2.0f;
+		}
+
 		// Create some lights for our scene
-		scene->Lights.resize(4);
+		scene->Lights.resize(8);
 		scene->Lights[0].Position = glm::vec3(3.0f, 3.0f, 3.0f);
 		scene->Lights[0].Color = glm::vec3(0.892f, 1.0f, 0.882f);
-		scene->Lights[0].Range = 10.0f;
+		scene->Lights[0].Range = 5.0f;
 
 		scene->Lights[1].Position = glm::vec3(3.0f, -3.0f, 3.0f);
 		scene->Lights[1].Color = glm::vec3(0.892f, 1.0f, 0.882f);
-		scene->Lights[1].Range = 10.0f;
+		scene->Lights[1].Range = 5.0f;
 
-		scene->Lights[2].Position = glm::vec3(-3.0f, 3.0f, 3.0f);
+		scene->Lights[2].Position = glm::vec3(-3.0f, 3.0f, 5.0f);
 		scene->Lights[2].Color = glm::vec3(0.892f, 1.0f, 0.882f);
-		scene->Lights[2].Range = 10.0f;
+		scene->Lights[2].Range = 5.0f;
 
-		scene->Lights[3].Position = glm::vec3(-3.0f, -3.0f, 3.0f);
+		scene->Lights[3].Position = glm::vec3(-3.0f, -3.0f, 5.0f);
 		scene->Lights[3].Color = glm::vec3(0.892f, 1.0f, 0.882f);
-		scene->Lights[3].Range = 10.0f;
+		scene->Lights[3].Range = 5.0f;
+
+		scene->Lights[4].Position = glm::vec3(-8.0f, -3.0f, 5.0f);
+		scene->Lights[4].Color = glm::vec3(0.892f, 1.0f, 0.882f);
+		scene->Lights[4].Range = 10.0f;
+
+		scene->Lights[5].Position = glm::vec3(-8.0f, 3.0f, 5.0f);
+		scene->Lights[5].Color = glm::vec3(0.892f, 1.0f, 0.882f);
+		scene->Lights[5].Range = 10.0f;
+
+		scene->Lights[6].Position = glm::vec3(8.0f, -3.0f, 5.0f);
+		scene->Lights[6].Color = glm::vec3(0.892f, 1.0f, 0.882f);
+		scene->Lights[6].Range = 10.0f;
+		
+		scene->Lights[7].Position = glm::vec3(8.0f, 3.0f, 5.0f);
+		scene->Lights[7].Color = glm::vec3(0.892f, 1.0f, 0.882f);
+		scene->Lights[7].Range = 10.0f;
 
 		// We'll create a mesh that is a simple plane that we can resize later
 		MeshResource::Sptr planeMesh = ResourceManager::CreateAsset<MeshResource>();
@@ -4068,7 +4555,8 @@ int main() {
 		GameObject::Sptr plane = scene->CreateGameObject("Plane");
 		{
 			// Scale up the plane
-			plane->SetScale(glm::vec3(10.0F));
+			plane->SetScale(glm::vec3(19.0F));
+			plane->SetPostion(glm::vec3(0.0f, -4.0f, 0.0f));
 
 			// Create and attach a RenderComponent to the object to draw our mesh
 			RenderComponent::Sptr renderer = plane->Add<RenderComponent>();
@@ -4083,9 +4571,9 @@ int main() {
 		GameObject::Sptr GameLogo = scene->CreateGameObject("Game Menu Logo");
 		{
 			// Set position in the scene
-			GameLogo->SetPostion(glm::vec3(1.0f, 1.25f, 3.0f));
+			GameLogo->SetPostion(glm::vec3(1.75f, 1.15f, 3.0f));
 			// Scale down the plane
-			GameLogo->SetScale(glm::vec3(1.5f, 1.0f, 1.0f));
+			GameLogo->SetScale(glm::vec3(2.0f, 1.45f, 1.0f));
 
 			// Create and attach a render component
 			RenderComponent::Sptr renderer = GameLogo->Add<RenderComponent>();
@@ -4099,9 +4587,9 @@ int main() {
 		GameObject::Sptr ButtonBackground1 = scene->CreateGameObject("ButtonBackground1");
 		{
 			// Set position in the scene
-			ButtonBackground1->SetPostion(glm::vec3(1.0f, 0.5f, 3.0f));
+			ButtonBackground1->SetPostion(glm::vec3(1.75f, 0.1f, 3.0f));
 			// Scale down the plane
-			ButtonBackground1->SetScale(glm::vec3(1.25f, 0.250f, 1.0f));
+			ButtonBackground1->SetScale(glm::vec3(1.75f, 0.30f, 1.0f));
 
 			// Create and attach a render component
 			RenderComponent::Sptr renderer = ButtonBackground1->Add<RenderComponent>();
@@ -4116,9 +4604,9 @@ int main() {
 		GameObject::Sptr ButtonBackground2 = scene->CreateGameObject("ButtonBackground2");
 		{
 			// Set position in the scene
-			ButtonBackground2->SetPostion(glm::vec3(1.0f, 0.15f, 3.0f));
+			ButtonBackground2->SetPostion(glm::vec3(1.75f, -0.350f, 3.0f));
 			// Scale down the plane
-			ButtonBackground2->SetScale(glm::vec3(1.25f, 0.250f, 1.0f));
+			ButtonBackground2->SetScale(glm::vec3(1.75f, 0.30f, 1.0f));
 
 			// Create and attach a render component
 			RenderComponent::Sptr renderer = ButtonBackground2->Add<RenderComponent>();
@@ -4132,9 +4620,9 @@ int main() {
 		GameObject::Sptr ButtonBackground3 = scene->CreateGameObject("ButtonBackground3");
 		{
 			// Set position in the scene
-			ButtonBackground3->SetPostion(glm::vec3(1.0f, -0.2f, 3.0f));
+			ButtonBackground3->SetPostion(glm::vec3(1.75f, -0.8f, 3.0f));
 			// Scale down the plane
-			ButtonBackground3->SetScale(glm::vec3(1.25f, 0.250f, 1.0f));
+			ButtonBackground3->SetScale(glm::vec3(1.75f, 0.30f, 1.0f));
 
 			// Create and attach a render component
 			RenderComponent::Sptr renderer = ButtonBackground3->Add<RenderComponent>();
@@ -4150,7 +4638,7 @@ int main() {
 			// Set position in the scene
 			Filter->SetPostion(glm::vec3(1.0f, 0.5f, 3.010f));
 			// Scale down the plane
-			Filter->SetScale(glm::vec3(1.25f, 0.25f, 1.0f));
+			Filter->SetScale(glm::vec3(1.75f, 0.3f, 1.0f));
 
 			// Create and attach a render component
 			RenderComponent::Sptr renderer = Filter->Add<RenderComponent>();
@@ -4164,7 +4652,7 @@ int main() {
 		GameObject::Sptr StartButton = scene->CreateGameObject("StartButton");
 		{
 			// Set position in the scene
-			StartButton->SetPostion(glm::vec3(0.75f, 0.375f, 3.5f));
+			StartButton->SetPostion(glm::vec3(1.3f, 0.080f, 3.5f));
 			// Scale down the plane
 			StartButton->SetScale(glm::vec3(0.5f, 0.125f, 1.0f));
 
@@ -4180,7 +4668,7 @@ int main() {
 		GameObject::Sptr BackButton = scene->CreateGameObject("BackButton");
 		{
 			// Set position in the scene
-			BackButton->SetPostion(glm::vec3(0.750f, -0.15f, 3.5f));
+			BackButton->SetPostion(glm::vec3(1.3f, -0.6f, 3.5f));
 			// Scale down the plane
 			BackButton->SetScale(glm::vec3(0.5f, 0.125f, 1.0f));
 
@@ -4196,9 +4684,9 @@ int main() {
 		GameObject::Sptr ControlsButton = scene->CreateGameObject("ControlsButton");
 		{
 			// Set position in the scene
-			ControlsButton->SetPostion(glm::vec3(0.750f, 0.115f, 3.5f));
+			ControlsButton->SetPostion(glm::vec3(1.3f, -0.26f, 3.5f));
 			// Scale down the plane
-			ControlsButton->SetScale(glm::vec3(0.8f, 0.25f, 1.0f));
+			ControlsButton->SetScale(glm::vec3(1.0f, 0.250f, 1.0f));
 
 			// Create and attach a render component
 			RenderComponent::Sptr renderer = ControlsButton->Add<RenderComponent>();
@@ -4207,6 +4695,72 @@ int main() {
 
 			// This object is a renderable only, it doesn't have any behaviours or
 			// physics bodies attached!
+		}
+
+		GameObject::Sptr FrogTongue = scene->CreateGameObject("FrogTongue");
+		{
+			// Set position in the scene
+			FrogTongue->SetPostion(glm::vec3(-3.4f, -1.05f, 3.59f));
+			// Scale down the plane
+			FrogTongue->SetScale(glm::vec3(1.0f, 0.1f, 1.0f));
+			FrogTongue->SetRotation(glm::vec3(0.0f, 0.0f, 45.0f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = FrogTongue->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(FrogTongueMaterial);
+		}
+
+		GameObject::Sptr FrogBody = scene->CreateGameObject("FrogBody");
+		{
+			// Set position in the scene
+			FrogBody->SetPostion(glm::vec3(-3.4f, -1.05f, 3.6f));
+			// Scale down the plane
+			FrogBody->SetScale(glm::vec3(1.5f, 1.5f, 1.0f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = FrogBody->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(FrogBodyMaterial);
+		}
+
+		GameObject::Sptr FrogHeadBot = scene->CreateGameObject("FrogHeadBot");
+		{
+			// Set position in the scene
+			FrogHeadBot->SetPostion(glm::vec3(-3.4f, -1.05f, 3.61f));
+			// Scale down the plane
+			FrogHeadBot->SetScale(glm::vec3(1.5f, 1.5f, 1.0f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = FrogHeadBot->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(FrogHeadBotMaterial);
+		}
+
+		GameObject::Sptr FrogHeadTop = scene->CreateGameObject("FrogHeadTop");
+		{
+			// Set position in the scene
+			FrogHeadTop->SetPostion(glm::vec3(-3.4f, -1.05f, 3.62f));
+			// Scale down the plane
+			FrogHeadTop->SetScale(glm::vec3(1.5f, 1.5f, 1.0f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = FrogHeadTop->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(FrogHeadTopMaterial);
+		}
+
+		GameObject::Sptr BushTransition = scene->CreateGameObject("BushTransition");
+		{
+			// Set position in the scene
+			BushTransition->SetPostion(glm::vec3(5.f, 0.0f, 3.8f));
+			// Scale down the plane
+			BushTransition->SetScale(glm::vec3(5.8f, 2.5f, 1.0f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = BushTransition->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(BushTransitionMaterial);
 		}
 
 
@@ -4257,6 +4811,46 @@ int main() {
 				BackTextMaterial->MatShader = scene->BaseShader;
 				BackTextMaterial->Texture = BackTextTex;
 				BackTextMaterial->Shininess = 2.0f;
+			}
+
+			Material::Sptr FrogBodyMaterial = ResourceManager::CreateAsset<Material>();
+			{
+				FrogBodyMaterial->Name = "FrogBody";
+				FrogBodyMaterial->MatShader = scene->BaseShader;
+				FrogBodyMaterial->Texture = FrogBodyTex;
+				FrogBodyMaterial->Shininess = 2.0f;
+			}
+
+			Material::Sptr FrogHeadTopMaterial = ResourceManager::CreateAsset<Material>();
+			{
+				FrogHeadTopMaterial->Name = "FrogHeadTop";
+				FrogHeadTopMaterial->MatShader = scene->BaseShader;
+				FrogHeadTopMaterial->Texture = FrogHeadTopTex;
+				FrogHeadTopMaterial->Shininess = 2.0f;
+			}
+
+			Material::Sptr FrogHeadBotMaterial = ResourceManager::CreateAsset<Material>();
+			{
+				FrogHeadBotMaterial->Name = "FrogHeadBot";
+				FrogHeadBotMaterial->MatShader = scene->BaseShader;
+				FrogHeadBotMaterial->Texture = FrogHeadBotTex;
+				FrogHeadBotMaterial->Shininess = 2.0f;
+			}
+
+			Material::Sptr FrogTongueMaterial = ResourceManager::CreateAsset<Material>();
+			{
+				FrogTongueMaterial->Name = "FrogTongue";
+				FrogTongueMaterial->MatShader = scene->BaseShader;
+				FrogTongueMaterial->Texture = FrogTongueTex;
+				FrogTongueMaterial->Shininess = 2.0f;
+			}
+
+			Material::Sptr BushTransitionMaterial = ResourceManager::CreateAsset<Material>();
+			{
+				BushTransitionMaterial->Name = "BushTransition";
+				BushTransitionMaterial->MatShader = scene->BaseShader;
+				BushTransitionMaterial->Texture = BushTransitionTex;
+				BushTransitionMaterial->Shininess = 2.0f;
 			}
 
 			// Create some lights for our scene
@@ -4343,6 +4937,74 @@ int main() {
 				// This object is a renderable only, it doesn't have any behaviours or
 				// physics bodies attached!
 			}
+
+			GameObject::Sptr FrogTongue = scene->CreateGameObject("FrogTongue");
+			{
+				// Set position in the scene
+				FrogTongue->SetPostion(glm::vec3(-3.4f, -1.05f, 3.59f));
+				// Scale down the plane
+				FrogTongue->SetScale(glm::vec3(1.0f, 0.1f, 1.0f));
+				FrogTongue->SetRotation(glm::vec3(0.0f, 0.0f, 45.0f));
+
+				// Create and attach a render component
+				RenderComponent::Sptr renderer = FrogTongue->Add<RenderComponent>();
+				renderer->SetMesh(planeMesh);
+				renderer->SetMaterial(FrogTongueMaterial);
+			}
+
+			GameObject::Sptr FrogBody = scene->CreateGameObject("FrogBody");
+			{
+				// Set position in the scene
+				FrogBody->SetPostion(glm::vec3(-3.4f, -1.05f, 3.6f));
+				// Scale down the plane
+				FrogBody->SetScale(glm::vec3(1.5f, 1.5f, 1.0f));
+
+				// Create and attach a render component
+				RenderComponent::Sptr renderer = FrogBody->Add<RenderComponent>();
+				renderer->SetMesh(planeMesh);
+				renderer->SetMaterial(FrogBodyMaterial);
+			}
+
+			GameObject::Sptr FrogHeadBot = scene->CreateGameObject("FrogHeadBot");
+			{
+				// Set position in the scene
+				FrogHeadBot->SetPostion(glm::vec3(-3.4f, -1.05f, 3.61f));
+				// Scale down the plane
+				FrogHeadBot->SetScale(glm::vec3(1.5f, 1.5f, 1.0f));
+
+				// Create and attach a render component
+				RenderComponent::Sptr renderer = FrogHeadBot->Add<RenderComponent>();
+				renderer->SetMesh(planeMesh);
+				renderer->SetMaterial(FrogHeadBotMaterial);
+			}
+
+			GameObject::Sptr FrogHeadTop = scene->CreateGameObject("FrogHeadTop");
+			{
+				// Set position in the scene
+				FrogHeadTop->SetPostion(glm::vec3(-3.4f, -1.05f, 3.62f));
+				// Scale down the plane
+				FrogHeadTop->SetScale(glm::vec3(1.5f, 1.5f, 1.0f));
+
+				// Create and attach a render component
+				RenderComponent::Sptr renderer = FrogHeadTop->Add<RenderComponent>();
+				renderer->SetMesh(planeMesh);
+				renderer->SetMaterial(FrogHeadTopMaterial);
+			}
+
+			GameObject::Sptr BushTransition = scene->CreateGameObject("BushTransition");
+			{
+				// Set position in the scene
+				BushTransition->SetPostion(glm::vec3(5.f, 0.0f, 3.8f));
+				// Scale down the plane
+				BushTransition->SetScale(glm::vec3(5.8f, 2.5f, 1.0f));
+
+				// Create and attach a render component
+				RenderComponent::Sptr renderer = BushTransition->Add<RenderComponent>();
+				renderer->SetMesh(planeMesh);
+				renderer->SetMaterial(BushTransitionMaterial);
+			}
+
+
 
 			// Save the asset manifest for all the resources we just loaded
 			ResourceManager::SaveManifest("manifest.json");
@@ -4490,23 +5152,79 @@ int main() {
 				Material10->Shininess = 2.0f;
 			}
 
+			Material::Sptr FrogBodyMaterial = ResourceManager::CreateAsset<Material>();
+			{
+				FrogBodyMaterial->Name = "FrogBody";
+				FrogBodyMaterial->MatShader = scene->BaseShader;
+				FrogBodyMaterial->Texture = FrogBodyTex;
+				FrogBodyMaterial->Shininess = 2.0f;
+			}
+
+			Material::Sptr FrogHeadTopMaterial = ResourceManager::CreateAsset<Material>();
+			{
+				FrogHeadTopMaterial->Name = "FrogHeadTop";
+				FrogHeadTopMaterial->MatShader = scene->BaseShader;
+				FrogHeadTopMaterial->Texture = FrogHeadTopTex;
+				FrogHeadTopMaterial->Shininess = 2.0f;
+			}
+
+			Material::Sptr FrogHeadBotMaterial = ResourceManager::CreateAsset<Material>();
+			{
+				FrogHeadBotMaterial->Name = "FrogHeadBot";
+				FrogHeadBotMaterial->MatShader = scene->BaseShader;
+				FrogHeadBotMaterial->Texture = FrogHeadBotTex;
+				FrogHeadBotMaterial->Shininess = 2.0f;
+			}
+
+			Material::Sptr FrogTongueMaterial = ResourceManager::CreateAsset<Material>();
+			{
+				FrogTongueMaterial->Name = "FrogTongue";
+				FrogTongueMaterial->MatShader = scene->BaseShader;
+				FrogTongueMaterial->Texture = FrogTongueTex;
+				FrogTongueMaterial->Shininess = 2.0f;
+			}
+
+			Material::Sptr BushTransitionMaterial = ResourceManager::CreateAsset<Material>();
+			{
+				BushTransitionMaterial->Name = "BushTransition";
+				BushTransitionMaterial->MatShader = scene->BaseShader;
+				BushTransitionMaterial->Texture = BushTransitionTex;
+				BushTransitionMaterial->Shininess = 2.0f;
+			}
+			 
 			// Create some lights for our scene
-			scene->Lights.resize(4);
+			scene->Lights.resize(8);
 			scene->Lights[0].Position = glm::vec3(3.0f, 3.0f, 3.0f);
 			scene->Lights[0].Color = glm::vec3(0.892f, 1.0f, 0.882f);
-			scene->Lights[0].Range = 10.0f;
+			scene->Lights[0].Range = 5.0f;
 
 			scene->Lights[1].Position = glm::vec3(3.0f, -3.0f, 3.0f);
 			scene->Lights[1].Color = glm::vec3(0.892f, 1.0f, 0.882f);
-			scene->Lights[1].Range = 10.0f;
+			scene->Lights[1].Range = 5.0f;
 
-			scene->Lights[2].Position = glm::vec3(-3.0f, 3.0f, 3.0f);
+			scene->Lights[2].Position = glm::vec3(-3.0f, 3.0f, 5.0f);
 			scene->Lights[2].Color = glm::vec3(0.892f, 1.0f, 0.882f);
-			scene->Lights[2].Range = 10.0f;
+			scene->Lights[2].Range = 5.0f;
 
-			scene->Lights[3].Position = glm::vec3(-3.0f, -3.0f, 3.0f);
+			scene->Lights[3].Position = glm::vec3(-3.0f, -3.0f, 5.0f);
 			scene->Lights[3].Color = glm::vec3(0.892f, 1.0f, 0.882f);
-			scene->Lights[3].Range = 10.0f;
+			scene->Lights[3].Range = 5.0f;
+
+			scene->Lights[4].Position = glm::vec3(-8.0f, -3.0f, 5.0f);
+			scene->Lights[4].Color = glm::vec3(0.892f, 1.0f, 0.882f);
+			scene->Lights[4].Range = 10.0f;
+
+			scene->Lights[5].Position = glm::vec3(-8.0f, 3.0f, 5.0f);
+			scene->Lights[5].Color = glm::vec3(0.892f, 1.0f, 0.882f);
+			scene->Lights[5].Range = 10.0f;
+
+			scene->Lights[6].Position = glm::vec3(8.0f, -3.0f, 5.0f);
+			scene->Lights[6].Color = glm::vec3(0.892f, 1.0f, 0.882f);
+			scene->Lights[6].Range = 10.0f;
+
+			scene->Lights[7].Position = glm::vec3(8.0f, 3.0f, 5.0f);
+			scene->Lights[7].Color = glm::vec3(0.892f, 1.0f, 0.882f);
+			scene->Lights[7].Range = 10.0f;
 
 			// We'll create a mesh that is a simple plane that we can resize later
 			MeshResource::Sptr planeMesh = ResourceManager::CreateAsset<MeshResource>();
@@ -4530,7 +5248,7 @@ int main() {
 			GameObject::Sptr plane = scene->CreateGameObject("Plane");
 			{
 				// Scale up the plane
-				plane->SetScale(glm::vec3(15.0F, 10.0f, 10.0f));
+				plane->SetScale(glm::vec3(20.0F, 12.0f, 10.0f));
 
 				// Create and attach a RenderComponent to the object to draw our mesh
 				RenderComponent::Sptr renderer = plane->Add<RenderComponent>();
@@ -4862,6 +5580,71 @@ int main() {
 				renderer->SetMaterial(Material10);
 			}
 
+			GameObject::Sptr FrogTongue = scene->CreateGameObject("FrogTongue");
+			{
+				// Set position in the scene
+				FrogTongue->SetPostion(glm::vec3(-3.4f, -1.05f, 3.59f));
+				// Scale down the plane
+				FrogTongue->SetScale(glm::vec3(1.0f, 0.1f, 1.0f));
+				FrogTongue->SetRotation(glm::vec3(0.0f, 0.0f, 45.0f));
+
+				// Create and attach a render component
+				RenderComponent::Sptr renderer = FrogTongue->Add<RenderComponent>();
+				renderer->SetMesh(planeMesh);
+				renderer->SetMaterial(FrogTongueMaterial);
+			}
+
+			GameObject::Sptr FrogBody = scene->CreateGameObject("FrogBody");
+			{
+				// Set position in the scene
+				FrogBody->SetPostion(glm::vec3(-3.4f, -1.05f, 3.6f));
+				// Scale down the plane
+				FrogBody->SetScale(glm::vec3(1.5f, 1.5f, 1.0f));
+
+				// Create and attach a render component
+				RenderComponent::Sptr renderer = FrogBody->Add<RenderComponent>();
+				renderer->SetMesh(planeMesh);
+				renderer->SetMaterial(FrogBodyMaterial);
+			}
+
+			GameObject::Sptr FrogHeadBot = scene->CreateGameObject("FrogHeadBot");
+			{
+				// Set position in the scene
+				FrogHeadBot->SetPostion(glm::vec3(-3.4f, -1.05f, 3.61f));
+				// Scale down the plane
+				FrogHeadBot->SetScale(glm::vec3(1.5f, 1.5f, 1.0f));
+
+				// Create and attach a render component
+				RenderComponent::Sptr renderer = FrogHeadBot->Add<RenderComponent>();
+				renderer->SetMesh(planeMesh);
+				renderer->SetMaterial(FrogHeadBotMaterial);
+			}
+
+			GameObject::Sptr FrogHeadTop = scene->CreateGameObject("FrogHeadTop");
+			{
+				// Set position in the scene
+				FrogHeadTop->SetPostion(glm::vec3(-3.4f, -1.05f, 3.62f));
+				// Scale down the plane
+				FrogHeadTop->SetScale(glm::vec3(1.5f, 1.5f, 1.0f));
+
+				// Create and attach a render component
+				RenderComponent::Sptr renderer = FrogHeadTop->Add<RenderComponent>();
+				renderer->SetMesh(planeMesh);
+				renderer->SetMaterial(FrogHeadTopMaterial);
+			}
+
+			GameObject::Sptr BushTransition = scene->CreateGameObject("BushTransition");
+			{
+				// Set position in the scene
+				BushTransition->SetPostion(glm::vec3(5.f, 0.0f, 3.8f));
+				// Scale down the plane
+				BushTransition->SetScale(glm::vec3(5.8f, 2.5f, 1.0f));
+
+				// Create and attach a render component
+				RenderComponent::Sptr renderer = BushTransition->Add<RenderComponent>();
+				renderer->SetMesh(planeMesh);
+				renderer->SetMaterial(BushTransitionMaterial);
+			}
 
 
 			scene->SetAmbientLight(glm::vec3(0.2f));
@@ -5168,7 +5951,7 @@ int main() {
 		
 		// Calculate the time since our last frame (dt)
 		double thisFrame = glfwGetTime();
-		//std::cout << glfwGetTime() << std::endl;
+		std::cout << glfwGetTime() << std::endl;
 		float dt = static_cast<float>(thisFrame - lastFrame);
 
 		// Showcasing how to use the imGui library!
