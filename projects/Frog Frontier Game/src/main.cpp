@@ -233,8 +233,8 @@ bool DrawSaveLoadImGui(Scene::Sptr& scene, std::string& path) {
 		scene->FindObjectByName("FrogTongue")->SetPostion(glm::vec3(scene->FindObjectByName("Main Camera")->GetPosition().x - 3.4, scene->FindObjectByName("Main Camera")->GetPosition().y - 1.05, scene->FindObjectByName("Main Camera")->GetPosition().z - 1.41));
 		scene->FindObjectByName("BushTransition")->SetPostion(glm::vec3(scene->FindObjectByName("Main Camera")->GetPosition().x + 5, scene->FindObjectByName("Main Camera")->GetPosition().y, scene->FindObjectByName("Main Camera")->GetPosition().z - 1.2));
 	}
-
-	if (glfwGetKey(window, GLFW_KEY_ENTER) && DoTransition == false && scene->FindObjectByName("Main Camera") != NULL && scene->FindObjectByName("Filter") != NULL && enterclick == false && (scenevalue == 1 || scenevalue == 2 || scenevalue == 3) && paused == true && (index == 2|| index == 3) && (paused == true || playerLose == true || playerWin == true)) //menu
+	/*
+	if (glfwGetKey(window, GLFW_KEY_ENTER) && DoTransition == false && scene->FindObjectByName("Main Camera") != NULL && scene->FindObjectByName("Filter") != NULL && enterclick == false && (scenevalue == 1 || scenevalue == 2 || scenevalue == 3) && (index == 2|| index == 3) && (paused == true || playerLose == true || playerWin == true)) //menu
 	{
 		DoTransition = true;
 		transitiontimer = glfwGetTime() + 2.0;
@@ -247,6 +247,7 @@ bool DrawSaveLoadImGui(Scene::Sptr& scene, std::string& path) {
 		scene->FindObjectByName("FrogTongue")->SetPostion(glm::vec3(scene->FindObjectByName("Main Camera")->GetPosition().x - 3.4, scene->FindObjectByName("Main Camera")->GetPosition().y - 1.05, scene->FindObjectByName("Main Camera")->GetPosition().z - 1.41));
 		scene->FindObjectByName("BushTransition")->SetPostion(glm::vec3(scene->FindObjectByName("Main Camera")->GetPosition().x + 5, scene->FindObjectByName("Main Camera")->GetPosition().y, scene->FindObjectByName("Main Camera")->GetPosition().z - 1.2));
 	}
+	*/
 
 	if (DoTransition == true && transitioncomplete == false)
 	{
@@ -379,16 +380,17 @@ bool DrawSaveLoadImGui(Scene::Sptr& scene, std::string& path) {
 		enterclick = true;
 		return true;
 	}
-	else if (DoTransition == true && scene->FindObjectByName("player") == NULL && scene->FindObjectByName("Filter") == NULL && enterclick == false && scenevalue == 12) //controls
+	else if (glfwGetKey(window, GLFW_KEY_ENTER) && scene->FindObjectByName("player") == NULL && scene->FindObjectByName("Filter") == NULL && enterclick == false && scenevalue == 12) //controls
 	{
 		path = "menu.json";
 		SceneLoad(scene, path);
 		scenevalue = 11;
 		index = 1;
 		enterclick = true;
+		DoTransition = false;
 		return true;
 	}
-	else if (DoTransition == true && scene->FindObjectByName("player") == NULL && scene->FindObjectByName("Filter") != NULL && enterclick == false && scenevalue == 13) // level select
+	else if (glfwGetKey(window, GLFW_KEY_ENTER) && scene->FindObjectByName("player") == NULL && scene->FindObjectByName("Filter") != NULL && enterclick == false && scenevalue == 13) // level select
 	{
 		switch (index) {
 		case 1:
@@ -396,18 +398,21 @@ bool DrawSaveLoadImGui(Scene::Sptr& scene, std::string& path) {
 			SceneLoad(scene, path);
 			scenevalue = 1;
 			index = 1;
+			DoTransition = false;
 			break;
 		case 2:
 			path = "Level.json";
 			SceneLoad(scene, path);
 			scenevalue = 2;
 			index = 1;
+			DoTransition = false;
 			break;
 		case 3:
 			path = "Level3.json";
 			SceneLoad(scene, path);
 			scenevalue = 3;
 			index = 1;
+			DoTransition = false;
 			break;
 		case 4:
 			return 0;
@@ -441,7 +446,7 @@ bool DrawSaveLoadImGui(Scene::Sptr& scene, std::string& path) {
 		return true;
 	}
 
-	if (DoTransition == true && scene->FindObjectByName("player") != NULL && (paused == true || playerLose == true || playerWin == true) && enterclick == false) //pause
+	if (glfwGetKey(window, GLFW_KEY_ENTER) && scene->FindObjectByName("player") != NULL && (paused == true || playerLose == true || playerWin == true) && enterclick == false) //pause
 	{
 		if (index == 2)
 		{
@@ -450,6 +455,7 @@ bool DrawSaveLoadImGui(Scene::Sptr& scene, std::string& path) {
 			enterclick == true;
 			index = 1;
 			scenevalue = 13;
+			DoTransition = false;
 			return true;
 		}
 		else if (index == 3)
@@ -459,6 +465,7 @@ bool DrawSaveLoadImGui(Scene::Sptr& scene, std::string& path) {
 			enterclick == true;
 			index = 1;
 			scenevalue = 11;
+			DoTransition = false;
 			return true;
 		}
 		
