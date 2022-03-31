@@ -47,7 +47,7 @@
 #include "Gameplay/Components/IComponent.h"
 #include "Gameplay/Components/Camera.h"
 #include "Gameplay/Components/RotatingBehaviour.h"
-#include "Gameplay/Components/JumpBehaviour.h"
+//#include "Gameplay/Components/JumpBehaviour.h"
 #include "Gameplay/Components/RenderComponent.h"
 #include "Gameplay/Components/MaterialSwapBehaviour.h"
 
@@ -1211,7 +1211,7 @@ int main() {
 	ComponentManager::RegisterType<RigidBody>();
 	ComponentManager::RegisterType<TriggerVolume>();
 	ComponentManager::RegisterType<RotatingBehaviour>();
-	ComponentManager::RegisterType<JumpBehaviour>();
+	//ComponentManager::RegisterType<JumpBehaviour>();
 	ComponentManager::RegisterType<MaterialSwapBehaviour>();
 
 	// GL states, we'll enable depth testing and backface fulling
@@ -2103,7 +2103,7 @@ int main() {
 			player->SetScale(glm::vec3(0.5f, 0.5f, 0.5f));
 
 			// Add some behaviour that relies on the physics body
-			player->Add<JumpBehaviour>(player->GetPosition());
+			//player->Add<JumpBehaviour>(player->GetPosition());
 			//player->Get<JumpBehaviour>(player->GetPosition());
 			// Create and attach a renderer for the monkey
 			RenderComponent::Sptr renderer = player->Add<RenderComponent>();
@@ -4135,7 +4135,7 @@ int main() {
 			player->SetScale(glm::vec3(0.5f, 0.5f, 0.5f));
 
 			// Add some behaviour that relies on the physics body
-			player->Add<JumpBehaviour>(player->GetPosition());
+			//player->Add<JumpBehaviour>(player->GetPosition());
 			//player->Get<JumpBehaviour>(player->GetPosition());
 			// Create and attach a renderer for the monkey
 			RenderComponent::Sptr renderer = player->Add<RenderComponent>();
@@ -6092,9 +6092,9 @@ int main() {
 
 
 			/// If your game gets reaaaally chunky take this code out
-			if (glfwGetKey(window, GLFW_KEY_UP) && scene->IsPlaying == false) {
-				scene->IsPlaying = true;
-			}
+			//if (glfwGetKey(window, GLFW_KEY_UP) && scene->IsPlaying == false) {
+			//	scene->IsPlaying = true;
+			//}
 			//////
 
 			// Make a new area for the scene saving/loading
