@@ -100,7 +100,7 @@ void GlDebugMessage(GLenum source, GLenum type, GLuint id, GLenum severity, GLsi
 // Stores our GLFW window in a global variable for now
 GLFWwindow* window;
 // The current size of our window in pixels
-glm::ivec2 windowSize = glm::ivec2(800, 800);
+glm::ivec2 windowSize = glm::ivec2(1422, 800);
 // The title of our GLFW window
 std::string windowTitle = "Frog Frontier";
 
@@ -113,6 +113,40 @@ using namespace Gameplay::Physics;
 
 // The scene that we will be rendering
 Scene::Sptr scene = nullptr;
+
+MeshResource::Sptr planeMesh;
+MeshResource::Sptr cubeMesh;
+MeshResource::Sptr mushroomMesh;
+MeshResource::Sptr vinesMesh;
+MeshResource::Sptr cobwebMesh;
+MeshResource::Sptr ladybugMesh;
+
+//Anim test
+MeshResource::Sptr fly1Mesh;
+MeshResource::Sptr fly2Mesh;
+
+MeshResource::Sptr BranchMesh;
+MeshResource::Sptr LogMesh;
+MeshResource::Sptr Plant1Mesh;
+MeshResource::Sptr Plant2Mesh;
+MeshResource::Sptr Plant3Mesh;
+
+MeshResource::Sptr SunflowerMesh;
+MeshResource::Sptr ToadMesh;
+MeshResource::Sptr Rock1Mesh;
+MeshResource::Sptr Rock2Mesh;
+MeshResource::Sptr Rock3Mesh;
+MeshResource::Sptr twigMesh;
+MeshResource::Sptr frogMesh;
+
+MeshResource::Sptr tmMesh;
+MeshResource::Sptr bmMesh;
+
+MeshResource::Sptr PBMesh;
+MeshResource::Sptr BGMesh;
+MeshResource::Sptr ExitTreeMesh;
+MeshResource::Sptr BGRockMesh;
+MeshResource::Sptr ExitRockMesh;
 
 int SceneLoad(Scene::Sptr& scene, std::string& path)
 {
@@ -804,9 +838,15 @@ void SceneChanger()
 	}
 
 }
-
+bool loadMeshOnce = true;
+float animIntervals = 0;
 void keyboard() 
 {
+	//Loads Keyframes for animations
+	//if (loadMeshOnce) {
+	//}
+	//loadMeshOnce
+
 
 	if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS && performedtask == false)
 	{
@@ -975,16 +1015,33 @@ void keyboard()
 			}
 			else {
 				JTemp = glfwGetTime();
+				animIntervals = 0;
+				scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(ladybugMesh); //sets obj to default
 			}
 
 			x = JTime * 8; //Multiply to increase speed of jump
-			//std::cout << x << "\n" << jumpheight << "\n";
+			std::cout << JTime << "\n";
 
 			//parabola function so the jump will slow as it reaches the max height
 			jumpheight = (-8 * pow(x - 1, 2) + 8) + 0.2; //0.2 is currently the ladybugs starting point on z
 
 			if (jumpheight < 0) { //so the ladybug doesnt go through the ground
 				jumpo = false;
+			}
+
+			//Jump Animations (still working on lerping them)
+
+			if (JTime == animIntervals + 0.1) {
+				scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(fly1Mesh);
+			}
+			else if (JTime == animIntervals + 0.2) {
+				scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(fly2Mesh);
+			}
+			else if (JTime == animIntervals + 0.3) {
+				animIntervals = animIntervals + 0.3;
+			}
+			else {
+				scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(fly1Mesh);
 			}
 		}
 
@@ -997,8 +1054,13 @@ void keyboard()
 				isJumpPressed = false;
 			}
 
-
+			//player->Add<RenderComponent>();
+			//Animations
+			if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS) {
+				scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(cobwebMesh);
+			}
 		}
+
 
 		if (scenevalue == 1)
 		{
@@ -1114,6 +1176,7 @@ glm::vec3 useSEEK(glm::vec3 gameObject, glm::vec3 seekObject)//make pass by refe
 
 
 
+
 int main() {
 	Logger::Init(); // We'll borrow the logger from the toolkit, but we need to initialize it
 
@@ -1216,7 +1279,7 @@ int main() {
 		Texture2D::Sptr    greenTex = ResourceManager::CreateAsset<Texture2D>("textures/green.png");
 		Texture2D::Sptr    rockTexture = ResourceManager::CreateAsset<Texture2D>("textures/grey.png");
 		Texture2D::Sptr    grassTexture = ResourceManager::CreateAsset<Texture2D>("textures/ground.png");
-		Texture2D::Sptr    ladybugTexture = ResourceManager::CreateAsset<Texture2D>("textures/lbuv.png");
+		Texture2D::Sptr    ladybugTexture = ResourceManager::CreateAsset<Texture2D>("textures/LadybugUV.png");
 		Texture2D::Sptr    LogTex = ResourceManager::CreateAsset<Texture2D>("textures/logUV.png");
 		Texture2D::Sptr    MBGTex = ResourceManager::CreateAsset<Texture2D>("textures/MountainBackgroundUV.png");
 		Texture2D::Sptr    mushroomTexture = ResourceManager::CreateAsset<Texture2D>("textures/MushroomUV.png");
@@ -1746,33 +1809,37 @@ int main() {
 		scene->Lights[12].Color = glm::vec3(0.2f, 0.8f, 0.1f);
 
 		// We'll create a mesh that is a simple plane that we can resize later
-		MeshResource::Sptr planeMesh = ResourceManager::CreateAsset<MeshResource>();
-		MeshResource::Sptr cubeMesh = ResourceManager::CreateAsset<MeshResource>("cube.obj");
-		MeshResource::Sptr mushroomMesh = ResourceManager::CreateAsset<MeshResource>("Mushroom.obj");
-		MeshResource::Sptr vinesMesh = ResourceManager::CreateAsset<MeshResource>("Vines.obj");
-		MeshResource::Sptr cobwebMesh = ResourceManager::CreateAsset<MeshResource>("Cobweb.obj");
-		MeshResource::Sptr ladybugMesh = ResourceManager::CreateAsset<MeshResource>("lbo.obj");
+		planeMesh = ResourceManager::CreateAsset<MeshResource>();
+		cubeMesh = ResourceManager::CreateAsset<MeshResource>("cube.obj");
+		mushroomMesh = ResourceManager::CreateAsset<MeshResource>("Mushroom.obj");
+		vinesMesh = ResourceManager::CreateAsset<MeshResource>("Vines.obj");
+		cobwebMesh = ResourceManager::CreateAsset<MeshResource>("Cobweb.obj");
 
-		MeshResource::Sptr BranchMesh = ResourceManager::CreateAsset<MeshResource>("Branch.obj");
-		MeshResource::Sptr LogMesh = ResourceManager::CreateAsset<MeshResource>("Log.obj");
-		MeshResource::Sptr Plant1Mesh = ResourceManager::CreateAsset<MeshResource>("PLANT.obj");
-		MeshResource::Sptr Plant2Mesh = ResourceManager::CreateAsset<MeshResource>("Plant2.obj");
-		MeshResource::Sptr Plant3Mesh = ResourceManager::CreateAsset<MeshResource>("Plant3.obj");
+		//Anim test
+		fly1Mesh = ResourceManager::CreateAsset<MeshResource>("fly1.obj");
+		fly2Mesh = ResourceManager::CreateAsset<MeshResource>("fly2.obj");
+		ladybugMesh = ResourceManager::CreateAsset<MeshResource>("lbo2.obj");
 
-		MeshResource::Sptr SunflowerMesh = ResourceManager::CreateAsset<MeshResource>("Sunflower.obj");
-		MeshResource::Sptr ToadMesh = ResourceManager::CreateAsset<MeshResource>("ToadStool.obj");
-		MeshResource::Sptr Rock1Mesh = ResourceManager::CreateAsset<MeshResource>("Rock1.obj");
-		MeshResource::Sptr Rock2Mesh = ResourceManager::CreateAsset<MeshResource>("Rock2.obj");
-		MeshResource::Sptr Rock3Mesh = ResourceManager::CreateAsset<MeshResource>("Rock3.obj");
-		MeshResource::Sptr twigMesh = ResourceManager::CreateAsset<MeshResource>("Twig.obj");
-		MeshResource::Sptr frogMesh = ResourceManager::CreateAsset<MeshResource>("frog.obj");
+		BranchMesh = ResourceManager::CreateAsset<MeshResource>("Branch.obj");
+		LogMesh = ResourceManager::CreateAsset<MeshResource>("Log.obj");
+		Plant1Mesh = ResourceManager::CreateAsset<MeshResource>("PLANT.obj");
+		Plant2Mesh = ResourceManager::CreateAsset<MeshResource>("Plant2.obj");
+		Plant3Mesh = ResourceManager::CreateAsset<MeshResource>("Plant3.obj");
 
-		MeshResource::Sptr tmMesh = ResourceManager::CreateAsset<MeshResource>("tm.obj");
-		MeshResource::Sptr bmMesh = ResourceManager::CreateAsset<MeshResource>("bm.obj");
+		SunflowerMesh = ResourceManager::CreateAsset<MeshResource>("Sunflower.obj");
+		ToadMesh = ResourceManager::CreateAsset<MeshResource>("ToadStool.obj");
+		Rock1Mesh = ResourceManager::CreateAsset<MeshResource>("Rock1.obj");
+		Rock2Mesh = ResourceManager::CreateAsset<MeshResource>("Rock2.obj");
+		Rock3Mesh = ResourceManager::CreateAsset<MeshResource>("Rock3.obj");
+		twigMesh = ResourceManager::CreateAsset<MeshResource>("Twig.obj");
+		frogMesh = ResourceManager::CreateAsset<MeshResource>("frog.obj");
 
-		MeshResource::Sptr PBMesh = ResourceManager::CreateAsset<MeshResource>("PB.obj");
-		MeshResource::Sptr BGMesh = ResourceManager::CreateAsset<MeshResource>("Background.obj");
-		MeshResource::Sptr ExitTreeMesh = ResourceManager::CreateAsset<MeshResource>("ExitTree.obj");
+		tmMesh = ResourceManager::CreateAsset<MeshResource>("tm.obj");
+		bmMesh = ResourceManager::CreateAsset<MeshResource>("bm.obj");
+
+		PBMesh = ResourceManager::CreateAsset<MeshResource>("PB.obj");
+		BGMesh = ResourceManager::CreateAsset<MeshResource>("Background.obj");
+		ExitTreeMesh = ResourceManager::CreateAsset<MeshResource>("ExitTree.obj");
 
 		planeMesh->AddParam(MeshBuilderParam::CreatePlane(ZERO, UNIT_Z, UNIT_X, glm::vec2(1.0f)));
 		planeMesh->GenerateMesh();
@@ -2028,7 +2095,7 @@ int main() {
 		}
 
 
-		GameObject::Sptr player = scene->CreateGameObject("player");
+		GameObject::Sptr player = scene->CreateGameObject("player"); //pyr
 		{
 			// Set position in the scene
 			player->SetPostion(glm::vec3(6.f, 0.0f, 1.0f));
@@ -2814,35 +2881,35 @@ int main() {
 		scene->Lights[9].Range = 100.0f;
 
 		// We'll create a mesh that is a simple plane that we can resize later
-		MeshResource::Sptr planeMesh = ResourceManager::CreateAsset<MeshResource>();
-		MeshResource::Sptr cubeMesh = ResourceManager::CreateAsset<MeshResource>("cube.obj");
+		planeMesh = ResourceManager::CreateAsset<MeshResource>();
+		cubeMesh = ResourceManager::CreateAsset<MeshResource>("cube.obj");
 
-		MeshResource::Sptr mushroomMesh = ResourceManager::CreateAsset<MeshResource>("Mushroom.obj");
-		MeshResource::Sptr tmMesh = ResourceManager::CreateAsset<MeshResource>("tm.obj");
-		MeshResource::Sptr bmMesh = ResourceManager::CreateAsset<MeshResource>("bm.obj");
-		MeshResource::Sptr ToadMesh = ResourceManager::CreateAsset<MeshResource>("ToadStool.obj");
+		mushroomMesh = ResourceManager::CreateAsset<MeshResource>("Mushroom.obj");
+		tmMesh = ResourceManager::CreateAsset<MeshResource>("tm.obj");
+		bmMesh = ResourceManager::CreateAsset<MeshResource>("bm.obj");
+		ToadMesh = ResourceManager::CreateAsset<MeshResource>("ToadStool.obj");
 
 		
-		MeshResource::Sptr cobwebMesh = ResourceManager::CreateAsset<MeshResource>("Cobweb.obj");
-		MeshResource::Sptr BranchMesh = ResourceManager::CreateAsset<MeshResource>("Branch.obj");
-		MeshResource::Sptr LogMesh = ResourceManager::CreateAsset<MeshResource>("Log.obj");
-		MeshResource::Sptr Plant1Mesh = ResourceManager::CreateAsset<MeshResource>("PLANT.obj");
-		MeshResource::Sptr Plant2Mesh = ResourceManager::CreateAsset<MeshResource>("Plant2.obj");
-		MeshResource::Sptr Plant3Mesh = ResourceManager::CreateAsset<MeshResource>("Plant3.obj");
+		cobwebMesh = ResourceManager::CreateAsset<MeshResource>("Cobweb.obj");
+		BranchMesh = ResourceManager::CreateAsset<MeshResource>("Branch.obj");
+		LogMesh = ResourceManager::CreateAsset<MeshResource>("Log.obj");
+		Plant1Mesh = ResourceManager::CreateAsset<MeshResource>("PLANT.obj");
+		Plant2Mesh = ResourceManager::CreateAsset<MeshResource>("Plant2.obj");
+		Plant3Mesh = ResourceManager::CreateAsset<MeshResource>("Plant3.obj");
 
-		MeshResource::Sptr SunflowerMesh = ResourceManager::CreateAsset<MeshResource>("Sunflower.obj");
+		SunflowerMesh = ResourceManager::CreateAsset<MeshResource>("Sunflower.obj");
 		
-		MeshResource::Sptr Rock1Mesh = ResourceManager::CreateAsset<MeshResource>("Rock1.obj");
-		MeshResource::Sptr Rock2Mesh = ResourceManager::CreateAsset<MeshResource>("Rock2.obj");
-		MeshResource::Sptr Rock3Mesh = ResourceManager::CreateAsset<MeshResource>("Rock3.obj");
-		MeshResource::Sptr twigMesh = ResourceManager::CreateAsset<MeshResource>("Twig.obj");
-		MeshResource::Sptr vinesMesh = ResourceManager::CreateAsset<MeshResource>("Vines.obj");
+		Rock1Mesh = ResourceManager::CreateAsset<MeshResource>("Rock1.obj");
+		Rock2Mesh = ResourceManager::CreateAsset<MeshResource>("Rock2.obj");
+		Rock3Mesh = ResourceManager::CreateAsset<MeshResource>("Rock3.obj");
+		twigMesh = ResourceManager::CreateAsset<MeshResource>("Twig.obj");
+		vinesMesh = ResourceManager::CreateAsset<MeshResource>("Vines.obj");
 
-		MeshResource::Sptr ladybugMesh = ResourceManager::CreateAsset<MeshResource>("lbo.obj");
-		MeshResource::Sptr frogMesh = ResourceManager::CreateAsset<MeshResource>("frog.obj");
+		ladybugMesh = ResourceManager::CreateAsset<MeshResource>("lbo2.obj"); //real lbm
+		frogMesh = ResourceManager::CreateAsset<MeshResource>("frog.obj");
 
-		MeshResource::Sptr BGMesh = ResourceManager::CreateAsset<MeshResource>("Background.obj");
-		MeshResource::Sptr ExitTreeMesh = ResourceManager::CreateAsset<MeshResource>("ExitTree.obj");
+		BGMesh = ResourceManager::CreateAsset<MeshResource>("Background.obj");
+		ExitTreeMesh = ResourceManager::CreateAsset<MeshResource>("ExitTree.obj");
 
 		planeMesh->AddParam(MeshBuilderParam::CreatePlane(ZERO, UNIT_Z, UNIT_X, glm::vec2(1.0f)));
 		planeMesh->GenerateMesh();
@@ -3090,6 +3157,7 @@ int main() {
 			triggerInteraction->EnterMaterial = boxMaterial;
 			triggerInteraction->ExitMaterial = monkeyMaterial;
 		}
+
 		GameObject::Sptr jumpingObstacle = scene->CreateGameObject("Trigger2");
 		{
 			// Set and rotation position in the scene
@@ -3857,37 +3925,37 @@ int main() {
 		scene->Lights[9].Range = 100.0f;
 
 		// We'll create a mesh that is a simple plane that we can resize later
-		MeshResource::Sptr planeMesh = ResourceManager::CreateAsset<MeshResource>();
-		MeshResource::Sptr cubeMesh = ResourceManager::CreateAsset<MeshResource>("cube.obj");
+		planeMesh = ResourceManager::CreateAsset<MeshResource>();
+		cubeMesh = ResourceManager::CreateAsset<MeshResource>("cube.obj");
 
-		MeshResource::Sptr mushroomMesh = ResourceManager::CreateAsset<MeshResource>("Mushroom.obj");
-		MeshResource::Sptr tmMesh = ResourceManager::CreateAsset<MeshResource>("tm.obj");
-		MeshResource::Sptr bmMesh = ResourceManager::CreateAsset<MeshResource>("bm.obj");
-		MeshResource::Sptr ToadMesh = ResourceManager::CreateAsset<MeshResource>("ToadStool.obj");
+		mushroomMesh = ResourceManager::CreateAsset<MeshResource>("Mushroom.obj");
+		tmMesh = ResourceManager::CreateAsset<MeshResource>("tm.obj");
+		bmMesh = ResourceManager::CreateAsset<MeshResource>("bm.obj");
+		ToadMesh = ResourceManager::CreateAsset<MeshResource>("ToadStool.obj");
 
 
-		MeshResource::Sptr cobwebMesh = ResourceManager::CreateAsset<MeshResource>("Cobweb.obj");
-		MeshResource::Sptr BranchMesh = ResourceManager::CreateAsset<MeshResource>("Branch.obj");
-		MeshResource::Sptr LogMesh = ResourceManager::CreateAsset<MeshResource>("Log.obj");
-		MeshResource::Sptr Plant1Mesh = ResourceManager::CreateAsset<MeshResource>("PLANT.obj");
-		MeshResource::Sptr Plant2Mesh = ResourceManager::CreateAsset<MeshResource>("Plant2.obj");
-		MeshResource::Sptr Plant3Mesh = ResourceManager::CreateAsset<MeshResource>("Plant3.obj");
+		cobwebMesh = ResourceManager::CreateAsset<MeshResource>("Cobweb.obj");
+		BranchMesh = ResourceManager::CreateAsset<MeshResource>("Branch.obj");
+		LogMesh = ResourceManager::CreateAsset<MeshResource>("Log.obj");
+		Plant1Mesh = ResourceManager::CreateAsset<MeshResource>("PLANT.obj");
+		Plant2Mesh = ResourceManager::CreateAsset<MeshResource>("Plant2.obj");
+		Plant3Mesh = ResourceManager::CreateAsset<MeshResource>("Plant3.obj");
 
-		MeshResource::Sptr SunflowerMesh = ResourceManager::CreateAsset<MeshResource>("Sunflower.obj");
+		SunflowerMesh = ResourceManager::CreateAsset<MeshResource>("Sunflower.obj");
 
-		MeshResource::Sptr Rock1Mesh = ResourceManager::CreateAsset<MeshResource>("Rock1.obj");
-		MeshResource::Sptr Rock2Mesh = ResourceManager::CreateAsset<MeshResource>("Rock2.obj");
-		MeshResource::Sptr Rock3Mesh = ResourceManager::CreateAsset<MeshResource>("Rock3.obj");
-		MeshResource::Sptr twigMesh = ResourceManager::CreateAsset<MeshResource>("Twig.obj");
-		MeshResource::Sptr vinesMesh = ResourceManager::CreateAsset<MeshResource>("Vines.obj");
+		Rock1Mesh = ResourceManager::CreateAsset<MeshResource>("Rock1.obj");
+		Rock2Mesh = ResourceManager::CreateAsset<MeshResource>("Rock2.obj");
+		Rock3Mesh = ResourceManager::CreateAsset<MeshResource>("Rock3.obj");
+		twigMesh = ResourceManager::CreateAsset<MeshResource>("Twig.obj");
+		vinesMesh = ResourceManager::CreateAsset<MeshResource>("Vines.obj");
 
-		MeshResource::Sptr ladybugMesh = ResourceManager::CreateAsset<MeshResource>("lbo.obj");
-		MeshResource::Sptr frogMesh = ResourceManager::CreateAsset<MeshResource>("frog.obj");
+		ladybugMesh = ResourceManager::CreateAsset<MeshResource>("lbo.obj");
+		frogMesh = ResourceManager::CreateAsset<MeshResource>("frog.obj");
 
-		MeshResource::Sptr BGRockMesh = ResourceManager::CreateAsset<MeshResource>("RockBackground.obj");
-		MeshResource::Sptr BGMesh = ResourceManager::CreateAsset<MeshResource>("Background.obj");
-		MeshResource::Sptr ExitTreeMesh = ResourceManager::CreateAsset<MeshResource>("ExitTree.obj");
-		MeshResource::Sptr ExitRockMesh = ResourceManager::CreateAsset<MeshResource>("ExitRock.obj");
+		BGRockMesh = ResourceManager::CreateAsset<MeshResource>("RockBackground.obj");
+		BGMesh = ResourceManager::CreateAsset<MeshResource>("Background.obj");
+		ExitTreeMesh = ResourceManager::CreateAsset<MeshResource>("ExitTree.obj");
+		ExitRockMesh = ResourceManager::CreateAsset<MeshResource>("ExitRock.obj");
 
 		planeMesh->AddParam(MeshBuilderParam::CreatePlane(ZERO, UNIT_Z, UNIT_X, glm::vec2(1.0f)));
 		planeMesh->GenerateMesh();
@@ -4575,8 +4643,8 @@ int main() {
 		scene->Lights[7].Range = 10.0f;
 
 		// We'll create a mesh that is a simple plane that we can resize later
-		MeshResource::Sptr planeMesh = ResourceManager::CreateAsset<MeshResource>();
-		MeshResource::Sptr cubeMesh = ResourceManager::CreateAsset<MeshResource>("cube.obj");
+		planeMesh = ResourceManager::CreateAsset<MeshResource>();
+		cubeMesh = ResourceManager::CreateAsset<MeshResource>("cube.obj");
 		planeMesh->AddParam(MeshBuilderParam::CreatePlane(ZERO, UNIT_Z, UNIT_X, glm::vec2(1.0f)));
 		planeMesh->GenerateMesh();
 
@@ -4913,8 +4981,8 @@ int main() {
 			scene->Lights[3].Range = 10.0f;
 
 			// We'll create a mesh that is a simple plane that we can resize later
-			MeshResource::Sptr planeMesh = ResourceManager::CreateAsset<MeshResource>();
-			MeshResource::Sptr cubeMesh = ResourceManager::CreateAsset<MeshResource>("cube.obj");
+			planeMesh = ResourceManager::CreateAsset<MeshResource>();
+			cubeMesh = ResourceManager::CreateAsset<MeshResource>("cube.obj");
 			planeMesh->AddParam(MeshBuilderParam::CreatePlane(ZERO, UNIT_Z, UNIT_X, glm::vec2(1.0f)));
 			planeMesh->GenerateMesh();
 
@@ -5268,8 +5336,8 @@ int main() {
 			scene->Lights[7].Range = 10.0f;
 
 			// We'll create a mesh that is a simple plane that we can resize later
-			MeshResource::Sptr planeMesh = ResourceManager::CreateAsset<MeshResource>();
-			MeshResource::Sptr cubeMesh = ResourceManager::CreateAsset<MeshResource>("cube.obj");
+			planeMesh = ResourceManager::CreateAsset<MeshResource>();
+			cubeMesh = ResourceManager::CreateAsset<MeshResource>("cube.obj");
 			planeMesh->AddParam(MeshBuilderParam::CreatePlane(ZERO, UNIT_Z, UNIT_X, glm::vec2(1.0f)));
 			planeMesh->GenerateMesh();
 
@@ -5896,7 +5964,7 @@ int main() {
 
 
 			//Stops the player from rotating
-			scene->FindObjectByName("player")->SetRotation(glm::vec3(90.f, scene->FindObjectByName("player")->GetRotation().y, 0.f));
+			scene->FindObjectByName("player")->SetRotation(glm::vec3(90.f, scene->FindObjectByName("player")->GetRotation().y, 90.f));
 
 			keyboard();
 			if (soundprompt == false && glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS && (paused != true && playerLose != true && playerWin != true))
@@ -5944,7 +6012,7 @@ int main() {
 			//test.Update();
 
 			playerCollision.update(scene->FindObjectByName("player")->GetPosition()); // to update
-			scene->FindObjectByName("player")->Get<JumpBehaviour>()->getPlayerCoords(scene->FindObjectByName("player")->GetPosition()); //send the players coordinates to JumpBehavior so we know when the player is on the ground
+			//scene->FindObjectByName("player")->Get<JumpBehaviour>()->getPlayerCoords(scene->FindObjectByName("player")->GetPosition()); //send the players coordinates to JumpBehavior so we know when the player is on the ground
 
 			if (scenevalue == 1)
 			{
