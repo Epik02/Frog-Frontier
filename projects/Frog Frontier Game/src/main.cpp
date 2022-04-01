@@ -149,6 +149,14 @@ MeshResource::Sptr RockWallMesh1;
 MeshResource::Sptr RockWallMesh2;
 
 MeshResource::Sptr BGMineMesh;
+MeshResource::Sptr CaveEntranceMesh;
+MeshResource::Sptr Crystal1Mesh;
+MeshResource::Sptr Crystal2Mesh;
+MeshResource::Sptr StalagmiteMesh;
+MeshResource::Sptr StalagtiteMesh;
+MeshResource::Sptr GoldbarMesh;
+MeshResource::Sptr GoldPile1Mesh;
+MeshResource::Sptr GoldPile2Mesh;
 
 MeshResource::Sptr tmMesh;
 MeshResource::Sptr bmMesh;
@@ -1296,13 +1304,24 @@ int main() {
 		Texture2D::Sptr    BlankTex = ResourceManager::CreateAsset<Texture2D>("textures/blank.png");
 		Texture2D::Sptr    bmTex = ResourceManager::CreateAsset<Texture2D>("textures/bmuv.png");
 		Texture2D::Sptr    BranchTex = ResourceManager::CreateAsset<Texture2D>("textures/BranchUV.png");
+		Texture2D::Sptr    CaveEntranceTex = ResourceManager::CreateAsset<Texture2D>("texures/CaveEntranceUV.png");
 		Texture2D::Sptr    CampfireTex = ResourceManager::CreateAsset<Texture2D>("textures/CampfireUVFrame.png");
 		Texture2D::Sptr    cobwebTexture = ResourceManager::CreateAsset<Texture2D>("textures/CobwebUV.png");
 		Texture2D::Sptr    cobweb2Texture = ResourceManager::CreateAsset<Texture2D>("textures/CobwebUVFrame.png");
+		Texture2D::Sptr    Crystal1BlueTex = ResourceManager::CreateAsset<Texture2D>("textures/Crystal1UVBlue.png");
+		Texture2D::Sptr    Crystal1GreenTex = ResourceManager::CreateAsset<Texture2D>("textures/Crystal1UVGreen.png");
+		Texture2D::Sptr    Crystal1PurpleTex = ResourceManager::CreateAsset<Texture2D>("textures/Crystal1UVPurple.png");
+		Texture2D::Sptr    Crystal1RedTex = ResourceManager::CreateAsset<Texture2D>("textures/Crystal1UVRed.png");
+		Texture2D::Sptr    Crystal2BlueTex = ResourceManager::CreateAsset<Texture2D>("textures/Crystal2UVBlue.png");
+		Texture2D::Sptr    Crystal2GreenTex = ResourceManager::CreateAsset<Texture2D>("textures/Crystal2UVGreen.png");
+		Texture2D::Sptr    Crystal2YellowTex = ResourceManager::CreateAsset<Texture2D>("textures/Crystal2UVYellow.png");
 		Texture2D::Sptr    ExitRockTex = ResourceManager::CreateAsset<Texture2D>("textures/ExitRockUV.png");
 		Texture2D::Sptr    ExitTreeTex = ResourceManager::CreateAsset<Texture2D>("textures/ExitTreeUV.png");
 		Texture2D::Sptr    ForegroundTex = ResourceManager::CreateAsset<Texture2D>("textures/fg1.png");
 		Texture2D::Sptr    frogTex = ResourceManager::CreateAsset<Texture2D>("textures/froguv.png");
+		Texture2D::Sptr    GoldBarTex = ResourceManager::CreateAsset<Texture2D>("textures/GoldBarUV.png");
+		Texture2D::Sptr    GoldPile1Tex = ResourceManager::CreateAsset<Texture2D>("textures/GoldPile1UV.png");
+		Texture2D::Sptr    GoldPile2Tex = ResourceManager::CreateAsset<Texture2D>("textures/GoldPile2UV.png");
 		Texture2D::Sptr    BGGrassTex = ResourceManager::CreateAsset<Texture2D>("textures/grassuv.png");
 		Texture2D::Sptr    Grass1Tex = ResourceManager::CreateAsset<Texture2D>("textures/Grass1.png");
 		Texture2D::Sptr    Grass2Tex = ResourceManager::CreateAsset<Texture2D>("textures/Grass2.png");
@@ -1330,6 +1349,8 @@ int main() {
 		Texture2D::Sptr    RockWallTex = ResourceManager::CreateAsset<Texture2D>("textures/RockWallUV.png");
 		Texture2D::Sptr    RootTexture = ResourceManager::CreateAsset<Texture2D>("textures/RootUV.png");
 		Texture2D::Sptr    SignPostTex = ResourceManager::CreateAsset<Texture2D>("textures/SignPostUV.png");
+		Texture2D::Sptr    StalagmiteTex = ResourceManager::CreateAsset<Texture2D>("textures/StalagmiteUV.png");
+		Texture2D::Sptr    StalagtiteTex = ResourceManager::CreateAsset<Texture2D>("textures/Stalagtite.png");
 		Texture2D::Sptr    SunflowerTex = ResourceManager::CreateAsset<Texture2D>("textures/SunflowerUV.png");
 		Texture2D::Sptr    twigTex = ResourceManager::CreateAsset<Texture2D>("textures/TwigUV.png");
 		Texture2D::Sptr    ToadTex = ResourceManager::CreateAsset<Texture2D>("textures/Toad.png");
@@ -4258,10 +4279,10 @@ int main() {
 		createCollision("273", -1052.823f, 5.0f, 1.f, 1.f);
 
 
-		createCollision("281", -1046.f, 0.44f, 1.f, 1.f);
-		createCollision("282", -1055.f, 0.44f, 1.f, 1.f);
-		createCollision("283", -1048.f, 0.44f, 1.f, 1.f);
-		createCollision("284", -1052.f, 0.44f, 1.f, 1.f);
+		createCollision("281", -1096.f, 0.44f, 1.f, 1.f);
+		createCollision("282", -1095.f, 0.44f, 1.f, 1.f);
+		createCollision("283", -1098.f, 0.44f, 1.f, 1.f);
+		createCollision("284", -1092.f, 0.44f, 1.f, 1.f);
 
 		createCollision("291", -1116.0f, 5.0f, 1.f, 1.f);
 		createCollision("292", -1118.963f, 6.570f, 1.f, 1.f);
@@ -4275,13 +4296,13 @@ int main() {
 
 		
 
-		createCollision("261", -1096.0f, 5.0f, 1.f, 1.f);
-		createCollision("262", -1098.963f, 6.570f, 1.f, 1.f);
-		createCollision("263", -1102.823f, 5.0f, 1.f, 1.f);
+		//createCollision("261", -1096.0f, 5.0f, 1.f, 1.f);
+		//createCollision("262", -1098.963f, 6.570f, 1.f, 1.f);
+		//createCollision("263", -1102.823f, 5.0f, 1.f, 1.f);
 
-		createCollision("271", -1150.f, 2.470f, 1.f, 2.f); //2y
+		//createCollision("271", -1150.f, 2.470f, 1.f, 2.f); //2y
 
-		createCollision("281", -1198.98f, 1.560f, 1.f, 4.f); //4y
+		//createCollision("281", -1198.98f, 1.560f, 1.f, 4.f); //4y
 
 
 
@@ -4759,7 +4780,7 @@ int main() {
 
 
 
-
+		
 		/// Working Level ///									//////		Level 5	////////// scenevalue == 5
 
 		{
@@ -5230,6 +5251,109 @@ int main() {
 			MineBackgroundMaterial->Shininess = 2.0f;
 		}
 
+		Material::Sptr CaveEntranceMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			CaveEntranceMaterial->Name = "CaveEntrance";
+			CaveEntranceMaterial->MatShader = scene->BaseShader;
+			CaveEntranceMaterial->Texture = CaveEntranceTex;
+			CaveEntranceMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr GoldBarMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			GoldBarMaterial->Name = "GoldBar";
+			GoldBarMaterial->MatShader = scene->BaseShader;
+			GoldBarMaterial->Texture = GoldBarTex;
+			GoldBarMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr GoldPile1Material = ResourceManager::CreateAsset<Material>();
+		{
+			GoldPile1Material->Name = "GoldPile1";
+			GoldPile1Material->MatShader = scene->BaseShader;
+			GoldPile1Material->Texture = GoldPile1Tex;
+			GoldPile1Material->Shininess = 2.0f;
+		}
+
+		Material::Sptr GoldPile2Material = ResourceManager::CreateAsset<Material>();
+		{
+			GoldPile2Material->Name = "GoldPile2";
+			GoldPile2Material->MatShader = scene->BaseShader;
+			GoldPile2Material->Texture = GoldPile2Tex;
+			GoldPile2Material->Shininess = 2.0f;
+		}
+
+		Material::Sptr Crystal1BlueMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			Crystal1BlueMaterial->Name = "Crystal1Blue";
+			Crystal1BlueMaterial->MatShader = scene->BaseShader;
+			Crystal1BlueMaterial->Texture = Crystal1BlueTex;
+			Crystal1BlueMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr Crystal1GreenMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			Crystal1GreenMaterial->Name = "Crystal1Green";
+			Crystal1GreenMaterial->MatShader = scene->BaseShader;
+			Crystal1GreenMaterial->Texture = Crystal1GreenTex;
+			Crystal1GreenMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr Crystal1PurpleMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			Crystal1PurpleMaterial->Name = "Crystal1Purple";
+			Crystal1PurpleMaterial->MatShader = scene->BaseShader;
+			Crystal1PurpleMaterial->Texture = Crystal1PurpleTex;
+			Crystal1PurpleMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr Crystal1RedMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			Crystal1RedMaterial->Name = "Crystal1Red";
+			Crystal1RedMaterial->MatShader = scene->BaseShader;
+			Crystal1RedMaterial->Texture = Crystal1RedTex;
+			Crystal1RedMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr Crystal2BlueMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			Crystal2BlueMaterial->Name = "Crystal2Blue";
+			Crystal2BlueMaterial->MatShader = scene->BaseShader;
+			Crystal2BlueMaterial->Texture = Crystal2BlueTex;
+			Crystal2BlueMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr Crystal2GreenMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			Crystal2GreenMaterial->Name = "Crystal2Green";
+			Crystal2GreenMaterial->MatShader = scene->BaseShader;
+			Crystal2GreenMaterial->Texture = Crystal2GreenTex;
+			Crystal2GreenMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr Crystal2YellowMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			Crystal2YellowMaterial->Name = "Crystal2Yellow";
+			Crystal2YellowMaterial->MatShader = scene->BaseShader;
+			Crystal2YellowMaterial->Texture = Crystal2YellowTex;
+			Crystal2YellowMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr StalagmiteMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			StalagmiteMaterial->Name = "Stalagmite";
+			StalagmiteMaterial->MatShader = scene->BaseShader;
+			StalagmiteMaterial->Texture = StalagmiteTex;
+			StalagmiteMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr StalagtiteMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			StalagtiteMaterial->Name = "Stalagtite";
+			StalagtiteMaterial->MatShader = scene->BaseShader;
+			StalagtiteMaterial->Texture = StalagtiteTex;
+			StalagtiteMaterial->Shininess = 2.0f;
+		}
 
 		// Create some lights for our scene
 		scene->Lights.resize(31);
@@ -5385,6 +5509,16 @@ int main() {
 		ExitTreeMesh = ResourceManager::CreateAsset<MeshResource>("ExitTree.obj");
 		ExitRockMesh = ResourceManager::CreateAsset<MeshResource>("ExitRock.obj");
 
+		CaveEntranceMesh = ResourceManager::CreateAsset<MeshResource>("CaveEntrance.obj");
+		Crystal1Mesh = ResourceManager::CreateAsset<MeshResource>("Crystals1.obj");
+		Crystal2Mesh = ResourceManager::CreateAsset<MeshResource>("Crystals2.obj");
+		StalagmiteMesh = ResourceManager::CreateAsset<MeshResource>("Stalagmite.obj");
+		StalagtiteMesh = ResourceManager::CreateAsset<MeshResource>("Stalagite.obj");
+		GoldbarMesh = ResourceManager::CreateAsset<MeshResource>("Goldbar.obj");
+		GoldPile1Mesh = ResourceManager::CreateAsset<MeshResource>("GoldPile1.obj");
+		GoldPile2Mesh = ResourceManager::CreateAsset<MeshResource>("GoldPile2.obj");
+
+
 		planeMesh->AddParam(MeshBuilderParam::CreatePlane(ZERO, UNIT_Z, UNIT_X, glm::vec2(1.0f)));
 		planeMesh->GenerateMesh();
 
@@ -5400,18 +5534,18 @@ int main() {
 		//createGroundObstacle("24", glm::vec3(-380.f, 5.530f, 0.250f), glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(90.f, 0.0f, -25.f), vinesMesh, vinesMaterial); // vine 8 (squish blocking)
 		//createGroundObstacle("26", glm::vec3(-395.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 9 (tall jump)
 
-		/*
-		createGroundObstacle("1", glm::vec3(-450.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //red mushroom 1 (small jump)
-		createGroundObstacle("2", glm::vec3(-500.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //red mushroom 2 (small jump)
-		createGroundObstacle("3", glm::vec3(-550.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), tmMesh, tmMaterial); // tall mushroom 1 (small jump)
-		createGroundObstacle("4", glm::vec3(-600.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), bmMesh, bmMaterial); //branch mushroom 1 (small jump)
+		
+		createGroundObstacle("1", glm::vec3(-1650.f, 0.0f, 0.215f), glm::vec3(6.f, 4.f, 8.f), glm::vec3(90.f, 0.0f, 80.0f), Crystal1Mesh, Crystal1BlueMaterial); //red mushroom 1 (small jump)
+		createGroundObstacle("2", glm::vec3(-1700.f, 0.0f, -0.f), glm::vec3(6.f, 3.f, 8.f), glm::vec3(90.f, 0.0f, -162.0f), Crystal2Mesh, Crystal2BlueMaterial); //red mushroom 2 (small jump)
+		//createGroundObstacle("3", glm::vec3(-1750.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), StalagmiteMesh, StalagmiteMaterial); // tall mushroom 1 (small jump)
+		//createGroundObstacle("4", glm::vec3(-1800.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), StalagtiteMesh, StalagtiteMaterial); //branch mushroom 1 (small jump)
 
-		createGroundObstacle("5", glm::vec3(-650.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //red mushroom 3 (small jump)
-		createGroundObstacle("6", glm::vec3(-680.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //red mushroom 4 (small jump)
+		createGroundObstacle("5", glm::vec3(-1850.f, 0.0f, 0.3f), glm::vec3(2.f, 2.f, 2.f), glm::vec3(90.f, 0.0f, 0.0f), GoldbarMesh, GoldBarMaterial); //red mushroom 3 (small jump)
+		createGroundObstacle("6", glm::vec3(-1900.f, 0.0f, -0.0), glm::vec3(4.f, 4.f, 2.f), glm::vec3(90.f, 0.0f, -71.0f), GoldPile1Mesh, GoldPile1Material); //red mushroom 4 (small jump)
 
-		createGroundObstacle("7", glm::vec3(-710.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //red mushroom 5 (small jump)
-		createGroundObstacle("8", glm::vec3(-750.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), bmMesh, bmMaterial); //branch mushroom 2 (small jump)
-		*/
+		//createGroundObstacle("7", glm::vec3(-2000.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), GoldPile2Mesh, GoldPile2Material); //red mushroom 5 (small jump)
+		//createGroundObstacle("8", glm::vec3(-2050.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), bmMesh, bmMaterial); //branch mushroom 2 (small jump)
+		
 
 		//Collisions
 
@@ -5437,14 +5571,14 @@ int main() {
 
 
 		//3D Backgrounds
-		createGroundObstacle("27", glm::vec3(-292.3f - 1200.f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMineMesh, MineBackgroundMaterial);
-		createGroundObstacle("28", glm::vec3(-400.f - 1200.f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMineMesh, MineBackgroundMaterial);
-		createGroundObstacle("29", glm::vec3(-507.7f - 1200.f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMineMesh, MineBackgroundMaterial);
+		createGroundObstacle("27", glm::vec3(-292.3f - 1200.f, -53.250f, -4.5f), glm::vec3(6.f, 12.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMineMesh, MineBackgroundMaterial);
+		createGroundObstacle("28", glm::vec3(-400.f - 1200.f, -53.250f, -4.5f), glm::vec3(6.f, 12.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMineMesh, MineBackgroundMaterial);
+		createGroundObstacle("29", glm::vec3(-507.7f - 1200.f, -53.250f, -4.5f), glm::vec3(6.f, 12.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMineMesh, MineBackgroundMaterial);
 
-		createGroundObstacle("30", glm::vec3(-615.4f - 1200.f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMineMesh, MineBackgroundMaterial);
-		createGroundObstacle("31", glm::vec3(-723.1f - 1200.f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMineMesh, MineBackgroundMaterial);
-		createGroundObstacle("32", glm::vec3(-830.8f - 1200.f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMineMesh, MineBackgroundMaterial);
-		createGroundObstacle("26", glm::vec3(-938.2f - 1200.f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMineMesh, MineBackgroundMaterial);
+		createGroundObstacle("30", glm::vec3(-615.4f - 1200.f, -53.250f, -4.5f), glm::vec3(6.f, 12.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMineMesh, MineBackgroundMaterial);
+		createGroundObstacle("31", glm::vec3(-723.1f - 1200.f, -53.250f, -4.5f), glm::vec3(6.f, 12.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMineMesh, MineBackgroundMaterial);
+		createGroundObstacle("32", glm::vec3(-830.8f - 1200.f, -53.250f, -4.5f), glm::vec3(6.f, 12.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMineMesh, MineBackgroundMaterial);
+		createGroundObstacle("26", glm::vec3(-938.2f - 1200.f, -53.250f, -4.5f), glm::vec3(6.f, 12.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMineMesh, MineBackgroundMaterial);
 
 		//2DBackGrounds
 		createGroundObstacle("33", glm::vec3(-75.f - 1200.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineBackdropMaterial);
@@ -5454,22 +5588,22 @@ int main() {
 		createGroundObstacle("37", glm::vec3(-2150.f - 400.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineBackdropMaterial);
 
 		//Exit Rock
-		createGroundObstacle("58", glm::vec3(-409.f - 400.f - 1200.f, -1.f, 0.f), glm::vec3(1.f), glm::vec3(90.0f, 0.0f, 180.f), ExitRockMesh, ExitRockMaterial);
+		createGroundObstacle("58", glm::vec3(-409.f - 400.f - 1200.f, -1.f, 0.f), glm::vec3(2.f, 2.f, 1.f), glm::vec3(90.0f, 0.0f, -68.f), CaveEntranceMesh, CaveEntranceMaterial);
 
 		//Foreground 
-		createGroundObstacle("59", glm::vec3(40.f - 400.f - 1200.f, -5.f, 10.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
-		createGroundObstacle("60", glm::vec3(0.f - 400.f - 1200.f, -5.f, 10.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
-		createGroundObstacle("61", glm::vec3(-40.f - 400.f - 1200.f, -5.f, 10.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
-		createGroundObstacle("62", glm::vec3(-80.f - 400.f - 1200.f, -5.f, 10.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
-		createGroundObstacle("63", glm::vec3(-120.f - 400.f - 1200.f, -5.f, 10.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
-		createGroundObstacle("64", glm::vec3(-160.f - 400.f - 1200.f, -5.f, 10.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+		createGroundObstacle("59", glm::vec3(40.f - 400.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+		createGroundObstacle("60", glm::vec3(0.f - 400.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+		createGroundObstacle("61", glm::vec3(-40.f - 400.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+		createGroundObstacle("62", glm::vec3(-80.f - 400.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+		createGroundObstacle("63", glm::vec3(-120.f - 400.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+		createGroundObstacle("64", glm::vec3(-160.f - 400.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
 
-		createGroundObstacle("65", glm::vec3(-200.f - 400.f - 1200.f, -5.f, 10.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
-		createGroundObstacle("66", glm::vec3(-240.f - 400.f - 1200.f, -5.f, 10.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
-		createGroundObstacle("67", glm::vec3(-280.f - 400.f - 1200.f, -5.f, 10.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
-		createGroundObstacle("68", glm::vec3(-320.f - 400.f - 1200.f, -5.f, 10.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
-		createGroundObstacle("69", glm::vec3(-360.f - 400.f - 1200.f, -5.f, 10.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
-		createGroundObstacle("70", glm::vec3(-400.f - 400.f - 1200.f, -5.f, 10.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+		createGroundObstacle("65", glm::vec3(-200.f - 400.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+		createGroundObstacle("66", glm::vec3(-240.f - 400.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+		createGroundObstacle("67", glm::vec3(-280.f - 400.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+		createGroundObstacle("68", glm::vec3(-320.f - 400.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+		createGroundObstacle("69", glm::vec3(-360.f - 400.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+		createGroundObstacle("70", glm::vec3(-400.f - 400.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
 
 
 
