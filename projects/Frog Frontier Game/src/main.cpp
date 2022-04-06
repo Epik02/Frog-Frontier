@@ -63,6 +63,11 @@
 
 #include "fmod.hpp"
 
+bool level1 = false;
+bool level2 = false;
+bool level3 = false;
+bool level5 = false;
+
 //#define LOG_GL_NOTIFICATIONS
 
 /*
@@ -130,7 +135,6 @@ MeshResource::Sptr LogMesh;
 MeshResource::Sptr Plant1Mesh;
 MeshResource::Sptr Plant2Mesh;
 MeshResource::Sptr Plant3Mesh;
-
 MeshResource::Sptr SunflowerMesh;
 MeshResource::Sptr ToadMesh;
 MeshResource::Sptr Rock1Mesh;
@@ -138,7 +142,6 @@ MeshResource::Sptr Rock2Mesh;
 MeshResource::Sptr Rock3Mesh;
 MeshResource::Sptr twigMesh;
 MeshResource::Sptr frogMesh;
-
 MeshResource::Sptr CampfireMesh;
 MeshResource::Sptr PuddleMesh;
 MeshResource::Sptr SignPostMesh;
@@ -147,7 +150,6 @@ MeshResource::Sptr RockPileMesh;
 MeshResource::Sptr RockTunnelMesh;
 MeshResource::Sptr RockWallMesh1;
 MeshResource::Sptr RockWallMesh2;
-
 MeshResource::Sptr BGMineMesh;
 MeshResource::Sptr CaveEntranceMesh;
 MeshResource::Sptr Crystal1Mesh;
@@ -157,15 +159,110 @@ MeshResource::Sptr StalagtiteMesh;
 MeshResource::Sptr GoldbarMesh;
 MeshResource::Sptr GoldPile1Mesh;
 MeshResource::Sptr GoldPile2Mesh;
-
 MeshResource::Sptr tmMesh;
 MeshResource::Sptr bmMesh;
-
 MeshResource::Sptr PBMesh;
 MeshResource::Sptr BGMesh;
 MeshResource::Sptr ExitTreeMesh;
 MeshResource::Sptr BGRockMesh;
 MeshResource::Sptr ExitRockMesh;
+
+//Materials
+Material::Sptr boxMaterial;
+Material::Sptr PbarbugMaterial;
+Material::Sptr greenMaterial;
+Material::Sptr bgMaterial;
+Material::Sptr grassMaterial;
+Material::Sptr winMaterial;
+Material::Sptr ladybugMaterial;
+Material::Sptr monkeyMaterial;
+Material::Sptr mushroomMaterial;
+Material::Sptr vinesMaterial;
+Material::Sptr cobwebMaterial;
+Material::Sptr PanelMaterial;
+Material::Sptr ResumeMaterial;
+Material::Sptr MainMenuMaterial;
+Material::Sptr PauseMaterial;
+Material::Sptr ButtonMaterial;
+Material::Sptr FilterMaterial;
+Material::Sptr WinnerMaterial;
+Material::Sptr LoserMaterial;
+Material::Sptr ReplayMaterial;
+Material::Sptr BranchMaterial;
+Material::Sptr LogMaterial;
+Material::Sptr PlantMaterial;
+Material::Sptr SunflowerMaterial;
+Material::Sptr ToadMaterial;
+Material::Sptr BlankMaterial;
+Material::Sptr ForegroundMaterial;
+Material::Sptr rockMaterial;
+Material::Sptr twigMaterial;
+Material::Sptr frogMaterial;
+Material::Sptr tmMaterial;
+Material::Sptr bmMaterial;
+Material::Sptr PBMaterial;
+Material::Sptr BGMaterial;
+Material::Sptr BGGrassMaterial;
+Material::Sptr ProgressBarMaterial;
+Material::Sptr grass1Material;
+Material::Sptr grass2Material;
+Material::Sptr grass3Material;
+Material::Sptr grass4Material;
+Material::Sptr grass5Material;
+Material::Sptr ExitTreeMaterial;
+Material::Sptr LStextMaterial;
+Material::Sptr FrogBodyMaterial;
+Material::Sptr FrogHeadTopMaterial;
+Material::Sptr FrogHeadBotMaterial;
+Material::Sptr FrogTongueMaterial;
+Material::Sptr ExitRockMaterial;
+Material::Sptr BushTransitionMaterial;
+Material::Sptr SignPostMaterial;
+Material::Sptr PuddleMaterial;
+Material::Sptr CampfireMaterial;
+Material::Sptr HangingRockMaterial;
+Material::Sptr RockPileMaterial;
+Material::Sptr RockTunnelMaterial;
+Material::Sptr RockWallMaterial;
+Material::Sptr MineBackdropMaterial;
+Material::Sptr MineForegroundMaterial;
+Material::Sptr MineBackgroundMaterial;
+Material::Sptr CaveEntranceMaterial;
+Material::Sptr GoldBarMaterial;
+Material::Sptr GoldPile1Material;
+Material::Sptr GoldPile2Material;
+Material::Sptr Crystal1BlueMaterial;
+Material::Sptr Crystal1GreenMaterial;
+Material::Sptr Crystal1PurpleMaterial;
+Material::Sptr Crystal1RedMaterial;
+Material::Sptr Crystal2BlueMaterial;
+Material::Sptr Crystal2GreenMaterial;
+Material::Sptr Crystal2YellowMaterial;
+Material::Sptr StalagmiteMaterial;
+Material::Sptr StalagtiteMaterial;
+Material::Sptr MenuMaterial;
+Material::Sptr ButtonBackMaterial;
+Material::Sptr ButtonStartMaterial;
+Material::Sptr ButtonExitMaterial;
+Material::Sptr FFLogoMaterial;
+Material::Sptr BackTextMaterial;
+Material::Sptr StartTextMaterial;
+Material::Sptr ControlsMaterial;
+Material::Sptr MountainBackdropMaterial;
+Material::Sptr MountainForegroundMaterial;
+Material::Sptr LSButtonMaterial;
+Material::Sptr LSLogoMaterial;
+Material::Sptr BackMaterial;
+Material::Sptr Material1;
+Material::Sptr Material2;
+Material::Sptr Material3;
+Material::Sptr Material4;
+Material::Sptr Material5;
+Material::Sptr Material6;
+Material::Sptr Material7;
+Material::Sptr Material8;
+Material::Sptr Material9;
+Material::Sptr Material10;
 
 int SceneLoad(Scene::Sptr& scene, std::string& path)
 {
@@ -1432,7 +1529,7 @@ int main() {
 		scene->BaseShader = uboShader;
 		
 		// Create our materials
-		Material::Sptr boxMaterial = ResourceManager::CreateAsset<Material>();
+		boxMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			boxMaterial->Name = "Box";
 			boxMaterial->MatShader = scene->BaseShader;
@@ -1440,7 +1537,7 @@ int main() {
 			boxMaterial->Shininess = 2.0f;
 		}
 
-		Material::Sptr PbarbugMaterial = ResourceManager::CreateAsset<Material>();
+		PbarbugMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			PbarbugMaterial->Name = "minibug";
 			PbarbugMaterial->MatShader = scene->BaseShader;
@@ -1448,7 +1545,7 @@ int main() {
 			PbarbugMaterial->Shininess = 2.0f;
 		}
 
-		Material::Sptr greenMaterial = ResourceManager::CreateAsset<Material>();
+		greenMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			greenMaterial->Name = "green";
 			greenMaterial->MatShader = scene->BaseShader;
@@ -1456,7 +1553,7 @@ int main() {
 			greenMaterial->Shininess = 2.0f;
 		}
 
-		Material::Sptr bgMaterial = ResourceManager::CreateAsset<Material>();
+		bgMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			bgMaterial->Name = "bg";
 			bgMaterial->MatShader = scene->BaseShader;
@@ -1464,7 +1561,7 @@ int main() {
 			bgMaterial->Shininess = 2.0f;
 		}
 
-		Material::Sptr grassMaterial = ResourceManager::CreateAsset<Material>();
+		grassMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			grassMaterial->Name = "Grass";
 			grassMaterial->MatShader = scene->BaseShader;
@@ -1472,7 +1569,7 @@ int main() {
 			grassMaterial->Shininess = 2.0f;
 		}
 
-		Material::Sptr winMaterial = ResourceManager::CreateAsset<Material>();
+		winMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			winMaterial->Name = "win";
 			winMaterial->MatShader = scene->BaseShader;
@@ -1480,7 +1577,7 @@ int main() {
 			winMaterial->Shininess = 2.0f;
 		}
 
-		Material::Sptr ladybugMaterial = ResourceManager::CreateAsset<Material>();
+		ladybugMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			ladybugMaterial->Name = "lbo";
 			ladybugMaterial->MatShader = scene->BaseShader;
@@ -1488,7 +1585,7 @@ int main() {
 			ladybugMaterial->Shininess = 2.0f;
 		}
 
-		Material::Sptr monkeyMaterial = ResourceManager::CreateAsset<Material>();
+		monkeyMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			monkeyMaterial->Name = "Monkey";
 			monkeyMaterial->MatShader = scene->BaseShader;
@@ -1497,7 +1594,7 @@ int main() {
 
 		}
 
-		Material::Sptr mushroomMaterial = ResourceManager::CreateAsset<Material>();
+		mushroomMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			mushroomMaterial->Name = "Mushroom";
 			mushroomMaterial->MatShader = scene->BaseShader;
@@ -1506,7 +1603,7 @@ int main() {
 
 		}
 
-		Material::Sptr vinesMaterial = ResourceManager::CreateAsset<Material>();
+		vinesMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			vinesMaterial->Name = "vines";
 			vinesMaterial->MatShader = scene->BaseShader;
@@ -1515,7 +1612,7 @@ int main() {
 
 		}
 
-		Material::Sptr cobwebMaterial = ResourceManager::CreateAsset<Material>();
+		cobwebMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			cobwebMaterial->Name = "cobweb";
 			cobwebMaterial->MatShader = scene->BaseShader;
@@ -1524,7 +1621,7 @@ int main() {
 
 		}
 
-		Material::Sptr PanelMaterial = ResourceManager::CreateAsset<Material>();
+		PanelMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			PanelMaterial->Name = "Panel";
 			PanelMaterial->MatShader = scene->BaseShader;
@@ -1532,7 +1629,7 @@ int main() {
 			PanelMaterial->Shininess = 2.0f;
 		}
 
-		Material::Sptr ResumeMaterial = ResourceManager::CreateAsset<Material>();
+		ResumeMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			ResumeMaterial->Name = "Resume";
 			ResumeMaterial->MatShader = scene->BaseShader;
@@ -1540,7 +1637,7 @@ int main() {
 			ResumeMaterial->Shininess = 2.0f;
 		}
 
-		Material::Sptr MainMenuMaterial = ResourceManager::CreateAsset<Material>();
+		MainMenuMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			MainMenuMaterial->Name = "Main Menu";
 			MainMenuMaterial->MatShader = scene->BaseShader;
@@ -1548,7 +1645,7 @@ int main() {
 			MainMenuMaterial->Shininess = 2.0f;
 		}
 
-		Material::Sptr PauseMaterial = ResourceManager::CreateAsset<Material>();
+		PauseMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			PauseMaterial->Name = "Pause";
 			PauseMaterial->MatShader = scene->BaseShader;
@@ -1556,7 +1653,7 @@ int main() {
 			PauseMaterial->Shininess = 2.0f;
 		}
 
-		Material::Sptr ButtonMaterial = ResourceManager::CreateAsset<Material>();
+		ButtonMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			ButtonMaterial->Name = "Button";
 			ButtonMaterial->MatShader = scene->BaseShader;
@@ -1564,7 +1661,7 @@ int main() {
 			ButtonMaterial->Shininess = 2.0f;
 		}
 
-		Material::Sptr FilterMaterial = ResourceManager::CreateAsset<Material>();
+		FilterMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			FilterMaterial->Name = "Button Filter";
 			FilterMaterial->MatShader = scene->BaseShader;
@@ -1572,7 +1669,7 @@ int main() {
 			FilterMaterial->Shininess = 2.0f;
 		}
 
-		Material::Sptr WinnerMaterial = ResourceManager::CreateAsset<Material>();
+		WinnerMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			WinnerMaterial->Name = "WinnerLogo";
 			WinnerMaterial->MatShader = scene->BaseShader;
@@ -1580,7 +1677,7 @@ int main() {
 			WinnerMaterial->Shininess = 2.0f;
 		}
 
-		Material::Sptr LoserMaterial = ResourceManager::CreateAsset<Material>();
+		LoserMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			LoserMaterial->Name = "LoserLogo";
 			LoserMaterial->MatShader = scene->BaseShader;
@@ -1588,7 +1685,7 @@ int main() {
 			LoserMaterial->Shininess = 2.0f;
 		}
 
-		Material::Sptr ReplayMaterial = ResourceManager::CreateAsset<Material>();
+		ReplayMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			ReplayMaterial->Name = "Replay Text";
 			ReplayMaterial->MatShader = scene->BaseShader;
@@ -1596,7 +1693,7 @@ int main() {
 			ReplayMaterial->Shininess = 2.0f;
 		}
 
-		Material::Sptr BranchMaterial = ResourceManager::CreateAsset<Material>();
+		BranchMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			BranchMaterial->Name = "Branch";
 			BranchMaterial->MatShader = scene->BaseShader;
@@ -1604,7 +1701,7 @@ int main() {
 			BranchMaterial->Shininess = 2.0f;
 		}
 
-		Material::Sptr LogMaterial = ResourceManager::CreateAsset<Material>();
+		LogMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			LogMaterial->Name = "Log";
 			LogMaterial->MatShader = scene->BaseShader;
@@ -1612,7 +1709,7 @@ int main() {
 			LogMaterial->Shininess = 2.0f;
 		}
 
-		Material::Sptr PlantMaterial = ResourceManager::CreateAsset<Material>();
+		PlantMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			PlantMaterial->Name = "Plant";
 			PlantMaterial->MatShader = scene->BaseShader;
@@ -1620,7 +1717,7 @@ int main() {
 			PlantMaterial->Shininess = 2.0f;
 		}
 
-		Material::Sptr SunflowerMaterial = ResourceManager::CreateAsset<Material>();
+		SunflowerMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			SunflowerMaterial->Name = "Sunflower";
 			SunflowerMaterial->MatShader = scene->BaseShader;
@@ -1628,28 +1725,28 @@ int main() {
 			SunflowerMaterial->Shininess = 2.0f;
 		}
 
-		Material::Sptr ToadMaterial = ResourceManager::CreateAsset<Material>();
+		ToadMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			ToadMaterial->Name = "Toad";
 			ToadMaterial->MatShader = scene->BaseShader;
 			ToadMaterial->Texture = ToadTex;
 			ToadMaterial->Shininess = 2.0f;
 		}
-		Material::Sptr BlankMaterial = ResourceManager::CreateAsset<Material>();
+		BlankMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			BlankMaterial->Name = "Blank";
 			BlankMaterial->MatShader = scene->BaseShader;
 			BlankMaterial->Texture = BlankTex;
 			BlankMaterial->Shininess = 2.0f;
 		}
-		Material::Sptr ForegroundMaterial = ResourceManager::CreateAsset<Material>();
+		ForegroundMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			ForegroundMaterial->Name = "Foreground";
 			ForegroundMaterial->MatShader = scene->BaseShader;
 			ForegroundMaterial->Texture = ForegroundTex;
 			ForegroundMaterial->Shininess = 2.0f;
 		}
-		Material::Sptr rockMaterial = ResourceManager::CreateAsset<Material>();
+		rockMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			rockMaterial->Name = "Rock";
 			rockMaterial->MatShader = scene->BaseShader;
@@ -1657,28 +1754,28 @@ int main() {
 			rockMaterial->Shininess = 2.0f;
 		}
 
-		Material::Sptr twigMaterial = ResourceManager::CreateAsset<Material>();
+		twigMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			twigMaterial->Name = "twig";
 			twigMaterial->MatShader = scene->BaseShader;
 			twigMaterial->Texture = twigTex;
 			twigMaterial->Shininess = 2.0f;
 		}
-		Material::Sptr frogMaterial = ResourceManager::CreateAsset<Material>();
+		frogMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			frogMaterial->Name = "frog";
 			frogMaterial->MatShader = scene->BaseShader;
 			frogMaterial->Texture = frogTex;
 			frogMaterial->Shininess = 2.0f;
 		}
-		Material::Sptr tmMaterial = ResourceManager::CreateAsset<Material>();
+		tmMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			tmMaterial->Name = "tallmushroom";
 			tmMaterial->MatShader = scene->BaseShader;
 			tmMaterial->Texture = tmTex;
 			tmMaterial->Shininess = 2.0f;
 		}
-		Material::Sptr bmMaterial = ResourceManager::CreateAsset<Material>();
+		bmMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			bmMaterial->Name = "branchmushroom";
 			bmMaterial->MatShader = scene->BaseShader;
@@ -1686,77 +1783,77 @@ int main() {
 			bmMaterial->Shininess = 2.0f;
 		}
 
-		Material::Sptr PBMaterial = ResourceManager::CreateAsset<Material>();
+		PBMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			PBMaterial->Name = "PauseButton";
 			PBMaterial->MatShader = scene->BaseShader;
 			PBMaterial->Texture = PBTex;
 			PBMaterial->Shininess = 2.0f;
 		}
-		Material::Sptr BGMaterial = ResourceManager::CreateAsset<Material>();
+		BGMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			BGMaterial->Name = "BG";
 			BGMaterial->MatShader = scene->BaseShader;
 			BGMaterial->Texture = BGTex;
 			BGMaterial->Shininess = 2.0f;
 		}
-		Material::Sptr BGGrassMaterial = ResourceManager::CreateAsset<Material>();
+		BGGrassMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			BGGrassMaterial->Name = "BGGrass";
 			BGGrassMaterial->MatShader = scene->BaseShader;
 			BGGrassMaterial->Texture = BGGrassTex;
 			BGGrassMaterial->Shininess = 2.0f;
 		}
-		Material::Sptr ProgressBarMaterial = ResourceManager::CreateAsset<Material>();
+		ProgressBarMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			ProgressBarMaterial->Name = "ProgressBar";
 			ProgressBarMaterial->MatShader = scene->BaseShader;
 			ProgressBarMaterial->Texture = ProgressTex;
 			ProgressBarMaterial->Shininess = 2.0f;
 		}
-		Material::Sptr grass1Material = ResourceManager::CreateAsset<Material>();
+		grass1Material = ResourceManager::CreateAsset<Material>();
 		{
 			grass1Material->Name = "grass1";
 			grass1Material->MatShader = scene->BaseShader;
 			grass1Material->Texture = Grass1Tex;
 			grass1Material->Shininess = 2.0f;
 		}
-		Material::Sptr grass2Material = ResourceManager::CreateAsset<Material>();
+		grass2Material = ResourceManager::CreateAsset<Material>();
 		{
 			grass2Material->Name = "grass2";
 			grass2Material->MatShader = scene->BaseShader;
 			grass2Material->Texture = Grass2Tex;
 			grass2Material->Shininess = 2.0f;
 		}
-		Material::Sptr grass3Material = ResourceManager::CreateAsset<Material>();
+		grass3Material = ResourceManager::CreateAsset<Material>();
 		{
 			grass3Material->Name = "grass3";
 			grass3Material->MatShader = scene->BaseShader;
 			grass3Material->Texture = Grass3Tex;
 			grass3Material->Shininess = 2.0f;
 		}
-		Material::Sptr grass4Material = ResourceManager::CreateAsset<Material>();
+		grass4Material = ResourceManager::CreateAsset<Material>();
 		{
 			grass4Material->Name = "grass4";
 			grass4Material->MatShader = scene->BaseShader;
 			grass4Material->Texture = Grass4Tex;
 			grass4Material->Shininess = 2.0f;
 		}
-		Material::Sptr grass5Material = ResourceManager::CreateAsset<Material>();
+		grass5Material = ResourceManager::CreateAsset<Material>();
 		{
 			grass5Material->Name = "grass5";
 			grass5Material->MatShader = scene->BaseShader;
 			grass5Material->Texture = Grass5Tex;
 			grass5Material->Shininess = 2.0f;
 		}
-		Material::Sptr ExitTreeMaterial = ResourceManager::CreateAsset<Material>();
+		ExitTreeMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			ExitTreeMaterial->Name = "ExitTree";
 			ExitTreeMaterial->MatShader = scene->BaseShader;
 			ExitTreeMaterial->Texture = ExitTreeTex;
 			ExitTreeMaterial->Shininess = 2.0f;
 		}
-		Material::Sptr LStextMaterial = ResourceManager::CreateAsset<Material>();
+		LStextMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			LStextMaterial->Name = "LStext";
 			LStextMaterial->MatShader = scene->BaseShader;
@@ -1764,7 +1861,7 @@ int main() {
 			LStextMaterial->Shininess = 2.0f;
 		}
 
-		Material::Sptr FrogBodyMaterial = ResourceManager::CreateAsset<Material>();
+		FrogBodyMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			FrogBodyMaterial->Name = "FrogBody";
 			FrogBodyMaterial->MatShader = scene->BaseShader;
@@ -1772,7 +1869,7 @@ int main() {
 			FrogBodyMaterial->Shininess = 2.0f;
 		}
 
-		Material::Sptr FrogHeadTopMaterial = ResourceManager::CreateAsset<Material>();
+		FrogHeadTopMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			FrogHeadTopMaterial->Name = "FrogHeadTop";
 			FrogHeadTopMaterial->MatShader = scene->BaseShader;
@@ -1780,7 +1877,7 @@ int main() {
 			FrogHeadTopMaterial->Shininess = 2.0f;
 		}
 
-		Material::Sptr FrogHeadBotMaterial = ResourceManager::CreateAsset<Material>();
+		FrogHeadBotMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			FrogHeadBotMaterial->Name = "FrogHeadBot";
 			FrogHeadBotMaterial->MatShader = scene->BaseShader;
@@ -1788,7 +1885,7 @@ int main() {
 			FrogHeadBotMaterial->Shininess = 2.0f;
 		}
 
-		Material::Sptr FrogTongueMaterial = ResourceManager::CreateAsset<Material>();
+		FrogTongueMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			FrogTongueMaterial->Name = "FrogTongue";
 			FrogTongueMaterial->MatShader = scene->BaseShader;
@@ -1796,12 +1893,399 @@ int main() {
 			FrogTongueMaterial->Shininess = 2.0f;
 		}
 
-		Material::Sptr BushTransitionMaterial = ResourceManager::CreateAsset<Material>();
+		BushTransitionMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			BushTransitionMaterial->Name = "BushTransition";
 			BushTransitionMaterial->MatShader = scene->BaseShader;
 			BushTransitionMaterial->Texture = BushTransitionTex;
 			BushTransitionMaterial->Shininess = 2.0f;
+		}
+		ExitRockMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			ExitRockMaterial->Name = "ExitRock";
+			ExitRockMaterial->MatShader = scene->BaseShader;
+			ExitRockMaterial->Texture = ExitRockTex;
+			ExitRockMaterial->Shininess = 2.0f;
+		}
+		SignPostMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			SignPostMaterial->Name = "SignPost";
+			SignPostMaterial->MatShader = scene->BaseShader;
+			SignPostMaterial->Texture = SignPostTex;
+			SignPostMaterial->Shininess = 2.0f;
+		}
+
+		PuddleMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			PuddleMaterial->Name = "Puddle";
+			PuddleMaterial->MatShader = scene->BaseShader;
+			PuddleMaterial->Texture = PuddleTex;
+			PuddleMaterial->Shininess = 2.0f;
+		}
+
+		CampfireMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			CampfireMaterial->Name = "Campfire";
+			CampfireMaterial->MatShader = scene->BaseShader;
+			CampfireMaterial->Texture = CampfireTex;
+			CampfireMaterial->Shininess = 2.0f;
+		}
+
+		HangingRockMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			HangingRockMaterial->Name = "HangingRock";
+			HangingRockMaterial->MatShader = scene->BaseShader;
+			HangingRockMaterial->Texture = HangingRockTex;
+			HangingRockMaterial->Shininess = 2.0f;
+		}
+
+		RockPileMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			RockPileMaterial->Name = "RockPile";
+			RockPileMaterial->MatShader = scene->BaseShader;
+			RockPileMaterial->Texture = RockPileTex;
+			RockPileMaterial->Shininess = 2.0f;
+		}
+
+		RockTunnelMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			RockTunnelMaterial->Name = "RockTunnel";
+			RockTunnelMaterial->MatShader = scene->BaseShader;
+			RockTunnelMaterial->Texture = RockTunnelTex;
+			RockTunnelMaterial->Shininess = 2.0f;
+		}
+
+		RockWallMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			RockWallMaterial->Name = "RockWall";
+			RockWallMaterial->MatShader = scene->BaseShader;
+			RockWallMaterial->Texture = RockWallTex;
+			RockWallMaterial->Shininess = 2.0f;
+		}
+
+		MineBackdropMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			MineBackdropMaterial->Name = "Backdrop";
+			MineBackdropMaterial->MatShader = scene->BaseShader;
+			MineBackdropMaterial->Texture = MineBackgroundTex;
+			MineBackdropMaterial->Shininess = 2.0f;
+		}
+
+		MineForegroundMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			MineForegroundMaterial->Name = "Foreground";
+			MineForegroundMaterial->MatShader = scene->BaseShader;
+			MineForegroundMaterial->Texture = MineForegroundTex;
+			MineForegroundMaterial->Shininess = 2.0f;
+		}
+
+		MineBackgroundMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			MineBackgroundMaterial->Name = "Background";
+			MineBackgroundMaterial->MatShader = scene->BaseShader;
+			MineBackgroundMaterial->Texture = MineUVTex;
+			MineBackgroundMaterial->Shininess = 2.0f;
+		}
+
+		CaveEntranceMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			CaveEntranceMaterial->Name = "CaveEntrance";
+			CaveEntranceMaterial->MatShader = scene->BaseShader;
+			CaveEntranceMaterial->Texture = CaveEntranceTex;
+			CaveEntranceMaterial->Shininess = 2.0f;
+		}
+
+		GoldBarMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			GoldBarMaterial->Name = "GoldBar";
+			GoldBarMaterial->MatShader = scene->BaseShader;
+			GoldBarMaterial->Texture = GoldBarTex;
+			GoldBarMaterial->Shininess = 2.0f;
+		}
+
+		GoldPile1Material = ResourceManager::CreateAsset<Material>();
+		{
+			GoldPile1Material->Name = "GoldPile1";
+			GoldPile1Material->MatShader = scene->BaseShader;
+			GoldPile1Material->Texture = GoldPile1Tex;
+			GoldPile1Material->Shininess = 2.0f;
+		}
+
+		GoldPile2Material = ResourceManager::CreateAsset<Material>();
+		{
+			GoldPile2Material->Name = "GoldPile2";
+			GoldPile2Material->MatShader = scene->BaseShader;
+			GoldPile2Material->Texture = GoldPile2Tex;
+			GoldPile2Material->Shininess = 2.0f;
+		}
+
+		Crystal1BlueMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			Crystal1BlueMaterial->Name = "Crystal1Blue";
+			Crystal1BlueMaterial->MatShader = scene->BaseShader;
+			Crystal1BlueMaterial->Texture = Crystal1BlueTex;
+			Crystal1BlueMaterial->Shininess = 2.0f;
+		}
+
+		Crystal1GreenMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			Crystal1GreenMaterial->Name = "Crystal1Green";
+			Crystal1GreenMaterial->MatShader = scene->BaseShader;
+			Crystal1GreenMaterial->Texture = Crystal1GreenTex;
+			Crystal1GreenMaterial->Shininess = 2.0f;
+		}
+
+		Crystal1PurpleMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			Crystal1PurpleMaterial->Name = "Crystal1Purple";
+			Crystal1PurpleMaterial->MatShader = scene->BaseShader;
+			Crystal1PurpleMaterial->Texture = Crystal1PurpleTex;
+			Crystal1PurpleMaterial->Shininess = 2.0f;
+		}
+
+		Crystal1RedMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			Crystal1RedMaterial->Name = "Crystal1Red";
+			Crystal1RedMaterial->MatShader = scene->BaseShader;
+			Crystal1RedMaterial->Texture = Crystal1RedTex;
+			Crystal1RedMaterial->Shininess = 2.0f;
+		}
+
+		Crystal2BlueMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			Crystal2BlueMaterial->Name = "Crystal2Blue";
+			Crystal2BlueMaterial->MatShader = scene->BaseShader;
+			Crystal2BlueMaterial->Texture = Crystal2BlueTex;
+			Crystal2BlueMaterial->Shininess = 2.0f;
+		}
+
+		Crystal2GreenMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			Crystal2GreenMaterial->Name = "Crystal2Green";
+			Crystal2GreenMaterial->MatShader = scene->BaseShader;
+			Crystal2GreenMaterial->Texture = Crystal2GreenTex;
+			Crystal2GreenMaterial->Shininess = 2.0f;
+		}
+
+		Crystal2YellowMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			Crystal2YellowMaterial->Name = "Crystal2Yellow";
+			Crystal2YellowMaterial->MatShader = scene->BaseShader;
+			Crystal2YellowMaterial->Texture = Crystal2YellowTex;
+			Crystal2YellowMaterial->Shininess = 2.0f;
+		}
+
+		StalagmiteMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			StalagmiteMaterial->Name = "Stalagmite";
+			StalagmiteMaterial->MatShader = scene->BaseShader;
+			StalagmiteMaterial->Texture = StalagmiteTex;
+			StalagmiteMaterial->Shininess = 2.0f;
+		}
+
+		StalagtiteMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			StalagtiteMaterial->Name = "Stalagtite";
+			StalagtiteMaterial->MatShader = scene->BaseShader;
+			StalagtiteMaterial->Texture = StalagtiteTex;
+			StalagtiteMaterial->Shininess = 2.0f;
+		}
+		MenuMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			MenuMaterial->Name = "Menu";
+			MenuMaterial->MatShader = scene->BaseShader;
+			MenuMaterial->Texture = MenuTex;
+			MenuMaterial->Shininess = 2.0f;
+		}
+
+		ButtonBackMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			ButtonBackMaterial->Name = "ButtonBackground";
+			ButtonBackMaterial->MatShader = scene->BaseShader;
+			ButtonBackMaterial->Texture = ButtonBackTex;
+			ButtonBackMaterial->Shininess = 2.0f;
+		}
+
+		ButtonStartMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			ButtonStartMaterial->Name = "ButtonStart";
+			ButtonStartMaterial->MatShader = scene->BaseShader;
+			ButtonStartMaterial->Texture = ButtonStartTex;
+			ButtonStartMaterial->Shininess = 2.0f;
+		}
+
+		ButtonExitMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			ButtonExitMaterial->Name = "ButtonExit";
+			ButtonExitMaterial->MatShader = scene->BaseShader;
+			ButtonExitMaterial->Texture = ButtonExitTex;
+			ButtonExitMaterial->Shininess = 2.0f;
+		}
+
+		FFLogoMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			FFLogoMaterial->Name = "Frog Frontier Logo";
+			FFLogoMaterial->MatShader = scene->BaseShader;
+			FFLogoMaterial->Texture = FFLogoTex;
+			FFLogoMaterial->Shininess = 2.0f;
+		}
+
+		BackTextMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			BackTextMaterial->Name = "Back Button Text";
+			BackTextMaterial->MatShader = scene->BaseShader;
+			BackTextMaterial->Texture = BackTextTex;
+			BackTextMaterial->Shininess = 2.0f;
+		}
+
+		StartTextMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			StartTextMaterial->Name = "Start Button Text";
+			StartTextMaterial->MatShader = scene->BaseShader;
+			StartTextMaterial->Texture = StartTextTex;
+			StartTextMaterial->Shininess = 2.0f;
+		}
+
+		ControlsMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			ControlsMaterial->Name = "Controls Text";
+			ControlsMaterial->MatShader = scene->BaseShader;
+			ControlsMaterial->Texture = ControlsTex;
+			ControlsMaterial->Shininess = 2.0f;
+		}
+		MountainBackdropMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			MountainBackdropMaterial->Name = "Backdrop";
+			MountainBackdropMaterial->MatShader = scene->BaseShader;
+			MountainBackdropMaterial->Texture = MountainBackdropTex;
+			MountainBackdropMaterial->Shininess = 2.0f;
+		}
+
+		MountainForegroundMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			MountainForegroundMaterial->Name = "Foreground";
+			MountainForegroundMaterial->MatShader = scene->BaseShader;
+			MountainForegroundMaterial->Texture = MountainForegroundTex;
+			MountainForegroundMaterial->Shininess = 2.0f;
+		}
+		LSButtonMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			LSButtonMaterial->Name = "LSButton";
+			LSButtonMaterial->MatShader = scene->BaseShader;
+			LSButtonMaterial->Texture = LSButtonTex;
+			LSButtonMaterial->Shininess = 2.0f;
+		}
+
+		LSLogoMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			LSLogoMaterial->Name = "LSLogo";
+			LSLogoMaterial->MatShader = scene->BaseShader;
+			LSLogoMaterial->Texture = LSLogoTex;
+			LSLogoMaterial->Shininess = 2.0f;
+		}
+
+		ButtonBackMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			ButtonBackMaterial->Name = "ButtonBackground";
+			ButtonBackMaterial->MatShader = scene->BaseShader;
+			ButtonBackMaterial->Texture = ButtonBackTex;
+			ButtonBackMaterial->Shininess = 2.0f;
+		}
+
+		BackMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			BackMaterial->Name = "Back";
+			BackMaterial->MatShader = scene->BaseShader;
+			BackMaterial->Texture = BackTex;
+			BackMaterial->Shininess = 2.0f;
+		}
+
+		FilterMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			FilterMaterial->Name = "Button Filter";
+			FilterMaterial->MatShader = scene->BaseShader;
+			FilterMaterial->Texture = FilterTex;
+			FilterMaterial->Shininess = 2.0f;
+		}
+
+		Material1 = ResourceManager::CreateAsset<Material>();
+		{
+			Material1->Name = "1";
+			Material1->MatShader = scene->BaseShader;
+			Material1->Texture = Tex1;
+			Material1->Shininess = 2.0f;
+		}
+
+		Material2 = ResourceManager::CreateAsset<Material>();
+		{
+			Material2->Name = "2";
+			Material2->MatShader = scene->BaseShader;
+			Material2->Texture = Tex2;
+			Material2->Shininess = 2.0f;
+		}
+
+		Material3 = ResourceManager::CreateAsset<Material>();
+		{
+			Material3->Name = "3";
+			Material3->MatShader = scene->BaseShader;
+			Material3->Texture = Tex3;
+			Material3->Shininess = 2.0f;
+		}
+
+		Material4 = ResourceManager::CreateAsset<Material>();
+		{
+			Material4->Name = "4";
+			Material4->MatShader = scene->BaseShader;
+			Material4->Texture = Tex4;
+			Material4->Shininess = 2.0f;
+		}
+
+		Material5 = ResourceManager::CreateAsset<Material>();
+		{
+			Material5->Name = "5";
+			Material5->MatShader = scene->BaseShader;
+			Material5->Texture = Tex5;
+			Material5->Shininess = 2.0f;
+		}
+
+		Material6 = ResourceManager::CreateAsset<Material>();
+		{
+			Material6->Name = "6";
+			Material6->MatShader = scene->BaseShader;
+			Material6->Texture = Tex6;
+			Material6->Shininess = 2.0f;
+		}
+
+		Material7 = ResourceManager::CreateAsset<Material>();
+		{
+			Material7->Name = "7";
+			Material7->MatShader = scene->BaseShader;
+			Material7->Texture = Tex7;
+			Material7->Shininess = 2.0f;
+		}
+
+		Material8 = ResourceManager::CreateAsset<Material>();
+		{
+			Material8->Name = "8";
+			Material8->MatShader = scene->BaseShader;
+			Material8->Texture = Tex8;
+			Material8->Shininess = 2.0f;
+		}
+
+		Material9 = ResourceManager::CreateAsset<Material>();
+		{
+			Material9->Name = "9";
+			Material9->MatShader = scene->BaseShader;
+			Material9->Texture = Tex9;
+			Material9->Shininess = 2.0f;
+		}
+
+		Material10 = ResourceManager::CreateAsset<Material>();
+		{
+			Material10->Name = "10";
+			Material10->MatShader = scene->BaseShader;
+			Material10->Texture = Tex10;
+			Material10->Shininess = 2.0f;
 		}
 
 		// Create some lights for our scene
@@ -1911,223 +2395,224 @@ int main() {
 		planeMesh->GenerateMesh();
 
 	
+		if (level1) {
+			//Background Assets
+			createBackgroundAsset("1", glm::vec3(-1.f, 5.0f, -0.f), 0.5, glm::vec3(83.f, 5.0f, 0.0f), BranchMesh, BranchMaterial);
+			createBackgroundAsset("2", glm::vec3(-200.f, 5.0f, -0.f), 0.5, glm::vec3(83.f, 5.0f, 0.0f), BranchMesh, BranchMaterial);
 
-		//Background Assets
-		createBackgroundAsset("1", glm::vec3(-1.f, 5.0f, -0.f), 0.5, glm::vec3(83.f, 5.0f, 0.0f), BranchMesh, BranchMaterial);
-		createBackgroundAsset("2", glm::vec3(-200.f, 5.0f, -0.f), 0.5, glm::vec3(83.f, 5.0f, 0.0f), BranchMesh, BranchMaterial);
+			createBackgroundAsset("3", glm::vec3(-186.f, 4.0f, -0.660), 3, glm::vec3(83.f, 5.0f, 0.0f), LogMesh, LogMaterial);
+			createBackgroundAsset("4", glm::vec3(-20.f, 0.0f, -0.660), 0.5, glm::vec3(400.f, 5.0f, 0.0f), LogMesh, LogMaterial);
 
-		createBackgroundAsset("3", glm::vec3(-186.f, 4.0f, -0.660), 3, glm::vec3(83.f, 5.0f, 0.0f), LogMesh, LogMaterial);
-		createBackgroundAsset("4", glm::vec3(-20.f, 0.0f, -0.660), 0.5, glm::vec3(400.f, 5.0f, 0.0f), LogMesh, LogMaterial);
+			createBackgroundAsset("5", glm::vec3(-54.5, 5.470f, -0.330), 6.0, glm::vec3(83.f, 5.0f, 0.0f), Plant1Mesh, PlantMaterial);
+			createBackgroundAsset("6", glm::vec3(-140.5, 5.470f, -0.330), 6.0, glm::vec3(83.f, 5.0f, 0.0f), Plant2Mesh, PlantMaterial);
+			createBackgroundAsset("7", glm::vec3(-240.5, 5.470f, -0.330), 6.0, glm::vec3(83.f, 5.0f, 0.0f), Plant3Mesh, PlantMaterial);
 
-		createBackgroundAsset("5", glm::vec3(-54.5, 5.470f, -0.330), 6.0, glm::vec3(83.f, 5.0f, 0.0f), Plant1Mesh, PlantMaterial);
-		createBackgroundAsset("6", glm::vec3(-140.5, 5.470f, -0.330), 6.0, glm::vec3(83.f, 5.0f, 0.0f), Plant2Mesh, PlantMaterial);
-		createBackgroundAsset("7", glm::vec3(-240.5, 5.470f, -0.330), 6.0, glm::vec3(83.f, 5.0f, 0.0f), Plant3Mesh, PlantMaterial);
+			createBackgroundAsset("8", glm::vec3(-20.f, 0.0f, -0.660), 6.0, glm::vec3(83.f, 5.0f, 0.0f), SunflowerMesh, SunflowerMaterial);
 
-		createBackgroundAsset("8", glm::vec3(-20.f, 0.0f, -0.660), 6.0, glm::vec3(83.f, 5.0f, 0.0f), SunflowerMesh, SunflowerMaterial);
+			createBackgroundAsset("9", glm::vec3(-13.f, 5.0f, -0.430), 0.5, glm::vec3(83.f, 5.0f, 90.0f), ToadMesh, ToadMaterial);
+			createBackgroundAsset("10", glm::vec3(-90.f, 5.0f, -0.430), 0.5, glm::vec3(83.f, 5.0f, 90.0f), ToadMesh, ToadMaterial);
+			createBackgroundAsset("11", glm::vec3(-330.f, 5.0f, -0.430), 0.5, glm::vec3(83.f, 5.0f, 90.0f), ToadMesh, ToadMaterial);
 
-		createBackgroundAsset("9", glm::vec3(-13.f, 5.0f, -0.430), 0.5, glm::vec3(83.f, 5.0f, 90.0f), ToadMesh, ToadMaterial);
-		createBackgroundAsset("10", glm::vec3(-90.f, 5.0f, -0.430), 0.5, glm::vec3(83.f, 5.0f, 90.0f), ToadMesh, ToadMaterial);
-		createBackgroundAsset("11", glm::vec3(-330.f, 5.0f, -0.430), 0.5, glm::vec3(83.f, 5.0f, 90.0f), ToadMesh, ToadMaterial);
+			createBackgroundAsset("12", glm::vec3(-20.f, 0.0f, -0.660), 0.5, glm::vec3(83.f, 5.0f, 90.0f), Rock1Mesh, boxMaterial);
+			createBackgroundAsset("13", glm::vec3(-20.f, 0.0f, -0.660), 0.5, glm::vec3(83.f, 5.0f, 90.0f), Rock2Mesh, rockMaterial);
+			createBackgroundAsset("14", glm::vec3(-20.f, 0.0f, -0.660), 0.5, glm::vec3(83.f, 5.0f, 90.0f), Rock3Mesh, rockMaterial);
 
-		createBackgroundAsset("12", glm::vec3(-20.f, 0.0f, -0.660), 0.5, glm::vec3(83.f, 5.0f, 90.0f), Rock1Mesh, boxMaterial);
-		createBackgroundAsset("13", glm::vec3(-20.f, 0.0f, -0.660), 0.5, glm::vec3(83.f, 5.0f, 90.0f), Rock2Mesh, rockMaterial);
-		createBackgroundAsset("14", glm::vec3(-20.f, 0.0f, -0.660), 0.5, glm::vec3(83.f, 5.0f, 90.0f), Rock3Mesh, rockMaterial);
+			createBackgroundAsset("15", glm::vec3(-20.f, 6.0f, -0.660), 0.5, glm::vec3(83.f, 5.0f, 90.0f), twigMesh, twigMaterial);
+			createBackgroundAsset("16", glm::vec3(13.060f, 1.530f, 0.550), 0.05, glm::vec3(83.f, -7.0f, 90.0f), frogMesh, frogMaterial);
 
-		createBackgroundAsset("15", glm::vec3(-20.f, 6.0f, -0.660), 0.5, glm::vec3(83.f, 5.0f, 90.0f), twigMesh, twigMaterial);
-		createBackgroundAsset("16", glm::vec3(13.060f, 1.530f, 0.550), 0.05, glm::vec3(83.f, -7.0f, 90.0f), frogMesh, frogMaterial);
+			createBackgroundAsset("17", glm::vec3(7.5f, 4.6f, -1.8), 0.5, glm::vec3(83.f, -7.0f, 90.0f), bmMesh, bmMaterial);
+			createBackgroundAsset("18", glm::vec3(-6.f, -12.660f, 0.400), 0.05, glm::vec3(83.f, -7.0f, 90.0f), tmMesh, tmMaterial);
 
-		createBackgroundAsset("17", glm::vec3(7.5f, 4.6f, -1.8), 0.5, glm::vec3(83.f, -7.0f, 90.0f), bmMesh, bmMaterial);
-		createBackgroundAsset("18", glm::vec3(-6.f, -12.660f, 0.400), 0.05, glm::vec3(83.f, -7.0f, 90.0f), tmMesh, tmMaterial);
+			//Obstacles
+			createGroundObstacle("2", glm::vec3(-20.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 1 (small jump)
+			createGroundObstacle("3", glm::vec3(-60.f, 0.0f, 3.0), glm::vec3(1.f, 1.f, 1.f), glm::vec3(90.f, 0.0f, 73.f), vinesMesh, vinesMaterial); // vine 1 (jump blocking)
+			createGroundObstacle("4", glm::vec3(-110.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 1 (tall jump)
+			createGroundObstacle("5", glm::vec3(-45.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 2
+			createGroundObstacle("6", glm::vec3(-150.f, 5.530f, 0.250f), glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(90.f, 0.0f, -25.f), vinesMesh, vinesMaterial); // vine 2 (squish blocking)
+			createGroundObstacle("7", glm::vec3(-150.240f, 0.f, 7.88f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, 84.f), cobwebMesh, cobwebMaterial); //cobweb 2 (squish Blocking 2)
 
-		//Obstacles
-		createGroundObstacle("2", glm::vec3(-20.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 1 (small jump)
-		createGroundObstacle("3", glm::vec3(-60.f, 0.0f, 3.0), glm::vec3(1.f, 1.f, 1.f), glm::vec3(90.f, 0.0f, 73.f), vinesMesh, vinesMaterial); // vine 1 (jump blocking)
-		createGroundObstacle("4", glm::vec3(-110.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 1 (tall jump)
-		createGroundObstacle("5", glm::vec3(-45.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 2
-		createGroundObstacle("6", glm::vec3(-150.f, 5.530f, 0.250f), glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(90.f, 0.0f, -25.f), vinesMesh, vinesMaterial); // vine 2 (squish blocking)
-		createGroundObstacle("7", glm::vec3(-150.240f, 0.f, 7.88f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, 84.f), cobwebMesh, cobwebMaterial); //cobweb 2 (squish Blocking 2)
+			createGroundObstacle("8", glm::vec3(-170.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 3 (small jump)
+			createGroundObstacle("9", glm::vec3(-200.f, 0.0f, 3.0), glm::vec3(1.f, 1.f, 1.f), glm::vec3(90.f, 0.0f, 73.f), vinesMesh, vinesMaterial); // vine 3 (jump blocking)
+			createGroundObstacle("10", glm::vec3(-220.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 3 (tall jump)
+			createGroundObstacle("11", glm::vec3(-230.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 4 (small jump)
+			createGroundObstacle("12", glm::vec3(-250.f, 0.0f, 3.0), glm::vec3(1.f, 1.f, 1.f), glm::vec3(90.f, 0.0f, 73.f), vinesMesh, vinesMaterial); // vine 4 (jump blocking)
+			createGroundObstacle("13", glm::vec3(-275.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 5 (small jump)
+			createGroundObstacle("14", glm::vec3(-300.f, 5.530f, 0.250f), glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(90.f, 0.0f, -25.f), vinesMesh, vinesMaterial); // vine 5 (squish blocking)
+			createGroundObstacle("15", glm::vec3(-300.240f, 0.f, 7.88f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, 84.f), cobwebMesh, cobwebMaterial); //cobweb 4 (squish Blocking 2)
 
-		createGroundObstacle("8", glm::vec3(-170.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 3 (small jump)
-		createGroundObstacle("9", glm::vec3(-200.f, 0.0f, 3.0), glm::vec3(1.f, 1.f, 1.f), glm::vec3(90.f, 0.0f, 73.f), vinesMesh, vinesMaterial); // vine 3 (jump blocking)
-		createGroundObstacle("10", glm::vec3(-220.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 3 (tall jump)
-		createGroundObstacle("11", glm::vec3(-230.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 4 (small jump)
-		createGroundObstacle("12", glm::vec3(-250.f, 0.0f, 3.0), glm::vec3(1.f, 1.f, 1.f), glm::vec3(90.f, 0.0f, 73.f), vinesMesh, vinesMaterial); // vine 4 (jump blocking)
-		createGroundObstacle("13", glm::vec3(-275.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 5 (small jump)
-		createGroundObstacle("14", glm::vec3(-300.f, 5.530f, 0.250f), glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(90.f, 0.0f, -25.f), vinesMesh, vinesMaterial); // vine 5 (squish blocking)
-		createGroundObstacle("15", glm::vec3(-300.240f, 0.f, 7.88f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, 84.f), cobwebMesh, cobwebMaterial); //cobweb 4 (squish Blocking 2)
+			createGroundObstacle("16", glm::vec3(-310.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 6 (small jump)
+			createGroundObstacle("17", glm::vec3(-315.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 7 (small jump)
+			createGroundObstacle("18", glm::vec3(-320.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 8 (small jump)
+			createGroundObstacle("19", glm::vec3(-325.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 5 (tall jump)
+			createGroundObstacle("20", glm::vec3(-340.f, 0.0f, 3.0), glm::vec3(1.f, 1.f, 1.f), glm::vec3(90.f, 0.0f, 73.f), vinesMesh, vinesMaterial); // vine 6 (jump blocking)
+			createGroundObstacle("21", glm::vec3(-345.f, 5.530f, 0.250f), glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(90.f, 0.0f, -25.f), vinesMesh, vinesMaterial); // vine 7 (squish blocking)
+			createGroundObstacle("22", glm::vec3(-345.240f, 0.f, 7.88f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, 84.f), cobwebMesh, cobwebMaterial); //cobweb 6 (squish Blocking 2)
+			createGroundObstacle("23", glm::vec3(-360.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 7 (tall jump)
+			createGroundObstacle("24", glm::vec3(-380.f, 5.530f, 0.250f), glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(90.f, 0.0f, -25.f), vinesMesh, vinesMaterial); // vine 8 (squish blocking)
+			createGroundObstacle("25", glm::vec3(-380.240f, 0.f, 7.88f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, 84.f), cobwebMesh, cobwebMaterial); //cobweb 8 (squish Blocking 2)
+			createGroundObstacle("26", glm::vec3(-395.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 9 (tall jump)
 
-		createGroundObstacle("16", glm::vec3(-310.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 6 (small jump)
-		createGroundObstacle("17", glm::vec3(-315.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 7 (small jump)
-		createGroundObstacle("18", glm::vec3(-320.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 8 (small jump)
-		createGroundObstacle("19", glm::vec3(-325.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 5 (tall jump)
-		createGroundObstacle("20", glm::vec3(-340.f, 0.0f, 3.0), glm::vec3(1.f, 1.f, 1.f), glm::vec3(90.f, 0.0f, 73.f), vinesMesh, vinesMaterial); // vine 6 (jump blocking)
-		createGroundObstacle("21", glm::vec3(-345.f, 5.530f, 0.250f), glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(90.f, 0.0f, -25.f), vinesMesh, vinesMaterial); // vine 7 (squish blocking)
-		createGroundObstacle("22", glm::vec3(-345.240f, 0.f, 7.88f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, 84.f), cobwebMesh, cobwebMaterial); //cobweb 6 (squish Blocking 2)
-		createGroundObstacle("23", glm::vec3(-360.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 7 (tall jump)
-		createGroundObstacle("24", glm::vec3(-380.f, 5.530f, 0.250f), glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(90.f, 0.0f, -25.f), vinesMesh, vinesMaterial); // vine 8 (squish blocking)
-		createGroundObstacle("25", glm::vec3(-380.240f, 0.f, 7.88f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, 84.f), cobwebMesh, cobwebMaterial); //cobweb 8 (squish Blocking 2)
-		createGroundObstacle("26", glm::vec3(-395.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 9 (tall jump)
+			//3D Backgrounds
+			createGroundObstacle("27", glm::vec3(107.7f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
+			createGroundObstacle("28", glm::vec3(0.f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
+			createGroundObstacle("29", glm::vec3(-107.7f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
 
-		//3D Backgrounds
-		createGroundObstacle("27", glm::vec3(107.7f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
-		createGroundObstacle("28", glm::vec3(0.f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
-		createGroundObstacle("29", glm::vec3(-107.7f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
+			createGroundObstacle("30", glm::vec3(-215.4f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
+			createGroundObstacle("31", glm::vec3(-323.1f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
+			createGroundObstacle("32", glm::vec3(-430.8f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
 
-		createGroundObstacle("30", glm::vec3(-215.4f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
-		createGroundObstacle("31", glm::vec3(-323.1f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
-		createGroundObstacle("32", glm::vec3(-430.8f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
+			//2DBackGrounds
+			createGroundObstacle("33", glm::vec3(350.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, bgMaterial);
+			createGroundObstacle("34", glm::vec3(-50.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, bgMaterial);
+			createGroundObstacle("35", glm::vec3(-425.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, bgMaterial);
+			createGroundObstacle("36", glm::vec3(-1225.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, bgMaterial);
+			createGroundObstacle("37", glm::vec3(-1650.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, bgMaterial);
 
-		//2DBackGrounds
-		createGroundObstacle("33", glm::vec3(350.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, bgMaterial);
-		createGroundObstacle("34", glm::vec3(-50.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, bgMaterial);
-		createGroundObstacle("35", glm::vec3(-425.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, bgMaterial);
-		createGroundObstacle("36", glm::vec3(-1225.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, bgMaterial);
-		createGroundObstacle("37", glm::vec3(-1650.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, bgMaterial);
+			//Grass
+			createGroundObstacle("38", glm::vec3(-18.170f, -38.230f, 5.250f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass1Material);
+			createGroundObstacle("39", glm::vec3(29.580f, 46.920f, 5.080f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass2Material);
+			createGroundObstacle("40", glm::vec3(2.090f, -47.360f, 5.090f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass3Material);
+			createGroundObstacle("41", glm::vec3(35.700f, -37.550f, 5.310f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass4Material);
+			createGroundObstacle("42", glm::vec3(-47.340f, -37.120f, 5.560f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass5Material);
 
-		//Grass
-		createGroundObstacle("38", glm::vec3(-18.170f, -38.230f, 5.250f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass1Material);
-		createGroundObstacle("39", glm::vec3(29.580f, 46.920f, 5.080f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass2Material);
-		createGroundObstacle("40", glm::vec3(2.090f, -47.360f, 5.090f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass3Material);
-		createGroundObstacle("41", glm::vec3(35.700f, -37.550f, 5.310f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass4Material);
-		createGroundObstacle("42", glm::vec3(-47.340f, -37.120f, 5.560f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass5Material);
+			createGroundObstacle("43", glm::vec3(-18.170f - 103.5f, -38.230f, 5.250f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass1Material);
+			createGroundObstacle("44", glm::vec3(29.580f - 103.5f, 46.920f, 5.080f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass2Material);
+			createGroundObstacle("45", glm::vec3(2.090f - 103.5f, -47.360f, 5.090f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass3Material);
+			createGroundObstacle("46", glm::vec3(35.700f - 103.5f, -37.550f, 5.310f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass4Material);
+			createGroundObstacle("47", glm::vec3(-47.340f - 103.5f, -37.120f, 5.560f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass5Material);
 
-		createGroundObstacle("43", glm::vec3(-18.170f - 103.5f, -38.230f, 5.250f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass1Material);
-		createGroundObstacle("44", glm::vec3(29.580f - 103.5f, 46.920f, 5.080f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass2Material);
-		createGroundObstacle("45", glm::vec3(2.090f - 103.5f, -47.360f, 5.090f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass3Material);
-		createGroundObstacle("46", glm::vec3(35.700f - 103.5f, -37.550f, 5.310f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass4Material);
-		createGroundObstacle("47", glm::vec3(-47.340f - 103.5f, -37.120f, 5.560f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass5Material);
+			createGroundObstacle("48", glm::vec3(-18.170f - 103.5f - 103.5f, -38.230f, 5.250f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass1Material);
+			createGroundObstacle("49", glm::vec3(29.580f - 103.5f - 103.5f, 46.920f, 5.080f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass2Material);
+			createGroundObstacle("50", glm::vec3(2.090f - 103.5f - 103.5f, -47.360f, 5.090f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass3Material);
+			createGroundObstacle("51", glm::vec3(35.700f - 103.5f - 103.5f, -37.550f, 5.310f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass4Material);
+			createGroundObstacle("52", glm::vec3(-47.340f - 103.5f - 103.5f, -37.120f, 5.560f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass5Material);
 
-		createGroundObstacle("48", glm::vec3(-18.170f - 103.5f - 103.5f, -38.230f, 5.250f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass1Material);
-		createGroundObstacle("49", glm::vec3(29.580f - 103.5f - 103.5f, 46.920f, 5.080f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass2Material);
-		createGroundObstacle("50", glm::vec3(2.090f - 103.5f - 103.5f, -47.360f, 5.090f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass3Material);
-		createGroundObstacle("51", glm::vec3(35.700f - 103.5f - 103.5f, -37.550f, 5.310f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass4Material);
-		createGroundObstacle("52", glm::vec3(-47.340f - 103.5f - 103.5f, -37.120f, 5.560f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass5Material);
+			createGroundObstacle("53", glm::vec3(-18.170f - 103.5f - 103.5f - 103.5f, -38.230f, 5.250f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass1Material);
+			createGroundObstacle("54", glm::vec3(29.580f - 103.5f - 103.5f - 103.5f, 46.920f, 5.080f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass2Material);
+			createGroundObstacle("55", glm::vec3(2.090f - 103.5f - 103.5f - 103.5f, -47.360f, 5.090f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass3Material);
+			createGroundObstacle("56", glm::vec3(35.700f - 103.5f - 103.5f - 103.5f, -37.550f, 5.310f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass4Material);
+			createGroundObstacle("57", glm::vec3(-47.340f - 103.5f - 103.5f - 103.5f, -37.120f, 5.560f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass5Material);
 
-		createGroundObstacle("53", glm::vec3(-18.170f - 103.5f - 103.5f - 103.5f, -38.230f, 5.250f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass1Material);
-		createGroundObstacle("54", glm::vec3(29.580f - 103.5f - 103.5f - 103.5f, 46.920f, 5.080f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass2Material);
-		createGroundObstacle("55", glm::vec3(2.090f - 103.5f - 103.5f - 103.5f, -47.360f, 5.090f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass3Material);
-		createGroundObstacle("56", glm::vec3(35.700f - 103.5f - 103.5f - 103.5f, -37.550f, 5.310f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass4Material);
-		createGroundObstacle("57", glm::vec3(-47.340f - 103.5f - 103.5f - 103.5f, -37.120f, 5.560f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass5Material);
+			//Exit Tree
+			createGroundObstacle("58", glm::vec3(-409.f, -3.380f, -0.340f), glm::vec3(3.0f, 3.0f, 3.0f), glm::vec3(90.0f, 0.0f, 140.f), ExitTreeMesh, ExitTreeMaterial);
 
-		//Exit Tree
-		createGroundObstacle("58", glm::vec3(-409.f, -3.380f, -0.340f), glm::vec3(3.0f, 3.0f, 3.0f), glm::vec3(90.0f, 0.0f, 140.f), ExitTreeMesh, ExitTreeMaterial);
+			//Foreground Grass
+			createGroundObstacle("59", glm::vec3(40.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+			createGroundObstacle("60", glm::vec3(0.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+			createGroundObstacle("61", glm::vec3(-40.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+			createGroundObstacle("62", glm::vec3(-80.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+			createGroundObstacle("63", glm::vec3(-120.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+			createGroundObstacle("64", glm::vec3(-160.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
 
-		//Foreground Grass
-		createGroundObstacle("59", glm::vec3(40.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
-		createGroundObstacle("60", glm::vec3(0.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
-		createGroundObstacle("61", glm::vec3(-40.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
-		createGroundObstacle("62", glm::vec3(-80.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
-		createGroundObstacle("63", glm::vec3(-120.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
-		createGroundObstacle("64", glm::vec3(-160.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
-
-		createGroundObstacle("65", glm::vec3(-200.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
-		createGroundObstacle("66", glm::vec3(-240.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
-		createGroundObstacle("67", glm::vec3(-280.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
-		createGroundObstacle("68", glm::vec3(-320.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
-		createGroundObstacle("69", glm::vec3(-360.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
-		createGroundObstacle("70", glm::vec3(-400.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+			createGroundObstacle("65", glm::vec3(-200.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+			createGroundObstacle("66", glm::vec3(-240.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+			createGroundObstacle("67", glm::vec3(-280.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+			createGroundObstacle("68", glm::vec3(-320.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+			createGroundObstacle("69", glm::vec3(-360.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+			createGroundObstacle("70", glm::vec3(-400.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
 
 
-		//Collisions
+			//Collisions
 
-		//mushroom 1 collision
-		createCollision("2", -19.660f, 1.560f, 1.f, 1.f);
-		createCollision("3", -20.410f, 1.560f, 1.f, 1.f);
-		createCollision("4", -19.970f, 1.860f, 1.f, 1.f);
-		createCollision("5", -20.190f, 0.450f, 1.f, 1.f);
+			//mushroom 1 collision
+			createCollision("2", -19.660f, 1.560f, 1.f, 1.f);
+			createCollision("3", -20.410f, 1.560f, 1.f, 1.f);
+			createCollision("4", -19.970f, 1.860f, 1.f, 1.f);
+			createCollision("5", -20.190f, 0.450f, 1.f, 1.f);
 
-		//mushroom 2 collision
-		createCollision("6", -44.660f, 1.560f, 1.f, 1.f);
-		createCollision("7", -45.410f, 1.560f, 1.f, 1.f);
-		createCollision("8", -44.970f, 1.860f, 1.f, 1.f);
-		createCollision("9", -45.190f, 0.450f, 1.f, 1.f);
+			//mushroom 2 collision
+			createCollision("6", -44.660f, 1.560f, 1.f, 1.f);
+			createCollision("7", -45.410f, 1.560f, 1.f, 1.f);
+			createCollision("8", -44.970f, 1.860f, 1.f, 1.f);
+			createCollision("9", -45.190f, 0.450f, 1.f, 1.f);
 
-		// vine 1 collisions
-		createCollision("10", -53.30f, 11.f, 0.5f, 5.5f);
-		createCollision("11", -60.30f, 11.f, 0.5f, 5.5f);
-		createCollision("12", -56.8f, 6.f, 4.0f, 0.5f);
-		createCollision("13", -56.8f, 17.f, 4.0f, 0.5f);
+			// vine 1 collisions
+			createCollision("10", -53.30f, 11.f, 0.5f, 5.5f);
+			createCollision("11", -60.30f, 11.f, 0.5f, 5.5f);
+			createCollision("12", -56.8f, 6.f, 4.0f, 0.5f);
+			createCollision("13", -56.8f, 17.f, 4.0f, 0.5f);
 
-		//cobweb collisions
-		createCollision("14", -110.f, 1.63f, 1.f, 7.f);
+			//cobweb collisions
+			createCollision("14", -110.f, 1.63f, 1.f, 7.f);
 
-		// squish collision
-		createCollision("15", -149.780f, 10.4f, 0.420f, 10.f);
+			// squish collision
+			createCollision("15", -149.780f, 10.4f, 0.420f, 10.f);
 
-		//mushroom 3 collision
-		createCollision("16", -169.660f, 1.560f, 1.f, 1.f);
-		createCollision("17", -170.410f, 1.560f, 1.f, 1.f);
-		createCollision("18", -169.970f, 1.860f, 1.f, 1.f);
-		createCollision("19", -170.190f, 0.450f, 1.f, 1.f);
+			//mushroom 3 collision
+			createCollision("16", -169.660f, 1.560f, 1.f, 1.f);
+			createCollision("17", -170.410f, 1.560f, 1.f, 1.f);
+			createCollision("18", -169.970f, 1.860f, 1.f, 1.f);
+			createCollision("19", -170.190f, 0.450f, 1.f, 1.f);
 
-		// vine 3 collisions
-		createCollision("20", -193.30f, 11.f, 0.5f, 5.5f);
-		createCollision("21", -200.30f, 11.f, 0.5f, 5.5f);
-		createCollision("22", -196.8f, 6.f, 4.0f, 0.5f);
-		createCollision("23", -196.8f, 17.f, 4.0f, 0.5f);
+			// vine 3 collisions
+			createCollision("20", -193.30f, 11.f, 0.5f, 5.5f);
+			createCollision("21", -200.30f, 11.f, 0.5f, 5.5f);
+			createCollision("22", -196.8f, 6.f, 4.0f, 0.5f);
+			createCollision("23", -196.8f, 17.f, 4.0f, 0.5f);
 
-		//cobweb collisions
-		createCollision("24", -220.f, 1.63f, 1.f, 7.f);
+			//cobweb collisions
+			createCollision("24", -220.f, 1.63f, 1.f, 7.f);
 
-		//mushroom 4 collision
-		createCollision("25", -229.660f, 1.560f, 1.f, 1.f);
-		createCollision("26", -230.410f, 1.560f, 1.f, 1.f);
-		createCollision("27", -229.970f, 1.860f, 1.f, 1.f);
-		createCollision("28", -230.190f, 0.450f, 1.f, 1.f);
+			//mushroom 4 collision
+			createCollision("25", -229.660f, 1.560f, 1.f, 1.f);
+			createCollision("26", -230.410f, 1.560f, 1.f, 1.f);
+			createCollision("27", -229.970f, 1.860f, 1.f, 1.f);
+			createCollision("28", -230.190f, 0.450f, 1.f, 1.f);
 
-		// vine 4 collisions
-		createCollision("29", -243.30f, 11.f, 0.5f, 5.5f);
-		createCollision("30", -250.30f, 11.f, 0.5f, 5.5f);
-		createCollision("31", -246.8f, 6.f, 4.0f, 0.5f);
-		createCollision("32", -246.8f, 17.f, 4.0f, 0.5f);
+			// vine 4 collisions
+			createCollision("29", -243.30f, 11.f, 0.5f, 5.5f);
+			createCollision("30", -250.30f, 11.f, 0.5f, 5.5f);
+			createCollision("31", -246.8f, 6.f, 4.0f, 0.5f);
+			createCollision("32", -246.8f, 17.f, 4.0f, 0.5f);
 
-		//mushroom 5 collision
-		createCollision("33", -274.660f, 1.560f, 1.f, 1.f);
-		createCollision("34", -275.410f, 1.560f, 1.f, 1.f);
-		createCollision("35", -274.970f, 1.860f, 1.f, 1.f);
-		createCollision("36", -275.190f, 0.450f, 1.f, 1.f);
+			//mushroom 5 collision
+			createCollision("33", -274.660f, 1.560f, 1.f, 1.f);
+			createCollision("34", -275.410f, 1.560f, 1.f, 1.f);
+			createCollision("35", -274.970f, 1.860f, 1.f, 1.f);
+			createCollision("36", -275.190f, 0.450f, 1.f, 1.f);
 
-		// squish collision
-		createCollision("37", -299.780f, 10.4f, 0.420f, 10.f);
+			// squish collision
+			createCollision("37", -299.780f, 10.4f, 0.420f, 10.f);
 
-		//mushroom 6 collision
-		createCollision("38", -309.660f, 1.560f, 1.f, 1.f);
-		createCollision("39", -310.410f, 1.560f, 1.f, 1.f);
-		createCollision("40", -309.970f, 1.860f, 1.f, 1.f);
-		createCollision("41", -310.190f, 0.450f, 1.f, 1.f);
+			//mushroom 6 collision
+			createCollision("38", -309.660f, 1.560f, 1.f, 1.f);
+			createCollision("39", -310.410f, 1.560f, 1.f, 1.f);
+			createCollision("40", -309.970f, 1.860f, 1.f, 1.f);
+			createCollision("41", -310.190f, 0.450f, 1.f, 1.f);
 
-		//mushroom 7 collision
-		createCollision("42", -314.660f, 1.560f, 1.f, 1.f);
-		createCollision("43", -315.410f, 1.560f, 1.f, 1.f);
-		createCollision("44", -314.970f, 1.860f, 1.f, 1.f);
-		createCollision("45", -315.190f, 0.450f, 1.f, 1.f);
+			//mushroom 7 collision
+			createCollision("42", -314.660f, 1.560f, 1.f, 1.f);
+			createCollision("43", -315.410f, 1.560f, 1.f, 1.f);
+			createCollision("44", -314.970f, 1.860f, 1.f, 1.f);
+			createCollision("45", -315.190f, 0.450f, 1.f, 1.f);
 
-		//mushroom 8 collision
-		createCollision("46", -319.660f, 1.560f, 1.f, 1.f);
-		createCollision("47", -320.410f, 1.560f, 1.f, 1.f);
-		createCollision("48", -319.970f, 1.860f, 1.f, 1.f);
-		createCollision("49", -320.190f, 0.450f, 1.f, 1.f);
+			//mushroom 8 collision
+			createCollision("46", -319.660f, 1.560f, 1.f, 1.f);
+			createCollision("47", -320.410f, 1.560f, 1.f, 1.f);
+			createCollision("48", -319.970f, 1.860f, 1.f, 1.f);
+			createCollision("49", -320.190f, 0.450f, 1.f, 1.f);
 
-		//cobweb collisions
-		createCollision("50", -325.f, 1.63f, 1.f, 7.f);
+			//cobweb collisions
+			createCollision("50", -325.f, 1.63f, 1.f, 7.f);
 
-		// vine 6 collisions
-		createCollision("51", -333.30f, 11.f, 0.5f, 5.5f);
-		createCollision("52", -340.30f, 11.f, 0.5f, 5.5f);
-		createCollision("53", -336.8f, 6.f, 4.0f, 0.5f);
-		createCollision("54", -336.8f, 17.f, 4.0f, 0.5f);
+			// vine 6 collisions
+			createCollision("51", -333.30f, 11.f, 0.5f, 5.5f);
+			createCollision("52", -340.30f, 11.f, 0.5f, 5.5f);
+			createCollision("53", -336.8f, 6.f, 4.0f, 0.5f);
+			createCollision("54", -336.8f, 17.f, 4.0f, 0.5f);
 
-		// squish collision
-		createCollision("55", -344.780f, 10.4f, 0.420f, 10.f);
+			// squish collision
+			createCollision("55", -344.780f, 10.4f, 0.420f, 10.f);
 
-		//cobweb collisions
-		createCollision("56", -360.f, 1.63f, 1.f, 7.f);
+			//cobweb collisions
+			createCollision("56", -360.f, 1.63f, 1.f, 7.f);
 
-		// squish collision
-		createCollision("57", -379.780f, 10.4f, 0.420f, 10.f);
+			// squish collision
+			createCollision("57", -379.780f, 10.4f, 0.420f, 10.f);
 
-		//cobweb collisions
-		createCollision("58", -395.f, 1.63f, 1.f, 7.f);
+			//cobweb collisions
+			createCollision("58", -395.f, 1.63f, 1.f, 7.f);
+		}
 
 		// Set up the scene's camera
 		GameObject::Sptr camera = scene->CreateGameObject("Main Camera");
@@ -2525,381 +3010,6 @@ int main() {
 		// I hate this
 		scene->BaseShader = uboShader;
 
-		// Create our materials
-		Material::Sptr boxMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			boxMaterial->Name = "Box";
-			boxMaterial->MatShader = scene->BaseShader;
-			boxMaterial->Texture = boxTexture;
-			boxMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr PbarbugMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			PbarbugMaterial->Name = "minibug";
-			PbarbugMaterial->MatShader = scene->BaseShader;
-			PbarbugMaterial->Texture = PbarbugTex;
-			PbarbugMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr greenMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			greenMaterial->Name = "green";
-			greenMaterial->MatShader = scene->BaseShader;
-			greenMaterial->Texture = greenTex;
-			greenMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr bgMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			bgMaterial->Name = "bg";
-			bgMaterial->MatShader = scene->BaseShader;
-			bgMaterial->Texture = bgTexture;
-			bgMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr grassMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			grassMaterial->Name = "Grass";
-			grassMaterial->MatShader = scene->BaseShader;
-			grassMaterial->Texture = grassTexture;
-			grassMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr winMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			winMaterial->Name = "win";
-			winMaterial->MatShader = scene->BaseShader;
-			winMaterial->Texture = winTexture;
-			winMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr ladybugMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			ladybugMaterial->Name = "lbo";
-			ladybugMaterial->MatShader = scene->BaseShader;
-			ladybugMaterial->Texture = ladybugTexture;
-			ladybugMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr monkeyMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			monkeyMaterial->Name = "Monkey";
-			monkeyMaterial->MatShader = scene->BaseShader;
-			monkeyMaterial->Texture = monkeyTex;
-			monkeyMaterial->Shininess = 256.0f;
-
-		}
-
-		Material::Sptr mushroomMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			mushroomMaterial->Name = "Mushroom";
-			mushroomMaterial->MatShader = scene->BaseShader;
-			mushroomMaterial->Texture = mushroomTexture;
-			mushroomMaterial->Shininess = 256.0f;
-
-		}
-
-		Material::Sptr vinesMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			vinesMaterial->Name = "vines";
-			vinesMaterial->MatShader = scene->BaseShader;
-			vinesMaterial->Texture = vinesTexture;
-			vinesMaterial->Shininess = 256.0f;
-
-		}
-
-		Material::Sptr cobwebMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			cobwebMaterial->Name = "cobweb";
-			cobwebMaterial->MatShader = scene->BaseShader;
-			cobwebMaterial->Texture = cobwebTexture;
-			cobwebMaterial->Shininess = 256.0f;
-
-		}
-
-		Material::Sptr PanelMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			PanelMaterial->Name = "Panel";
-			PanelMaterial->MatShader = scene->BaseShader;
-			PanelMaterial->Texture = PanelTex;
-			PanelMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr ResumeMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			ResumeMaterial->Name = "Resume";
-			ResumeMaterial->MatShader = scene->BaseShader;
-			ResumeMaterial->Texture = ResumeTex;
-			ResumeMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr MainMenuMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			MainMenuMaterial->Name = "Main Menu";
-			MainMenuMaterial->MatShader = scene->BaseShader;
-			MainMenuMaterial->Texture = MainMenuTex;
-			MainMenuMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr PauseMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			PauseMaterial->Name = "Pause";
-			PauseMaterial->MatShader = scene->BaseShader;
-			PauseMaterial->Texture = PauseTex;
-			PauseMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr ButtonMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			ButtonMaterial->Name = "Button";
-			ButtonMaterial->MatShader = scene->BaseShader;
-			ButtonMaterial->Texture = ButtonTex;
-			ButtonMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr FilterMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			FilterMaterial->Name = "Button Filter";
-			FilterMaterial->MatShader = scene->BaseShader;
-			FilterMaterial->Texture = FilterTex;
-			FilterMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr WinnerMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			WinnerMaterial->Name = "WinnerLogo";
-			WinnerMaterial->MatShader = scene->BaseShader;
-			WinnerMaterial->Texture = WinnerTex;
-			WinnerMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr LoserMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			LoserMaterial->Name = "LoserLogo";
-			LoserMaterial->MatShader = scene->BaseShader;
-			LoserMaterial->Texture = LoserTex;
-			LoserMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr ReplayMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			ReplayMaterial->Name = "Replay Text";
-			ReplayMaterial->MatShader = scene->BaseShader;
-			ReplayMaterial->Texture = ReplayTex;
-			ReplayMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr BranchMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			BranchMaterial->Name = "Branch";
-			BranchMaterial->MatShader = scene->BaseShader;
-			BranchMaterial->Texture = BranchTex;
-			BranchMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr LogMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			LogMaterial->Name = "Log";
-			LogMaterial->MatShader = scene->BaseShader;
-			LogMaterial->Texture = LogTex;
-			LogMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr PlantMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			PlantMaterial->Name = "Plant";
-			PlantMaterial->MatShader = scene->BaseShader;
-			PlantMaterial->Texture = PlantTex;
-			PlantMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr SunflowerMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			SunflowerMaterial->Name = "Sunflower";
-			SunflowerMaterial->MatShader = scene->BaseShader;
-			SunflowerMaterial->Texture = SunflowerTex;
-			SunflowerMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr ToadMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			ToadMaterial->Name = "Toad";
-			ToadMaterial->MatShader = scene->BaseShader;
-			ToadMaterial->Texture = ToadTex;
-			ToadMaterial->Shininess = 2.0f;
-		}
-		Material::Sptr BlankMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			BlankMaterial->Name = "Blank";
-			BlankMaterial->MatShader = scene->BaseShader;
-			BlankMaterial->Texture = BlankTex;
-			BlankMaterial->Shininess = 2.0f;
-		}
-		Material::Sptr ForegroundMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			ForegroundMaterial->Name = "Foreground";
-			ForegroundMaterial->MatShader = scene->BaseShader;
-			ForegroundMaterial->Texture = ForegroundTex;
-			ForegroundMaterial->Shininess = 2.0f;
-		}
-		Material::Sptr rockMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			rockMaterial->Name = "Rock";
-			rockMaterial->MatShader = scene->BaseShader;
-			rockMaterial->Texture = RockTex;
-			rockMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr twigMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			twigMaterial->Name = "twig";
-			twigMaterial->MatShader = scene->BaseShader;
-			twigMaterial->Texture = twigTex;
-			twigMaterial->Shininess = 2.0f;
-		}
-		Material::Sptr frogMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			frogMaterial->Name = "frog";
-			frogMaterial->MatShader = scene->BaseShader;
-			frogMaterial->Texture = frogTex;
-			frogMaterial->Shininess = 2.0f;
-		}
-		Material::Sptr tmMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			tmMaterial->Name = "tallmushroom";
-			tmMaterial->MatShader = scene->BaseShader;
-			tmMaterial->Texture = tmTex;
-			tmMaterial->Shininess = 2.0f;
-		}
-		Material::Sptr bmMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			bmMaterial->Name = "branchmushroom";
-			bmMaterial->MatShader = scene->BaseShader;
-			bmMaterial->Texture = bmTex;
-			bmMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr PBMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			PBMaterial->Name = "PauseButton";
-			PBMaterial->MatShader = scene->BaseShader;
-			PBMaterial->Texture = PBTex;
-			PBMaterial->Shininess = 2.0f;
-		}
-		Material::Sptr BGMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			BGMaterial->Name = "BG";
-			BGMaterial->MatShader = scene->BaseShader;
-			BGMaterial->Texture = BGTex;
-			BGMaterial->Shininess = 2.0f;
-		}
-		Material::Sptr BGGrassMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			BGGrassMaterial->Name = "BGGrass";
-			BGGrassMaterial->MatShader = scene->BaseShader;
-			BGGrassMaterial->Texture = BGGrassTex;
-			BGGrassMaterial->Shininess = 2.0f;
-		}
-		Material::Sptr ProgressBarMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			ProgressBarMaterial->Name = "ProgressBar";
-			ProgressBarMaterial->MatShader = scene->BaseShader;
-			ProgressBarMaterial->Texture = ProgressTex;
-			ProgressBarMaterial->Shininess = 2.0f;
-		}
-		Material::Sptr grass1Material = ResourceManager::CreateAsset<Material>();
-		{
-			grass1Material->Name = "grass1";
-			grass1Material->MatShader = scene->BaseShader;
-			grass1Material->Texture = Grass1Tex;
-			grass1Material->Shininess = 2.0f;
-		}
-		Material::Sptr grass2Material = ResourceManager::CreateAsset<Material>();
-		{
-			grass2Material->Name = "grass2";
-			grass2Material->MatShader = scene->BaseShader;
-			grass2Material->Texture = Grass2Tex;
-			grass2Material->Shininess = 2.0f;
-		}
-		Material::Sptr grass3Material = ResourceManager::CreateAsset<Material>();
-		{
-			grass3Material->Name = "grass3";
-			grass3Material->MatShader = scene->BaseShader;
-			grass3Material->Texture = Grass3Tex;
-			grass3Material->Shininess = 2.0f;
-		}
-		Material::Sptr grass4Material = ResourceManager::CreateAsset<Material>();
-		{
-			grass4Material->Name = "grass4";
-			grass4Material->MatShader = scene->BaseShader;
-			grass4Material->Texture = Grass4Tex;
-			grass4Material->Shininess = 2.0f;
-		}
-		Material::Sptr grass5Material = ResourceManager::CreateAsset<Material>();
-		{
-			grass5Material->Name = "grass5";
-			grass5Material->MatShader = scene->BaseShader;
-			grass5Material->Texture = Grass5Tex;
-			grass5Material->Shininess = 2.0f;
-		}
-		Material::Sptr ExitTreeMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			ExitTreeMaterial->Name = "ExitTree";
-			ExitTreeMaterial->MatShader = scene->BaseShader;
-			ExitTreeMaterial->Texture = ExitTreeTex;
-			ExitTreeMaterial->Shininess = 2.0f;
-		}
-		Material::Sptr LStextMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			LStextMaterial->Name = "LStext";
-			LStextMaterial->MatShader = scene->BaseShader;
-			LStextMaterial->Texture = LStextTex;
-			LStextMaterial->Shininess = 2.0f;
-		}
-
-
-		Material::Sptr FrogBodyMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			FrogBodyMaterial->Name = "FrogBody";
-			FrogBodyMaterial->MatShader = scene->BaseShader;
-			FrogBodyMaterial->Texture = FrogBodyTex;
-			FrogBodyMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr FrogHeadTopMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			FrogHeadTopMaterial->Name = "FrogHeadTop";
-			FrogHeadTopMaterial->MatShader = scene->BaseShader;
-			FrogHeadTopMaterial->Texture = FrogHeadTopTex;
-			FrogHeadTopMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr FrogHeadBotMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			FrogHeadBotMaterial->Name = "FrogHeadBot";
-			FrogHeadBotMaterial->MatShader = scene->BaseShader;
-			FrogHeadBotMaterial->Texture = FrogHeadBotTex;
-			FrogHeadBotMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr FrogTongueMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			FrogTongueMaterial->Name = "FrogTongue";
-			FrogTongueMaterial->MatShader = scene->BaseShader;
-			FrogTongueMaterial->Texture = FrogTongueTex;
-			FrogTongueMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr BushTransitionMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			BushTransitionMaterial->Name = "BushTransition";
-			BushTransitionMaterial->MatShader = scene->BaseShader;
-			BushTransitionMaterial->Texture = BushTransitionTex;
-			BushTransitionMaterial->Shininess = 2.0f;
-		}
-
-
 		// Create some lights for our scene
 		scene->Lights.resize(18);
 		scene->Lights[0].Position = glm::vec3(-400.0f, 1.0f, 40.0f);
@@ -2981,187 +3091,187 @@ int main() {
 		planeMesh->GenerateMesh();
 
 
+		if (level2) {
+			//Background Assets
+			createBackgroundAsset("1", glm::vec3(-401.f, 5.0f, -0.f), 0.5, glm::vec3(83.f, 5.0f, 0.0f), BranchMesh, BranchMaterial);
+			createBackgroundAsset("2", glm::vec3(-600.f, 5.0f, -0.f), 0.5, glm::vec3(83.f, 5.0f, 0.0f), BranchMesh, BranchMaterial);
 
-		//Background Assets
-		createBackgroundAsset("1", glm::vec3(-401.f, 5.0f, -0.f), 0.5, glm::vec3(83.f, 5.0f, 0.0f), BranchMesh, BranchMaterial);
-		createBackgroundAsset("2", glm::vec3(-600.f, 5.0f, -0.f), 0.5, glm::vec3(83.f, 5.0f, 0.0f), BranchMesh, BranchMaterial);
+			createBackgroundAsset("3", glm::vec3(-586.f, 4.0f, -0.660), 3, glm::vec3(83.f, 5.0f, 0.0f), LogMesh, LogMaterial);
+			createBackgroundAsset("4", glm::vec3(-420.f, 0.0f, -0.660), 0.5, glm::vec3(400.f, 5.0f, 0.0f), LogMesh, LogMaterial);
 
-		createBackgroundAsset("3", glm::vec3(-586.f, 4.0f, -0.660), 3, glm::vec3(83.f, 5.0f, 0.0f), LogMesh, LogMaterial);
-		createBackgroundAsset("4", glm::vec3(-420.f, 0.0f, -0.660), 0.5, glm::vec3(400.f, 5.0f, 0.0f), LogMesh, LogMaterial);
+			createBackgroundAsset("5", glm::vec3(-454.5, 5.470f, -0.330), 6.0, glm::vec3(83.f, 5.0f, 0.0f), Plant1Mesh, PlantMaterial);
+			createBackgroundAsset("6", glm::vec3(-540.5, 5.470f, -0.330), 6.0, glm::vec3(83.f, 5.0f, 0.0f), Plant2Mesh, PlantMaterial);
+			createBackgroundAsset("7", glm::vec3(-640.5, 5.470f, -0.330), 6.0, glm::vec3(83.f, 5.0f, 0.0f), Plant3Mesh, PlantMaterial);
 
-		createBackgroundAsset("5", glm::vec3(-454.5, 5.470f, -0.330), 6.0, glm::vec3(83.f, 5.0f, 0.0f), Plant1Mesh, PlantMaterial);
-		createBackgroundAsset("6", glm::vec3(-540.5, 5.470f, -0.330), 6.0, glm::vec3(83.f, 5.0f, 0.0f), Plant2Mesh, PlantMaterial);
-		createBackgroundAsset("7", glm::vec3(-640.5, 5.470f, -0.330), 6.0, glm::vec3(83.f, 5.0f, 0.0f), Plant3Mesh, PlantMaterial);
+			createBackgroundAsset("8", glm::vec3(-420.f, 0.0f, -0.660), 6.0, glm::vec3(83.f, 5.0f, 0.0f), SunflowerMesh, SunflowerMaterial);
 
-		createBackgroundAsset("8", glm::vec3(-420.f, 0.0f, -0.660), 6.0, glm::vec3(83.f, 5.0f, 0.0f), SunflowerMesh, SunflowerMaterial);
+			createBackgroundAsset("9", glm::vec3(-413.f, 5.0f, -0.430), 0.5, glm::vec3(83.f, 5.0f, 90.0f), ToadMesh, ToadMaterial);
+			createBackgroundAsset("10", glm::vec3(-490.f, 5.0f, -0.430), 0.5, glm::vec3(83.f, 5.0f, 90.0f), ToadMesh, ToadMaterial);
+			createBackgroundAsset("11", glm::vec3(-730.f, 5.0f, -0.430), 0.5, glm::vec3(83.f, 5.0f, 90.0f), ToadMesh, ToadMaterial);
 
-		createBackgroundAsset("9", glm::vec3(-413.f, 5.0f, -0.430), 0.5, glm::vec3(83.f, 5.0f, 90.0f), ToadMesh, ToadMaterial);
-		createBackgroundAsset("10", glm::vec3(-490.f, 5.0f, -0.430), 0.5, glm::vec3(83.f, 5.0f, 90.0f), ToadMesh, ToadMaterial);
-		createBackgroundAsset("11", glm::vec3(-730.f, 5.0f, -0.430), 0.5, glm::vec3(83.f, 5.0f, 90.0f), ToadMesh, ToadMaterial);
+			createBackgroundAsset("12", glm::vec3(-420.f, 0.0f, -0.660), 0.5, glm::vec3(83.f, 5.0f, 90.0f), Rock1Mesh, boxMaterial);
+			createBackgroundAsset("13", glm::vec3(-420.f, 0.0f, -0.660), 0.5, glm::vec3(83.f, 5.0f, 90.0f), Rock2Mesh, rockMaterial);
+			createBackgroundAsset("14", glm::vec3(-420.f, 0.0f, -0.660), 0.5, glm::vec3(83.f, 5.0f, 90.0f), Rock3Mesh, rockMaterial);
 
-		createBackgroundAsset("12", glm::vec3(-420.f, 0.0f, -0.660), 0.5, glm::vec3(83.f, 5.0f, 90.0f), Rock1Mesh, boxMaterial);
-		createBackgroundAsset("13", glm::vec3(-420.f, 0.0f, -0.660), 0.5, glm::vec3(83.f, 5.0f, 90.0f), Rock2Mesh, rockMaterial);
-		createBackgroundAsset("14", glm::vec3(-420.f, 0.0f, -0.660), 0.5, glm::vec3(83.f, 5.0f, 90.0f), Rock3Mesh, rockMaterial);
+			createBackgroundAsset("15", glm::vec3(-420.f, 6.0f, -0.660), 0.5, glm::vec3(83.f, 5.0f, 90.0f), twigMesh, twigMaterial);
+			createBackgroundAsset("16", glm::vec3(-387.060f, 1.530f, 0.550), 0.05, glm::vec3(83.f, -7.0f, 90.0f), frogMesh, frogMaterial);
 
-		createBackgroundAsset("15", glm::vec3(-420.f, 6.0f, -0.660), 0.5, glm::vec3(83.f, 5.0f, 90.0f), twigMesh, twigMaterial);
-		createBackgroundAsset("16", glm::vec3(-387.060f, 1.530f, 0.550), 0.05, glm::vec3(83.f, -7.0f, 90.0f), frogMesh, frogMaterial);
+			createBackgroundAsset("17", glm::vec3(-392.5f, 4.6f, -1.8), 0.5, glm::vec3(83.f, -7.0f, 90.0f), bmMesh, bmMaterial);
+			createBackgroundAsset("18", glm::vec3(-406.f, -12.660f, 0.400), 0.05, glm::vec3(83.f, -7.0f, 90.0f), tmMesh, tmMaterial);
 
-		createBackgroundAsset("17", glm::vec3(-392.5f, 4.6f, -1.8), 0.5, glm::vec3(83.f, -7.0f, 90.0f), bmMesh, bmMaterial);
-		createBackgroundAsset("18", glm::vec3(-406.f, -12.660f, 0.400), 0.05, glm::vec3(83.f, -7.0f, 90.0f), tmMesh, tmMaterial);
+			//Obstacles
 
-		//Obstacles
-		
-		//createGroundObstacle("18", glm::vec3(-320.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 8 (small jump)
-		//createGroundObstacle("20", glm::vec3(-340.f, 0.0f, 3.0), glm::vec3(1.f, 1.f, 1.f), glm::vec3(90.f, 0.0f, 73.f), vinesMesh, vinesMaterial); // vine 6 (jump blocking)
-		//createGroundObstacle("24", glm::vec3(-380.f, 5.530f, 0.250f), glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(90.f, 0.0f, -25.f), vinesMesh, vinesMaterial); // vine 8 (squish blocking)
-		//createGroundObstacle("26", glm::vec3(-395.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 9 (tall jump)
+			//createGroundObstacle("18", glm::vec3(-320.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 8 (small jump)
+			//createGroundObstacle("20", glm::vec3(-340.f, 0.0f, 3.0), glm::vec3(1.f, 1.f, 1.f), glm::vec3(90.f, 0.0f, 73.f), vinesMesh, vinesMaterial); // vine 6 (jump blocking)
+			//createGroundObstacle("24", glm::vec3(-380.f, 5.530f, 0.250f), glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(90.f, 0.0f, -25.f), vinesMesh, vinesMaterial); // vine 8 (squish blocking)
+			//createGroundObstacle("26", glm::vec3(-395.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 9 (tall jump)
 
-		createGroundObstacle("1", glm::vec3(-450.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //red mushroom 1 (small jump)
-		createGroundObstacle("2", glm::vec3(-500.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //red mushroom 2 (small jump)
-		createGroundObstacle("3", glm::vec3(-550.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), tmMesh, tmMaterial); // tall mushroom 1 (small jump)
-		createGroundObstacle("4", glm::vec3(-600.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), bmMesh, bmMaterial); //branch mushroom 1 (small jump)
+			createGroundObstacle("1", glm::vec3(-450.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //red mushroom 1 (small jump)
+			createGroundObstacle("2", glm::vec3(-500.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //red mushroom 2 (small jump)
+			createGroundObstacle("3", glm::vec3(-550.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), tmMesh, tmMaterial); // tall mushroom 1 (small jump)
+			createGroundObstacle("4", glm::vec3(-600.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), bmMesh, bmMaterial); //branch mushroom 1 (small jump)
 
-		createGroundObstacle("5", glm::vec3(-650.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //red mushroom 3 (small jump)
-		createGroundObstacle("6", glm::vec3(-680.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //red mushroom 4 (small jump)
-		
-		createGroundObstacle("7", glm::vec3(-710.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //red mushroom 5 (small jump)
-		createGroundObstacle("8", glm::vec3(-750.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), bmMesh, bmMaterial); //branch mushroom 2 (small jump)
+			createGroundObstacle("5", glm::vec3(-650.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //red mushroom 3 (small jump)
+			createGroundObstacle("6", glm::vec3(-680.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //red mushroom 4 (small jump)
 
-		//Collisions
+			createGroundObstacle("7", glm::vec3(-710.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //red mushroom 5 (small jump)
+			createGroundObstacle("8", glm::vec3(-750.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), bmMesh, bmMaterial); //branch mushroom 2 (small jump)
 
-		//mushroom 8 collision
-	//	createCollision("101", -19.660f, 1.560f, 1.f, 1.f);
-	//	createCollision("102", -20.410f, 1.560f, 1.f, 1.f);
-	//	createCollision("103", -19.970f, 1.860f, 1.f, 1.f);
-	//	createCollision("104", -20.190f, 0.450f, 1.f, 1.f);
+			//Collisions
 
-		// vine 6 collisions
-		//createCollision("51", -333.30f, 11.f, 0.5f, 5.5f);
-		//createCollision("52", -340.30f, 11.f, 0.5f, 5.5f);
-		//createCollision("53", -336.8f, 6.f, 4.0f, 0.5f);
-		//createCollision("54", -336.8f, 17.f, 4.0f, 0.5f);
+			//mushroom 8 collision
+		//	createCollision("101", -19.660f, 1.560f, 1.f, 1.f);
+		//	createCollision("102", -20.410f, 1.560f, 1.f, 1.f);
+		//	createCollision("103", -19.970f, 1.860f, 1.f, 1.f);
+		//	createCollision("104", -20.190f, 0.450f, 1.f, 1.f);
 
-		// squish collision
-		//createCollision("57", -379.780f, 10.4f, 0.420f, 10.f);
+			// vine 6 collisions
+			//createCollision("51", -333.30f, 11.f, 0.5f, 5.5f);
+			//createCollision("52", -340.30f, 11.f, 0.5f, 5.5f);
+			//createCollision("53", -336.8f, 6.f, 4.0f, 0.5f);
+			//createCollision("54", -336.8f, 17.f, 4.0f, 0.5f);
 
-		//cobweb collisions
-		//createCollision("58", -395.f, 1.63f, 1.f, 7.f);
+			// squish collision
+			//createCollision("57", -379.780f, 10.4f, 0.420f, 10.f);
+
+			//cobweb collisions
+			//createCollision("58", -395.f, 1.63f, 1.f, 7.f);
 
 
-		
 
-		//3D Backgrounds
-		createGroundObstacle("27", glm::vec3(-292.3f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
-		createGroundObstacle("28", glm::vec3(-400.f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
-		createGroundObstacle("29", glm::vec3(-507.7f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
 
-		createGroundObstacle("30", glm::vec3(-615.4f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
-		createGroundObstacle("31", glm::vec3(-723.1f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
-		createGroundObstacle("32", glm::vec3(-830.8f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
+			//3D Backgrounds
+			createGroundObstacle("27", glm::vec3(-292.3f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
+			createGroundObstacle("28", glm::vec3(-400.f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
+			createGroundObstacle("29", glm::vec3(-507.7f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
 
-		//2DBackGrounds
-		createGroundObstacle("33", glm::vec3(-50.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, bgMaterial);
-		createGroundObstacle("34", glm::vec3(-450.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, bgMaterial);
-		createGroundObstacle("35", glm::vec3(-825.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, bgMaterial);
-		createGroundObstacle("36", glm::vec3(-1625.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, bgMaterial);
-		createGroundObstacle("37", glm::vec3(-2150.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, bgMaterial);
+			createGroundObstacle("30", glm::vec3(-615.4f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
+			createGroundObstacle("31", glm::vec3(-723.1f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
+			createGroundObstacle("32", glm::vec3(-830.8f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
 
-		//Grass
-		createGroundObstacle("38", glm::vec3(-418.170f, -38.230f, 5.250f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass1Material);
-		createGroundObstacle("39", glm::vec3(-370.42f, 46.920f, 5.080f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass2Material);
-		createGroundObstacle("40", glm::vec3(-397.91f, -47.360f, 5.090f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass3Material);
-		createGroundObstacle("41", glm::vec3(-364.3f, -37.550f, 5.310f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass4Material);
-		createGroundObstacle("42", glm::vec3(-447.340f, -37.120f, 5.560f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass5Material);
+			//2DBackGrounds
+			createGroundObstacle("33", glm::vec3(-50.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, bgMaterial);
+			createGroundObstacle("34", glm::vec3(-450.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, bgMaterial);
+			createGroundObstacle("35", glm::vec3(-825.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, bgMaterial);
+			createGroundObstacle("36", glm::vec3(-1625.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, bgMaterial);
+			createGroundObstacle("37", glm::vec3(-2150.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, bgMaterial);
 
-		createGroundObstacle("43", glm::vec3(-418.170f - 103.5f, -38.230f, 5.250f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass1Material);
-		createGroundObstacle("44", glm::vec3(-370.42f - 103.5f, 46.920f, 5.080f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass2Material);
-		createGroundObstacle("45", glm::vec3(-397.91f - 103.5f, -47.360f, 5.090f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass3Material);
-		createGroundObstacle("46", glm::vec3(-364.3f - 103.5f, -37.550f, 5.310f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass4Material);
-		createGroundObstacle("47", glm::vec3(-47.340f - 103.5f - 400.f, -37.120f, 5.560f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass5Material);
+			//Grass
+			createGroundObstacle("38", glm::vec3(-418.170f, -38.230f, 5.250f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass1Material);
+			createGroundObstacle("39", glm::vec3(-370.42f, 46.920f, 5.080f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass2Material);
+			createGroundObstacle("40", glm::vec3(-397.91f, -47.360f, 5.090f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass3Material);
+			createGroundObstacle("41", glm::vec3(-364.3f, -37.550f, 5.310f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass4Material);
+			createGroundObstacle("42", glm::vec3(-447.340f, -37.120f, 5.560f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass5Material);
 
-		createGroundObstacle("48", glm::vec3(-18.170f - 103.5f - 103.5f -400.f, -38.230f, 5.250f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass1Material);
-		createGroundObstacle("49", glm::vec3(29.580f - 103.5f - 103.5f - 400.f, 46.920f, 5.080f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass2Material);
-		createGroundObstacle("50", glm::vec3(2.090f - 103.5f - 103.5f - 400.f, -47.360f, 5.090f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass3Material);
-		createGroundObstacle("51", glm::vec3(35.700f - 103.5f - 103.5f - 400.f, -37.550f, 5.310f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass4Material);
-		createGroundObstacle("52", glm::vec3(-47.340f - 103.5f - 103.5f - 400.f, -37.120f, 5.560f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass5Material);
+			createGroundObstacle("43", glm::vec3(-418.170f - 103.5f, -38.230f, 5.250f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass1Material);
+			createGroundObstacle("44", glm::vec3(-370.42f - 103.5f, 46.920f, 5.080f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass2Material);
+			createGroundObstacle("45", glm::vec3(-397.91f - 103.5f, -47.360f, 5.090f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass3Material);
+			createGroundObstacle("46", glm::vec3(-364.3f - 103.5f, -37.550f, 5.310f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass4Material);
+			createGroundObstacle("47", glm::vec3(-47.340f - 103.5f - 400.f, -37.120f, 5.560f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass5Material);
 
-		createGroundObstacle("53", glm::vec3(-18.170f - 103.5f - 103.5f - 103.5f - 400.f, -38.230f, 5.250f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass1Material);
-		createGroundObstacle("54", glm::vec3(29.580f - 103.5f - 103.5f - 103.5f - 400.f, 46.920f, 5.080f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass2Material);
-		createGroundObstacle("55", glm::vec3(2.090f - 103.5f - 103.5f - 103.5f - 400.f, -47.360f, 5.090f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass3Material);
-		createGroundObstacle("56", glm::vec3(35.700f - 103.5f - 103.5f - 103.5f - 400.f, -37.550f, 5.310f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass4Material);
-		createGroundObstacle("57", glm::vec3(-47.340f - 103.5f - 103.5f - 103.5f - 400.f, -37.120f, 5.560f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass5Material);
+			createGroundObstacle("48", glm::vec3(-18.170f - 103.5f - 103.5f - 400.f, -38.230f, 5.250f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass1Material);
+			createGroundObstacle("49", glm::vec3(29.580f - 103.5f - 103.5f - 400.f, 46.920f, 5.080f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass2Material);
+			createGroundObstacle("50", glm::vec3(2.090f - 103.5f - 103.5f - 400.f, -47.360f, 5.090f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass3Material);
+			createGroundObstacle("51", glm::vec3(35.700f - 103.5f - 103.5f - 400.f, -37.550f, 5.310f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass4Material);
+			createGroundObstacle("52", glm::vec3(-47.340f - 103.5f - 103.5f - 400.f, -37.120f, 5.560f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass5Material);
 
-		//Exit Tree
-		createGroundObstacle("58", glm::vec3(-409.f - 400.f, -3.380f, -0.340f), glm::vec3(3.0f, 3.0f, 3.0f), glm::vec3(90.0f, 0.0f, 140.f), ExitTreeMesh, ExitTreeMaterial);
+			createGroundObstacle("53", glm::vec3(-18.170f - 103.5f - 103.5f - 103.5f - 400.f, -38.230f, 5.250f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass1Material);
+			createGroundObstacle("54", glm::vec3(29.580f - 103.5f - 103.5f - 103.5f - 400.f, 46.920f, 5.080f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass2Material);
+			createGroundObstacle("55", glm::vec3(2.090f - 103.5f - 103.5f - 103.5f - 400.f, -47.360f, 5.090f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass3Material);
+			createGroundObstacle("56", glm::vec3(35.700f - 103.5f - 103.5f - 103.5f - 400.f, -37.550f, 5.310f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass4Material);
+			createGroundObstacle("57", glm::vec3(-47.340f - 103.5f - 103.5f - 103.5f - 400.f, -37.120f, 5.560f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass5Material);
 
-		//Foreground Grass
-		createGroundObstacle("59", glm::vec3(40.f - 400.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
-		createGroundObstacle("60", glm::vec3(0.f - 400.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
-		createGroundObstacle("61", glm::vec3(-40.f - 400.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
-		createGroundObstacle("62", glm::vec3(-80.f - 400.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
-		createGroundObstacle("63", glm::vec3(-120.f - 400.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
-		createGroundObstacle("64", glm::vec3(-160.f - 400.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+			//Exit Tree
+			createGroundObstacle("58", glm::vec3(-409.f - 400.f, -3.380f, -0.340f), glm::vec3(3.0f, 3.0f, 3.0f), glm::vec3(90.0f, 0.0f, 140.f), ExitTreeMesh, ExitTreeMaterial);
 
-		createGroundObstacle("65", glm::vec3(-200.f - 400.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
-		createGroundObstacle("66", glm::vec3(-240.f - 400.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
-		createGroundObstacle("67", glm::vec3(-280.f - 400.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
-		createGroundObstacle("68", glm::vec3(-320.f - 400.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
-		createGroundObstacle("69", glm::vec3(-360.f - 400.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
-		createGroundObstacle("70", glm::vec3(-400.f - 400.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+			//Foreground Grass
+			createGroundObstacle("59", glm::vec3(40.f - 400.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+			createGroundObstacle("60", glm::vec3(0.f - 400.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+			createGroundObstacle("61", glm::vec3(-40.f - 400.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+			createGroundObstacle("62", glm::vec3(-80.f - 400.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+			createGroundObstacle("63", glm::vec3(-120.f - 400.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+			createGroundObstacle("64", glm::vec3(-160.f - 400.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
 
-		//red mushroom 1
-		createCollision("101", -19.660f - 430.f, 1.560f, 1.f, 1.f);
-		createCollision("102", -20.410f - 430.f, 1.560f, 1.f, 1.f);
-		createCollision("103", -19.970f - 430.f, 1.860f, 1.f, 1.f);
-		createCollision("104", -20.190f - 430.f, 0.450f, 1.f, 1.f);
+			createGroundObstacle("65", glm::vec3(-200.f - 400.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+			createGroundObstacle("66", glm::vec3(-240.f - 400.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+			createGroundObstacle("67", glm::vec3(-280.f - 400.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+			createGroundObstacle("68", glm::vec3(-320.f - 400.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+			createGroundObstacle("69", glm::vec3(-360.f - 400.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
+			createGroundObstacle("70", glm::vec3(-400.f - 400.f, -14.390f, 5.390f), glm::vec3(40.0f, 11.770f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, ForegroundMaterial);
 
-		//red mushroom 2
-		createCollision("111", -19.660f - 480.f, 1.560f, 1.f, 1.f);
-		createCollision("111", -20.410f - 480.f, 1.560f, 1.f, 1.f);
-		createCollision("111", -19.970f - 480.f, 1.860f, 1.f, 1.f);
-		createCollision("111", -20.190f - 480.f, 0.450f, 1.f, 1.f);
+			//red mushroom 1
+			createCollision("101", -19.660f - 430.f, 1.560f, 1.f, 1.f);
+			createCollision("102", -20.410f - 430.f, 1.560f, 1.f, 1.f);
+			createCollision("103", -19.970f - 430.f, 1.860f, 1.f, 1.f);
+			createCollision("104", -20.190f - 430.f, 0.450f, 1.f, 1.f);
 
-		//tall mushroom
-		createCollision("121", -19.660f - 530.f, 1.560f, 1.f, 1.f);
-		createCollision("122", -20.410f - 530.f, 1.560f, 1.f, 1.f);
-		createCollision("123", -19.970f - 530.f, 1.860f, 1.f, 1.f);
-		createCollision("124", -20.190f - 530.f, 0.450f, 1.f, 1.f);
-		createCollision("125", -550.f, 3.430f, 2.f, 4.f);
+			//red mushroom 2
+			createCollision("111", -19.660f - 480.f, 1.560f, 1.f, 1.f);
+			createCollision("111", -20.410f - 480.f, 1.560f, 1.f, 1.f);
+			createCollision("111", -19.970f - 480.f, 1.860f, 1.f, 1.f);
+			createCollision("111", -20.190f - 480.f, 0.450f, 1.f, 1.f);
 
-		//big mushroom
-		createCollision("131", -19.660f - 580.f, 1.560f, 1.f, 1.f);
-		createCollision("132", -20.410f - 580.f, 1.560f, 1.f, 1.f);
-		createCollision("133", -19.970f - 580.f, 1.860f, 1.f, 1.f);
-		createCollision("134", -20.190f - 580.f, 0.450f, 1.f, 1.f);
-		createCollision("135", -600.f, 3.080f, 3.f, 4.f);
-		createCollision("136", -600.f, 3.22f, 4.f, 2.f);
+			//tall mushroom
+			createCollision("121", -19.660f - 530.f, 1.560f, 1.f, 1.f);
+			createCollision("122", -20.410f - 530.f, 1.560f, 1.f, 1.f);
+			createCollision("123", -19.970f - 530.f, 1.860f, 1.f, 1.f);
+			createCollision("124", -20.190f - 530.f, 0.450f, 1.f, 1.f);
+			createCollision("125", -550.f, 3.430f, 2.f, 4.f);
 
-		//red mushroom 3
-		createCollision("141", -19.660f - 630.f, 1.560f, 1.f, 1.f);
-		createCollision("142", -20.410f - 630.f, 1.560f, 1.f, 1.f);
-		createCollision("143", -19.970f - 630.f, 1.860f, 1.f, 1.f);
-		createCollision("144", -20.190f - 630.f, 0.450f, 1.f, 1.f);
+			//big mushroom
+			createCollision("131", -19.660f - 580.f, 1.560f, 1.f, 1.f);
+			createCollision("132", -20.410f - 580.f, 1.560f, 1.f, 1.f);
+			createCollision("133", -19.970f - 580.f, 1.860f, 1.f, 1.f);
+			createCollision("134", -20.190f - 580.f, 0.450f, 1.f, 1.f);
+			createCollision("135", -600.f, 3.080f, 3.f, 4.f);
+			createCollision("136", -600.f, 3.22f, 4.f, 2.f);
 
-		//red mushroom 4
-		createCollision("151", -19.660f - 660.f, 1.560f, 1.f, 1.f);
-		createCollision("152", -20.410f - 660.f, 1.560f, 1.f, 1.f);
-		createCollision("153", -19.970f - 660.f, 1.860f, 1.f, 1.f);
-		createCollision("154", -20.190f - 660.f, 0.450f, 1.f, 1.f);
+			//red mushroom 3
+			createCollision("141", -19.660f - 630.f, 1.560f, 1.f, 1.f);
+			createCollision("142", -20.410f - 630.f, 1.560f, 1.f, 1.f);
+			createCollision("143", -19.970f - 630.f, 1.860f, 1.f, 1.f);
+			createCollision("144", -20.190f - 630.f, 0.450f, 1.f, 1.f);
 
-		//red mushroom 5
-		createCollision("161", -19.660f - 690.f, 1.560f, 1.f, 1.f);
-		createCollision("162", -20.410f - 690.f, 1.560f, 1.f, 1.f);
-		createCollision("163", -19.970f - 690.f, 1.860f, 1.f, 1.f);
-		createCollision("164", -20.190f - 690.f, 0.450f, 1.f, 1.f);
+			//red mushroom 4
+			createCollision("151", -19.660f - 660.f, 1.560f, 1.f, 1.f);
+			createCollision("152", -20.410f - 660.f, 1.560f, 1.f, 1.f);
+			createCollision("153", -19.970f - 660.f, 1.860f, 1.f, 1.f);
+			createCollision("154", -20.190f - 660.f, 0.450f, 1.f, 1.f);
 
-		//big mushroom 2
-		createCollision("171", -19.660f - 730.f, 1.560f, 1.f, 1.f);
-		createCollision("172", -20.410f - 730.f, 1.560f, 1.f, 1.f);
-		createCollision("173", -19.970f - 730.f, 1.860f, 1.f, 1.f);
-		createCollision("174", -20.190f - 730.f, 0.450f, 1.f, 1.f);
-		createCollision("175", -750.f, 3.080f, 3.f, 4.f);
-		createCollision("176", -750.f, 3.22f, 4.f, 2.f);
+			//red mushroom 5
+			createCollision("161", -19.660f - 690.f, 1.560f, 1.f, 1.f);
+			createCollision("162", -20.410f - 690.f, 1.560f, 1.f, 1.f);
+			createCollision("163", -19.970f - 690.f, 1.860f, 1.f, 1.f);
+			createCollision("164", -20.190f - 690.f, 0.450f, 1.f, 1.f);
 
+			//big mushroom 2
+			createCollision("171", -19.660f - 730.f, 1.560f, 1.f, 1.f);
+			createCollision("172", -20.410f - 730.f, 1.560f, 1.f, 1.f);
+			createCollision("173", -19.970f - 730.f, 1.860f, 1.f, 1.f);
+			createCollision("174", -20.190f - 730.f, 0.450f, 1.f, 1.f);
+			createCollision("175", -750.f, 3.080f, 3.f, 4.f);
+			createCollision("176", -750.f, 3.22f, 4.f, 2.f);
+		}
 		
 
 		// Set up the scene's camera
@@ -3563,460 +3673,6 @@ int main() {
 		// I hate this
 		scene->BaseShader = uboShader;
 
-		// Create our materials
-		Material::Sptr boxMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			boxMaterial->Name = "Box";
-			boxMaterial->MatShader = scene->BaseShader;
-			boxMaterial->Texture = boxTexture;
-			boxMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr PbarbugMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			PbarbugMaterial->Name = "minibug";
-			PbarbugMaterial->MatShader = scene->BaseShader;
-			PbarbugMaterial->Texture = PbarbugTex;
-			PbarbugMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr greenMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			greenMaterial->Name = "green";
-			greenMaterial->MatShader = scene->BaseShader;
-			greenMaterial->Texture = greenTex;
-			greenMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr bgMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			bgMaterial->Name = "bg";
-			bgMaterial->MatShader = scene->BaseShader;
-			bgMaterial->Texture = bgTexture;
-			bgMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr grassMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			grassMaterial->Name = "Grass";
-			grassMaterial->MatShader = scene->BaseShader;
-			grassMaterial->Texture = grassTexture;
-			grassMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr winMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			winMaterial->Name = "win";
-			winMaterial->MatShader = scene->BaseShader;
-			winMaterial->Texture = winTexture;
-			winMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr ladybugMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			ladybugMaterial->Name = "lbo";
-			ladybugMaterial->MatShader = scene->BaseShader;
-			ladybugMaterial->Texture = ladybugTexture;
-			ladybugMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr monkeyMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			monkeyMaterial->Name = "Monkey";
-			monkeyMaterial->MatShader = scene->BaseShader;
-			monkeyMaterial->Texture = monkeyTex;
-			monkeyMaterial->Shininess = 256.0f;
-
-		}
-
-		Material::Sptr mushroomMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			mushroomMaterial->Name = "Mushroom";
-			mushroomMaterial->MatShader = scene->BaseShader;
-			mushroomMaterial->Texture = mushroomTexture;
-			mushroomMaterial->Shininess = 256.0f;
-
-		}
-
-		Material::Sptr vinesMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			vinesMaterial->Name = "vines";
-			vinesMaterial->MatShader = scene->BaseShader;
-			vinesMaterial->Texture = vinesTexture;
-			vinesMaterial->Shininess = 256.0f;
-
-		}
-
-		Material::Sptr cobwebMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			cobwebMaterial->Name = "cobweb";
-			cobwebMaterial->MatShader = scene->BaseShader;
-			cobwebMaterial->Texture = cobwebTexture;
-			cobwebMaterial->Shininess = 256.0f;
-
-		}
-
-		Material::Sptr PanelMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			PanelMaterial->Name = "Panel";
-			PanelMaterial->MatShader = scene->BaseShader;
-			PanelMaterial->Texture = PanelTex;
-			PanelMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr ResumeMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			ResumeMaterial->Name = "Resume";
-			ResumeMaterial->MatShader = scene->BaseShader;
-			ResumeMaterial->Texture = ResumeTex;
-			ResumeMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr MainMenuMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			MainMenuMaterial->Name = "Main Menu";
-			MainMenuMaterial->MatShader = scene->BaseShader;
-			MainMenuMaterial->Texture = MainMenuTex;
-			MainMenuMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr PauseMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			PauseMaterial->Name = "Pause";
-			PauseMaterial->MatShader = scene->BaseShader;
-			PauseMaterial->Texture = PauseTex;
-			PauseMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr ButtonMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			ButtonMaterial->Name = "Button";
-			ButtonMaterial->MatShader = scene->BaseShader;
-			ButtonMaterial->Texture = ButtonTex;
-			ButtonMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr FilterMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			FilterMaterial->Name = "Button Filter";
-			FilterMaterial->MatShader = scene->BaseShader;
-			FilterMaterial->Texture = FilterTex;
-			FilterMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr WinnerMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			WinnerMaterial->Name = "WinnerLogo";
-			WinnerMaterial->MatShader = scene->BaseShader;
-			WinnerMaterial->Texture = WinnerTex;
-			WinnerMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr LoserMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			LoserMaterial->Name = "LoserLogo";
-			LoserMaterial->MatShader = scene->BaseShader;
-			LoserMaterial->Texture = LoserTex;
-			LoserMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr ReplayMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			ReplayMaterial->Name = "Replay Text";
-			ReplayMaterial->MatShader = scene->BaseShader;
-			ReplayMaterial->Texture = ReplayTex;
-			ReplayMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr BranchMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			BranchMaterial->Name = "Branch";
-			BranchMaterial->MatShader = scene->BaseShader;
-			BranchMaterial->Texture = BranchTex;
-			BranchMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr LogMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			LogMaterial->Name = "Log";
-			LogMaterial->MatShader = scene->BaseShader;
-			LogMaterial->Texture = LogTex;
-			LogMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr PlantMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			PlantMaterial->Name = "Plant";
-			PlantMaterial->MatShader = scene->BaseShader;
-			PlantMaterial->Texture = PlantTex;
-			PlantMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr SunflowerMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			SunflowerMaterial->Name = "Sunflower";
-			SunflowerMaterial->MatShader = scene->BaseShader;
-			SunflowerMaterial->Texture = SunflowerTex;
-			SunflowerMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr ToadMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			ToadMaterial->Name = "Toad";
-			ToadMaterial->MatShader = scene->BaseShader;
-			ToadMaterial->Texture = ToadTex;
-			ToadMaterial->Shininess = 2.0f;
-		}
-		Material::Sptr BlankMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			BlankMaterial->Name = "Blank";
-			BlankMaterial->MatShader = scene->BaseShader;
-			BlankMaterial->Texture = BlankTex;
-			BlankMaterial->Shininess = 2.0f;
-		}
-		Material::Sptr ForegroundMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			ForegroundMaterial->Name = "Foreground";
-			ForegroundMaterial->MatShader = scene->BaseShader;
-			ForegroundMaterial->Texture = ForegroundTex;
-			ForegroundMaterial->Shininess = 2.0f;
-		}
-		Material::Sptr rockMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			rockMaterial->Name = "Rock";
-			rockMaterial->MatShader = scene->BaseShader;
-			rockMaterial->Texture = RockTex;
-			rockMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr twigMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			twigMaterial->Name = "twig";
-			twigMaterial->MatShader = scene->BaseShader;
-			twigMaterial->Texture = twigTex;
-			twigMaterial->Shininess = 2.0f;
-		}
-		Material::Sptr frogMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			frogMaterial->Name = "frog";
-			frogMaterial->MatShader = scene->BaseShader;
-			frogMaterial->Texture = frogTex;
-			frogMaterial->Shininess = 2.0f;
-		}
-		Material::Sptr tmMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			tmMaterial->Name = "tallmushroom";
-			tmMaterial->MatShader = scene->BaseShader;
-			tmMaterial->Texture = tmTex;
-			tmMaterial->Shininess = 2.0f;
-		}
-		Material::Sptr bmMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			bmMaterial->Name = "branchmushroom";
-			bmMaterial->MatShader = scene->BaseShader;
-			bmMaterial->Texture = bmTex;
-			bmMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr PBMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			PBMaterial->Name = "PauseButton";
-			PBMaterial->MatShader = scene->BaseShader;
-			PBMaterial->Texture = PBTex;
-			PBMaterial->Shininess = 2.0f;
-		}
-		Material::Sptr BGMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			BGMaterial->Name = "BG";
-			BGMaterial->MatShader = scene->BaseShader;
-			BGMaterial->Texture = MBGTex;
-			BGMaterial->Shininess = 2.0f;
-		}
-		Material::Sptr BGGrassMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			BGGrassMaterial->Name = "BGGrass";
-			BGGrassMaterial->MatShader = scene->BaseShader;
-			BGGrassMaterial->Texture = BGGrassTex;
-			BGGrassMaterial->Shininess = 2.0f;
-		}
-		Material::Sptr ProgressBarMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			ProgressBarMaterial->Name = "ProgressBar";
-			ProgressBarMaterial->MatShader = scene->BaseShader;
-			ProgressBarMaterial->Texture = ProgressTex;
-			ProgressBarMaterial->Shininess = 2.0f;
-		}
-		Material::Sptr grass1Material = ResourceManager::CreateAsset<Material>();
-		{
-			grass1Material->Name = "grass1";
-			grass1Material->MatShader = scene->BaseShader;
-			grass1Material->Texture = Grass1Tex;
-			grass1Material->Shininess = 2.0f;
-		}
-		Material::Sptr grass2Material = ResourceManager::CreateAsset<Material>();
-		{
-			grass2Material->Name = "grass2";
-			grass2Material->MatShader = scene->BaseShader;
-			grass2Material->Texture = Grass2Tex;
-			grass2Material->Shininess = 2.0f;
-		}
-		Material::Sptr grass3Material = ResourceManager::CreateAsset<Material>();
-		{
-			grass3Material->Name = "grass3";
-			grass3Material->MatShader = scene->BaseShader;
-			grass3Material->Texture = Grass3Tex;
-			grass3Material->Shininess = 2.0f;
-		}
-		Material::Sptr grass4Material = ResourceManager::CreateAsset<Material>();
-		{
-			grass4Material->Name = "grass4";
-			grass4Material->MatShader = scene->BaseShader;
-			grass4Material->Texture = Grass4Tex;
-			grass4Material->Shininess = 2.0f;
-		}
-		Material::Sptr grass5Material = ResourceManager::CreateAsset<Material>();
-		{
-			grass5Material->Name = "grass5";
-			grass5Material->MatShader = scene->BaseShader;
-			grass5Material->Texture = Grass5Tex;
-			grass5Material->Shininess = 2.0f;
-		}
-		Material::Sptr ExitTreeMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			ExitTreeMaterial->Name = "ExitTree";
-			ExitTreeMaterial->MatShader = scene->BaseShader;
-			ExitTreeMaterial->Texture = ExitTreeTex;
-			ExitTreeMaterial->Shininess = 2.0f;
-		}
-		Material::Sptr LStextMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			LStextMaterial->Name = "LStext";
-			LStextMaterial->MatShader = scene->BaseShader;
-			LStextMaterial->Texture = LStextTex;
-			LStextMaterial->Shininess = 2.0f;
-		}
-		Material::Sptr ExitRockMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			ExitRockMaterial->Name = "ExitRock";
-			ExitRockMaterial->MatShader = scene->BaseShader;
-			ExitRockMaterial->Texture = ExitRockTex;
-			ExitRockMaterial->Shininess = 2.0f;
-		}
-
-
-		Material::Sptr FrogBodyMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			FrogBodyMaterial->Name = "FrogBody";
-			FrogBodyMaterial->MatShader = scene->BaseShader;
-			FrogBodyMaterial->Texture = FrogBodyTex;
-			FrogBodyMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr FrogHeadTopMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			FrogHeadTopMaterial->Name = "FrogHeadTop";
-			FrogHeadTopMaterial->MatShader = scene->BaseShader;
-			FrogHeadTopMaterial->Texture = FrogHeadTopTex;
-			FrogHeadTopMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr FrogHeadBotMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			FrogHeadBotMaterial->Name = "FrogHeadBot";
-			FrogHeadBotMaterial->MatShader = scene->BaseShader;
-			FrogHeadBotMaterial->Texture = FrogHeadBotTex;
-			FrogHeadBotMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr FrogTongueMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			FrogTongueMaterial->Name = "FrogTongue";
-			FrogTongueMaterial->MatShader = scene->BaseShader;
-			FrogTongueMaterial->Texture = FrogTongueTex;
-			FrogTongueMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr BushTransitionMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			BushTransitionMaterial->Name = "BushTransition";
-			BushTransitionMaterial->MatShader = scene->BaseShader;
-			BushTransitionMaterial->Texture = BushTransitionTex;
-			BushTransitionMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr SignPostMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			SignPostMaterial->Name = "SignPost";
-			SignPostMaterial->MatShader = scene->BaseShader;
-			SignPostMaterial->Texture = SignPostTex;
-			SignPostMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr PuddleMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			PuddleMaterial->Name = "Puddle";
-			PuddleMaterial->MatShader = scene->BaseShader;
-			PuddleMaterial->Texture = PuddleTex;
-			PuddleMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr CampfireMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			CampfireMaterial->Name = "Campfire";
-			CampfireMaterial->MatShader = scene->BaseShader;
-			CampfireMaterial->Texture = CampfireTex;
-			CampfireMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr HangingRockMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			HangingRockMaterial->Name = "HangingRock";
-			HangingRockMaterial->MatShader = scene->BaseShader;
-			HangingRockMaterial->Texture = HangingRockTex;
-			HangingRockMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr RockPileMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			RockPileMaterial->Name = "RockPile";
-			RockPileMaterial->MatShader = scene->BaseShader;
-			RockPileMaterial->Texture = RockPileTex;
-			RockPileMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr RockTunnelMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			RockTunnelMaterial->Name = "RockTunnel";
-			RockTunnelMaterial->MatShader = scene->BaseShader;
-			RockTunnelMaterial->Texture = RockTunnelTex;
-			RockTunnelMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr RockWallMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			RockWallMaterial->Name = "RockWall";
-			RockWallMaterial->MatShader = scene->BaseShader;
-			RockWallMaterial->Texture = RockWallTex;
-			RockWallMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr MountainBackdropMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			MountainBackdropMaterial->Name = "Backdrop";
-			MountainBackdropMaterial->MatShader = scene->BaseShader;
-			MountainBackdropMaterial->Texture = MountainBackdropTex;
-			MountainBackdropMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr MountainForegroundMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			MountainForegroundMaterial->Name = "Foreground";
-			MountainForegroundMaterial->MatShader = scene->BaseShader;
-			MountainForegroundMaterial->Texture = MountainForegroundTex;
-			MountainForegroundMaterial->Shininess = 2.0f;
-		}
-
-
 		// Create some lights for our scene
 		scene->Lights.resize(31);
 		scene->Lights[0].Position = glm::vec3(-400.0f - 400.f, 1.0f, 40.0f);
@@ -4183,190 +3839,190 @@ int main() {
 		planeMesh->GenerateMesh();
 
 
+		if (level3) {
+			//Background Assets
+			createBackgroundAsset("1", glm::vec3(-401.f - 400.f, 5.0f, -0.f), 0.5, glm::vec3(83.f, 5.0f, 0.0f), BranchMesh, BranchMaterial);
+			createBackgroundAsset("2", glm::vec3(-600.f - 400.f, 5.0f, -0.f), 0.5, glm::vec3(83.f, 5.0f, 0.0f), BranchMesh, BranchMaterial);
 
-		//Background Assets
-		createBackgroundAsset("1", glm::vec3(-401.f - 400.f, 5.0f, -0.f), 0.5, glm::vec3(83.f, 5.0f, 0.0f), BranchMesh, BranchMaterial);
-		createBackgroundAsset("2", glm::vec3(-600.f - 400.f, 5.0f, -0.f), 0.5, glm::vec3(83.f, 5.0f, 0.0f), BranchMesh, BranchMaterial);
+			createBackgroundAsset("3", glm::vec3(-586.f - 400.f, 4.0f, -0.660), 3, glm::vec3(83.f, 5.0f, 0.0f), LogMesh, LogMaterial);
+			createBackgroundAsset("4", glm::vec3(-420.f - 400.f, 0.0f, -0.660), 0.5, glm::vec3(400.f, 5.0f, 0.0f), LogMesh, LogMaterial);
 
-		createBackgroundAsset("3", glm::vec3(-586.f - 400.f, 4.0f, -0.660), 3, glm::vec3(83.f, 5.0f, 0.0f), LogMesh, LogMaterial);
-		createBackgroundAsset("4", glm::vec3(-420.f - 400.f, 0.0f, -0.660), 0.5, glm::vec3(400.f, 5.0f, 0.0f), LogMesh, LogMaterial);
+			createBackgroundAsset("5", glm::vec3(-454.5 - 400.f, 5.470f, -0.330), 6.0, glm::vec3(83.f, 5.0f, 0.0f), Plant1Mesh, PlantMaterial);
+			createBackgroundAsset("6", glm::vec3(-540.5 - 400.f, 5.470f, -0.330), 6.0, glm::vec3(83.f, 5.0f, 0.0f), Plant2Mesh, PlantMaterial);
+			createBackgroundAsset("7", glm::vec3(-640.5 - 400.f, 5.470f, -0.330), 6.0, glm::vec3(83.f, 5.0f, 0.0f), Plant3Mesh, PlantMaterial);
 
-		createBackgroundAsset("5", glm::vec3(-454.5 - 400.f, 5.470f, -0.330), 6.0, glm::vec3(83.f, 5.0f, 0.0f), Plant1Mesh, PlantMaterial);
-		createBackgroundAsset("6", glm::vec3(-540.5 - 400.f, 5.470f, -0.330), 6.0, glm::vec3(83.f, 5.0f, 0.0f), Plant2Mesh, PlantMaterial);
-		createBackgroundAsset("7", glm::vec3(-640.5 - 400.f, 5.470f, -0.330), 6.0, glm::vec3(83.f, 5.0f, 0.0f), Plant3Mesh, PlantMaterial);
+			createBackgroundAsset("8", glm::vec3(-420.f - 400.f, 0.0f, -0.660), 6.0, glm::vec3(83.f, 5.0f, 0.0f), SunflowerMesh, SunflowerMaterial);
 
-		createBackgroundAsset("8", glm::vec3(-420.f - 400.f, 0.0f, -0.660), 6.0, glm::vec3(83.f, 5.0f, 0.0f), SunflowerMesh, SunflowerMaterial);
+			createBackgroundAsset("9", glm::vec3(-413.f - 400.f, 5.0f, -0.430), 0.5, glm::vec3(83.f, 5.0f, 90.0f), ToadMesh, ToadMaterial);
+			createBackgroundAsset("10", glm::vec3(-490.f - 400.f, 5.0f, -0.430), 0.5, glm::vec3(83.f, 5.0f, 90.0f), ToadMesh, ToadMaterial);
+			createBackgroundAsset("11", glm::vec3(-730.f - 400.f, 5.0f, -0.430), 0.5, glm::vec3(83.f, 5.0f, 90.0f), ToadMesh, ToadMaterial);
 
-		createBackgroundAsset("9", glm::vec3(-413.f - 400.f, 5.0f, -0.430), 0.5, glm::vec3(83.f, 5.0f, 90.0f), ToadMesh, ToadMaterial);
-		createBackgroundAsset("10", glm::vec3(-490.f - 400.f, 5.0f, -0.430), 0.5, glm::vec3(83.f, 5.0f, 90.0f), ToadMesh, ToadMaterial);
-		createBackgroundAsset("11", glm::vec3(-730.f - 400.f, 5.0f, -0.430), 0.5, glm::vec3(83.f, 5.0f, 90.0f), ToadMesh, ToadMaterial);
+			createBackgroundAsset("12", glm::vec3(-420.f - 400.f, 0.0f, -0.660), 0.5, glm::vec3(83.f, 5.0f, 90.0f), Rock1Mesh, boxMaterial);
+			createBackgroundAsset("13", glm::vec3(-420.f - 400.f, 0.0f, -0.660), 0.5, glm::vec3(83.f, 5.0f, 90.0f), Rock2Mesh, rockMaterial);
+			createBackgroundAsset("14", glm::vec3(-420.f - 400.f, 0.0f, -0.660), 0.5, glm::vec3(83.f, 5.0f, 90.0f), Rock3Mesh, rockMaterial);
 
-		createBackgroundAsset("12", glm::vec3(-420.f - 400.f, 0.0f, -0.660), 0.5, glm::vec3(83.f, 5.0f, 90.0f), Rock1Mesh, boxMaterial);
-		createBackgroundAsset("13", glm::vec3(-420.f - 400.f, 0.0f, -0.660), 0.5, glm::vec3(83.f, 5.0f, 90.0f), Rock2Mesh, rockMaterial);
-		createBackgroundAsset("14", glm::vec3(-420.f - 400.f, 0.0f, -0.660), 0.5, glm::vec3(83.f, 5.0f, 90.0f), Rock3Mesh, rockMaterial);
+			createBackgroundAsset("15", glm::vec3(-420.f - 400.f, 6.0f, -0.660), 0.5, glm::vec3(83.f, 5.0f, 90.0f), twigMesh, twigMaterial);
+			createBackgroundAsset("16", glm::vec3(-387.060f - 400.f, 1.530f, 0.550), 0.05, glm::vec3(83.f, -7.0f, 90.0f), frogMesh, frogMaterial);
 
-		createBackgroundAsset("15", glm::vec3(-420.f - 400.f, 6.0f, -0.660), 0.5, glm::vec3(83.f, 5.0f, 90.0f), twigMesh, twigMaterial);
-		createBackgroundAsset("16", glm::vec3(-387.060f - 400.f, 1.530f, 0.550), 0.05, glm::vec3(83.f, -7.0f, 90.0f), frogMesh, frogMaterial);
+			createBackgroundAsset("17", glm::vec3(-392.5f - 400.f, 4.6f, -1.8), 0.5, glm::vec3(83.f, -7.0f, 90.0f), bmMesh, bmMaterial);
+			createBackgroundAsset("18", glm::vec3(-406.f - 400.f, -12.660f, 0.400), 0.05, glm::vec3(83.f, -7.0f, 90.0f), tmMesh, tmMaterial);
 
-		createBackgroundAsset("17", glm::vec3(-392.5f - 400.f, 4.6f, -1.8), 0.5, glm::vec3(83.f, -7.0f, 90.0f), bmMesh, bmMaterial);
-		createBackgroundAsset("18", glm::vec3(-406.f - 400.f, -12.660f, 0.400), 0.05, glm::vec3(83.f, -7.0f, 90.0f), tmMesh, tmMaterial);
-
-		//Obstacles
-		createGroundObstacle("1", glm::vec3(-850.f,-4.0f, 0.0f), glm::vec3(5.0f, 5.0f, 5.0f), glm::vec3(90.0f, 0.0f, -168.0f), SignPostMesh, SignPostMaterial);
-		createGroundObstacle("2", glm::vec3(-880.f, 0.0f, -2.830f), glm::vec3(1.0f, 4.0f, 3.0f), glm::vec3(90.0f, 0.0f, -21.0f), RockPileMesh, RockPileMaterial);
-		createGroundObstacle("3", glm::vec3(-900.f, 0.0f, 0.0f), glm::vec3(3.0f, 2.0f, 2.0f), glm::vec3(90.0f, 0.0f, 0.0f), RockTunnelMesh, RockTunnelMaterial);
-		createGroundObstacle("4", glm::vec3(-950.f, -2.50f, 0.0f), glm::vec3(1.0f, 2.0f, 2.0f), glm::vec3(90.0f, 0.0f, 0.0f), RockWallMesh1, RockWallMaterial);
-		createGroundObstacle("5", glm::vec3(-980.f, -2.50f, 0.0f), glm::vec3(1.0f, 2.0f, 2.0f), glm::vec3(90.0f, 0.0f, 0.0f), RockWallMesh1, RockWallMaterial);
-		createGroundObstacle("6", glm::vec3(-1010.f, 0.0f, 0.0f), glm::vec3(1.0f, 1.5f, 1.0f), glm::vec3(90.0f, 0.0f, 0.0f), RockWallMesh2, RockWallMaterial);
-		createGroundObstacle("7", glm::vec3(-1050.f, 0.0f, 0.0f), glm::vec3(3.0f, 2.0f, 2.0f), glm::vec3(90.0f, 0.0f, 0.0f), RockTunnelMesh, RockTunnelMaterial);
-		createGroundObstacle("8", glm::vec3(-1090.f, 1.390f, 0.3f), glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(90.0f, 0.0f, 158.0f), PuddleMesh, PuddleMaterial);
-		createGroundObstacle("9", glm::vec3(-1120.f, 0.0f, 0.0f), glm::vec3(3.0f, 2.0f, 2.0f), glm::vec3(90.0f, 0.0f, 0.0f), RockTunnelMesh, RockTunnelMaterial);
-		createGroundObstacle("10", glm::vec3(-1150.f, -2.22f, 0.0f), glm::vec3(0.4f, 0.4f, 0.4f), glm::vec3(90.0f, 0.0f, -67.0f), CampfireMesh, CampfireMaterial);
-
-
-		//createGroundObstacle("2", glm::vec3(-900.f, 1.390f, 0.3f), glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(90.0f, 0.0f, 158.0f), PuddleMesh, PuddleMaterial);
-		//createGroundObstacle("3", glm::vec3(-950.f, -2.22f, 0.0f), glm::vec3(0.4f, 0.4f, 0.4f), glm::vec3(90.0f, 0.0f, -67.0f), CampfireMesh, CampfireMaterial);
-		//createGroundObstacle("4", glm::vec3(-1000.f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f), HangingRockMesh, HangingRockMaterial);
-		//createGroundObstacle("5", glm::vec3(-1050.f, 0.0f, -2.830f), glm::vec3(1.0f, 4.0f, 3.0f), glm::vec3(90.0f, 0.0f, -21.0f), RockPileMesh, RockPileMaterial);
-		//createGroundObstacle("6", glm::vec3(-1100.f, 0.0f, 0.0f), glm::vec3(3.0f, 2.0f, 2.0f), glm::vec3(90.0f, 0.0f, 0.0f), RockTunnelMesh, RockTunnelMaterial);
-		//createGroundObstacle("7", glm::vec3(-1150.f, -2.50f, 0.0f), glm::vec3(1.0f, 2.0f, 2.0f), glm::vec3(90.0f, 0.0f, 0.0f), RockWallMesh1, RockWallMaterial);
-		//createGroundObstacle("8", glm::vec3(-1200.f, 0.0f, 0.0f), glm::vec3(1.0f, 1.5f, 1.0f), glm::vec3(90.0f, 0.0f, 0.0f), RockWallMesh2, RockWallMaterial);
+			//Obstacles
+			createGroundObstacle("1", glm::vec3(-850.f, -4.0f, 0.0f), glm::vec3(5.0f, 5.0f, 5.0f), glm::vec3(90.0f, 0.0f, -168.0f), SignPostMesh, SignPostMaterial);
+			createGroundObstacle("2", glm::vec3(-880.f, 0.0f, -2.830f), glm::vec3(1.0f, 4.0f, 3.0f), glm::vec3(90.0f, 0.0f, -21.0f), RockPileMesh, RockPileMaterial);
+			createGroundObstacle("3", glm::vec3(-900.f, 0.0f, 0.0f), glm::vec3(3.0f, 2.0f, 2.0f), glm::vec3(90.0f, 0.0f, 0.0f), RockTunnelMesh, RockTunnelMaterial);
+			createGroundObstacle("4", glm::vec3(-950.f, -2.50f, 0.0f), glm::vec3(1.0f, 2.0f, 2.0f), glm::vec3(90.0f, 0.0f, 0.0f), RockWallMesh1, RockWallMaterial);
+			createGroundObstacle("5", glm::vec3(-980.f, -2.50f, 0.0f), glm::vec3(1.0f, 2.0f, 2.0f), glm::vec3(90.0f, 0.0f, 0.0f), RockWallMesh1, RockWallMaterial);
+			createGroundObstacle("6", glm::vec3(-1010.f, 0.0f, 0.0f), glm::vec3(1.0f, 1.5f, 1.0f), glm::vec3(90.0f, 0.0f, 0.0f), RockWallMesh2, RockWallMaterial);
+			createGroundObstacle("7", glm::vec3(-1050.f, 0.0f, 0.0f), glm::vec3(3.0f, 2.0f, 2.0f), glm::vec3(90.0f, 0.0f, 0.0f), RockTunnelMesh, RockTunnelMaterial);
+			createGroundObstacle("8", glm::vec3(-1090.f, 1.390f, 0.3f), glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(90.0f, 0.0f, 158.0f), PuddleMesh, PuddleMaterial);
+			createGroundObstacle("9", glm::vec3(-1120.f, 0.0f, 0.0f), glm::vec3(3.0f, 2.0f, 2.0f), glm::vec3(90.0f, 0.0f, 0.0f), RockTunnelMesh, RockTunnelMaterial);
+			createGroundObstacle("10", glm::vec3(-1150.f, -2.22f, 0.0f), glm::vec3(0.4f, 0.4f, 0.4f), glm::vec3(90.0f, 0.0f, -67.0f), CampfireMesh, CampfireMaterial);
 
 
-
-
-		//createGroundObstacle("18", glm::vec3(-320.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 8 (small jump)
-		//createGroundObstacle("20", glm::vec3(-340.f, 0.0f, 3.0), glm::vec3(1.f, 1.f, 1.f), glm::vec3(90.f, 0.0f, 73.f), vinesMesh, vinesMaterial); // vine 6 (jump blocking)
-		//createGroundObstacle("24", glm::vec3(-380.f, 5.530f, 0.250f), glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(90.f, 0.0f, -25.f), vinesMesh, vinesMaterial); // vine 8 (squish blocking)
-		//createGroundObstacle("26", glm::vec3(-395.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 9 (tall jump)
-
-		/*
-		createGroundObstacle("1", glm::vec3(-450.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //red mushroom 1 (small jump)
-		createGroundObstacle("2", glm::vec3(-500.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //red mushroom 2 (small jump)
-		createGroundObstacle("3", glm::vec3(-550.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), tmMesh, tmMaterial); // tall mushroom 1 (small jump)
-		createGroundObstacle("4", glm::vec3(-600.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), bmMesh, bmMaterial); //branch mushroom 1 (small jump)
-
-		createGroundObstacle("5", glm::vec3(-650.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //red mushroom 3 (small jump)
-		createGroundObstacle("6", glm::vec3(-680.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //red mushroom 4 (small jump)
-
-		createGroundObstacle("7", glm::vec3(-710.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //red mushroom 5 (small jump)
-		createGroundObstacle("8", glm::vec3(-750.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), bmMesh, bmMaterial); //branch mushroom 2 (small jump)
-		*/
-
-		//Collisions
-
-		//mushroom 8 collision
-		createCollision("211", -850.0f, 8.11f, 1.f, 2.f); //2y
-		createCollision("212", -849.6f, 7.79f, 1.f, 2.f);
-		createCollision("213", -849.930f, 8.160f, 1.f, 2.f); 
-		createCollision("214", -850.f, 8.150f, 1.f, 2.f);
-
-		createCollision("221", -878.924f, 1.560f, 1.f, 2.f); //2y
-		createCollision("222", -880.00f, 12.390f, 1.f, 2.f); //2y
-
-		createCollision("231", -896.0f, 5.0f, 1.f, 1.f);
-		createCollision("232", -898.963f, 6.570f, 1.f, 1.f);
-		createCollision("233", -902.823f, 5.0f, 1.f, 1.f);
-
-		createCollision("241", -950.f, 2.470f, 1.f, 2.f);
-
-		createCollision("251", -980.f, 2.470f, 1.f, 2.f);
-
-		createCollision("261", -1008.98f, 1.560f, 1.f, 4.f); //4y
-
-		createCollision("271", -1046.0f, 5.0f, 1.f, 1.f);
-		createCollision("272", -1048.963f, 6.570f, 1.f, 1.f);
-		createCollision("273", -1052.823f, 5.0f, 1.f, 1.f);
-
-
-		createCollision("281", -1096.f, 0.44f, 1.f, 1.f);
-		createCollision("282", -1095.f, 0.44f, 1.f, 1.f);
-		createCollision("283", -1098.f, 0.44f, 1.f, 1.f);
-		createCollision("284", -1092.f, 0.44f, 1.f, 1.f);
-
-		createCollision("291", -1116.0f, 5.0f, 1.f, 1.f);
-		createCollision("292", -1118.963f, 6.570f, 1.f, 1.f);
-		createCollision("293", -1122.823f, 5.0f, 1.f, 1.f);
-
-
-		createCollision("201", -1147.44f, 6.3f, 1.f, 1.f);
-		createCollision("202", -1151.720f, 6.3f, 1.f, 1.f);
-		createCollision("203", -1150.f, 6.3f, 1.f, 1.f);
-		
-
-		
-
-		//createCollision("261", -1096.0f, 5.0f, 1.f, 1.f);
-		//createCollision("262", -1098.963f, 6.570f, 1.f, 1.f);
-		//createCollision("263", -1102.823f, 5.0f, 1.f, 1.f);
-
-		//createCollision("271", -1150.f, 2.470f, 1.f, 2.f); //2y
-
-		//createCollision("281", -1198.98f, 1.560f, 1.f, 4.f); //4y
+			//createGroundObstacle("2", glm::vec3(-900.f, 1.390f, 0.3f), glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(90.0f, 0.0f, 158.0f), PuddleMesh, PuddleMaterial);
+			//createGroundObstacle("3", glm::vec3(-950.f, -2.22f, 0.0f), glm::vec3(0.4f, 0.4f, 0.4f), glm::vec3(90.0f, 0.0f, -67.0f), CampfireMesh, CampfireMaterial);
+			//createGroundObstacle("4", glm::vec3(-1000.f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f), HangingRockMesh, HangingRockMaterial);
+			//createGroundObstacle("5", glm::vec3(-1050.f, 0.0f, -2.830f), glm::vec3(1.0f, 4.0f, 3.0f), glm::vec3(90.0f, 0.0f, -21.0f), RockPileMesh, RockPileMaterial);
+			//createGroundObstacle("6", glm::vec3(-1100.f, 0.0f, 0.0f), glm::vec3(3.0f, 2.0f, 2.0f), glm::vec3(90.0f, 0.0f, 0.0f), RockTunnelMesh, RockTunnelMaterial);
+			//createGroundObstacle("7", glm::vec3(-1150.f, -2.50f, 0.0f), glm::vec3(1.0f, 2.0f, 2.0f), glm::vec3(90.0f, 0.0f, 0.0f), RockWallMesh1, RockWallMaterial);
+			//createGroundObstacle("8", glm::vec3(-1200.f, 0.0f, 0.0f), glm::vec3(1.0f, 1.5f, 1.0f), glm::vec3(90.0f, 0.0f, 0.0f), RockWallMesh2, RockWallMaterial);
 
 
 
 
-		//3D Backgrounds
-		createGroundObstacle("27", glm::vec3(-292.3f - 400.f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGRockMesh, BGMaterial);
-		createGroundObstacle("28", glm::vec3(-400.f - 400.f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGRockMesh, BGMaterial);
-		createGroundObstacle("29", glm::vec3(-507.7f - 400.f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGRockMesh, BGMaterial);
+			//createGroundObstacle("18", glm::vec3(-320.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 8 (small jump)
+			//createGroundObstacle("20", glm::vec3(-340.f, 0.0f, 3.0), glm::vec3(1.f, 1.f, 1.f), glm::vec3(90.f, 0.0f, 73.f), vinesMesh, vinesMaterial); // vine 6 (jump blocking)
+			//createGroundObstacle("24", glm::vec3(-380.f, 5.530f, 0.250f), glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(90.f, 0.0f, -25.f), vinesMesh, vinesMaterial); // vine 8 (squish blocking)
+			//createGroundObstacle("26", glm::vec3(-395.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 9 (tall jump)
 
-		createGroundObstacle("30", glm::vec3(-615.4f - 400.f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGRockMesh, BGMaterial);
-		createGroundObstacle("31", glm::vec3(-723.1f - 400.f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGRockMesh, BGMaterial);
-		createGroundObstacle("32", glm::vec3(-830.8f - 400.f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGRockMesh, BGMaterial);
-		createGroundObstacle("26", glm::vec3(-938.2f - 400.f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGRockMesh, BGMaterial);
+			/*
+			createGroundObstacle("1", glm::vec3(-450.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //red mushroom 1 (small jump)
+			createGroundObstacle("2", glm::vec3(-500.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //red mushroom 2 (small jump)
+			createGroundObstacle("3", glm::vec3(-550.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), tmMesh, tmMaterial); // tall mushroom 1 (small jump)
+			createGroundObstacle("4", glm::vec3(-600.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), bmMesh, bmMaterial); //branch mushroom 1 (small jump)
 
-		//2DBackGrounds
-		createGroundObstacle("33", glm::vec3(-75.f - 400.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MountainBackdropMaterial);
-		createGroundObstacle("34", glm::vec3(-450.f - 400.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MountainBackdropMaterial);
-		createGroundObstacle("35", glm::vec3(-825.f - 400.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MountainBackdropMaterial);
-		createGroundObstacle("36", glm::vec3(-1600.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MountainBackdropMaterial);
-		createGroundObstacle("37", glm::vec3(-2150.f - 400.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MountainBackdropMaterial);
+			createGroundObstacle("5", glm::vec3(-650.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //red mushroom 3 (small jump)
+			createGroundObstacle("6", glm::vec3(-680.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //red mushroom 4 (small jump)
 
-		//Grass
-		createGroundObstacle("38", glm::vec3(-418.170f - 400.f, -38.230f, 5.250f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass1Material);
-		createGroundObstacle("39", glm::vec3(-370.42f - 400.f, 46.920f, 5.080f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass2Material);
-		createGroundObstacle("40", glm::vec3(-397.91f - 400.f, -47.360f, 5.090f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass3Material);
-		createGroundObstacle("41", glm::vec3(-364.3f - 400.f, -37.550f, 5.310f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass4Material);
-		createGroundObstacle("42", glm::vec3(-447.340f - 400.f, -37.120f, 5.560f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass5Material);
+			createGroundObstacle("7", glm::vec3(-710.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //red mushroom 5 (small jump)
+			createGroundObstacle("8", glm::vec3(-750.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), bmMesh, bmMaterial); //branch mushroom 2 (small jump)
+			*/
 
-		createGroundObstacle("43", glm::vec3(-418.170f - 103.5f - 400.f, -38.230f, 5.250f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass1Material);
-		createGroundObstacle("44", glm::vec3(-370.42f - 103.5f - 400.f, 46.920f, 5.080f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass2Material);
-		createGroundObstacle("45", glm::vec3(-397.91f - 103.5f - 400.f, -47.360f, 5.090f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass3Material);
-		createGroundObstacle("46", glm::vec3(-364.3f - 103.5f - 400.f, -37.550f, 5.310f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass4Material);
-		createGroundObstacle("47", glm::vec3(-47.340f - 103.5f - 400.f - 400.f, -37.120f, 5.560f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass5Material);
+			//Collisions
 
-		createGroundObstacle("48", glm::vec3(-18.170f - 103.5f - 103.5f - 400.f - 400.f, -38.230f, 5.250f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass1Material);
-		createGroundObstacle("49", glm::vec3(29.580f - 103.5f - 103.5f - 400.f - 400.f, 46.920f, 5.080f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass2Material);
-		createGroundObstacle("50", glm::vec3(2.090f - 103.5f - 103.5f - 400.f - 400.f, -47.360f, 5.090f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass3Material);
-		createGroundObstacle("51", glm::vec3(35.700f - 103.5f - 103.5f - 400.f - 400.f, -37.550f, 5.310f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass4Material);
-		createGroundObstacle("52", glm::vec3(-47.340f - 103.5f - 103.5f - 400.f - 400.f, -37.120f, 5.560f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass5Material);
+			//mushroom 8 collision
+			createCollision("211", -850.0f, 8.11f, 1.f, 2.f); //2y
+			createCollision("212", -849.6f, 7.79f, 1.f, 2.f);
+			createCollision("213", -849.930f, 8.160f, 1.f, 2.f);
+			createCollision("214", -850.f, 8.150f, 1.f, 2.f);
 
-		createGroundObstacle("53", glm::vec3(-18.170f - 103.5f - 103.5f - 103.5f - 400.f - 400.f, -38.230f, 5.250f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass1Material);
-		createGroundObstacle("54", glm::vec3(29.580f - 103.5f - 103.5f - 103.5f - 400.f - 400.f, 46.920f, 5.080f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass2Material);
-		createGroundObstacle("55", glm::vec3(2.090f - 103.5f - 103.5f - 103.5f - 400.f - 400.f, -47.360f, 5.090f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass3Material);
-		createGroundObstacle("56", glm::vec3(35.700f - 103.5f - 103.5f - 103.5f - 400.f - 400.f, -37.550f, 5.310f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass4Material);
-		createGroundObstacle("57", glm::vec3(-47.340f - 103.5f - 103.5f - 103.5f - 400.f - 400.f, -37.120f, 5.560f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass5Material);
+			createCollision("221", -878.924f, 1.560f, 1.f, 2.f); //2y
+			createCollision("222", -880.00f, 12.390f, 1.f, 2.f); //2y
 
-		//Exit Rock
-		createGroundObstacle("58", glm::vec3(-409.f - 400.f - 400.f, -1.f, 0.f), glm::vec3(1.f), glm::vec3(90.0f, 0.0f, 180.f), ExitRockMesh, ExitRockMaterial);
+			createCollision("231", -896.0f, 5.0f, 1.f, 1.f);
+			createCollision("232", -898.963f, 6.570f, 1.f, 1.f);
+			createCollision("233", -902.823f, 5.0f, 1.f, 1.f);
 
-		//Foreground Grass
-		createGroundObstacle("59", glm::vec3(40.f - 400.f - 400.f, -5.f, 10.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
-		createGroundObstacle("60", glm::vec3(0.f - 400.f - 400.f, -5.f, 10.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
-		createGroundObstacle("61", glm::vec3(-40.f - 400.f - 400.f, -5.f, 10.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
-		createGroundObstacle("62", glm::vec3(-80.f - 400.f - 400.f, -5.f, 10.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
-		createGroundObstacle("63", glm::vec3(-120.f - 400.f - 400.f, -5.f, 10.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
-		createGroundObstacle("64", glm::vec3(-160.f - 400.f - 400.f, -5.f, 10.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
+			createCollision("241", -950.f, 2.470f, 1.f, 2.f);
 
-		createGroundObstacle("65", glm::vec3(-200.f - 400.f - 400.f, -5.f, 10.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
-		createGroundObstacle("66", glm::vec3(-240.f - 400.f - 400.f, -5.f, 10.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
-		createGroundObstacle("67", glm::vec3(-280.f - 400.f - 400.f, -5.f, 10.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
-		createGroundObstacle("68", glm::vec3(-320.f - 400.f - 400.f, -5.f, 10.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
-		createGroundObstacle("69", glm::vec3(-360.f - 400.f - 400.f, -5.f, 10.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
-		createGroundObstacle("70", glm::vec3(-400.f - 400.f - 400.f, -5.f, 10.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
+			createCollision("251", -980.f, 2.470f, 1.f, 2.f);
 
+			createCollision("261", -1008.98f, 1.560f, 1.f, 4.f); //4y
+
+			createCollision("271", -1046.0f, 5.0f, 1.f, 1.f);
+			createCollision("272", -1048.963f, 6.570f, 1.f, 1.f);
+			createCollision("273", -1052.823f, 5.0f, 1.f, 1.f);
+
+
+			createCollision("281", -1096.f, 0.44f, 1.f, 1.f);
+			createCollision("282", -1095.f, 0.44f, 1.f, 1.f);
+			createCollision("283", -1098.f, 0.44f, 1.f, 1.f);
+			createCollision("284", -1092.f, 0.44f, 1.f, 1.f);
+
+			createCollision("291", -1116.0f, 5.0f, 1.f, 1.f);
+			createCollision("292", -1118.963f, 6.570f, 1.f, 1.f);
+			createCollision("293", -1122.823f, 5.0f, 1.f, 1.f);
+
+
+			createCollision("201", -1147.44f, 6.3f, 1.f, 1.f);
+			createCollision("202", -1151.720f, 6.3f, 1.f, 1.f);
+			createCollision("203", -1150.f, 6.3f, 1.f, 1.f);
+
+
+
+
+			//createCollision("261", -1096.0f, 5.0f, 1.f, 1.f);
+			//createCollision("262", -1098.963f, 6.570f, 1.f, 1.f);
+			//createCollision("263", -1102.823f, 5.0f, 1.f, 1.f);
+
+			//createCollision("271", -1150.f, 2.470f, 1.f, 2.f); //2y
+
+			//createCollision("281", -1198.98f, 1.560f, 1.f, 4.f); //4y
+
+
+
+
+			//3D Backgrounds
+			createGroundObstacle("27", glm::vec3(-292.3f - 400.f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGRockMesh, BGMaterial);
+			createGroundObstacle("28", glm::vec3(-400.f - 400.f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGRockMesh, BGMaterial);
+			createGroundObstacle("29", glm::vec3(-507.7f - 400.f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGRockMesh, BGMaterial);
+
+			createGroundObstacle("30", glm::vec3(-615.4f - 400.f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGRockMesh, BGMaterial);
+			createGroundObstacle("31", glm::vec3(-723.1f - 400.f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGRockMesh, BGMaterial);
+			createGroundObstacle("32", glm::vec3(-830.8f - 400.f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGRockMesh, BGMaterial);
+			createGroundObstacle("26", glm::vec3(-938.2f - 400.f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGRockMesh, BGMaterial);
+
+			//2DBackGrounds
+			createGroundObstacle("33", glm::vec3(-75.f - 400.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MountainBackdropMaterial);
+			createGroundObstacle("34", glm::vec3(-450.f - 400.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MountainBackdropMaterial);
+			createGroundObstacle("35", glm::vec3(-825.f - 400.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MountainBackdropMaterial);
+			createGroundObstacle("36", glm::vec3(-1600.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MountainBackdropMaterial);
+			createGroundObstacle("37", glm::vec3(-2150.f - 400.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MountainBackdropMaterial);
+
+			//Grass
+			createGroundObstacle("38", glm::vec3(-418.170f - 400.f, -38.230f, 5.250f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass1Material);
+			createGroundObstacle("39", glm::vec3(-370.42f - 400.f, 46.920f, 5.080f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass2Material);
+			createGroundObstacle("40", glm::vec3(-397.91f - 400.f, -47.360f, 5.090f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass3Material);
+			createGroundObstacle("41", glm::vec3(-364.3f - 400.f, -37.550f, 5.310f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass4Material);
+			createGroundObstacle("42", glm::vec3(-447.340f - 400.f, -37.120f, 5.560f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass5Material);
+
+			createGroundObstacle("43", glm::vec3(-418.170f - 103.5f - 400.f, -38.230f, 5.250f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass1Material);
+			createGroundObstacle("44", glm::vec3(-370.42f - 103.5f - 400.f, 46.920f, 5.080f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass2Material);
+			createGroundObstacle("45", glm::vec3(-397.91f - 103.5f - 400.f, -47.360f, 5.090f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass3Material);
+			createGroundObstacle("46", glm::vec3(-364.3f - 103.5f - 400.f, -37.550f, 5.310f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass4Material);
+			createGroundObstacle("47", glm::vec3(-47.340f - 103.5f - 400.f - 400.f, -37.120f, 5.560f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass5Material);
+
+			createGroundObstacle("48", glm::vec3(-18.170f - 103.5f - 103.5f - 400.f - 400.f, -38.230f, 5.250f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass1Material);
+			createGroundObstacle("49", glm::vec3(29.580f - 103.5f - 103.5f - 400.f - 400.f, 46.920f, 5.080f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass2Material);
+			createGroundObstacle("50", glm::vec3(2.090f - 103.5f - 103.5f - 400.f - 400.f, -47.360f, 5.090f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass3Material);
+			createGroundObstacle("51", glm::vec3(35.700f - 103.5f - 103.5f - 400.f - 400.f, -37.550f, 5.310f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass4Material);
+			createGroundObstacle("52", glm::vec3(-47.340f - 103.5f - 103.5f - 400.f - 400.f, -37.120f, 5.560f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass5Material);
+
+			createGroundObstacle("53", glm::vec3(-18.170f - 103.5f - 103.5f - 103.5f - 400.f - 400.f, -38.230f, 5.250f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass1Material);
+			createGroundObstacle("54", glm::vec3(29.580f - 103.5f - 103.5f - 103.5f - 400.f - 400.f, 46.920f, 5.080f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass2Material);
+			createGroundObstacle("55", glm::vec3(2.090f - 103.5f - 103.5f - 103.5f - 400.f - 400.f, -47.360f, 5.090f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass3Material);
+			createGroundObstacle("56", glm::vec3(35.700f - 103.5f - 103.5f - 103.5f - 400.f - 400.f, -37.550f, 5.310f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass4Material);
+			createGroundObstacle("57", glm::vec3(-47.340f - 103.5f - 103.5f - 103.5f - 400.f - 400.f, -37.120f, 5.560f), glm::vec3(9.0f, 9.0f, 9.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, grass5Material);
+
+			//Exit Rock
+			createGroundObstacle("58", glm::vec3(-409.f - 400.f - 400.f, -1.f, 0.f), glm::vec3(1.f), glm::vec3(90.0f, 0.0f, 180.f), ExitRockMesh, ExitRockMaterial);
+
+			//Foreground Grass
+			createGroundObstacle("59", glm::vec3(40.f - 400.f - 400.f, -5.f, 10.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
+			createGroundObstacle("60", glm::vec3(0.f - 400.f - 400.f, -5.f, 10.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
+			createGroundObstacle("61", glm::vec3(-40.f - 400.f - 400.f, -5.f, 10.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
+			createGroundObstacle("62", glm::vec3(-80.f - 400.f - 400.f, -5.f, 10.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
+			createGroundObstacle("63", glm::vec3(-120.f - 400.f - 400.f, -5.f, 10.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
+			createGroundObstacle("64", glm::vec3(-160.f - 400.f - 400.f, -5.f, 10.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
+
+			createGroundObstacle("65", glm::vec3(-200.f - 400.f - 400.f, -5.f, 10.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
+			createGroundObstacle("66", glm::vec3(-240.f - 400.f - 400.f, -5.f, 10.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
+			createGroundObstacle("67", glm::vec3(-280.f - 400.f - 400.f, -5.f, 10.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
+			createGroundObstacle("68", glm::vec3(-320.f - 400.f - 400.f, -5.f, 10.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
+			createGroundObstacle("69", glm::vec3(-360.f - 400.f - 400.f, -5.f, 10.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
+			createGroundObstacle("70", glm::vec3(-400.f - 400.f - 400.f, -5.f, 10.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
+		}
 		
 		
 
@@ -4453,20 +4109,21 @@ int main() {
 			//behaviour->RotationSpeed = glm::vec3(0.0f, 0.0f, -90.0f);
 		}
 
-		createGroundObstacle("79", glm::vec3(40.f - 400.f - 400.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.22f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
-		createGroundObstacle("80", glm::vec3(0.f - 400.f - 400.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
-		createGroundObstacle("81", glm::vec3(-40.f - 400.f - 400.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
-		createGroundObstacle("82", glm::vec3(-80.f - 400.f - 400.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
-		createGroundObstacle("83", glm::vec3(-120.f - 400.f - 400.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
-		createGroundObstacle("84", glm::vec3(-160.f - 400.f - 400.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
+		if (level3) {
+			createGroundObstacle("79", glm::vec3(40.f - 400.f - 400.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.22f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
+			createGroundObstacle("80", glm::vec3(0.f - 400.f - 400.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
+			createGroundObstacle("81", glm::vec3(-40.f - 400.f - 400.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
+			createGroundObstacle("82", glm::vec3(-80.f - 400.f - 400.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
+			createGroundObstacle("83", glm::vec3(-120.f - 400.f - 400.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
+			createGroundObstacle("84", glm::vec3(-160.f - 400.f - 400.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
 
-		createGroundObstacle("85", glm::vec3(-200.f - 400.f - 400.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
-		createGroundObstacle("86", glm::vec3(-240.f - 400.f - 400.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
-		createGroundObstacle("87", glm::vec3(-280.f - 400.f - 400.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
-		createGroundObstacle("88", glm::vec3(-320.f - 400.f - 400.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
-		createGroundObstacle("89", glm::vec3(-360.f - 400.f - 400.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
-		createGroundObstacle("90", glm::vec3(-400.f - 400.f - 400.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
-
+			createGroundObstacle("85", glm::vec3(-200.f - 400.f - 400.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
+			createGroundObstacle("86", glm::vec3(-240.f - 400.f - 400.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
+			createGroundObstacle("87", glm::vec3(-280.f - 400.f - 400.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
+			createGroundObstacle("88", glm::vec3(-320.f - 400.f - 400.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
+			createGroundObstacle("89", glm::vec3(-360.f - 400.f - 400.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
+			createGroundObstacle("90", glm::vec3(-400.f - 400.f - 400.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MountainForegroundMaterial);
+		}
 
 		//Objects with transparency need to be loaded in last otherwise it creates issues
 		GameObject::Sptr PanelPause = scene->CreateGameObject("PanelPause");
@@ -4790,571 +4447,6 @@ int main() {
 		// I hate this
 		scene->BaseShader = uboShader;
 
-		// Create our materials
-		Material::Sptr boxMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			boxMaterial->Name = "Box";
-			boxMaterial->MatShader = scene->BaseShader;
-			boxMaterial->Texture = boxTexture;
-			boxMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr PbarbugMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			PbarbugMaterial->Name = "minibug";
-			PbarbugMaterial->MatShader = scene->BaseShader;
-			PbarbugMaterial->Texture = PbarbugTex;
-			PbarbugMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr greenMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			greenMaterial->Name = "green";
-			greenMaterial->MatShader = scene->BaseShader;
-			greenMaterial->Texture = greenTex;
-			greenMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr bgMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			bgMaterial->Name = "bg";
-			bgMaterial->MatShader = scene->BaseShader;
-			bgMaterial->Texture = bgTexture;
-			bgMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr grassMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			grassMaterial->Name = "Grass";
-			grassMaterial->MatShader = scene->BaseShader;
-			grassMaterial->Texture = grassTexture;
-			grassMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr winMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			winMaterial->Name = "win";
-			winMaterial->MatShader = scene->BaseShader;
-			winMaterial->Texture = winTexture;
-			winMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr ladybugMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			ladybugMaterial->Name = "lbo";
-			ladybugMaterial->MatShader = scene->BaseShader;
-			ladybugMaterial->Texture = ladybugTexture;
-			ladybugMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr monkeyMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			monkeyMaterial->Name = "Monkey";
-			monkeyMaterial->MatShader = scene->BaseShader;
-			monkeyMaterial->Texture = monkeyTex;
-			monkeyMaterial->Shininess = 256.0f;
-
-		}
-
-		Material::Sptr mushroomMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			mushroomMaterial->Name = "Mushroom";
-			mushroomMaterial->MatShader = scene->BaseShader;
-			mushroomMaterial->Texture = mushroomTexture;
-			mushroomMaterial->Shininess = 256.0f;
-
-		}
-
-		Material::Sptr vinesMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			vinesMaterial->Name = "vines";
-			vinesMaterial->MatShader = scene->BaseShader;
-			vinesMaterial->Texture = vinesTexture;
-			vinesMaterial->Shininess = 256.0f;
-
-		}
-
-		Material::Sptr cobwebMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			cobwebMaterial->Name = "cobweb";
-			cobwebMaterial->MatShader = scene->BaseShader;
-			cobwebMaterial->Texture = cobwebTexture;
-			cobwebMaterial->Shininess = 256.0f;
-
-		}
-
-		Material::Sptr PanelMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			PanelMaterial->Name = "Panel";
-			PanelMaterial->MatShader = scene->BaseShader;
-			PanelMaterial->Texture = PanelTex;
-			PanelMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr ResumeMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			ResumeMaterial->Name = "Resume";
-			ResumeMaterial->MatShader = scene->BaseShader;
-			ResumeMaterial->Texture = ResumeTex;
-			ResumeMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr MainMenuMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			MainMenuMaterial->Name = "Main Menu";
-			MainMenuMaterial->MatShader = scene->BaseShader;
-			MainMenuMaterial->Texture = MainMenuTex;
-			MainMenuMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr PauseMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			PauseMaterial->Name = "Pause";
-			PauseMaterial->MatShader = scene->BaseShader;
-			PauseMaterial->Texture = PauseTex;
-			PauseMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr ButtonMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			ButtonMaterial->Name = "Button";
-			ButtonMaterial->MatShader = scene->BaseShader;
-			ButtonMaterial->Texture = ButtonTex;
-			ButtonMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr FilterMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			FilterMaterial->Name = "Button Filter";
-			FilterMaterial->MatShader = scene->BaseShader;
-			FilterMaterial->Texture = FilterTex;
-			FilterMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr WinnerMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			WinnerMaterial->Name = "WinnerLogo";
-			WinnerMaterial->MatShader = scene->BaseShader;
-			WinnerMaterial->Texture = WinnerTex;
-			WinnerMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr LoserMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			LoserMaterial->Name = "LoserLogo";
-			LoserMaterial->MatShader = scene->BaseShader;
-			LoserMaterial->Texture = LoserTex;
-			LoserMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr ReplayMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			ReplayMaterial->Name = "Replay Text";
-			ReplayMaterial->MatShader = scene->BaseShader;
-			ReplayMaterial->Texture = ReplayTex;
-			ReplayMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr BranchMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			BranchMaterial->Name = "Branch";
-			BranchMaterial->MatShader = scene->BaseShader;
-			BranchMaterial->Texture = BranchTex;
-			BranchMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr LogMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			LogMaterial->Name = "Log";
-			LogMaterial->MatShader = scene->BaseShader;
-			LogMaterial->Texture = LogTex;
-			LogMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr PlantMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			PlantMaterial->Name = "Plant";
-			PlantMaterial->MatShader = scene->BaseShader;
-			PlantMaterial->Texture = PlantTex;
-			PlantMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr SunflowerMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			SunflowerMaterial->Name = "Sunflower";
-			SunflowerMaterial->MatShader = scene->BaseShader;
-			SunflowerMaterial->Texture = SunflowerTex;
-			SunflowerMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr ToadMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			ToadMaterial->Name = "Toad";
-			ToadMaterial->MatShader = scene->BaseShader;
-			ToadMaterial->Texture = ToadTex;
-			ToadMaterial->Shininess = 2.0f;
-		}
-		Material::Sptr BlankMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			BlankMaterial->Name = "Blank";
-			BlankMaterial->MatShader = scene->BaseShader;
-			BlankMaterial->Texture = BlankTex;
-			BlankMaterial->Shininess = 2.0f;
-		}
-		Material::Sptr ForegroundMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			ForegroundMaterial->Name = "Foreground";
-			ForegroundMaterial->MatShader = scene->BaseShader;
-			ForegroundMaterial->Texture = ForegroundTex;
-			ForegroundMaterial->Shininess = 2.0f;
-		}
-		Material::Sptr rockMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			rockMaterial->Name = "Rock";
-			rockMaterial->MatShader = scene->BaseShader;
-			rockMaterial->Texture = RockTex;
-			rockMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr twigMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			twigMaterial->Name = "twig";
-			twigMaterial->MatShader = scene->BaseShader;
-			twigMaterial->Texture = twigTex;
-			twigMaterial->Shininess = 2.0f;
-		}
-		Material::Sptr frogMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			frogMaterial->Name = "frog";
-			frogMaterial->MatShader = scene->BaseShader;
-			frogMaterial->Texture = frogTex;
-			frogMaterial->Shininess = 2.0f;
-		}
-		Material::Sptr tmMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			tmMaterial->Name = "tallmushroom";
-			tmMaterial->MatShader = scene->BaseShader;
-			tmMaterial->Texture = tmTex;
-			tmMaterial->Shininess = 2.0f;
-		}
-		Material::Sptr bmMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			bmMaterial->Name = "branchmushroom";
-			bmMaterial->MatShader = scene->BaseShader;
-			bmMaterial->Texture = bmTex;
-			bmMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr PBMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			PBMaterial->Name = "PauseButton";
-			PBMaterial->MatShader = scene->BaseShader;
-			PBMaterial->Texture = PBTex;
-			PBMaterial->Shininess = 2.0f;
-		}
-		Material::Sptr BGMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			BGMaterial->Name = "BG";
-			BGMaterial->MatShader = scene->BaseShader;
-			BGMaterial->Texture = MBGTex;
-			BGMaterial->Shininess = 2.0f;
-		}
-		Material::Sptr BGGrassMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			BGGrassMaterial->Name = "BGGrass";
-			BGGrassMaterial->MatShader = scene->BaseShader;
-			BGGrassMaterial->Texture = BGGrassTex;
-			BGGrassMaterial->Shininess = 2.0f;
-		}
-		Material::Sptr ProgressBarMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			ProgressBarMaterial->Name = "ProgressBar";
-			ProgressBarMaterial->MatShader = scene->BaseShader;
-			ProgressBarMaterial->Texture = ProgressTex;
-			ProgressBarMaterial->Shininess = 2.0f;
-		}
-		Material::Sptr grass1Material = ResourceManager::CreateAsset<Material>();
-		{
-			grass1Material->Name = "grass1";
-			grass1Material->MatShader = scene->BaseShader;
-			grass1Material->Texture = Grass1Tex;
-			grass1Material->Shininess = 2.0f;
-		}
-		Material::Sptr grass2Material = ResourceManager::CreateAsset<Material>();
-		{
-			grass2Material->Name = "grass2";
-			grass2Material->MatShader = scene->BaseShader;
-			grass2Material->Texture = Grass2Tex;
-			grass2Material->Shininess = 2.0f;
-		}
-		Material::Sptr grass3Material = ResourceManager::CreateAsset<Material>();
-		{
-			grass3Material->Name = "grass3";
-			grass3Material->MatShader = scene->BaseShader;
-			grass3Material->Texture = Grass3Tex;
-			grass3Material->Shininess = 2.0f;
-		}
-		Material::Sptr grass4Material = ResourceManager::CreateAsset<Material>();
-		{
-			grass4Material->Name = "grass4";
-			grass4Material->MatShader = scene->BaseShader;
-			grass4Material->Texture = Grass4Tex;
-			grass4Material->Shininess = 2.0f;
-		}
-		Material::Sptr grass5Material = ResourceManager::CreateAsset<Material>();
-		{
-			grass5Material->Name = "grass5";
-			grass5Material->MatShader = scene->BaseShader;
-			grass5Material->Texture = Grass5Tex;
-			grass5Material->Shininess = 2.0f;
-		}
-		Material::Sptr ExitTreeMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			ExitTreeMaterial->Name = "ExitTree";
-			ExitTreeMaterial->MatShader = scene->BaseShader;
-			ExitTreeMaterial->Texture = ExitTreeTex;
-			ExitTreeMaterial->Shininess = 2.0f;
-		}
-		Material::Sptr LStextMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			LStextMaterial->Name = "LStext";
-			LStextMaterial->MatShader = scene->BaseShader;
-			LStextMaterial->Texture = LStextTex;
-			LStextMaterial->Shininess = 2.0f;
-		}
-		Material::Sptr ExitRockMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			ExitRockMaterial->Name = "ExitRock";
-			ExitRockMaterial->MatShader = scene->BaseShader;
-			ExitRockMaterial->Texture = ExitRockTex;
-			ExitRockMaterial->Shininess = 2.0f;
-		}
-
-
-		Material::Sptr FrogBodyMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			FrogBodyMaterial->Name = "FrogBody";
-			FrogBodyMaterial->MatShader = scene->BaseShader;
-			FrogBodyMaterial->Texture = FrogBodyTex;
-			FrogBodyMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr FrogHeadTopMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			FrogHeadTopMaterial->Name = "FrogHeadTop";
-			FrogHeadTopMaterial->MatShader = scene->BaseShader;
-			FrogHeadTopMaterial->Texture = FrogHeadTopTex;
-			FrogHeadTopMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr FrogHeadBotMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			FrogHeadBotMaterial->Name = "FrogHeadBot";
-			FrogHeadBotMaterial->MatShader = scene->BaseShader;
-			FrogHeadBotMaterial->Texture = FrogHeadBotTex;
-			FrogHeadBotMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr FrogTongueMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			FrogTongueMaterial->Name = "FrogTongue";
-			FrogTongueMaterial->MatShader = scene->BaseShader;
-			FrogTongueMaterial->Texture = FrogTongueTex;
-			FrogTongueMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr BushTransitionMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			BushTransitionMaterial->Name = "BushTransition";
-			BushTransitionMaterial->MatShader = scene->BaseShader;
-			BushTransitionMaterial->Texture = BushTransitionTex;
-			BushTransitionMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr SignPostMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			SignPostMaterial->Name = "SignPost";
-			SignPostMaterial->MatShader = scene->BaseShader;
-			SignPostMaterial->Texture = SignPostTex;
-			SignPostMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr PuddleMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			PuddleMaterial->Name = "Puddle";
-			PuddleMaterial->MatShader = scene->BaseShader;
-			PuddleMaterial->Texture = PuddleTex;
-			PuddleMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr CampfireMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			CampfireMaterial->Name = "Campfire";
-			CampfireMaterial->MatShader = scene->BaseShader;
-			CampfireMaterial->Texture = CampfireTex;
-			CampfireMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr HangingRockMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			HangingRockMaterial->Name = "HangingRock";
-			HangingRockMaterial->MatShader = scene->BaseShader;
-			HangingRockMaterial->Texture = HangingRockTex;
-			HangingRockMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr RockPileMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			RockPileMaterial->Name = "RockPile";
-			RockPileMaterial->MatShader = scene->BaseShader;
-			RockPileMaterial->Texture = RockPileTex;
-			RockPileMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr RockTunnelMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			RockTunnelMaterial->Name = "RockTunnel";
-			RockTunnelMaterial->MatShader = scene->BaseShader;
-			RockTunnelMaterial->Texture = RockTunnelTex;
-			RockTunnelMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr RockWallMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			RockWallMaterial->Name = "RockWall";
-			RockWallMaterial->MatShader = scene->BaseShader;
-			RockWallMaterial->Texture = RockWallTex;
-			RockWallMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr MineBackdropMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			MineBackdropMaterial->Name = "Backdrop";
-			MineBackdropMaterial->MatShader = scene->BaseShader;
-			MineBackdropMaterial->Texture = MineBackgroundTex;
-			MineBackdropMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr MineForegroundMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			MineForegroundMaterial->Name = "Foreground";
-			MineForegroundMaterial->MatShader = scene->BaseShader;
-			MineForegroundMaterial->Texture = MineForegroundTex;
-			MineForegroundMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr MineBackgroundMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			MineBackgroundMaterial->Name = "Background";
-			MineBackgroundMaterial->MatShader = scene->BaseShader;
-			MineBackgroundMaterial->Texture = MineUVTex;
-			MineBackgroundMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr CaveEntranceMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			CaveEntranceMaterial->Name = "CaveEntrance";
-			CaveEntranceMaterial->MatShader = scene->BaseShader;
-			CaveEntranceMaterial->Texture = CaveEntranceTex;
-			CaveEntranceMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr GoldBarMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			GoldBarMaterial->Name = "GoldBar";
-			GoldBarMaterial->MatShader = scene->BaseShader;
-			GoldBarMaterial->Texture = GoldBarTex;
-			GoldBarMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr GoldPile1Material = ResourceManager::CreateAsset<Material>();
-		{
-			GoldPile1Material->Name = "GoldPile1";
-			GoldPile1Material->MatShader = scene->BaseShader;
-			GoldPile1Material->Texture = GoldPile1Tex;
-			GoldPile1Material->Shininess = 2.0f;
-		}
-
-		Material::Sptr GoldPile2Material = ResourceManager::CreateAsset<Material>();
-		{
-			GoldPile2Material->Name = "GoldPile2";
-			GoldPile2Material->MatShader = scene->BaseShader;
-			GoldPile2Material->Texture = GoldPile2Tex;
-			GoldPile2Material->Shininess = 2.0f;
-		}
-
-		Material::Sptr Crystal1BlueMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			Crystal1BlueMaterial->Name = "Crystal1Blue";
-			Crystal1BlueMaterial->MatShader = scene->BaseShader;
-			Crystal1BlueMaterial->Texture = Crystal1BlueTex;
-			Crystal1BlueMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr Crystal1GreenMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			Crystal1GreenMaterial->Name = "Crystal1Green";
-			Crystal1GreenMaterial->MatShader = scene->BaseShader;
-			Crystal1GreenMaterial->Texture = Crystal1GreenTex;
-			Crystal1GreenMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr Crystal1PurpleMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			Crystal1PurpleMaterial->Name = "Crystal1Purple";
-			Crystal1PurpleMaterial->MatShader = scene->BaseShader;
-			Crystal1PurpleMaterial->Texture = Crystal1PurpleTex;
-			Crystal1PurpleMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr Crystal1RedMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			Crystal1RedMaterial->Name = "Crystal1Red";
-			Crystal1RedMaterial->MatShader = scene->BaseShader;
-			Crystal1RedMaterial->Texture = Crystal1RedTex;
-			Crystal1RedMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr Crystal2BlueMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			Crystal2BlueMaterial->Name = "Crystal2Blue";
-			Crystal2BlueMaterial->MatShader = scene->BaseShader;
-			Crystal2BlueMaterial->Texture = Crystal2BlueTex;
-			Crystal2BlueMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr Crystal2GreenMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			Crystal2GreenMaterial->Name = "Crystal2Green";
-			Crystal2GreenMaterial->MatShader = scene->BaseShader;
-			Crystal2GreenMaterial->Texture = Crystal2GreenTex;
-			Crystal2GreenMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr Crystal2YellowMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			Crystal2YellowMaterial->Name = "Crystal2Yellow";
-			Crystal2YellowMaterial->MatShader = scene->BaseShader;
-			Crystal2YellowMaterial->Texture = Crystal2YellowTex;
-			Crystal2YellowMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr StalagmiteMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			StalagmiteMaterial->Name = "Stalagmite";
-			StalagmiteMaterial->MatShader = scene->BaseShader;
-			StalagmiteMaterial->Texture = StalagmiteTex;
-			StalagmiteMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr StalagtiteMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			StalagtiteMaterial->Name = "Stalagtite";
-			StalagtiteMaterial->MatShader = scene->BaseShader;
-			StalagtiteMaterial->Texture = StalagtiteTex;
-			StalagtiteMaterial->Shininess = 2.0f;
-		}
-
 		// Create some lights for our scene
 		scene->Lights.resize(31);
 		scene->Lights[0].Position = glm::vec3(-400.0f - 1200.f, 1.0f, 40.0f);
@@ -5523,88 +4615,88 @@ int main() {
 		planeMesh->GenerateMesh();
 
 
+		if (level5) {
+			//Background Assets
+			//createBackgroundAsset("16", glm::vec3(-387.060f - 400.f, 1.530f, 0.550), 0.05, glm::vec3(83.f, -7.0f, 90.0f), frogMesh, frogMaterial);
 
-		//Background Assets
-		//createBackgroundAsset("16", glm::vec3(-387.060f - 400.f, 1.530f, 0.550), 0.05, glm::vec3(83.f, -7.0f, 90.0f), frogMesh, frogMaterial);
+			//Obstacles
 
-		//Obstacles
-
-		//createGroundObstacle("18", glm::vec3(-320.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 8 (small jump)
-		//createGroundObstacle("20", glm::vec3(-340.f, 0.0f, 3.0), glm::vec3(1.f, 1.f, 1.f), glm::vec3(90.f, 0.0f, 73.f), vinesMesh, vinesMaterial); // vine 6 (jump blocking)
-		//createGroundObstacle("24", glm::vec3(-380.f, 5.530f, 0.250f), glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(90.f, 0.0f, -25.f), vinesMesh, vinesMaterial); // vine 8 (squish blocking)
-		//createGroundObstacle("26", glm::vec3(-395.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 9 (tall jump)
-
-		
-		createGroundObstacle("1", glm::vec3(-1650.f, 0.0f, 0.215f), glm::vec3(6.f, 4.f, 8.f), glm::vec3(90.f, 0.0f, 80.0f), Crystal1Mesh, Crystal1BlueMaterial); //red mushroom 1 (small jump)
-		createGroundObstacle("2", glm::vec3(-1700.f, 0.0f, -0.f), glm::vec3(6.f, 3.f, 8.f), glm::vec3(90.f, 0.0f, -162.0f), Crystal2Mesh, Crystal2BlueMaterial); //red mushroom 2 (small jump)
-		//createGroundObstacle("3", glm::vec3(-1750.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), StalagmiteMesh, StalagmiteMaterial); // tall mushroom 1 (small jump)
-		//createGroundObstacle("4", glm::vec3(-1800.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), StalagtiteMesh, StalagtiteMaterial); //branch mushroom 1 (small jump)
-
-		createGroundObstacle("5", glm::vec3(-1850.f, 0.0f, 0.3f), glm::vec3(2.f, 2.f, 2.f), glm::vec3(90.f, 0.0f, 0.0f), GoldbarMesh, GoldBarMaterial); //red mushroom 3 (small jump)
-		createGroundObstacle("6", glm::vec3(-1900.f, 0.0f, -0.0), glm::vec3(4.f, 4.f, 2.f), glm::vec3(90.f, 0.0f, -71.0f), GoldPile1Mesh, GoldPile1Material); //red mushroom 4 (small jump)
-
-		//createGroundObstacle("7", glm::vec3(-2000.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), GoldPile2Mesh, GoldPile2Material); //red mushroom 5 (small jump)
-		//createGroundObstacle("8", glm::vec3(-2050.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), bmMesh, bmMaterial); //branch mushroom 2 (small jump)
-		
-
-		//Collisions
-
-		//mushroom 8 collision
-	//	createCollision("101", -19.660f, 1.560f, 1.f, 1.f);
-	//	createCollision("102", -20.410f, 1.560f, 1.f, 1.f);
-	//	createCollision("103", -19.970f, 1.860f, 1.f, 1.f);
-	//	createCollision("104", -20.190f, 0.450f, 1.f, 1.f);
-
-		// vine 6 collisions
-		//createCollision("51", -333.30f, 11.f, 0.5f, 5.5f);
-		//createCollision("52", -340.30f, 11.f, 0.5f, 5.5f);
-		//createCollision("53", -336.8f, 6.f, 4.0f, 0.5f);
-		//createCollision("54", -336.8f, 17.f, 4.0f, 0.5f);
-
-		// squish collision
-		//createCollision("57", -379.780f, 10.4f, 0.420f, 10.f);
-
-		//cobweb collisions
-		//createCollision("58", -395.f, 1.63f, 1.f, 7.f);
+			//createGroundObstacle("18", glm::vec3(-320.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 8 (small jump)
+			//createGroundObstacle("20", glm::vec3(-340.f, 0.0f, 3.0), glm::vec3(1.f, 1.f, 1.f), glm::vec3(90.f, 0.0f, 73.f), vinesMesh, vinesMaterial); // vine 6 (jump blocking)
+			//createGroundObstacle("24", glm::vec3(-380.f, 5.530f, 0.250f), glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(90.f, 0.0f, -25.f), vinesMesh, vinesMaterial); // vine 8 (squish blocking)
+			//createGroundObstacle("26", glm::vec3(-395.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 9 (tall jump)
 
 
+			createGroundObstacle("1", glm::vec3(-1650.f, 0.0f, 0.215f), glm::vec3(6.f, 4.f, 8.f), glm::vec3(90.f, 0.0f, 80.0f), Crystal1Mesh, Crystal1BlueMaterial); //red mushroom 1 (small jump)
+			createGroundObstacle("2", glm::vec3(-1700.f, 0.0f, -0.f), glm::vec3(6.f, 3.f, 8.f), glm::vec3(90.f, 0.0f, -162.0f), Crystal2Mesh, Crystal2BlueMaterial); //red mushroom 2 (small jump)
+			//createGroundObstacle("3", glm::vec3(-1750.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), StalagmiteMesh, StalagmiteMaterial); // tall mushroom 1 (small jump)
+			//createGroundObstacle("4", glm::vec3(-1800.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), StalagtiteMesh, StalagtiteMaterial); //branch mushroom 1 (small jump)
+
+			createGroundObstacle("5", glm::vec3(-1850.f, 0.0f, 0.3f), glm::vec3(2.f, 2.f, 2.f), glm::vec3(90.f, 0.0f, 0.0f), GoldbarMesh, GoldBarMaterial); //red mushroom 3 (small jump)
+			createGroundObstacle("6", glm::vec3(-1900.f, 0.0f, -0.0), glm::vec3(4.f, 4.f, 2.f), glm::vec3(90.f, 0.0f, -71.0f), GoldPile1Mesh, GoldPile1Material); //red mushroom 4 (small jump)
+
+			//createGroundObstacle("7", glm::vec3(-2000.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), GoldPile2Mesh, GoldPile2Material); //red mushroom 5 (small jump)
+			//createGroundObstacle("8", glm::vec3(-2050.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), bmMesh, bmMaterial); //branch mushroom 2 (small jump)
 
 
-		//3D Backgrounds
-		createGroundObstacle("27", glm::vec3(-292.3f - 1200.f, -53.250f, -4.5f), glm::vec3(6.f, 12.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMineMesh, MineBackgroundMaterial);
-		createGroundObstacle("28", glm::vec3(-400.f - 1200.f, -53.250f, -4.5f), glm::vec3(6.f, 12.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMineMesh, MineBackgroundMaterial);
-		createGroundObstacle("29", glm::vec3(-507.7f - 1200.f, -53.250f, -4.5f), glm::vec3(6.f, 12.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMineMesh, MineBackgroundMaterial);
+			//Collisions
 
-		createGroundObstacle("30", glm::vec3(-615.4f - 1200.f, -53.250f, -4.5f), glm::vec3(6.f, 12.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMineMesh, MineBackgroundMaterial);
-		createGroundObstacle("31", glm::vec3(-723.1f - 1200.f, -53.250f, -4.5f), glm::vec3(6.f, 12.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMineMesh, MineBackgroundMaterial);
-		createGroundObstacle("32", glm::vec3(-830.8f - 1200.f, -53.250f, -4.5f), glm::vec3(6.f, 12.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMineMesh, MineBackgroundMaterial);
-		createGroundObstacle("26", glm::vec3(-938.2f - 1200.f, -53.250f, -4.5f), glm::vec3(6.f, 12.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMineMesh, MineBackgroundMaterial);
+			//mushroom 8 collision
+		//	createCollision("101", -19.660f, 1.560f, 1.f, 1.f);
+		//	createCollision("102", -20.410f, 1.560f, 1.f, 1.f);
+		//	createCollision("103", -19.970f, 1.860f, 1.f, 1.f);
+		//	createCollision("104", -20.190f, 0.450f, 1.f, 1.f);
 
-		//2DBackGrounds
-		createGroundObstacle("33", glm::vec3(-75.f - 1200.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineBackdropMaterial);
-		createGroundObstacle("34", glm::vec3(-450.f - 1200.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineBackdropMaterial);
-		createGroundObstacle("35", glm::vec3(-825.f - 1200.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineBackdropMaterial);
-		createGroundObstacle("36", glm::vec3(-2000.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineBackdropMaterial);
-		createGroundObstacle("37", glm::vec3(-2150.f - 400.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineBackdropMaterial);
+			// vine 6 collisions
+			//createCollision("51", -333.30f, 11.f, 0.5f, 5.5f);
+			//createCollision("52", -340.30f, 11.f, 0.5f, 5.5f);
+			//createCollision("53", -336.8f, 6.f, 4.0f, 0.5f);
+			//createCollision("54", -336.8f, 17.f, 4.0f, 0.5f);
 
-		//Exit Rock
-		createGroundObstacle("58", glm::vec3(-409.f - 400.f - 1200.f, -1.f, 0.f), glm::vec3(2.f, 2.f, 1.f), glm::vec3(90.0f, 0.0f, -68.f), CaveEntranceMesh, CaveEntranceMaterial);
+			// squish collision
+			//createCollision("57", -379.780f, 10.4f, 0.420f, 10.f);
 
-		//Foreground 
-		createGroundObstacle("59", glm::vec3(40.f - 400.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
-		createGroundObstacle("60", glm::vec3(0.f - 400.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
-		createGroundObstacle("61", glm::vec3(-40.f - 400.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
-		createGroundObstacle("62", glm::vec3(-80.f - 400.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
-		createGroundObstacle("63", glm::vec3(-120.f - 400.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
-		createGroundObstacle("64", glm::vec3(-160.f - 400.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+			//cobweb collisions
+			//createCollision("58", -395.f, 1.63f, 1.f, 7.f);
 
-		createGroundObstacle("65", glm::vec3(-200.f - 400.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
-		createGroundObstacle("66", glm::vec3(-240.f - 400.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
-		createGroundObstacle("67", glm::vec3(-280.f - 400.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
-		createGroundObstacle("68", glm::vec3(-320.f - 400.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
-		createGroundObstacle("69", glm::vec3(-360.f - 400.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
-		createGroundObstacle("70", glm::vec3(-400.f - 400.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
 
+
+
+			//3D Backgrounds
+			createGroundObstacle("27", glm::vec3(-292.3f - 1200.f, -53.250f, -4.5f), glm::vec3(6.f, 12.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMineMesh, MineBackgroundMaterial);
+			createGroundObstacle("28", glm::vec3(-400.f - 1200.f, -53.250f, -4.5f), glm::vec3(6.f, 12.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMineMesh, MineBackgroundMaterial);
+			createGroundObstacle("29", glm::vec3(-507.7f - 1200.f, -53.250f, -4.5f), glm::vec3(6.f, 12.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMineMesh, MineBackgroundMaterial);
+
+			createGroundObstacle("30", glm::vec3(-615.4f - 1200.f, -53.250f, -4.5f), glm::vec3(6.f, 12.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMineMesh, MineBackgroundMaterial);
+			createGroundObstacle("31", glm::vec3(-723.1f - 1200.f, -53.250f, -4.5f), glm::vec3(6.f, 12.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMineMesh, MineBackgroundMaterial);
+			createGroundObstacle("32", glm::vec3(-830.8f - 1200.f, -53.250f, -4.5f), glm::vec3(6.f, 12.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMineMesh, MineBackgroundMaterial);
+			createGroundObstacle("26", glm::vec3(-938.2f - 1200.f, -53.250f, -4.5f), glm::vec3(6.f, 12.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMineMesh, MineBackgroundMaterial);
+
+			//2DBackGrounds
+			createGroundObstacle("33", glm::vec3(-75.f - 1200.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineBackdropMaterial);
+			createGroundObstacle("34", glm::vec3(-450.f - 1200.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineBackdropMaterial);
+			createGroundObstacle("35", glm::vec3(-825.f - 1200.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineBackdropMaterial);
+			createGroundObstacle("36", glm::vec3(-2000.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineBackdropMaterial);
+			createGroundObstacle("37", glm::vec3(-2150.f - 400.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineBackdropMaterial);
+
+			//Exit Rock
+			createGroundObstacle("58", glm::vec3(-409.f - 400.f - 1200.f, -1.f, 0.f), glm::vec3(2.f, 2.f, 1.f), glm::vec3(90.0f, 0.0f, -68.f), CaveEntranceMesh, CaveEntranceMaterial);
+
+			//Foreground 
+			createGroundObstacle("59", glm::vec3(40.f - 400.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+			createGroundObstacle("60", glm::vec3(0.f - 400.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+			createGroundObstacle("61", glm::vec3(-40.f - 400.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+			createGroundObstacle("62", glm::vec3(-80.f - 400.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+			createGroundObstacle("63", glm::vec3(-120.f - 400.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+			createGroundObstacle("64", glm::vec3(-160.f - 400.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+
+			createGroundObstacle("65", glm::vec3(-200.f - 400.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+			createGroundObstacle("66", glm::vec3(-240.f - 400.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+			createGroundObstacle("67", glm::vec3(-280.f - 400.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+			createGroundObstacle("68", glm::vec3(-320.f - 400.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+			createGroundObstacle("69", glm::vec3(-360.f - 400.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+			createGroundObstacle("70", glm::vec3(-400.f - 400.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+		}
 
 
 
@@ -5691,20 +4783,21 @@ int main() {
 			//behaviour->RotationSpeed = glm::vec3(0.0f, 0.0f, -90.0f);
 		}
 
-		createGroundObstacle("79", glm::vec3(40.f - 400.f - 1200.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.22f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
-		createGroundObstacle("80", glm::vec3(0.f - 400.f - 1200.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
-		createGroundObstacle("81", glm::vec3(-40.f - 400.f - 1200.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
-		createGroundObstacle("82", glm::vec3(-80.f - 400.f - 1200.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
-		createGroundObstacle("83", glm::vec3(-120.f - 400.f - 1200.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
-		createGroundObstacle("84", glm::vec3(-160.f - 400.f - 1200.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+		if (level5) {
+			createGroundObstacle("79", glm::vec3(40.f - 400.f - 1200.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.22f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+			createGroundObstacle("80", glm::vec3(0.f - 400.f - 1200.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+			createGroundObstacle("81", glm::vec3(-40.f - 400.f - 1200.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+			createGroundObstacle("82", glm::vec3(-80.f - 400.f - 1200.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+			createGroundObstacle("83", glm::vec3(-120.f - 400.f - 1200.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+			createGroundObstacle("84", glm::vec3(-160.f - 400.f - 1200.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
 
-		createGroundObstacle("85", glm::vec3(-200.f - 400.f - 1200.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
-		createGroundObstacle("86", glm::vec3(-240.f - 400.f - 1200.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
-		createGroundObstacle("87", glm::vec3(-280.f - 400.f - 1200.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
-		createGroundObstacle("88", glm::vec3(-320.f - 400.f - 1200.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
-		createGroundObstacle("89", glm::vec3(-360.f - 400.f - 1200.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
-		createGroundObstacle("90", glm::vec3(-400.f - 400.f - 1200.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
-
+			createGroundObstacle("85", glm::vec3(-200.f - 400.f - 1200.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+			createGroundObstacle("86", glm::vec3(-240.f - 400.f - 1200.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+			createGroundObstacle("87", glm::vec3(-280.f - 400.f - 1200.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+			createGroundObstacle("88", glm::vec3(-320.f - 400.f - 1200.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+			createGroundObstacle("89", glm::vec3(-360.f - 400.f - 1200.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+			createGroundObstacle("90", glm::vec3(-400.f - 400.f - 1200.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+		}
 
 		//Objects with transparency need to be loaded in last otherwise it creates issues
 		GameObject::Sptr PanelPause = scene->CreateGameObject("PanelPause");
@@ -6029,118 +5122,6 @@ int main() {
 		// I hate this
 		scene->BaseShader = uboShader;
 
-		Material::Sptr MenuMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			MenuMaterial->Name = "Menu";
-			MenuMaterial->MatShader = scene->BaseShader;
-			MenuMaterial->Texture = MenuTex;
-			MenuMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr ButtonBackMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			ButtonBackMaterial->Name = "ButtonBackground";
-			ButtonBackMaterial->MatShader = scene->BaseShader;
-			ButtonBackMaterial->Texture = ButtonBackTex;
-			ButtonBackMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr ButtonStartMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			ButtonStartMaterial->Name = "ButtonStart";
-			ButtonStartMaterial->MatShader = scene->BaseShader;
-			ButtonStartMaterial->Texture = ButtonStartTex;
-			ButtonStartMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr ButtonExitMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			ButtonExitMaterial->Name = "ButtonExit";
-			ButtonExitMaterial->MatShader = scene->BaseShader;
-			ButtonExitMaterial->Texture = ButtonExitTex;
-			ButtonExitMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr FFLogoMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			FFLogoMaterial->Name = "Frog Frontier Logo";
-			FFLogoMaterial->MatShader = scene->BaseShader;
-			FFLogoMaterial->Texture = FFLogoTex;
-			FFLogoMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr BackTextMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			BackTextMaterial->Name = "Back Button Text";
-			BackTextMaterial->MatShader = scene->BaseShader;
-			BackTextMaterial->Texture = BackTextTex;
-			BackTextMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr StartTextMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			StartTextMaterial->Name = "Start Button Text";
-			StartTextMaterial->MatShader = scene->BaseShader;
-			StartTextMaterial->Texture = StartTextTex;
-			StartTextMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr ControlsMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			ControlsMaterial->Name = "Controls Text";
-			ControlsMaterial->MatShader = scene->BaseShader;
-			ControlsMaterial->Texture = ControlsTex;
-			ControlsMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr FilterMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			FilterMaterial->Name = "Button Filter";
-			FilterMaterial->MatShader = scene->BaseShader;
-			FilterMaterial->Texture = FilterTex;
-			FilterMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr FrogBodyMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			FrogBodyMaterial->Name = "FrogBody";
-			FrogBodyMaterial->MatShader = scene->BaseShader;
-			FrogBodyMaterial->Texture = FrogBodyTex;
-			FrogBodyMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr FrogHeadTopMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			FrogHeadTopMaterial->Name = "FrogHeadTop";
-			FrogHeadTopMaterial->MatShader = scene->BaseShader;
-			FrogHeadTopMaterial->Texture = FrogHeadTopTex;
-			FrogHeadTopMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr FrogHeadBotMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			FrogHeadBotMaterial->Name = "FrogHeadBot";
-			FrogHeadBotMaterial->MatShader = scene->BaseShader;
-			FrogHeadBotMaterial->Texture = FrogHeadBotTex;
-			FrogHeadBotMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr FrogTongueMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			FrogTongueMaterial->Name = "FrogTongue";
-			FrogTongueMaterial->MatShader = scene->BaseShader;
-			FrogTongueMaterial->Texture = FrogTongueTex;
-			FrogTongueMaterial->Shininess = 2.0f;
-		}
-
-		Material::Sptr BushTransitionMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			BushTransitionMaterial->Name = "BushTransition";
-			BushTransitionMaterial->MatShader = scene->BaseShader;
-			BushTransitionMaterial->Texture = BushTransitionTex;
-			BushTransitionMaterial->Shininess = 2.0f;
-		}
-
 		// Create some lights for our scene
 		scene->Lights.resize(8);
 		scene->Lights[0].Position = glm::vec3(3.0f, 3.0f, 3.0f);
@@ -6431,70 +5412,6 @@ int main() {
 			// I hate this
 			scene->BaseShader = uboShader;
 
-			Material::Sptr MenuMaterial = ResourceManager::CreateAsset<Material>();
-			{
-				MenuMaterial->Name = "Menu";
-				MenuMaterial->MatShader = scene->BaseShader;
-				MenuMaterial->Texture = ControlMenuTex;
-				MenuMaterial->Shininess = 2.0f;
-			}
-
-			Material::Sptr ButtonBackMaterial = ResourceManager::CreateAsset<Material>();
-			{
-				ButtonBackMaterial->Name = "ButtonBackground";
-				ButtonBackMaterial->MatShader = scene->BaseShader;
-				ButtonBackMaterial->Texture = ButtonBackTex;
-				ButtonBackMaterial->Shininess = 2.0f;
-			}
-
-			Material::Sptr BackTextMaterial = ResourceManager::CreateAsset<Material>();
-			{
-				BackTextMaterial->Name = "Back Button Text";
-				BackTextMaterial->MatShader = scene->BaseShader;
-				BackTextMaterial->Texture = BackTextTex;
-				BackTextMaterial->Shininess = 2.0f;
-			}
-
-			Material::Sptr FrogBodyMaterial = ResourceManager::CreateAsset<Material>();
-			{
-				FrogBodyMaterial->Name = "FrogBody";
-				FrogBodyMaterial->MatShader = scene->BaseShader;
-				FrogBodyMaterial->Texture = FrogBodyTex;
-				FrogBodyMaterial->Shininess = 2.0f;
-			}
-
-			Material::Sptr FrogHeadTopMaterial = ResourceManager::CreateAsset<Material>();
-			{
-				FrogHeadTopMaterial->Name = "FrogHeadTop";
-				FrogHeadTopMaterial->MatShader = scene->BaseShader;
-				FrogHeadTopMaterial->Texture = FrogHeadTopTex;
-				FrogHeadTopMaterial->Shininess = 2.0f;
-			}
-
-			Material::Sptr FrogHeadBotMaterial = ResourceManager::CreateAsset<Material>();
-			{
-				FrogHeadBotMaterial->Name = "FrogHeadBot";
-				FrogHeadBotMaterial->MatShader = scene->BaseShader;
-				FrogHeadBotMaterial->Texture = FrogHeadBotTex;
-				FrogHeadBotMaterial->Shininess = 2.0f;
-			}
-
-			Material::Sptr FrogTongueMaterial = ResourceManager::CreateAsset<Material>();
-			{
-				FrogTongueMaterial->Name = "FrogTongue";
-				FrogTongueMaterial->MatShader = scene->BaseShader;
-				FrogTongueMaterial->Texture = FrogTongueTex;
-				FrogTongueMaterial->Shininess = 2.0f;
-			}
-
-			Material::Sptr BushTransitionMaterial = ResourceManager::CreateAsset<Material>();
-			{
-				BushTransitionMaterial->Name = "BushTransition";
-				BushTransitionMaterial->MatShader = scene->BaseShader;
-				BushTransitionMaterial->Texture = BushTransitionTex;
-				BushTransitionMaterial->Shininess = 2.0f;
-			}
-
 			// Create some lights for our scene
 			scene->Lights.resize(4);
 			scene->Lights[0].Position = glm::vec3(3.0f, 3.0f, 3.0f);
@@ -6665,174 +5582,6 @@ int main() {
 
 			// I hate this
 			scene->BaseShader = uboShader;
-
-			Material::Sptr MenuMaterial = ResourceManager::CreateAsset<Material>();
-			{
-				MenuMaterial->Name = "Menu";
-				MenuMaterial->MatShader = scene->BaseShader;
-				MenuMaterial->Texture = LSMenuTex;
-				MenuMaterial->Shininess = 2.0f;
-			}
-
-			Material::Sptr LSButtonMaterial = ResourceManager::CreateAsset<Material>();
-			{
-				LSButtonMaterial->Name = "LSButton";
-				LSButtonMaterial->MatShader = scene->BaseShader;
-				LSButtonMaterial->Texture = LSButtonTex;
-				LSButtonMaterial->Shininess = 2.0f;
-			}
-
-			Material::Sptr LSLogoMaterial = ResourceManager::CreateAsset<Material>();
-			{
-				LSLogoMaterial->Name = "LSLogo";
-				LSLogoMaterial->MatShader = scene->BaseShader;
-				LSLogoMaterial->Texture = LSLogoTex;
-				LSLogoMaterial->Shininess = 2.0f;
-			}
-
-			Material::Sptr ButtonBackMaterial = ResourceManager::CreateAsset<Material>();
-			{
-				ButtonBackMaterial->Name = "ButtonBackground";
-				ButtonBackMaterial->MatShader = scene->BaseShader;
-				ButtonBackMaterial->Texture = ButtonBackTex;
-				ButtonBackMaterial->Shininess = 2.0f;
-			}
-
-			Material::Sptr BackMaterial = ResourceManager::CreateAsset<Material>();
-			{
-				BackMaterial->Name = "Back";
-				BackMaterial->MatShader = scene->BaseShader;
-				BackMaterial->Texture = BackTex;
-				BackMaterial->Shininess = 2.0f;
-			}
-
-			Material::Sptr FilterMaterial = ResourceManager::CreateAsset<Material>();
-			{
-				FilterMaterial->Name = "Button Filter";
-				FilterMaterial->MatShader = scene->BaseShader;
-				FilterMaterial->Texture = FilterTex;
-				FilterMaterial->Shininess = 2.0f;
-			}
-
-			Material::Sptr Material1 = ResourceManager::CreateAsset<Material>();
-			{
-				Material1->Name = "1";
-				Material1->MatShader = scene->BaseShader;
-				Material1->Texture = Tex1;
-				Material1->Shininess = 2.0f;
-			}
-
-			Material::Sptr Material2 = ResourceManager::CreateAsset<Material>();
-			{
-				Material2->Name = "2";
-				Material2->MatShader = scene->BaseShader;
-				Material2->Texture = Tex2;
-				Material2->Shininess = 2.0f;
-			}
-
-			Material::Sptr Material3 = ResourceManager::CreateAsset<Material>();
-			{
-				Material3->Name = "3";
-				Material3->MatShader = scene->BaseShader;
-				Material3->Texture = Tex3;
-				Material3->Shininess = 2.0f;
-			}
-
-			Material::Sptr Material4 = ResourceManager::CreateAsset<Material>();
-			{
-				Material4->Name = "4";
-				Material4->MatShader = scene->BaseShader;
-				Material4->Texture = Tex4;
-				Material4->Shininess = 2.0f;
-			}
-
-			Material::Sptr Material5 = ResourceManager::CreateAsset<Material>();
-			{
-				Material5->Name = "5";
-				Material5->MatShader = scene->BaseShader;
-				Material5->Texture = Tex5;
-				Material5->Shininess = 2.0f;
-			}
-
-			Material::Sptr Material6 = ResourceManager::CreateAsset<Material>();
-			{
-				Material6->Name = "6";
-				Material6->MatShader = scene->BaseShader;
-				Material6->Texture = Tex6;
-				Material6->Shininess = 2.0f;
-			}
-
-			Material::Sptr Material7 = ResourceManager::CreateAsset<Material>();
-			{
-				Material7->Name = "7";
-				Material7->MatShader = scene->BaseShader;
-				Material7->Texture = Tex7;
-				Material7->Shininess = 2.0f;
-			}
-
-			Material::Sptr Material8 = ResourceManager::CreateAsset<Material>();
-			{
-				Material8->Name = "8";
-				Material8->MatShader = scene->BaseShader;
-				Material8->Texture = Tex8;
-				Material8->Shininess = 2.0f;
-			}
-
-			Material::Sptr Material9 = ResourceManager::CreateAsset<Material>();
-			{
-				Material9->Name = "9";
-				Material9->MatShader = scene->BaseShader;
-				Material9->Texture = Tex9;
-				Material9->Shininess = 2.0f;
-			}
-
-			Material::Sptr Material10 = ResourceManager::CreateAsset<Material>();
-			{
-				Material10->Name = "10";
-				Material10->MatShader = scene->BaseShader;
-				Material10->Texture = Tex10;
-				Material10->Shininess = 2.0f;
-			}
-
-			Material::Sptr FrogBodyMaterial = ResourceManager::CreateAsset<Material>();
-			{
-				FrogBodyMaterial->Name = "FrogBody";
-				FrogBodyMaterial->MatShader = scene->BaseShader;
-				FrogBodyMaterial->Texture = FrogBodyTex;
-				FrogBodyMaterial->Shininess = 2.0f;
-			}
-
-			Material::Sptr FrogHeadTopMaterial = ResourceManager::CreateAsset<Material>();
-			{
-				FrogHeadTopMaterial->Name = "FrogHeadTop";
-				FrogHeadTopMaterial->MatShader = scene->BaseShader;
-				FrogHeadTopMaterial->Texture = FrogHeadTopTex;
-				FrogHeadTopMaterial->Shininess = 2.0f;
-			}
-
-			Material::Sptr FrogHeadBotMaterial = ResourceManager::CreateAsset<Material>();
-			{
-				FrogHeadBotMaterial->Name = "FrogHeadBot";
-				FrogHeadBotMaterial->MatShader = scene->BaseShader;
-				FrogHeadBotMaterial->Texture = FrogHeadBotTex;
-				FrogHeadBotMaterial->Shininess = 2.0f;
-			}
-
-			Material::Sptr FrogTongueMaterial = ResourceManager::CreateAsset<Material>();
-			{
-				FrogTongueMaterial->Name = "FrogTongue";
-				FrogTongueMaterial->MatShader = scene->BaseShader;
-				FrogTongueMaterial->Texture = FrogTongueTex;
-				FrogTongueMaterial->Shininess = 2.0f;
-			}
-
-			Material::Sptr BushTransitionMaterial = ResourceManager::CreateAsset<Material>();
-			{
-				BushTransitionMaterial->Name = "BushTransition";
-				BushTransitionMaterial->MatShader = scene->BaseShader;
-				BushTransitionMaterial->Texture = BushTransitionTex;
-				BushTransitionMaterial->Shininess = 2.0f;
-			}
 			 
 			// Create some lights for our scene
 			scene->Lights.resize(8);
@@ -7357,8 +6106,6 @@ int main() {
 			scene->SetAmbientLight(glm::vec3(0.3f));
 			std::cout << "L pressed" << std::endl;
 		}
-
-
 
 	
 
