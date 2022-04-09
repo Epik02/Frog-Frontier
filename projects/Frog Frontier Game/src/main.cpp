@@ -471,7 +471,12 @@ bool DrawSaveLoadImGui(Scene::Sptr& scene, std::string& path) {
 			DoTransition = false;
 			break;
 		case 4:
-			return 0;
+			path = "level4.json";
+			SceneLoad(scene, path);
+			scenevalue = 4;
+			index = 1;
+			enterclick = true;
+			DoTransition = false;
 			break;
 		case 5:
 			path = "Level5.json";
@@ -485,18 +490,6 @@ bool DrawSaveLoadImGui(Scene::Sptr& scene, std::string& path) {
 			return 0;
 			break;
 		case 7:
-			return 0;
-			break;
-		case 8:
-			return 0;
-			break;
-		case 9:
-			return 0;
-			break;
-		case 10:
-			return 0;
-			break;
-		case 11:
 			path = "menu.json";
 			SceneLoad(scene, path);
 			scenevalue = 11;
@@ -696,50 +689,15 @@ void SceneChanger()
 	else if (scenevalue == 13)
 	{
 		if (glfwGetKey(window, GLFW_KEY_UP) && performedtask == false) {
-			if (index - 5 < 1)
+			if (index == 1 || index == 3 || index == 5)
 			{
-				index = 11;
+				index = 7;
 				std::cout << index << std::endl;
 				performedtask = true;
 			}
-			else
+			else if (index == 7)
 			{
-				index -= 5;
-				std::cout << index << std::endl;
-				performedtask = true;
-			}
-		}
-		else if (glfwGetKey(window, GLFW_KEY_DOWN) && performedtask == false) {
-			if (index + 5 > 10)
-			{
-				index = 1;
-				std::cout << index << std::endl;
-				performedtask = true;
-			}
-			else
-			{
-				index += 5;
-				std::cout << index << std::endl;
-				performedtask = true;
-			}
-		}
-		else if (glfwGetKey(window, GLFW_KEY_LEFT) && performedtask == false)
-		{
-			if (index - 1 == 0)
-			{
-				index = 5;
-				std::cout << index << std::endl;
-				performedtask = true;
-			}
-			else if (index - 1 == 5)
-			{
-				index = 10;
-				std::cout << index << std::endl;
-				performedtask = true;
-			}
-			else if (index - 1 == 10)
-			{
-				std::cout << index << std::endl;
+				index = 4;
 				performedtask = true;
 			}
 			else
@@ -749,28 +707,75 @@ void SceneChanger()
 				performedtask = true;
 			}
 		}
-		else if (glfwGetKey(window, GLFW_KEY_RIGHT) && performedtask == false)
-		{
-			if (index + 1 == 6)
+		else if (glfwGetKey(window, GLFW_KEY_DOWN) && performedtask == false) {
+			if (index == 2 || index == 4 || index == 6)
 			{
-				index = 1;
+				index = 7;
 				std::cout << index << std::endl;
 				performedtask = true;
 			}
-			else if (index + 1 == 11)
+			else if (index == 7)
 			{
-				index = 5;
-				std::cout << index << std::endl;
-				performedtask = true;
-			}
-			else if (index + 1 == 12)
-			{
-				std::cout << index << std::endl;
+				index = 3;
 				performedtask = true;
 			}
 			else
 			{
 				index += 1;
+				std::cout << index << std::endl;
+				performedtask = true;
+			}
+		}
+		else if (glfwGetKey(window, GLFW_KEY_LEFT) && performedtask == false)
+		{
+			if (index - 2 == 0)
+			{
+				index = 6;
+				std::cout << index << std::endl;
+				performedtask = true;
+			}
+			else if (index - 2 == -1)
+			{
+				index = 5;
+				std::cout << index << std::endl;
+				performedtask = true;
+			}
+			else if (index == 7)
+			{
+				index = 2;
+				std::cout << index << std::endl;
+				performedtask = true;
+			}
+			else
+			{
+				index -= 2;
+				std::cout << index << std::endl;
+				performedtask = true;
+			}
+		}
+		else if (glfwGetKey(window, GLFW_KEY_RIGHT) && performedtask == false)
+		{
+			if (index + 2 == 7)
+			{
+				index = 1;
+				std::cout << index << std::endl;
+				performedtask = true;
+			}
+			else if (index + 2 == 8)
+			{
+				index = 2;
+				std::cout << index << std::endl;
+				performedtask = true;
+			}
+			else if (index == 7)
+			{
+				index = 6;
+				std::cout << index << std::endl;
+				performedtask = true;
+			}
+			else
+			{
+				index += 2;
 				std::cout << index << std::endl;
 				performedtask = true;
 			}
@@ -806,67 +811,43 @@ void SceneChanger()
 
 			if (index == 1)
 			{
-				scene->FindObjectByName("Filter")->SetPostion(glm::vec3(0.3f, 0.5f, 3.01f));
-				scene->FindObjectByName("Filter")->SetScale(glm::vec3(0.5f));
+				scene->FindObjectByName("Filter")->SetPostion(glm::vec3(0.7f, 0.4f, 3.01f));
+				scene->FindObjectByName("Filter")->SetScale(glm::vec3(0.7f));
 			}
 			else if (index == 2)
 			{
-				scene->FindObjectByName("Filter")->SetPostion(glm::vec3(0.9f, 0.5f, 3.01f));
-				scene->FindObjectByName("Filter")->SetScale(glm::vec3(0.5f));
+				scene->FindObjectByName("Filter")->SetPostion(glm::vec3(0.7f, -0.4f, 3.01f));
+				scene->FindObjectByName("Filter")->SetScale(glm::vec3(0.7f));
 			}
 			else if (index == 3)
 			{
-				scene->FindObjectByName("Filter")->SetPostion(glm::vec3(1.5f, 0.5f, 3.01f));
-				scene->FindObjectByName("Filter")->SetScale(glm::vec3(0.5f));
+				scene->FindObjectByName("Filter")->SetPostion(glm::vec3(1.6f, 0.4f, 3.01f));
+				scene->FindObjectByName("Filter")->SetScale(glm::vec3(0.7f));
 			}
 			else if (index == 4)
 			{
-				scene->FindObjectByName("Filter")->SetPostion(glm::vec3(2.1f, 0.5f, 3.01f));
-				scene->FindObjectByName("Filter")->SetScale(glm::vec3(0.5f));
+				scene->FindObjectByName("Filter")->SetPostion(glm::vec3(1.6f, -0.4f, 3.01f));
+				scene->FindObjectByName("Filter")->SetScale(glm::vec3(0.7f));
 			}
 			else if (index == 5)
 			{
-				scene->FindObjectByName("Filter")->SetPostion(glm::vec3(2.7f, 0.5f, 3.01f));
-				scene->FindObjectByName("Filter")->SetScale(glm::vec3(0.5f));
+				scene->FindObjectByName("Filter")->SetPostion(glm::vec3(2.5f, 0.4f, 3.01f));
+				scene->FindObjectByName("Filter")->SetScale(glm::vec3(0.7f));
 			}
 			else if (index == 6)
 			{
-				scene->FindObjectByName("Filter")->SetPostion(glm::vec3(0.3f, -0.1f, 3.01f));
-				scene->FindObjectByName("Filter")->SetScale(glm::vec3(0.5f));
+				scene->FindObjectByName("Filter")->SetPostion(glm::vec3(2.5f, -0.4f, 3.01f));
+				scene->FindObjectByName("Filter")->SetScale(glm::vec3(0.7f));
 			}
 			else if (index == 7)
-			{
-				scene->FindObjectByName("Filter")->SetPostion(glm::vec3(0.9f, -0.1f, 3.01f));
-				scene->FindObjectByName("Filter")->SetScale(glm::vec3(0.5f));
-			}
-			else if (index == 8)
-			{
-				scene->FindObjectByName("Filter")->SetPostion(glm::vec3(1.5f, -0.1f, 3.01f));
-				scene->FindObjectByName("Filter")->SetScale(glm::vec3(0.5f));
-			}
-			else if (index == 9)
-			{
-				scene->FindObjectByName("Filter")->SetPostion(glm::vec3(2.1f, -0.1f, 3.01f));
-				scene->FindObjectByName("Filter")->SetScale(glm::vec3(0.5f));
-			}
-			else if (index == 10)
-			{
-				scene->FindObjectByName("Filter")->SetPostion(glm::vec3(2.6f, -0.1f, 3.01f));
-				scene->FindObjectByName("Filter")->SetScale(glm::vec3(0.5f));
-			}
-			else if (index == 11)
 			{
 				scene->FindObjectByName("Filter")->SetPostion(glm::vec3(1.75f, -1.f, 3.01f));
 				scene->FindObjectByName("Filter")->SetScale(glm::vec3(2.f, 0.4, 0.5));
 			}
-
-
-
-		}
-	
+		}	
 	}
-
 }
+
 bool loadMeshOnce = true;
 float animIntervals = 0;
 void keyboard() 
@@ -1110,6 +1091,13 @@ void keyboard()
 			}
 		}
 		else if (scenevalue == 4)
+		{
+			if (scene->FindObjectByName("player")->GetPosition().x < -1600.f)
+			{
+				playerMove = false;
+			}
+		}
+		else if (scenevalue == 5)
 		{
 			if (scene->FindObjectByName("player")->GetPosition().x < -2000.f) {
 				playerMove = false;
@@ -6907,9 +6895,9 @@ int main() {
 			GameObject::Sptr LsButton1 = scene->CreateGameObject("LSButton1");
 			{
 				// Set position in the scene
-				LsButton1->SetPostion(glm::vec3(0.3f, 0.5f, 3.0f));
+				LsButton1->SetPostion(glm::vec3(0.7f, 0.4f, 3.0f));
 				// Scale down the plane
-				LsButton1->SetScale(glm::vec3(0.5f));
+				LsButton1->SetScale(glm::vec3(0.7f));
 
 				// Create and attach a render component
 				RenderComponent::Sptr renderer = LsButton1->Add<RenderComponent>();
@@ -6923,9 +6911,9 @@ int main() {
 			GameObject::Sptr LsButton2 = scene->CreateGameObject("LSButton2");
 			{
 				// Set position in the scene
-				LsButton2->SetPostion(glm::vec3(0.9f, 0.5f, 3.0f));
+				LsButton2->SetPostion(glm::vec3(0.7f, -0.4f, 3.0f));
 				// Scale down the plane
-				LsButton2->SetScale(glm::vec3(0.5f));
+				LsButton2->SetScale(glm::vec3(0.7f));
 
 				// Create and attach a render component
 				RenderComponent::Sptr renderer = LsButton2->Add<RenderComponent>();
@@ -6939,9 +6927,9 @@ int main() {
 			GameObject::Sptr LsButton3 = scene->CreateGameObject("LSButton3");
 			{
 				// Set position in the scene
-				LsButton3->SetPostion(glm::vec3(1.5f, 0.5f, 3.0f));
+				LsButton3->SetPostion(glm::vec3(1.6f, 0.4f, 3.0f));
 				// Scale down the plane
-				LsButton3->SetScale(glm::vec3(0.5f));
+				LsButton3->SetScale(glm::vec3(0.7f));
 
 				// Create and attach a render component
 				RenderComponent::Sptr renderer = LsButton3->Add<RenderComponent>();
@@ -6955,9 +6943,9 @@ int main() {
 			GameObject::Sptr LsButton4 = scene->CreateGameObject("LSButton4");
 			{
 				// Set position in the scene
-				LsButton4->SetPostion(glm::vec3(2.1f, 0.5f, 3.0f));
+				LsButton4->SetPostion(glm::vec3(1.6f, -0.4f, 3.0f));
 				// Scale down the plane
-				LsButton4->SetScale(glm::vec3(0.5f));
+				LsButton4->SetScale(glm::vec3(0.7f));
 
 				// Create and attach a render component
 				RenderComponent::Sptr renderer = LsButton4->Add<RenderComponent>();
@@ -6971,9 +6959,9 @@ int main() {
 			GameObject::Sptr LsButton5 = scene->CreateGameObject("LSButton5");
 			{
 				// Set position in the scene
-				LsButton5->SetPostion(glm::vec3(2.7f, 0.5f, 3.0f));
+				LsButton5->SetPostion(glm::vec3(2.5f, 0.4f, 3.0f));
 				// Scale down the plane
-				LsButton5->SetScale(glm::vec3(0.5f));
+				LsButton5->SetScale(glm::vec3(0.7f));
 
 				// Create and attach a render component
 				RenderComponent::Sptr renderer = LsButton5->Add<RenderComponent>();
@@ -6987,76 +6975,12 @@ int main() {
 			GameObject::Sptr LsButton6 = scene->CreateGameObject("LSButton6");
 			{
 				// Set position in the scene
-				LsButton6->SetPostion(glm::vec3(0.3f, -0.1f, 3.0f));
+				LsButton6->SetPostion(glm::vec3(2.5f, -0.4f, 3.0f));
 				// Scale down the plane
-				LsButton6->SetScale(glm::vec3(0.5f));
+				LsButton6->SetScale(glm::vec3(0.7f));
 
 				// Create and attach a render component
 				RenderComponent::Sptr renderer = LsButton6->Add<RenderComponent>();
-				renderer->SetMesh(planeMesh);
-				renderer->SetMaterial(LSButtonMaterial);
-
-				// This object is a renderable only, it doesn't have any behaviours or
-				// physics bodies attached!
-			}
-
-			GameObject::Sptr LsButton7 = scene->CreateGameObject("LSButton7");
-			{
-				// Set position in the scene
-				LsButton7->SetPostion(glm::vec3(0.9f, -0.1f, 3.0f));
-				// Scale down the plane
-				LsButton7->SetScale(glm::vec3(0.5f));
-
-				// Create and attach a render component
-				RenderComponent::Sptr renderer = LsButton7->Add<RenderComponent>();
-				renderer->SetMesh(planeMesh);
-				renderer->SetMaterial(LSButtonMaterial);
-
-				// This object is a renderable only, it doesn't have any behaviours or
-				// physics bodies attached!
-			}
-
-			GameObject::Sptr LsButton8 = scene->CreateGameObject("LSButton8");
-			{
-				// Set position in the scene
-				LsButton8->SetPostion(glm::vec3(1.5f, -0.1f, 3.0f));
-				// Scale down the plane
-				LsButton8->SetScale(glm::vec3(0.5f));
-
-				// Create and attach a render component
-				RenderComponent::Sptr renderer = LsButton8->Add<RenderComponent>();
-				renderer->SetMesh(planeMesh);
-				renderer->SetMaterial(LSButtonMaterial);
-
-				// This object is a renderable only, it doesn't have any behaviours or
-				// physics bodies attached!
-			}
-
-			GameObject::Sptr LsButton9 = scene->CreateGameObject("LSButton9");
-			{
-				// Set position in the scene
-				LsButton9->SetPostion(glm::vec3(2.1f, -0.1f, 3.0f));
-				// Scale down the plane
-				LsButton9->SetScale(glm::vec3(0.5f));
-
-				// Create and attach a render component
-				RenderComponent::Sptr renderer = LsButton9->Add<RenderComponent>();
-				renderer->SetMesh(planeMesh);
-				renderer->SetMaterial(LSButtonMaterial);
-
-				// This object is a renderable only, it doesn't have any behaviours or
-				// physics bodies attached!
-			}
-
-			GameObject::Sptr LsButton10 = scene->CreateGameObject("LSButton10");
-			{
-				// Set position in the scene
-				LsButton10->SetPostion(glm::vec3(2.7f, -0.1f, 3.0f));
-				// Scale down the plane
-				LsButton10->SetScale(glm::vec3(0.5f));
-
-				// Create and attach a render component
-				RenderComponent::Sptr renderer = LsButton10->Add<RenderComponent>();
 				renderer->SetMesh(planeMesh);
 				renderer->SetMaterial(LSButtonMaterial);
 
@@ -7124,8 +7048,8 @@ int main() {
 
 			GameObject::Sptr Num1 = scene->CreateGameObject("Num1");
 			{
-				Num1->SetPostion(glm::vec3(0.225f, 0.375f, 3.5f));
-				Num1->SetScale(glm::vec3(0.25f));
+				Num1->SetPostion(glm::vec3(0.525f, 0.3f, 3.5f));
+				Num1->SetScale(glm::vec3(0.3f));
 
 				RenderComponent::Sptr renderer = Num1->Add<RenderComponent>();
 				renderer->SetMesh(planeMesh);
@@ -7134,8 +7058,8 @@ int main() {
 
 			GameObject::Sptr Num2 = scene->CreateGameObject("Num2");
 			{
-				Num2->SetPostion(glm::vec3(0.675f, 0.375f, 3.5f));
-				Num2->SetScale(glm::vec3(0.25f));
+				Num2->SetPostion(glm::vec3(0.525f, -0.3f, 3.5f));
+				Num2->SetScale(glm::vec3(0.3f));
 
 				RenderComponent::Sptr renderer = Num2->Add<RenderComponent>();
 				renderer->SetMesh(planeMesh);
@@ -7144,8 +7068,8 @@ int main() {
 
 			GameObject::Sptr Num3 = scene->CreateGameObject("Num3");
 			{
-				Num3->SetPostion(glm::vec3(1.125f, 0.375f, 3.5f));
-				Num3->SetScale(glm::vec3(0.25f));
+				Num3->SetPostion(glm::vec3(1.2f, 0.3f, 3.5f));
+				Num3->SetScale(glm::vec3(0.3f));
 
 				RenderComponent::Sptr renderer = Num3->Add<RenderComponent>();
 				renderer->SetMesh(planeMesh);
@@ -7154,8 +7078,8 @@ int main() {
 
 			GameObject::Sptr Num4 = scene->CreateGameObject("Num4");
 			{
-				Num4->SetPostion(glm::vec3(1.575f, 0.375f, 3.5f));
-				Num4->SetScale(glm::vec3(0.25f));
+				Num4->SetPostion(glm::vec3(1.2f, -0.3f, 3.5f));
+				Num4->SetScale(glm::vec3(0.3f));
 
 				RenderComponent::Sptr renderer = Num4->Add<RenderComponent>();
 				renderer->SetMesh(planeMesh);
@@ -7164,8 +7088,8 @@ int main() {
 
 			GameObject::Sptr Num5 = scene->CreateGameObject("Num5");
 			{
-				Num5->SetPostion(glm::vec3(2.025f, 0.375f, 3.5f));
-				Num5->SetScale(glm::vec3(0.25f));
+				Num5->SetPostion(glm::vec3(1.875f, 0.3f, 3.5f));
+				Num5->SetScale(glm::vec3(0.3f));
 
 				RenderComponent::Sptr renderer = Num5->Add<RenderComponent>();
 				renderer->SetMesh(planeMesh);
@@ -7174,52 +7098,12 @@ int main() {
 
 			GameObject::Sptr Num6 = scene->CreateGameObject("Num6");
 			{
-				Num6->SetPostion(glm::vec3(0.225f, -0.075f, 3.5f));
-				Num6->SetScale(glm::vec3(0.25f));
+				Num6->SetPostion(glm::vec3(1.875f, -0.3f, 3.5f));
+				Num6->SetScale(glm::vec3(0.3f));
 
 				RenderComponent::Sptr renderer = Num6->Add<RenderComponent>();
 				renderer->SetMesh(planeMesh);
 				renderer->SetMaterial(Material6);
-			}
-
-			GameObject::Sptr Num7 = scene->CreateGameObject("Num7");
-			{
-				Num7->SetPostion(glm::vec3(0.675f, -0.075f, 3.5f));
-				Num7->SetScale(glm::vec3(0.25f));
-
-				RenderComponent::Sptr renderer = Num7->Add<RenderComponent>();
-				renderer->SetMesh(planeMesh);
-				renderer->SetMaterial(Material7);
-			}
-
-			GameObject::Sptr Num8 = scene->CreateGameObject("Num8");
-			{
-				Num8->SetPostion(glm::vec3(1.125f, -0.075f, 3.5f));
-				Num8->SetScale(glm::vec3(0.25f));
-
-				RenderComponent::Sptr renderer = Num8->Add<RenderComponent>();
-				renderer->SetMesh(planeMesh);
-				renderer->SetMaterial(Material8);
-			}
-
-			GameObject::Sptr Num9 = scene->CreateGameObject("Num9");
-			{
-				Num9->SetPostion(glm::vec3(1.575f, -0.075f, 3.5f));
-				Num9->SetScale(glm::vec3(0.25f));
-
-				RenderComponent::Sptr renderer = Num9->Add<RenderComponent>();
-				renderer->SetMesh(planeMesh);
-				renderer->SetMaterial(Material9);
-			}
-
-			GameObject::Sptr Num10 = scene->CreateGameObject("Num10");
-			{
-				Num10->SetPostion(glm::vec3(2.025f, -0.075f, 3.5f));
-				Num10->SetScale(glm::vec3(0.25f));
-
-				RenderComponent::Sptr renderer = Num10->Add<RenderComponent>();
-				renderer->SetMesh(planeMesh);
-				renderer->SetMaterial(Material10);
 			}
 
 			GameObject::Sptr FrogTongue = scene->CreateGameObject("FrogTongue");
