@@ -1056,7 +1056,7 @@ void keyboard()
 			if (scene->FindObjectByName("player")->GetPosition().z < 10.1 && playerFlying == true) {
 				scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x, scene->FindObjectByName("player")->GetPosition().y, scene->FindObjectByName("player")->GetPosition().z + 0.6));
 			}
-			else if (returnToGround == true && playerFlying == false && scene->FindObjectByName("player")->GetPosition().z > 0.3){
+			else if (returnToGround == true && playerFlying == false && scene->FindObjectByName("player")->GetPosition().z > 0.3) {
 				scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x, scene->FindObjectByName("player")->GetPosition().y, scene->FindObjectByName("player")->GetPosition().z - 0.12));
 			}
 
@@ -1113,89 +1113,87 @@ void keyboard()
 		}
 	}
 
+		//	//Run Animations (still working on lerping them) ***SWITCHING BETWEEN TOO MANY KEYFRAMES IN TOO SHORT A TIME WILL CAUSE THE GAME TO CRASH***
+		//	if (runningAnim == true) {
+		//		runAnimTime = glfwGetTime() - runAnimTemp;
+		//		runAnimTime = runAnimTime / 2.5;
+		//	}
+		//	else {
+		//		runAnimTemp = glfwGetTime();
+		//	}
+		//	//std::cout << runAnimTime << "\n" << animIntervals << "\n";
 
-	{
-	//	//Run Animations (still working on lerping them) ***SWITCHING BETWEEN TOO MANY KEYFRAMES IN TOO SHORT A TIME WILL CAUSE THE GAME TO CRASH***
-	//	if (runningAnim == true) {
-	//		runAnimTime = glfwGetTime() - runAnimTemp;
-	//		runAnimTime = runAnimTime / 2.5;
-	//	}
-	//	else {
-	//		runAnimTemp = glfwGetTime();
-	//	}
-	//	//std::cout << runAnimTime << "\n" << animIntervals << "\n";
+		//	if (runAnimTime >= (0.05 + FPSIncrease) && runAnimTime < (0.1 + FPSIncrease)) {
+		//		runFrame = runFrame + 1;
+		//		FPSIncrease = FPSIncrease + 0.05;
+		//	}
+		//	else if (runAnimTime < 0.05 || jumpo == false) {
+		//		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh1); //sets obj to default
+		//	}
+		//	if (scene->FindObjectByName("player")->GetPosition().z <= 0.3) {
+		//		runningAnim = true;
+		//	}
 
-	//	if (runAnimTime >= (0.05 + FPSIncrease) && runAnimTime < (0.1 + FPSIncrease)) {
-	//		runFrame = runFrame + 1;
-	//		FPSIncrease = FPSIncrease + 0.05;
-	//	}
-	//	else if (runAnimTime < 0.05 || jumpo == false) {
-	//		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh1); //sets obj to default
-	//	}
-	//	if (scene->FindObjectByName("player")->GetPosition().z <= 0.3) {
-	//		runningAnim = true;
-	//	}
+		//	if (runFrame == 18 || runningAnim == false) {
+		//		runFrame = 0;
+		//	}
 
-	//	if (runFrame == 18 || runningAnim == false) {
-	//		runFrame = 0;
-	//	}
-
-	//	switch (runFrame) {
-	//	case 1:
-	//		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh1);
-	//		break;
-	//	case 2:
-	//		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh2);
-	//		break;
-	//	case 3:
-	//		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh3);
-	//		break;
-	//	case 4:
-	//		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh4);
-	//		break;
-	//	case 5:
-	//		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh5);
-	//		break;
-	//	case 6:
-	//		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh6);
-	//		break;
-	//	case 7:
-	//		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh7);
-	//		break;
-	//	case 8:
-	//		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh8);
-	//		break;
-	//	case 9:
-	//		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh9);
-	//		break;
-	//	case 10:
-	//		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh10);
-	//		break;
-	//	case 11:
-	//		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh11);
-	//		break;
-	//	case 12:
-	//		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh12);
-	//		break;
-	//	case 13:
-	//		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh13);
-	//		break;
-	//	case 14:
-	//		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh14);
-	//		break;
-	//	case 15:
-	//		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh15);
-	//		break;
-	//	case 16:
-	//		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh16);
-	//		break;
-	//	case 17:
-	//		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh17);
-	//		break;
-	//	case 18:
-	//		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh18);
-	//		break;
-	//}
+		//	switch (runFrame) {
+		//	case 1:
+		//		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh1);
+		//		break;
+		//	case 2:
+		//		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh2);
+		//		break;
+		//	case 3:
+		//		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh3);
+		//		break;
+		//	case 4:
+		//		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh4);
+		//		break;
+		//	case 5:
+		//		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh5);
+		//		break;
+		//	case 6:
+		//		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh6);
+		//		break;
+		//	case 7:
+		//		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh7);
+		//		break;
+		//	case 8:
+		//		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh8);
+		//		break;
+		//	case 9:
+		//		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh9);
+		//		break;
+		//	case 10:
+		//		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh10);
+		//		break;
+		//	case 11:
+		//		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh11);
+		//		break;
+		//	case 12:
+		//		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh12);
+		//		break;
+		//	case 13:
+		//		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh13);
+		//		break;
+		//	case 14:
+		//		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh14);
+		//		break;
+		//	case 15:
+		//		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh15);
+		//		break;
+		//	case 16:
+		//		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh16);
+		//		break;
+		//	case 17:
+		//		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh17);
+		//		break;
+		//	case 18:
+		//		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh18);
+		//		break;
+		//}
 
 
 		if (playerJumping == false && playerFlying == false) {
@@ -3081,7 +3079,7 @@ int main() {
 
 		SunflowerMesh = ResourceManager::CreateAsset<MeshResource>("Sunflower.obj");
 		
-		Rock1Mesh = ResourceManager::CreateAsset<MeshResource>("Rock1.obj");
+		Rock1Mesh = ResourceManager::CreateAsset<MeshResource>("Rock1.obj"); 
 		Rock2Mesh = ResourceManager::CreateAsset<MeshResource>("Rock2.obj");
 		Rock3Mesh = ResourceManager::CreateAsset<MeshResource>("Rock3.obj");
 		twigMesh = ResourceManager::CreateAsset<MeshResource>("Twig.obj");
