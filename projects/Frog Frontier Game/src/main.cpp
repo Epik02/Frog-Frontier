@@ -194,6 +194,7 @@ MeshResource::Sptr flyingMesh4;
 MeshResource::Sptr flyingMesh5;
 MeshResource::Sptr flyingMesh6;
 MeshResource::Sptr flyingMesh7;
+MeshResource::Sptr flyingMesh8;
 
 int SceneLoad(Scene::Sptr& scene, std::string& path)
 {
@@ -685,6 +686,10 @@ float RemainingFTime = 0;
 bool jumpo = false;
 bool runningAnim = true;
 
+bool running = true;
+bool sliding = false;
+bool flying = false;
+
 
 
 
@@ -1012,6 +1017,9 @@ void keyboard()
 
 			//Timer
 			if (playerFlying == true) {
+				running = false;
+				flying = true;
+
 				FTime = glfwGetTime() - FTemp + RemainingFTime;
 				FTime = (FTime / 2.5) * 8;
 			}
@@ -1057,6 +1065,9 @@ void keyboard()
 			}
 
 			if (jumpo == true) {
+				running = false;
+				flying = true;
+
 				//scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(flyingMesh1);
 				JTime = glfwGetTime() - JTemp;
 				JTime = JTime / 2.5;
@@ -1079,6 +1090,142 @@ void keyboard()
 				jumpo = false;
 			}
 
+		}
+		if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS) {
+			runningAnim = true;
+		}
+		if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS) {
+			runningAnim = false;
+		}
+		if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
+			running = true;
+			flying = false;
+		}
+		if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS) {
+			running = false;
+			flying = true;
+		}
+	}
+
+			//Run Animations (still working on lerping them) ***SWITCHING BETWEEN TOO MANY KEYFRAMES IN TOO SHORT A TIME WILL CAUSE THE GAME TO CRASH***
+			if (runningAnim == true) {
+				runAnimTime = glfwGetTime() - runAnimTemp;
+				runAnimTime = runAnimTime / 2.5;
+			}
+			else {
+				runAnimTemp = glfwGetTime();
+			}
+			//std::cout << runAnimTime << "\n" << animIntervals << "\n";
+
+			if (runAnimTime >= (0.05 + FPSIncrease) && runAnimTime < (0.1 + FPSIncrease)) {
+				runFrame = runFrame + 1;
+				FPSIncrease = FPSIncrease + 0.05;
+			}
+			else if (runAnimTime < 0.05 || jumpo == false) {
+				scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh1); //sets obj to default
+			}
+			if (scene->FindObjectByName("player")->GetPosition().z <= 0.3) {
+				runningAnim = true;
+			}
+
+			if (jumpo == false && playerFlying == false) {
+				running = true;
+				flying = false;
+			}
+
+			if (running == true) {
+				if (runFrame >= 18 || runningAnim == false) {
+					runFrame = 0;
+				}
+			}
+			else if (flying == true) {
+				if (runFrame == 26 || runningAnim == false) {
+					runFrame = 19;
+				}
+				if (runFrame <= 18) {
+					runFrame = 19;
+				}
+			}
+
+			switch (runFrame) {
+			case 1:
+				scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh1);
+				break;
+			case 2:
+				scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh2);
+				break;
+			case 3:
+				scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh3);
+				break;
+			case 4:
+				scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh4);
+				break;
+			case 5:
+				scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh5);
+				break;
+			case 6:
+				scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh6);
+				break;
+			case 7:
+				scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh7);
+				break;
+			case 8:
+				scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh8);
+				break;
+			case 9:
+				scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh9);
+				break;
+			case 10:
+				scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh10);
+				break;
+			case 11:
+				scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh11);
+				break;
+			case 12:
+				scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh12);
+				break;
+			case 13:
+				scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh13);
+				break;
+			case 14:
+				scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh14);
+				break;
+			case 15:
+				scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh15);
+				break;
+			case 16:
+				scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh16);
+				break;
+			case 17:
+				scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh17);
+				break;
+			case 18:
+				scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh18);
+				break;
+			case 19:
+				scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(flyingMesh1);
+				break;
+			case 20:
+				scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(flyingMesh2);
+				break;
+			case 21:
+				scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(flyingMesh3);
+				break;
+			case 22:
+				scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(flyingMesh4);
+				break;
+			case 23:
+				scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(flyingMesh5);
+				break;
+			case 24:
+				scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(flyingMesh6);
+				break;
+			case 25:
+				scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(flyingMesh7);
+				break;
+			case 26:
+				scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(flyingMesh8);
+				break;
 		}
 		if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS) {
 			runningAnim = true;
@@ -1169,6 +1316,7 @@ void keyboard()
 		//		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh18);
 		//		break;
 		//}
+
 
 
 		if (playerJumping == false && playerFlying == false) {
@@ -3093,6 +3241,16 @@ int main() {
 		runningMesh16 = ResourceManager::CreateAsset<MeshResource>("Running_000016.obj");
 		runningMesh17 = ResourceManager::CreateAsset<MeshResource>("Running_000017.obj");
 		runningMesh18 = ResourceManager::CreateAsset<MeshResource>("Running_000018.obj");
+
+		//Flying Mesh
+		flyingMesh1 = ResourceManager::CreateAsset<MeshResource>("NewLadybug_000001.obj");
+		flyingMesh2 = ResourceManager::CreateAsset<MeshResource>("NewLadybug_000002.obj");
+		flyingMesh3 = ResourceManager::CreateAsset<MeshResource>("NewLadybug_000003.obj");
+		flyingMesh4 = ResourceManager::CreateAsset<MeshResource>("NewLadybug_000004.obj");
+		flyingMesh5 = ResourceManager::CreateAsset<MeshResource>("NewLadybug_000005.obj");
+		flyingMesh6 = ResourceManager::CreateAsset<MeshResource>("NewLadybug_000006.obj");
+		flyingMesh7 = ResourceManager::CreateAsset<MeshResource>("NewLadybug_000007.obj");
+		flyingMesh8 = ResourceManager::CreateAsset<MeshResource>("NewLadybug_000008.obj");
 
 		planeMesh->AddParam(MeshBuilderParam::CreatePlane(ZERO, UNIT_Z, UNIT_X, glm::vec2(1.0f)));
 		planeMesh->GenerateMesh();
