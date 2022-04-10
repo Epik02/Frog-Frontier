@@ -1645,7 +1645,7 @@ int main() {
 		Texture2D::Sptr    ControlMenuTex = ResourceManager::CreateAsset<Texture2D>("textures/ControlsMenu.png");
 
 		//Controls screen
-		Texture2D::Sptr    ControlsTex = ResourceManager::CreateAsset<Texture2D>("textures/Buttons.png");
+		Texture2D::Sptr    ControlTex = ResourceManager::CreateAsset<Texture2D>("textures/Buttons.png");
 
 		//Button UI
 		Texture2D::Sptr    ButtonTex = ResourceManager::CreateAsset<Texture2D>("textures/Button Background.png");
@@ -7992,7 +7992,7 @@ int main() {
 			{
 				ControlsMaterial->Name = "Controls";
 				ControlsMaterial->MatShader = scene->BaseShader;
-				ControlsMaterial->Texture = ControlsTex;
+				ControlsMaterial->Texture = ControlTex;
 				ControlsMaterial->Shininess = 2.0f;
 			}
 
@@ -8000,7 +8000,7 @@ int main() {
 			{
 				MenuMaterial->Name = "Menu";
 				MenuMaterial->MatShader = scene->BaseShader;
-				MenuMaterial->Texture = ControlMenuTex;
+				MenuMaterial->Texture = MenuTex;
 				MenuMaterial->Shininess = 2.0f;
 			}
 
@@ -8060,23 +8060,47 @@ int main() {
 				BushTransitionMaterial->Shininess = 2.0f;
 			}
 
+			Material::Sptr PanelMaterial = ResourceManager::CreateAsset<Material>();
+			{
+				PanelMaterial->Name = "Panel";
+				PanelMaterial->MatShader = scene->BaseShader;
+				PanelMaterial->Texture = PanelTex;
+				PanelMaterial->Shininess = 2.0f;
+			}
+
 			// Create some lights for our scene
-			scene->Lights.resize(4);
+			scene->Lights.resize(8);
 			scene->Lights[0].Position = glm::vec3(3.0f, 3.0f, 3.0f);
 			scene->Lights[0].Color = glm::vec3(0.892f, 1.0f, 0.882f);
-			scene->Lights[0].Range = 10.0f;
+			scene->Lights[0].Range = 5.0f;
 
 			scene->Lights[1].Position = glm::vec3(3.0f, -3.0f, 3.0f);
 			scene->Lights[1].Color = glm::vec3(0.892f, 1.0f, 0.882f);
-			scene->Lights[1].Range = 10.0f;
+			scene->Lights[1].Range = 5.0f;
 
-			scene->Lights[2].Position = glm::vec3(-3.0f, 3.0f, 3.0f);
+			scene->Lights[2].Position = glm::vec3(-3.0f, 3.0f, 5.0f);
 			scene->Lights[2].Color = glm::vec3(0.892f, 1.0f, 0.882f);
-			scene->Lights[2].Range = 10.0f;
+			scene->Lights[2].Range = 5.0f;
 
-			scene->Lights[3].Position = glm::vec3(-3.0f, -3.0f, 3.0f);
+			scene->Lights[3].Position = glm::vec3(-3.0f, -3.0f, 5.0f);
 			scene->Lights[3].Color = glm::vec3(0.892f, 1.0f, 0.882f);
-			scene->Lights[3].Range = 10.0f;
+			scene->Lights[3].Range = 5.0f;
+
+			scene->Lights[4].Position = glm::vec3(-8.0f, -3.0f, 5.0f);
+			scene->Lights[4].Color = glm::vec3(0.892f, 1.0f, 0.882f);
+			scene->Lights[4].Range = 10.0f;
+
+			scene->Lights[5].Position = glm::vec3(-8.0f, 3.0f, 5.0f);
+			scene->Lights[5].Color = glm::vec3(0.892f, 1.0f, 0.882f);
+			scene->Lights[5].Range = 10.0f;
+
+			scene->Lights[6].Position = glm::vec3(8.0f, -3.0f, 5.0f);
+			scene->Lights[6].Color = glm::vec3(0.892f, 1.0f, 0.882f);
+			scene->Lights[6].Range = 10.0f;
+
+			scene->Lights[7].Position = glm::vec3(8.0f, 3.0f, 5.0f);
+			scene->Lights[7].Color = glm::vec3(0.892f, 1.0f, 0.882f);
+			scene->Lights[7].Range = 10.0f;
 
 			// We'll create a mesh that is a simple plane that we can resize later
 			planeMesh = ResourceManager::CreateAsset<MeshResource>();
@@ -8100,7 +8124,8 @@ int main() {
 			GameObject::Sptr plane = scene->CreateGameObject("Plane");
 			{
 				// Scale up the plane
-				plane->SetScale(glm::vec3(10.0F));
+				plane->SetScale(glm::vec3(19.0F));
+				plane->SetPostion(glm::vec3(0.0f, -4.0f, 0.0f));
 
 				// Create and attach a RenderComponent to the object to draw our mesh
 				RenderComponent::Sptr renderer = plane->Add<RenderComponent>();
@@ -8112,18 +8137,33 @@ int main() {
 				physics->AddCollider(PlaneCollider::Create());
 			}
 
-			GameObject::Sptr plane2 = scene->CreateGameObject("Controls");
+			//Objects with transparency need to be loaded in last otherwise it creates issues
+			GameObject::Sptr Panel = scene->CreateGameObject("Panel");
+			{
+				// Set position in the scene
+				Panel->SetPostion(glm::vec3(0.0f, 0.0f, 0.001f));
+				// Scale down the plane
+				Panel->SetScale(glm::vec3(10.0f, 10.0f, 10.0f));
+
+				// Create and attach a render component
+				RenderComponent::Sptr renderer = Panel->Add<RenderComponent>();
+				renderer->SetMesh(planeMesh);
+				renderer->SetMaterial(PanelMaterial);
+			}
+
+			GameObject::Sptr plane3 = scene->CreateGameObject("Controls");
 			{
 				// Scale up the plane
-				plane2->SetScale(glm::vec3(10.0F));
+				plane3->SetScale(glm::vec3(10.0F));
+				plane3->SetPostion(glm::vec3(0.0f, 0.0f, 0.002f));
 
 				// Create and attach a RenderComponent to the object to draw our mesh
-				RenderComponent::Sptr renderer = plane2->Add<RenderComponent>();
+				RenderComponent::Sptr renderer = plane3->Add<RenderComponent>();
 				renderer->SetMesh(planeMesh);
 				renderer->SetMaterial(ControlsMaterial);
 
 				// Attach a plane collider that extends infinitely along the X/Y axis
-				RigidBody::Sptr physics = plane2->Add<RigidBody>(/*static by default*/);
+				RigidBody::Sptr physics = plane3->Add<RigidBody>(/*static by default*/);
 				physics->AddCollider(PlaneCollider::Create());
 			}
 
