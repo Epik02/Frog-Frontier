@@ -119,6 +119,7 @@ MeshResource::Sptr cubeMesh;
 MeshResource::Sptr mushroomMesh;
 MeshResource::Sptr vinesMesh;
 MeshResource::Sptr cobwebMesh;
+MeshResource::Sptr cobweb2Mesh;
 MeshResource::Sptr ladybugMesh;
 
 //Anim test
@@ -1671,6 +1672,8 @@ int main() {
 		Texture2D::Sptr    PauseTex = ResourceManager::CreateAsset<Texture2D>("textures/Pause.png");
 		Texture2D::Sptr    PanelTex = ResourceManager::CreateAsset<Texture2D>("textures/Panel.png");
 		Texture2D::Sptr    ProgressTex = ResourceManager::CreateAsset<Texture2D>("textures/progressbar.png");
+		Texture2D::Sptr    Progress2Tex = ResourceManager::CreateAsset<Texture2D>("textures/progressBar2.png");
+		Texture2D::Sptr    Progress3Tex = ResourceManager::CreateAsset<Texture2D>("textures/progressBar3.png");
 		Texture2D::Sptr    PbarbugTex = ResourceManager::CreateAsset<Texture2D>("textures/progressmeter.png");
 		Texture2D::Sptr    FFLogoTex = ResourceManager::CreateAsset<Texture2D>("textures/Frog Frontier Logo.png");
 		Texture2D::Sptr    LSLogoTex = ResourceManager::CreateAsset<Texture2D>("textures/Frog Frontier Logo Side Scroller.png");
@@ -1831,10 +1834,12 @@ int main() {
 			{
 				cobwebMaterial->Name = "cobweb";
 				cobwebMaterial->MatShader = scene->BaseShader;
-				cobwebMaterial->Texture = cobwebTexture;
+				cobwebMaterial->Texture = cobweb2Texture;
 				cobwebMaterial->Shininess = 256.0f;
 
 			}
+
+			
 
 			Material::Sptr PanelMaterial = ResourceManager::CreateAsset<Material>();
 			{
@@ -2250,6 +2255,7 @@ int main() {
 			mushroomMesh = ResourceManager::CreateAsset<MeshResource>("Mushroom.obj");
 			vinesMesh = ResourceManager::CreateAsset<MeshResource>("Vines.obj");
 			cobwebMesh = ResourceManager::CreateAsset<MeshResource>("Cobweb.obj");
+			cobweb2Mesh = ResourceManager::CreateAsset<MeshResource>("Spiderweb2.obj");
 
 			//Anim test
 			fly1Mesh = ResourceManager::CreateAsset<MeshResource>("fly1.obj");
@@ -2312,31 +2318,31 @@ int main() {
 			//Obstacles
 			createGroundObstacle("2", glm::vec3(-20.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 1 (small jump)
 			createGroundObstacle("3", glm::vec3(-60.f, 0.0f, 3.0), glm::vec3(1.f, 1.f, 1.f), glm::vec3(90.f, 0.0f, 73.f), vinesMesh, vinesMaterial); // vine 1 (jump blocking)
-			createGroundObstacle("4", glm::vec3(-110.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 1 (tall jump)
+			createGroundObstacle("4", glm::vec3(-110.f, 0.0f, -3.5f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(90.0f, 0.0f, 0.f), cobweb2Mesh, cobwebMaterial); //cobweb 1 (tall jump)
 			createGroundObstacle("5", glm::vec3(-45.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 2
 			createGroundObstacle("6", glm::vec3(-150.f, 5.530f, 0.250f), glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(90.f, 0.0f, -25.f), vinesMesh, vinesMaterial); // vine 2 (squish blocking)
-			createGroundObstacle("7", glm::vec3(-150.240f, 0.f, 7.88f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, 84.f), cobwebMesh, cobwebMaterial); //cobweb 2 (squish Blocking 2)
+			createGroundObstacle("7", glm::vec3(-150.240f, 0.f, 0.0f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(90.0f, 0.0f, 0.f), cobweb2Mesh, cobwebMaterial); //cobweb 2 (squish Blocking 2)
 
 			createGroundObstacle("8", glm::vec3(-170.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 3 (small jump)
 			createGroundObstacle("9", glm::vec3(-200.f, 0.0f, 3.0), glm::vec3(1.f, 1.f, 1.f), glm::vec3(90.f, 0.0f, 73.f), vinesMesh, vinesMaterial); // vine 3 (jump blocking)
-			createGroundObstacle("10", glm::vec3(-220.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 3 (tall jump)
+			createGroundObstacle("10", glm::vec3(-220.f, 0.0f, -3.5f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(90.0f, 0.0f, 0.f), cobweb2Mesh, cobwebMaterial); //cobweb 3 (tall jump)
 			createGroundObstacle("11", glm::vec3(-230.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 4 (small jump)
 			createGroundObstacle("12", glm::vec3(-250.f, 0.0f, 3.0), glm::vec3(1.f, 1.f, 1.f), glm::vec3(90.f, 0.0f, 73.f), vinesMesh, vinesMaterial); // vine 4 (jump blocking)
 			createGroundObstacle("13", glm::vec3(-275.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 5 (small jump)
 			createGroundObstacle("14", glm::vec3(-300.f, 5.530f, 0.250f), glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(90.f, 0.0f, -25.f), vinesMesh, vinesMaterial); // vine 5 (squish blocking)
-			createGroundObstacle("15", glm::vec3(-300.240f, 0.f, 7.88f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, 84.f), cobwebMesh, cobwebMaterial); //cobweb 4 (squish Blocking 2)
+			createGroundObstacle("15", glm::vec3(-300.240f, 0.f, 0.0f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(90.0f, 0.0f, 0.f), cobweb2Mesh, cobwebMaterial); //cobweb 4 (squish Blocking 2)
 
 			createGroundObstacle("16", glm::vec3(-310.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 6 (small jump)
 			createGroundObstacle("17", glm::vec3(-315.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 7 (small jump)
 			createGroundObstacle("18", glm::vec3(-320.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 8 (small jump)
-			createGroundObstacle("19", glm::vec3(-325.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 5 (tall jump)
+			createGroundObstacle("19", glm::vec3(-325.f, 0.0f, -3.5f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(90.0f, 0.0f, 0.f), cobweb2Mesh, cobwebMaterial); //cobweb 5 (tall jump)
 			createGroundObstacle("20", glm::vec3(-340.f, 0.0f, 3.0), glm::vec3(1.f, 1.f, 1.f), glm::vec3(90.f, 0.0f, 73.f), vinesMesh, vinesMaterial); // vine 6 (jump blocking)
 			createGroundObstacle("21", glm::vec3(-345.f, 5.530f, 0.250f), glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(90.f, 0.0f, -25.f), vinesMesh, vinesMaterial); // vine 7 (squish blocking)
-			createGroundObstacle("22", glm::vec3(-345.240f, 0.f, 7.88f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, 84.f), cobwebMesh, cobwebMaterial); //cobweb 6 (squish Blocking 2)
-			createGroundObstacle("23", glm::vec3(-360.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 7 (tall jump)
+			createGroundObstacle("22", glm::vec3(-345.240f, 0.f, 0.0f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(90.0f, 0.0f, 0.f), cobweb2Mesh, cobwebMaterial); //cobweb 6 (squish Blocking 2)
+			createGroundObstacle("23", glm::vec3(-360.f, 0.0f, -3.5f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(90.0f, 0.0f, 0.f), cobweb2Mesh, cobwebMaterial); //cobweb 7 (tall jump)
 			createGroundObstacle("24", glm::vec3(-380.f, 5.530f, 0.250f), glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(90.f, 0.0f, -25.f), vinesMesh, vinesMaterial); // vine 8 (squish blocking)
-			createGroundObstacle("25", glm::vec3(-380.240f, 0.f, 7.88f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, 84.f), cobwebMesh, cobwebMaterial); //cobweb 8 (squish Blocking 2)
-			createGroundObstacle("26", glm::vec3(-395.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 9 (tall jump)
+			createGroundObstacle("25", glm::vec3(-380.240f, 0.f, 0.0f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(90.0f, 0.0f, 0.f), cobweb2Mesh, cobwebMaterial); //cobweb 8 (squish Blocking 2)
+			createGroundObstacle("26", glm::vec3(-395.f, 0.0f, -3.5f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(90.0f, 0.0f, 0.f), cobweb2Mesh, cobwebMaterial); //cobweb 9 (tall jump)
 
 			//3D Backgrounds
 			createGroundObstacle("27", glm::vec3(107.7f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
@@ -2979,15 +2985,6 @@ int main() {
 
 			}
 
-			Material::Sptr cobwebMaterial = ResourceManager::CreateAsset<Material>();
-			{
-				cobwebMaterial->Name = "cobweb";
-				cobwebMaterial->MatShader = scene->BaseShader;
-				cobwebMaterial->Texture = cobwebTexture;
-				cobwebMaterial->Shininess = 256.0f;
-
-			}
-
 			Material::Sptr PanelMaterial = ResourceManager::CreateAsset<Material>();
 			{
 				PanelMaterial->Name = "Panel";
@@ -3407,7 +3404,6 @@ int main() {
 			ToadMesh = ResourceManager::CreateAsset<MeshResource>("ToadStool.obj");
 
 
-			cobwebMesh = ResourceManager::CreateAsset<MeshResource>("Cobweb.obj");
 			BranchMesh = ResourceManager::CreateAsset<MeshResource>("Branch.obj");
 			LogMesh = ResourceManager::CreateAsset<MeshResource>("Log.obj");
 			Plant1Mesh = ResourceManager::CreateAsset<MeshResource>("PLANT.obj");
@@ -3523,7 +3519,6 @@ int main() {
 			//createGroundObstacle("18", glm::vec3(-320.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 8 (small jump)
 			//createGroundObstacle("20", glm::vec3(-340.f, 0.0f, 3.0), glm::vec3(1.f, 1.f, 1.f), glm::vec3(90.f, 0.0f, 73.f), vinesMesh, vinesMaterial); // vine 6 (jump blocking)
 			//createGroundObstacle("24", glm::vec3(-380.f, 5.530f, 0.250f), glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(90.f, 0.0f, -25.f), vinesMesh, vinesMaterial); // vine 8 (squish blocking)
-			//createGroundObstacle("26", glm::vec3(-395.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 9 (tall jump)
 
 			createGroundObstacle("1", glm::vec3(-450.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //red mushroom 1 (small jump)
 			createGroundObstacle("2", glm::vec3(-500.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //red mushroom 2 (small jump)
@@ -4156,14 +4151,7 @@ int main() {
 
 			}
 
-			Material::Sptr cobwebMaterial = ResourceManager::CreateAsset<Material>();
-			{
-				cobwebMaterial->Name = "cobweb";
-				cobwebMaterial->MatShader = scene->BaseShader;
-				cobwebMaterial->Texture = cobwebTexture;
-				cobwebMaterial->Shininess = 256.0f;
-
-			}
+		
 
 			Material::Sptr PanelMaterial = ResourceManager::CreateAsset<Material>();
 			{
@@ -4352,7 +4340,7 @@ int main() {
 			{
 				ProgressBarMaterial->Name = "ProgressBar";
 				ProgressBarMaterial->MatShader = scene->BaseShader;
-				ProgressBarMaterial->Texture = ProgressTex;
+				ProgressBarMaterial->Texture = Progress2Tex;
 				ProgressBarMaterial->Shininess = 2.0f;
 			}
 			Material::Sptr grass1Material = ResourceManager::CreateAsset<Material>();
@@ -4662,7 +4650,6 @@ int main() {
 			ToadMesh = ResourceManager::CreateAsset<MeshResource>("ToadStool.obj");
 
 
-			cobwebMesh = ResourceManager::CreateAsset<MeshResource>("Cobweb.obj");
 			BranchMesh = ResourceManager::CreateAsset<MeshResource>("Branch.obj");
 			LogMesh = ResourceManager::CreateAsset<MeshResource>("Log.obj");
 			Plant1Mesh = ResourceManager::CreateAsset<MeshResource>("PLANT.obj");
@@ -4747,7 +4734,6 @@ int main() {
 			//createGroundObstacle("18", glm::vec3(-320.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 8 (small jump)
 			//createGroundObstacle("20", glm::vec3(-340.f, 0.0f, 3.0), glm::vec3(1.f, 1.f, 1.f), glm::vec3(90.f, 0.0f, 73.f), vinesMesh, vinesMaterial); // vine 6 (jump blocking)
 			//createGroundObstacle("24", glm::vec3(-380.f, 5.530f, 0.250f), glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(90.f, 0.0f, -25.f), vinesMesh, vinesMaterial); // vine 8 (squish blocking)
-			//createGroundObstacle("26", glm::vec3(-395.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 9 (tall jump)
 
 			/*
 			createGroundObstacle("1", glm::vec3(-450.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //red mushroom 1 (small jump)
@@ -4764,40 +4750,49 @@ int main() {
 
 			//Collisions
 
-			//mushroom 8 collision
+			//sign
 			createCollision("211", -850.0f, 8.11f, 1.f, 2.f); //2y
 			createCollision("212", -849.6f, 7.79f, 1.f, 2.f);
 			createCollision("213", -849.930f, 8.160f, 1.f, 2.f);
 			createCollision("214", -850.f, 8.150f, 1.f, 2.f);
 
+			//rock pile
 			createCollision("221", -878.924f, 1.560f, 1.f, 2.f); //2y
 			createCollision("222", -880.00f, 12.390f, 1.f, 2.f); //2y
 
+			//rock tunnel
 			createCollision("231", -896.0f, 5.0f, 1.f, 1.f);
 			createCollision("232", -898.963f, 6.570f, 1.f, 1.f);
 			createCollision("233", -902.823f, 5.0f, 1.f, 1.f);
 
+			//rock wall
 			createCollision("241", -950.f, 2.470f, 1.f, 2.f);
 
+			//rock wall
 			createCollision("251", -980.f, 2.470f, 1.f, 2.f);
 
+			//tall rock wall
 			createCollision("261", -1008.98f, 1.560f, 1.f, 4.f); //4y
 
+			//rock tunnel
 			createCollision("271", -1046.0f, 5.0f, 1.f, 1.f);
 			createCollision("272", -1048.963f, 6.570f, 1.f, 1.f);
 			createCollision("273", -1052.823f, 5.0f, 1.f, 1.f);
 
+			//puddle
+			createCollision("281", -1085.f, 0.44f, 1.f, 1.f);
+			createCollision("282", -1091.f, 0.44f, 1.f, 1.f);
+			createCollision("283", -1093.f, 0.44f, 1.f, 1.f);
+			createCollision("284", -1095.f, 0.44f, 1.f, 1.f);
+			createCollision("285", -1087.f, 0.44f, 1.f, 1.f);
+			createCollision("286", -1089.f, 0.44f, 1.f, 1.f);
 
-			createCollision("281", -1096.f, 0.44f, 1.f, 1.f);
-			createCollision("282", -1095.f, 0.44f, 1.f, 1.f);
-			createCollision("283", -1098.f, 0.44f, 1.f, 1.f);
-			createCollision("284", -1092.f, 0.44f, 1.f, 1.f);
-
+			//rock tunnel
 			createCollision("291", -1116.0f, 5.0f, 1.f, 1.f);
 			createCollision("292", -1118.963f, 6.570f, 1.f, 1.f);
 			createCollision("293", -1122.823f, 5.0f, 1.f, 1.f);
 
-
+			//campfire
 			createCollision("201", -1147.44f, 6.3f, 1.f, 1.f);
 			createCollision("202", -1151.720f, 6.3f, 1.f, 1.f);
 			createCollision("203", -1150.f, 6.3f, 1.f, 1.f);
@@ -5380,15 +5375,6 @@ int main() {
 
 		}
 
-		Material::Sptr cobwebMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			cobwebMaterial->Name = "cobweb";
-			cobwebMaterial->MatShader = scene->BaseShader;
-			cobwebMaterial->Texture = cobwebTexture;
-			cobwebMaterial->Shininess = 256.0f;
-
-		}
-
 		Material::Sptr PanelMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			PanelMaterial->Name = "Panel";
@@ -5576,7 +5562,7 @@ int main() {
 		{
 			ProgressBarMaterial->Name = "ProgressBar";
 			ProgressBarMaterial->MatShader = scene->BaseShader;
-			ProgressBarMaterial->Texture = ProgressTex;
+			ProgressBarMaterial->Texture = Progress2Tex;
 			ProgressBarMaterial->Shininess = 2.0f;
 		}
 		Material::Sptr grass1Material = ResourceManager::CreateAsset<Material>();
@@ -5886,7 +5872,6 @@ int main() {
 		ToadMesh = ResourceManager::CreateAsset<MeshResource>("ToadStool.obj");
 
 
-		cobwebMesh = ResourceManager::CreateAsset<MeshResource>("Cobweb.obj");
 		BranchMesh = ResourceManager::CreateAsset<MeshResource>("Branch.obj");
 		LogMesh = ResourceManager::CreateAsset<MeshResource>("Log.obj");
 		Plant1Mesh = ResourceManager::CreateAsset<MeshResource>("PLANT.obj");
@@ -5981,72 +5966,90 @@ int main() {
 		createGroundObstacle("14", glm::vec3(-1540.f, -2.50f, 0.0f), glm::vec3(1.0f, 2.0f, 2.0f), glm::vec3(90.0f, 0.0f, 0.0f), RockWallMesh1, RockWallMaterial);
 		createGroundObstacle("15", glm::vec3(-1580.f, -4.0f, 0.0f), glm::vec3(5.0f, 5.0f, 5.0f), glm::vec3(90.0f, 0.0f, -168.0f), SignPostMesh, SignPostMaterial);
 
-		/*simple jump
-		* 
-			jump limit
-			jump limit(can fly)
-			double fly
-			Hangingrock
-			simple jump
-			simple jumpand hoop jump
-			puddle series 
-			small jump
-			hanging rock
-			simple jump
-			signpost
+		//rock wall
+		createCollision("311", -1250.f, 2.470f, 1.f, 2.f);
 
-		//Collisions
+		//hanging rock
+		//-1275 -> -1280
+		createCollision("322", -1277.f, 7.470f, 1.f, 2.f);
+		createCollision("323", -1278.f, 7.470f, 1.f, 2.f);
+		createCollision("324", -1280.f, 7.470f, 1.f, 2.f);
 
-		////mushroom 8 collision scene 3
-		//createCollision("211", -850.0f, 8.11f, 1.f, 2.f); //2y
-		//createCollision("212", -849.6f, 7.79f, 1.f, 2.f);
-		//createCollision("213", -849.930f, 8.160f, 1.f, 2.f);
-		//createCollision("214", -850.f, 8.150f, 1.f, 2.f);
+		//rock tunnel // based off 1120
+		createCollision("331", -1296.0f, 5.0f, 1.f, 1.f);
+		createCollision("332", -1298.963f, 6.570f, 1.f, 1.f);
+		createCollision("333", -1302.823f, 5.0f, 1.f, 1.f);
 
-		//createCollision("221", -878.924f, 1.560f, 1.f, 2.f); //2y
-		//createCollision("222", -880.00f, 12.390f, 1.f, 2.f); //2y
+		//tall wall
+		createCollision("341", -1360.f, 1.56f, 1.f, 4.f);
 
-		//createCollision("231", -896.0f, 5.0f, 1.f, 1.f);
-		//createCollision("232", -898.963f, 6.570f, 1.f, 1.f);
-		//createCollision("233", -902.823f, 5.0f, 1.f, 1.f);
+		//tall wall
+		createCollision("351", -1370.f, 1.56f, 1.f, 4.f);
 
-		//createCollision("241", -950.f, 2.470f, 1.f, 2.f);
+		//hanging rock
+		createCollision("362", -1377.f, 7.470f, 1.f, 2.f);
+		createCollision("363", -1378.f, 7.470f, 1.f, 2.f);
+		createCollision("364", -1380.f, 7.470f, 1.f, 2.f);
 
-		//createCollision("251", -980.f, 2.470f, 1.f, 2.f);
+		//rock wall
+		createCollision("371", -1400.f, 2.470f, 1.f, 2.f);
 
-		//createCollision("261", -1008.98f, 1.560f, 1.f, 4.f); //4y
+		//rock wall
+		createCollision("381", -1420.f, 2.470f, 1.f, 2.f);
 
-		//createCollision("271", -1046.0f, 5.0f, 1.f, 1.f);
-		//createCollision("272", -1048.963f, 6.570f, 1.f, 1.f);
-		//createCollision("273", -1052.823f, 5.0f, 1.f, 1.f);
+		//rock pile
+		createCollision("391", -1423.924f, 1.560f, 1.f, 2.f); //2y
+		createCollision("392", -1425.00f, 12.390f, 1.f, 2.f); //2y
 
-
-		//createCollision("281", -1096.f, 0.44f, 1.f, 1.f);
-		//createCollision("282", -1095.f, 0.44f, 1.f, 1.f);
-		//createCollision("283", -1098.f, 0.44f, 1.f, 1.f);
-		//createCollision("284", -1092.f, 0.44f, 1.f, 1.f);
-
-		//createCollision("291", -1116.0f, 5.0f, 1.f, 1.f);
-		//createCollision("292", -1118.963f, 6.570f, 1.f, 1.f);
-		//createCollision("293", -1122.823f, 5.0f, 1.f, 1.f);
-
-
-		//createCollision("201", -1147.44f, 6.3f, 1.f, 1.f);
-		//createCollision("202", -1151.720f, 6.3f, 1.f, 1.f);
-		//createCollision("203", -1150.f, 6.3f, 1.f, 1.f);
+		//puddle
+		//-1440 -> 1464
+		createCollision("3101", -1440.f, 0.44f, 1.f, 1.f);
+		createCollision("3102", -1442.f, 0.44f, 1.f, 1.f);
+		createCollision("3103", -1444.f, 0.44f, 1.f, 1.f);
+		createCollision("3104", -1446.f, 0.44f, 1.f, 1.f);
+		createCollision("3105", -1448.f, 0.44f, 1.f, 1.f);
+		createCollision("3106", -1450.f, 0.44f, 1.f, 1.f);
+		createCollision("3107", -1452.f, 0.44f, 1.f, 1.f);
+		createCollision("3108", -1454.f, 0.44f, 1.f, 1.f);
+		createCollision("3109", -1456.f, 0.44f, 1.f, 1.f);
+		createCollision("31010", -1458.f, 0.44f, 1.f, 1.f);
+		createCollision("31011", -1460.f, 0.44f, 1.f, 1.f);
+		createCollision("31012", -1462.f, 0.44f, 1.f, 1.f);
+		createCollision("31013", -1464.f, 0.44f, 1.f, 1.f);
 
 
+		//puddle
+		//-1475 -> -1499
+		createCollision("3111", -1475.f, 0.44f, 1.f, 1.f);
+		createCollision("3112", -1477.f, 0.44f, 1.f, 1.f);
+		createCollision("3113", -1479.f, 0.44f, 1.f, 1.f);
+		createCollision("3114", -1481.f, 0.44f, 1.f, 1.f);
+		createCollision("3115", -1483.f, 0.44f, 1.f, 1.f);
+		createCollision("3116", -1485.f, 0.44f, 1.f, 1.f);
+		createCollision("3117", -1487.f, 0.44f, 1.f, 1.f);
+		createCollision("3118", -1489.f, 0.44f, 1.f, 1.f);
+		createCollision("3119", -1491.f, 0.44f, 1.f, 1.f);
+		createCollision("31110", -1493.f, 0.44f, 1.f, 1.f);
+		createCollision("31111", -1495.f, 0.44f, 1.f, 1.f);
+		createCollision("31112", -1497.f, 0.44f, 1.f, 1.f);
+		createCollision("31113", -1499.f, 0.44f, 1.f, 1.f);
+		
+		//rock wall
+		createCollision("3121", -1520.f, 2.470f, 1.f, 2.f);
+		
+		//hanging rock
+		createCollision("3132", -1527.f, 7.470f, 1.f, 2.f);
+		createCollision("3133", -1528.f, 7.470f, 1.f, 2.f);
+		createCollision("3134", -1530.f, 7.470f, 1.f, 2.f);
+		 
+		//rock wall
+		createCollision("3141", -1540.f, 2.470f, 1.f, 2.f);
 
-
-		//createCollision("261", -1096.0f, 5.0f, 1.f, 1.f);
-		//createCollision("262", -1098.963f, 6.570f, 1.f, 1.f);
-		//createCollision("263", -1102.823f, 5.0f, 1.f, 1.f);
-
-		//createCollision("271", -1150.f, 2.470f, 1.f, 2.f); //2y
-
-		//createCollision("281", -1198.98f, 1.560f, 1.f, 4.f); //4y
-		*/
-
+		//sign post
+		createCollision("3151", -1580.0f, 8.11f, 1.f, 2.f); //2y
+		createCollision("3152", -1579.6f, 7.79f, 1.f, 2.f);
+		createCollision("3153", -1579.930f, 8.160f, 1.f, 2.f);
+		createCollision("3154", -1580.f, 8.150f, 1.f, 2.f);
 
 
 		//3D Backgrounds
@@ -6607,15 +6610,6 @@ int main() {
 
 			}
 
-			Material::Sptr cobwebMaterial = ResourceManager::CreateAsset<Material>();
-			{
-				cobwebMaterial->Name = "cobweb";
-				cobwebMaterial->MatShader = scene->BaseShader;
-				cobwebMaterial->Texture = cobwebTexture;
-				cobwebMaterial->Shininess = 256.0f;
-
-			}
-
 			Material::Sptr PanelMaterial = ResourceManager::CreateAsset<Material>();
 			{
 				PanelMaterial->Name = "Panel";
@@ -6803,7 +6797,7 @@ int main() {
 			{
 				ProgressBarMaterial->Name = "ProgressBar";
 				ProgressBarMaterial->MatShader = scene->BaseShader;
-				ProgressBarMaterial->Texture = ProgressTex;
+				ProgressBarMaterial->Texture = Progress3Tex;
 				ProgressBarMaterial->Shininess = 2.0f;
 			}
 			Material::Sptr grass1Material = ResourceManager::CreateAsset<Material>();
@@ -7224,7 +7218,6 @@ int main() {
 			ToadMesh = ResourceManager::CreateAsset<MeshResource>("ToadStool.obj");
 
 
-			cobwebMesh = ResourceManager::CreateAsset<MeshResource>("Cobweb.obj");
 			BranchMesh = ResourceManager::CreateAsset<MeshResource>("Branch.obj");
 			LogMesh = ResourceManager::CreateAsset<MeshResource>("Log.obj");
 			Plant1Mesh = ResourceManager::CreateAsset<MeshResource>("PLANT.obj");
@@ -7268,20 +7261,29 @@ int main() {
 			//createGroundObstacle("26", glm::vec3(-395.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 9 (tall jump)
 
 
-			createGroundObstacle("1", glm::vec3(-1650.f, 0.0f, 0.215f), glm::vec3(6.f, 4.f, 8.f), glm::vec3(90.f, 0.0f, 80.0f), Crystal1Mesh, Crystal1BlueMaterial); //red mushroom 1 (small jump)
-			createGroundObstacle("2", glm::vec3(-1700.f, 0.0f, -0.f), glm::vec3(6.f, 3.f, 8.f), glm::vec3(90.f, 0.0f, -162.0f), Crystal2Mesh, Crystal2BlueMaterial); //red mushroom 2 (small jump)
+			createGroundObstacle("1", glm::vec3(-1650.f, 0.0f, 0.215f), glm::vec3(6.f, 4.f, 8.f), glm::vec3(90.f, 0.0f, 80.0f), Crystal1Mesh, Crystal1BlueMaterial); // (beeg jump)
+			createGroundObstacle("2", glm::vec3(-1700.f, 0.0f, -0.f), glm::vec3(4.f, 1.5f, 6.f), glm::vec3(90.f, 0.0f, -162.0f), Crystal2Mesh, Crystal2BlueMaterial); //(small jump)
+			createGroundObstacle("3", glm::vec3(-1750.f, 0.0f, -0.f), glm::vec3(4.f, 1.5f, 6.f), glm::vec3(90.f, 0.0f, -162.0f), Crystal2Mesh, Crystal2BlueMaterial); //(small jump)
+			createGroundObstacle("4", glm::vec3(-1800.f, 0.0f, 0.215f), glm::vec3(6.f, 4.f, 8.f), glm::vec3(90.f, 0.0f, 80.0f), Crystal1Mesh, Crystal1BlueMaterial); // (beeg jump)
+			createGroundObstacle("5", glm::vec3(-1850.f, 0.0f, -0.f), glm::vec3(4.f, 1.5f, 6.f), glm::vec3(90.f, 0.0f, -162.0f), Crystal2Mesh, Crystal2BlueMaterial); //(small jump)
+			createGroundObstacle("6", glm::vec3(-1880.f, 0.0f, -0.f), glm::vec3(4.f, 1.5f, 6.f), glm::vec3(90.f, 0.0f, -162.0f), Crystal2Mesh, Crystal2BlueMaterial); //(small jump)
+			createGroundObstacle("7", glm::vec3(-1900.f, 0.0f, 0.215f), glm::vec3(6.f, 4.f, 8.f), glm::vec3(90.f, 0.0f, 80.0f), Crystal1Mesh, Crystal1BlueMaterial); // (beeg jump)
+			createGroundObstacle("8", glm::vec3(-1910.f, 0.0f, 0.215f), glm::vec3(6.f, 4.f, 8.f), glm::vec3(90.f, 0.0f, 80.0f), Crystal1Mesh, Crystal1BlueMaterial); // (beeg jump)
+			createGroundObstacle("9", glm::vec3(-1930.f, 0.0f, -0.f), glm::vec3(4.f, 1.5f, 6.f), glm::vec3(90.f, 0.0f, -162.0f), Crystal2Mesh, Crystal2BlueMaterial); //(small jump)
+			createGroundObstacle("10", glm::vec3(-1950.f, 0.0f, 0.215f), glm::vec3(6.f, 4.f, 8.f), glm::vec3(90.f, 0.0f, 80.0f), Crystal1Mesh, Crystal1BlueMaterial); // (beeg jump)
+			createGroundObstacle("11", glm::vec3(-1960.f, 0.0f, 0.215f), glm::vec3(6.f, 4.f, 8.f), glm::vec3(90.f, 0.0f, 80.0f), Crystal1Mesh, Crystal1BlueMaterial); // (beeg jump)
 
-			createGroundObstacle("3", glm::vec3(-1650.f, 0.0f, 0.215f), glm::vec3(6.f, 4.f, 8.f), glm::vec3(90.f, 0.0f, 80.0f), Crystal1Mesh, Crystal1GreenMaterial); //red mushroom 1 (small jump)
-			createGroundObstacle("4", glm::vec3(-1700.f, 0.0f, -0.f), glm::vec3(6.f, 3.f, 8.f), glm::vec3(90.f, 0.0f, -162.0f), Crystal2Mesh, Crystal2GreenMaterial); //red mushroom 2 (small jump)
+			//createGroundObstacle("3", glm::vec3(-1650.f, 0.0f, 0.215f), glm::vec3(6.f, 4.f, 8.f), glm::vec3(90.f, 0.0f, 80.0f), Crystal1Mesh, Crystal1GreenMaterial); //red mushroom 1 (small jump)
+			//createGroundObstacle("4", glm::vec3(-1700.f, 0.0f, -0.f), glm::vec3(6.f, 3.f, 8.f), glm::vec3(90.f, 0.0f, -162.0f), Crystal2Mesh, Crystal2GreenMaterial); //red mushroom 2 (small jump)
 
-			createGroundObstacle("5", glm::vec3(-1650.f, 0.0f, 0.215f), glm::vec3(6.f, 4.f, 8.f), glm::vec3(90.f, 0.0f, 80.0f), Crystal1Mesh, Crystal1PurpleMaterial); //red mushroom 1 (small jump)
-			createGroundObstacle("6", glm::vec3(-1650.f, 0.0f, 0.215f), glm::vec3(6.f, 4.f, 8.f), glm::vec3(90.f, 0.0f, 80.0f), Crystal1Mesh, Crystal1RedMaterial);
-			createGroundObstacle("7", glm::vec3(-1700.f, 0.0f, -0.f), glm::vec3(6.f, 3.f, 8.f), glm::vec3(90.f, 0.0f, -162.0f), Crystal2Mesh, Crystal2YellowMaterial); //red mushroom 2 (small jump)
+			//createGroundObstacle("5", glm::vec3(-1650.f, 0.0f, 0.215f), glm::vec3(6.f, 4.f, 8.f), glm::vec3(90.f, 0.0f, 80.0f), Crystal1Mesh, Crystal1PurpleMaterial); //red mushroom 1 (small jump)
+			//createGroundObstacle("6", glm::vec3(-1650.f, 0.0f, 0.215f), glm::vec3(6.f, 4.f, 8.f), glm::vec3(90.f, 0.0f, 80.0f), Crystal1Mesh, Crystal1RedMaterial);
+			//createGroundObstacle("7", glm::vec3(-1700.f, 0.0f, -0.f), glm::vec3(6.f, 3.f, 8.f), glm::vec3(90.f, 0.0f, -162.0f), Crystal2Mesh, Crystal2YellowMaterial); //red mushroom 2 (small jump)
 			//createGroundObstacle("3", glm::vec3(-1750.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), StalagmiteMesh, StalagmiteMaterial); // tall mushroom 1 (small jump)
 			//createGroundObstacle("4", glm::vec3(-1800.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), StalagtiteMesh, StalagtiteMaterial); //branch mushroom 1 (small jump)
 
-			createGroundObstacle("8", glm::vec3(-1850.f, 0.0f, 0.3f), glm::vec3(2.f, 2.f, 2.f), glm::vec3(90.f, 0.0f, 0.0f), GoldbarMesh, GoldBarMaterial); //red mushroom 3 (small jump)
-			createGroundObstacle("9", glm::vec3(-1900.f, 0.0f, -0.0), glm::vec3(4.f, 4.f, 2.f), glm::vec3(90.f, 0.0f, -71.0f), GoldPile1Mesh, GoldPile1Material); //red mushroom 4 (small jump)
+			//createGroundObstacle("8", glm::vec3(-1850.f, 0.0f, 0.3f), glm::vec3(2.f, 2.f, 2.f), glm::vec3(90.f, 0.0f, 0.0f), GoldbarMesh, GoldBarMaterial); //red mushroom 3 (small jump)
+			//createGroundObstacle("9", glm::vec3(-1900.f, 0.0f, -0.0), glm::vec3(4.f, 4.f, 2.f), glm::vec3(90.f, 0.0f, -71.0f), GoldPile1Mesh, GoldPile1Material); //red mushroom 4 (small jump)
 
 			//createGroundObstacle("7", glm::vec3(-2000.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), GoldPile2Mesh, GoldPile2Material); //red mushroom 5 (small jump)
 			//createGroundObstacle("8", glm::vec3(-2050.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), bmMesh, bmMaterial); //branch mushroom 2 (small jump)
@@ -8045,7 +8047,7 @@ int main() {
 		{
 			ProgressBarMaterial->Name = "ProgressBar";
 			ProgressBarMaterial->MatShader = scene->BaseShader;
-			ProgressBarMaterial->Texture = ProgressTex;
+			ProgressBarMaterial->Texture = Progress3Tex;
 			ProgressBarMaterial->Shininess = 2.0f;
 		}
 		Material::Sptr grass1Material = ResourceManager::CreateAsset<Material>();
@@ -8510,13 +8512,28 @@ int main() {
 		//createGroundObstacle("26", glm::vec3(-395.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 9 (tall jump)
 
 
-		createGroundObstacle("1", glm::vec3(-1650.f, 0.0f, 0.215f), glm::vec3(6.f, 4.f, 8.f), glm::vec3(90.f, 0.0f, 80.0f), Crystal1Mesh, Crystal1BlueMaterial); //red mushroom 1 (small jump)
-		createGroundObstacle("2", glm::vec3(-1700.f, 0.0f, -0.f), glm::vec3(6.f, 3.f, 8.f), glm::vec3(90.f, 0.0f, -162.0f), Crystal2Mesh, Crystal2BlueMaterial); //red mushroom 2 (small jump)
-		//createGroundObstacle("3", glm::vec3(-1750.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), StalagmiteMesh, StalagmiteMaterial); // tall mushroom 1 (small jump)
-		//createGroundObstacle("4", glm::vec3(-1800.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), StalagtiteMesh, StalagtiteMaterial); //branch mushroom 1 (small jump)
-
-		createGroundObstacle("5", glm::vec3(-1850.f, 0.0f, 0.3f), glm::vec3(2.f, 2.f, 2.f), glm::vec3(90.f, 0.0f, 0.0f), GoldbarMesh, GoldBarMaterial); //red mushroom 3 (small jump)
-		createGroundObstacle("6", glm::vec3(-1900.f, 0.0f, -0.0), glm::vec3(4.f, 4.f, 2.f), glm::vec3(90.f, 0.0f, -71.0f), GoldPile1Mesh, GoldPile1Material); //red mushroom 4 (small jump)
+		createGroundObstacle("1", glm::vec3(-2050.f, 0.0f, 0.215f), glm::vec3(6.f, 4.f, 8.f), glm::vec3(90.f, 0.0f, 80.0f), Crystal1Mesh, Crystal1BlueMaterial); // (beeg jump)
+		createGroundObstacle("2", glm::vec3(-2065.f, 0.0f, -0.f), glm::vec3(4.f, 1.5f, 6.f), glm::vec3(90.f, 0.0f, -162.0f), Crystal2Mesh, Crystal2BlueMaterial); //(small jump)
+		createGroundObstacle("3", glm::vec3(-2080.f, 0.0f, -0.f), glm::vec3(4.f, 1.5f, 6.f), glm::vec3(90.f, 0.0f, -162.0f), Crystal2Mesh, Crystal2BlueMaterial); //(small jump)
+		createGroundObstacle("4", glm::vec3(-2100.f, 0.0f, 0.215f), glm::vec3(6.f, 4.f, 8.f), glm::vec3(90.f, 0.0f, 80.0f), Crystal1Mesh, Crystal1BlueMaterial); // (beeg jump)
+		createGroundObstacle("5", glm::vec3(-2115.f, 0.0f, -0.f), glm::vec3(4.f, 1.5f, 6.f), glm::vec3(90.f, 0.0f, -162.0f), Crystal2Mesh, Crystal2BlueMaterial); //(small jump)
+		createGroundObstacle("6", glm::vec3(-2130.f, 0.0f, -0.f), glm::vec3(4.f, 1.5f, 6.f), glm::vec3(90.f, 0.0f, -162.0f), Crystal2Mesh, Crystal2BlueMaterial); //(small jump)
+		createGroundObstacle("7", glm::vec3(-2150.f, 0.0f, 0.215f), glm::vec3(6.f, 4.f, 8.f), glm::vec3(90.f, 0.0f, 80.0f), Crystal1Mesh, Crystal1BlueMaterial); // (beeg jump)
+		createGroundObstacle("8", glm::vec3(-2160.f, 0.0f, 0.215f), glm::vec3(6.f, 4.f, 8.f), glm::vec3(90.f, 0.0f, 80.0f), Crystal1Mesh, Crystal1BlueMaterial); // (beeg jump)
+		createGroundObstacle("9", glm::vec3(-2180.f, 0.0f, -0.f), glm::vec3(4.f, 1.5f, 6.f), glm::vec3(90.f, 0.0f, -162.0f), Crystal2Mesh, Crystal2BlueMaterial); //(small jump)
+		createGroundObstacle("10", glm::vec3(-2200.f, 0.0f, 0.215f), glm::vec3(6.f, 4.f, 8.f), glm::vec3(90.f, 0.0f, 80.0f), Crystal1Mesh, Crystal1BlueMaterial); // (beeg jump)
+		createGroundObstacle("11", glm::vec3(-2210.f, 0.0f, 0.215f), glm::vec3(6.f, 4.f, 8.f), glm::vec3(90.f, 0.0f, 80.0f), Crystal1Mesh, Crystal1BlueMaterial); // (beeg jump)
+		createGroundObstacle("12", glm::vec3(-2240.f, 0.0f, 0.215f), glm::vec3(6.f, 4.f, 8.f), glm::vec3(90.f, 0.0f, 80.0f), Crystal1Mesh, Crystal1BlueMaterial); // (beeg jump)
+		createGroundObstacle("13", glm::vec3(-2245.f, 0.0f, -0.f), glm::vec3(4.f, 1.5f, 6.f), glm::vec3(90.f, 0.0f, -162.0f), Crystal2Mesh, Crystal2BlueMaterial); //(small jump)
+		createGroundObstacle("14", glm::vec3(-2260.f, 0.0f, -0.f), glm::vec3(4.f, 1.5f, 6.f), glm::vec3(90.f, 0.0f, -162.0f), Crystal2Mesh, Crystal2BlueMaterial); //(small jump)
+		createGroundObstacle("15", glm::vec3(-2270.f, 0.0f, -0.f), glm::vec3(4.f, 1.5f, 6.f), glm::vec3(90.f, 0.0f, -162.0f), Crystal2Mesh, Crystal2BlueMaterial); //(small jump)
+		createGroundObstacle("16", glm::vec3(-2280.f, 0.0f, -0.f), glm::vec3(4.f, 1.5f, 6.f), glm::vec3(90.f, 0.0f, -162.0f), Crystal2Mesh, Crystal2BlueMaterial); //(small jump)
+		createGroundObstacle("17", glm::vec3(-2300.f, 0.0f, 0.215f), glm::vec3(6.f, 4.f, 8.f), glm::vec3(90.f, 0.0f, 80.0f), Crystal1Mesh, Crystal1BlueMaterial); // (beeg jump)
+		createGroundObstacle("18", glm::vec3(-2310.f, 0.0f, 0.215f), glm::vec3(6.f, 4.f, 8.f), glm::vec3(90.f, 0.0f, 80.0f), Crystal1Mesh, Crystal1BlueMaterial); // (beeg jump)
+		createGroundObstacle("19", glm::vec3(-2345.f, 0.0f, -0.f), glm::vec3(4.f, 1.5f, 6.f), glm::vec3(90.f, 0.0f, -162.0f), Crystal2Mesh, Crystal2BlueMaterial); //(small jump)
+		createGroundObstacle("20", glm::vec3(-2360.f, 0.0f, -0.f), glm::vec3(4.f, 1.5f, 6.f), glm::vec3(90.f, 0.0f, -162.0f), Crystal2Mesh, Crystal2BlueMaterial); //(small jump)
+		createGroundObstacle("21", glm::vec3(-2370.f, 0.0f, -0.f), glm::vec3(4.f, 1.5f, 6.f), glm::vec3(90.f, 0.0f, -162.0f), Crystal2Mesh, Crystal2BlueMaterial); //(small jump)
+		createGroundObstacle("22", glm::vec3(-2380.f, 0.0f, -0.f), glm::vec3(4.f, 1.5f, 6.f), glm::vec3(90.f, 0.0f, -162.0f), Crystal2Mesh, Crystal2BlueMaterial); //(small jump)
 
 		//createGroundObstacle("7", glm::vec3(-2000.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), GoldPile2Mesh, GoldPile2Material); //red mushroom 5 (small jump)
 		//createGroundObstacle("8", glm::vec3(-2050.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), bmMesh, bmMaterial); //branch mushroom 2 (small jump)
