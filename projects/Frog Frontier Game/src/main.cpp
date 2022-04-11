@@ -7273,22 +7273,6 @@ int main() {
 			createGroundObstacle("10", glm::vec3(-1950.f, 0.0f, 0.215f), glm::vec3(6.f, 4.f, 8.f), glm::vec3(90.f, 0.0f, 80.0f), Crystal1Mesh, Crystal1BlueMaterial); // (beeg jump)
 			createGroundObstacle("11", glm::vec3(-1960.f, 0.0f, 0.215f), glm::vec3(6.f, 4.f, 8.f), glm::vec3(90.f, 0.0f, 80.0f), Crystal1Mesh, Crystal1BlueMaterial); // (beeg jump)
 
-			//createGroundObstacle("3", glm::vec3(-1650.f, 0.0f, 0.215f), glm::vec3(6.f, 4.f, 8.f), glm::vec3(90.f, 0.0f, 80.0f), Crystal1Mesh, Crystal1GreenMaterial); //red mushroom 1 (small jump)
-			//createGroundObstacle("4", glm::vec3(-1700.f, 0.0f, -0.f), glm::vec3(6.f, 3.f, 8.f), glm::vec3(90.f, 0.0f, -162.0f), Crystal2Mesh, Crystal2GreenMaterial); //red mushroom 2 (small jump)
-
-			//createGroundObstacle("5", glm::vec3(-1650.f, 0.0f, 0.215f), glm::vec3(6.f, 4.f, 8.f), glm::vec3(90.f, 0.0f, 80.0f), Crystal1Mesh, Crystal1PurpleMaterial); //red mushroom 1 (small jump)
-			//createGroundObstacle("6", glm::vec3(-1650.f, 0.0f, 0.215f), glm::vec3(6.f, 4.f, 8.f), glm::vec3(90.f, 0.0f, 80.0f), Crystal1Mesh, Crystal1RedMaterial);
-			//createGroundObstacle("7", glm::vec3(-1700.f, 0.0f, -0.f), glm::vec3(6.f, 3.f, 8.f), glm::vec3(90.f, 0.0f, -162.0f), Crystal2Mesh, Crystal2YellowMaterial); //red mushroom 2 (small jump)
-			//createGroundObstacle("3", glm::vec3(-1750.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), StalagmiteMesh, StalagmiteMaterial); // tall mushroom 1 (small jump)
-			//createGroundObstacle("4", glm::vec3(-1800.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), StalagtiteMesh, StalagtiteMaterial); //branch mushroom 1 (small jump)
-
-			//createGroundObstacle("8", glm::vec3(-1850.f, 0.0f, 0.3f), glm::vec3(2.f, 2.f, 2.f), glm::vec3(90.f, 0.0f, 0.0f), GoldbarMesh, GoldBarMaterial); //red mushroom 3 (small jump)
-			//createGroundObstacle("9", glm::vec3(-1900.f, 0.0f, -0.0), glm::vec3(4.f, 4.f, 2.f), glm::vec3(90.f, 0.0f, -71.0f), GoldPile1Mesh, GoldPile1Material); //red mushroom 4 (small jump)
-
-			//createGroundObstacle("7", glm::vec3(-2000.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), GoldPile2Mesh, GoldPile2Material); //red mushroom 5 (small jump)
-			//createGroundObstacle("8", glm::vec3(-2050.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), bmMesh, bmMaterial); //branch mushroom 2 (small jump)
-
-
 			//Collisions
 
 			//mushroom 8 collision
@@ -7309,8 +7293,9 @@ int main() {
 			//cobweb collisions
 			//createCollision("58", -395.f, 1.63f, 1.f, 7.f);
 
+				//create collision
 
-
+			
 
 			//3D Backgrounds
 			createGroundObstacle("27", glm::vec3(-292.3f - 1200.f, -53.250f, -4.5f), glm::vec3(6.f, 12.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMineMesh, MineBackgroundMaterial);
@@ -7347,11 +7332,83 @@ int main() {
 			createGroundObstacle("69", glm::vec3(-360.f - 400.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
 			createGroundObstacle("70", glm::vec3(-400.f - 400.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
 
+			//large rock
+			createCollision("511", -1646.f, 1.560f, 1.f, 1.f);
+			createCollision("512", -1649.44f, 4.f, 1.f, 1.f);
+			createCollision("513", -1652.f, 3.8f, 1.f, 1.f);
+			createCollision("514", -1648.f, 2.82f, 1.f, 1.f);
+			createCollision("515", -1646.f, 1.f, 1.f, 1.f);
+			createCollision("516", -1654.f, 1.56f, 1.f, 1.f);
 
+			//small rock
+			createCollision("521", -1698.f, 0.8f, 1.f, 1.f);
+			createCollision("522", -1699.f, 1.f, 1.f, 1.f);
+			createCollision("523", -1700.f, 1.f, 1.f, 1.f);
+			createCollision("524", -1702.f, 0.7f, 1.f, 1.f);
 
+			//small rock
+			createCollision("531", -1748.f, 0.8f, 1.f, 1.f);
+			createCollision("532", -1749.f, 1.f, 1.f, 1.f);
+			createCollision("533", -1750.f, 1.f, 1.f, 1.f);
+			createCollision("534", -1752.f, 0.7f, 1.f, 1.f);
 
+			//large rock
+			createCollision("541", -1796.f, 1.560f, 1.f, 1.f);
+			createCollision("542", -1796.f, 1.f, 1.f, 1.f);
+			createCollision("543", -1798.f, 2.82f, 1.f, 1.f);
+			createCollision("544", -1799.44f, 4.f, 1.f, 1.f);
+			createCollision("545", -1802.f, 3.8f, 1.f, 1.f);
+			createCollision("546", -1804.f, 1.56f, 1.f, 1.f);
 
+			//small rock 1850
+			createCollision("551", -1848.f, 0.8f, 1.f, 1.f);
+			createCollision("552", -1849.f, 1.f, 1.f, 1.f);
+			createCollision("553", -1850.f, 1.f, 1.f, 1.f);
+			createCollision("554", -1852.f, 0.7f, 1.f, 1.f);
 
+			//small rock 1880
+			createCollision("561", -1878.f, 0.8f, 1.f, 1.f);
+			createCollision("562", -1879.f, 1.f, 1.f, 1.f);
+			createCollision("563", -1880.f, 1.f, 1.f, 1.f);
+			createCollision("564", -1882.f, 0.7f, 1.f, 1.f);
+
+			//large rock 1900
+			createCollision("571", -1896.f, 1.560f, 1.f, 1.f);
+			createCollision("572", -1896.f, 1.f, 1.f, 1.f);
+			createCollision("573", -1898.f, 2.82f, 1.f, 1.f);
+			createCollision("574", -1899.44f, 4.f, 1.f, 1.f);
+			createCollision("575", -1902.f, 3.8f, 1.f, 1.f);
+			createCollision("576", -1904.f, 1.56f, 1.f, 1.f);
+
+			//large rock 1910
+			createCollision("581", -1906.f, 1.560f, 1.f, 1.f);
+			createCollision("582", -1906.f, 1.f, 1.f, 1.f);
+			createCollision("583", -1908.f, 2.82f, 1.f, 1.f);
+			createCollision("584", -1909.44f, 4.f, 1.f, 1.f);
+			createCollision("585", -1912.f, 3.8f, 1.f, 1.f);
+			createCollision("586", -1914.f, 1.56f, 1.f, 1.f);
+
+			//small rock 1930
+			createCollision("591", -1928.f, 0.8f, 1.f, 1.f);
+			createCollision("592", -1929.f, 1.f, 1.f, 1.f);
+			createCollision("593", -1930.f, 1.f, 1.f, 1.f);
+			createCollision("594", -1932.f, 0.7f, 1.f, 1.f);
+
+			//large rock 1950
+			createCollision("5101", -1946.f, 1.560f, 1.f, 1.f);
+			createCollision("5102", -1946.f, 1.f, 1.f, 1.f);
+			createCollision("5103", -1948.f, 2.82f, 1.f, 1.f);
+			createCollision("5104", -1949.44f, 4.f, 1.f, 1.f);
+			createCollision("5105", -1952.f, 3.8f, 1.f, 1.f);
+			createCollision("5106", -1954.f, 1.56f, 1.f, 1.f);
+
+			//large rock 1960
+			createCollision("5111", -1956.f, 1.560f, 1.f, 1.f);
+			createCollision("5112", -1956.f, 1.f, 1.f, 1.f);
+			createCollision("5113", -1958.f, 2.82f, 1.f, 1.f);
+			createCollision("5114", -1959.44f, 4.f, 1.f, 1.f);
+			createCollision("5115", -1962.f, 3.8f, 1.f, 1.f);
+			createCollision("5116", -1964.f, 1.56f, 1.f, 1.f);
 
 
 
@@ -8597,13 +8654,159 @@ int main() {
 		createGroundObstacle("69", glm::vec3(-360.f - 800.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
 		createGroundObstacle("70", glm::vec3(-400.f - 800.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
 
+		//collisions
 
+		
 
+		//large rock 
+		createCollision("611", -2046.f, 1.560f, 1.f, 1.f);
+		createCollision("612", -2046.f, 1.f, 1.f, 1.f);
+		createCollision("613", -2048.f, 2.82f, 1.f, 1.f);
+		createCollision("614", -2049.44f, 4.f, 1.f, 1.f);
+		createCollision("615", -2052.f, 3.8f, 1.f, 1.f);
+		createCollision("616", -2054.f, 1.56f, 1.f, 1.f);
 
+		//small rock 
+		createCollision("621", -2063.f, 0.8f, 1.f, 1.f);
+		createCollision("622", -2064.f, 1.f, 1.f, 1.f);
+		createCollision("623", -2065.f, 1.f, 1.f, 1.f);
+		createCollision("624", -2067.f, 0.7f, 1.f, 1.f);
 
+		//small rock 1930
+		createCollision("631", -2078.f, 0.8f, 1.f, 1.f);
+		createCollision("632", -2079.f, 1.f, 1.f, 1.f);
+		createCollision("633", -2080.f, 1.f, 1.f, 1.f);
+		createCollision("634", -2082.f, 0.7f, 1.f, 1.f);
 
+		//large rock 
+		createCollision("641", -2096.f, 1.560f, 1.f, 1.f);
+		createCollision("642", -2096.f, 1.f, 1.f, 1.f);
+		createCollision("643", -2098.f, 2.82f, 1.f, 1.f);
+		createCollision("644", -2099.44f, 4.f, 1.f, 1.f);
+		createCollision("645", -2102.f, 3.8f, 1.f, 1.f);
+		createCollision("646", -2104.f, 1.56f, 1.f, 1.f);
 
+		//small rock 
+		createCollision("651", -2113.f, 0.8f, 1.f, 1.f);
+		createCollision("652", -2114.f, 1.f, 1.f, 1.f);
+		createCollision("653", -2115.f, 1.f, 1.f, 1.f);
+		createCollision("654", -2117.f, 0.7f, 1.f, 1.f);
 
+		//small rock 1930
+		createCollision("661", -2128.f, 0.8f, 1.f, 1.f);
+		createCollision("662", -2129.f, 1.f, 1.f, 1.f);
+		createCollision("663", -2130.f, 1.f, 1.f, 1.f);
+		createCollision("664", -2132.f, 0.7f, 1.f, 1.f);
+
+		//large rock 
+		createCollision("671", -2146.f, 1.560f, 1.f, 1.f);
+		createCollision("672", -2146.f, 1.f, 1.f, 1.f);
+		createCollision("673", -2148.f, 2.82f, 1.f, 1.f);
+		createCollision("674", -2149.44f, 4.f, 1.f, 1.f);
+		createCollision("675", -2152.f, 3.8f, 1.f, 1.f);
+		createCollision("676", -2154.f, 1.56f, 1.f, 1.f);
+
+		//large rock 
+		createCollision("681", -2156.f, 1.560f, 1.f, 1.f);
+		createCollision("682", -2156.f, 1.f, 1.f, 1.f);
+		createCollision("683", -2158.f, 2.82f, 1.f, 1.f);
+		createCollision("684", -2159.44f, 4.f, 1.f, 1.f);
+		createCollision("685", -2162.f, 3.8f, 1.f, 1.f);
+		createCollision("686", -2164.f, 1.56f, 1.f, 1.f);
+
+		//small rock 1930
+		createCollision("691", -2178.f, 0.8f, 1.f, 1.f);
+		createCollision("692", -2179.f, 1.f, 1.f, 1.f);
+		createCollision("693", -2180.f, 1.f, 1.f, 1.f);
+		createCollision("694", -2182.f, 0.7f, 1.f, 1.f);
+
+		//large rock 
+		createCollision("6101", -2196.f, 1.560f, 1.f, 1.f);
+		createCollision("6102", -2196.f, 1.f, 1.f, 1.f);
+		createCollision("6103", -2198.f, 2.82f, 1.f, 1.f);
+		createCollision("6104", -2199.44f, 4.f, 1.f, 1.f);
+		createCollision("6105", -2202.f, 3.8f, 1.f, 1.f);
+		createCollision("6106", -2204.f, 1.56f, 1.f, 1.f);
+
+		//large rock 
+		createCollision("6111", -2206.f, 1.560f, 1.f, 1.f);
+		createCollision("6112", -2206.f, 1.f, 1.f, 1.f);
+		createCollision("6113", -2208.f, 2.82f, 1.f, 1.f);
+		createCollision("6114", -2209.44f, 4.f, 1.f, 1.f);
+		createCollision("6115", -2212.f, 3.8f, 1.f, 1.f);
+		createCollision("6116", -2214.f, 1.56f, 1.f, 1.f);
+
+		//large rock 
+		createCollision("6121", -2236.f, 1.560f, 1.f, 1.f);
+		createCollision("6122", -2236.f, 1.f, 1.f, 1.f);
+		createCollision("6123", -2238.f, 2.82f, 1.f, 1.f);
+		createCollision("6124", -2239.44f, 4.f, 1.f, 1.f);
+		createCollision("6125", -2242.f, 3.8f, 1.f, 1.f);
+		createCollision("6126", -2244.f, 1.56f, 1.f, 1.f);
+
+		//small rock 1930
+		createCollision("6131", -2243.f, 0.8f, 1.f, 1.f);
+		createCollision("6132", -2243.f, 1.f, 1.f, 1.f);
+		createCollision("6133", -2245.f, 1.f, 1.f, 1.f);
+		createCollision("6134", -2247.f, 0.7f, 1.f, 1.f);
+
+		//small rock 1930
+		createCollision("6141", -2258.f, 0.8f, 1.f, 1.f);
+		createCollision("6142", -2259.f, 1.f, 1.f, 1.f);
+		createCollision("6143", -2260.f, 1.f, 1.f, 1.f);
+		createCollision("6144", -2262.f, 0.7f, 1.f, 1.f);
+
+		//small rock 1930
+		createCollision("6151", -2268.f, 0.8f, 1.f, 1.f);
+		createCollision("6152", -2269.f, 1.f, 1.f, 1.f);
+		createCollision("6153", -2270.f, 1.f, 1.f, 1.f);
+		createCollision("6154", -2272.f, 0.7f, 1.f, 1.f);
+
+		//small rock 1930
+		createCollision("6161", -2278.f, 0.8f, 1.f, 1.f);
+		createCollision("6162", -2279.f, 1.f, 1.f, 1.f);
+		createCollision("6163", -2280.f, 1.f, 1.f, 1.f);
+		createCollision("6164", -2282.f, 0.7f, 1.f, 1.f);
+
+		//large rock 
+		createCollision("6171", -2296.f, 1.560f, 1.f, 1.f);
+		createCollision("6172", -2296.f, 1.f, 1.f, 1.f);
+		createCollision("6173", -2298.f, 2.82f, 1.f, 1.f);
+		createCollision("6174", -2299.44f, 4.f, 1.f, 1.f);
+		createCollision("6175", -2302.f, 3.8f, 1.f, 1.f);
+		createCollision("6176", -2304.f, 1.56f, 1.f, 1.f);
+
+		//large rock 
+		createCollision("6181", -2306.f, 1.560f, 1.f, 1.f);
+		createCollision("6182", -2306.f, 1.f, 1.f, 1.f);
+		createCollision("6183", -2308.f, 2.82f, 1.f, 1.f);
+		createCollision("6184", -2309.44f, 4.f, 1.f, 1.f);
+		createCollision("6185", -2312.f, 3.8f, 1.f, 1.f);
+		createCollision("6186", -2314.f, 1.56f, 1.f, 1.f);
+
+		//small rock 
+		createCollision("6191", -2343.f, 0.8f, 1.f, 1.f);
+		createCollision("6192", -2344.f, 1.f, 1.f, 1.f);
+		createCollision("6193", -2345.f, 1.f, 1.f, 1.f);
+		createCollision("6194", -2347.f, 0.7f, 1.f, 1.f);
+
+		//small rock 
+		createCollision("6201", -2358.f, 0.8f, 1.f, 1.f);
+		createCollision("6202", -2359.f, 1.f, 1.f, 1.f);
+		createCollision("6203", -2360.f, 1.f, 1.f, 1.f);
+		createCollision("6204", -2362.f, 0.7f, 1.f, 1.f);
+
+		//small rock 
+		createCollision("6211", -2368.f, 0.8f, 1.f, 1.f);
+		createCollision("6212", -2369.f, 1.f, 1.f, 1.f);
+		createCollision("6213", -2370.f, 1.f, 1.f, 1.f);
+		createCollision("6214", -2372.f, 0.7f, 1.f, 1.f);
+
+		//small rock 
+		createCollision("6221", -2378.f, 0.8f, 1.f, 1.f);
+		createCollision("6222", -2379.f, 1.f, 1.f, 1.f);
+		createCollision("6223", -2380.f, 1.f, 1.f, 1.f);
+		createCollision("6224", -2382.f, 0.7f, 1.f, 1.f);
 
 		// Set up the scene's camera
 		GameObject::Sptr camera = scene->CreateGameObject("Main Camera");
