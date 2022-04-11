@@ -547,7 +547,12 @@ bool DrawSaveLoadImGui(Scene::Sptr& scene, std::string& path) {
 			DoTransition = false;
 			break;
 		case 6:
-			return 0;
+			path = "Level6.json";
+			SceneLoad(scene, path);
+			scenevalue = 6;
+			index = 1;
+			enterclick = true;
+			DoTransition = false;
 			break;
 		case 7:
 			path = "menu.json";
@@ -1396,6 +1401,12 @@ void keyboard()
 				playerMove = false;
 			}
 		}
+		else if (scenevalue == 6)
+		{
+			if (scene->FindObjectByName("player")->GetPosition().x < -2400.f) {
+				playerMove = false;
+			}
+		}
 
 	}
 }
@@ -1652,6 +1663,9 @@ int main() {
 		Texture2D::Sptr    ButtonBackTex = ResourceManager::CreateAsset<Texture2D>("textures/Button Background.png");
 		Texture2D::Sptr    LSButtonTex = ResourceManager::CreateAsset<Texture2D>("textures/Level Button Background 1.png");
 		Texture2D::Sptr    FilterTex = ResourceManager::CreateAsset<Texture2D>("textures/Button Filter.png");
+		Texture2D::Sptr    ForestButtonTex = ResourceManager::CreateAsset<Texture2D>("textures/Forest Level.png");
+		Texture2D::Sptr    MountainButtonTex = ResourceManager::CreateAsset<Texture2D>("textures/Mountain Level.png");
+		Texture2D::Sptr    MineButtonTex = ResourceManager::CreateAsset<Texture2D>("textures/Mine Level.png");
 
 		//UI textures
 		Texture2D::Sptr    PauseTex = ResourceManager::CreateAsset<Texture2D>("textures/Pause.png");
@@ -1673,6 +1687,20 @@ int main() {
 		Texture2D::Sptr    Tex8 = ResourceManager::CreateAsset<Texture2D>("textures/8.png");
 		Texture2D::Sptr    Tex9 = ResourceManager::CreateAsset<Texture2D>("textures/9.png");
 		Texture2D::Sptr    Tex10 = ResourceManager::CreateAsset<Texture2D>("textures/10.png");
+
+		Texture2D::Sptr    Tex1R = ResourceManager::CreateAsset<Texture2D>("textures/1R.png");
+		Texture2D::Sptr    Tex2R = ResourceManager::CreateAsset<Texture2D>("textures/2R.png");
+		Texture2D::Sptr    Tex3R = ResourceManager::CreateAsset<Texture2D>("textures/3R.png");
+		Texture2D::Sptr    Tex4R = ResourceManager::CreateAsset<Texture2D>("textures/4R.png");
+		Texture2D::Sptr    Tex5R = ResourceManager::CreateAsset<Texture2D>("textures/5R.png");
+		Texture2D::Sptr    Tex6R = ResourceManager::CreateAsset<Texture2D>("textures/6R.png");
+
+		Texture2D::Sptr    Tex1B = ResourceManager::CreateAsset<Texture2D>("textures/1B.png");
+		Texture2D::Sptr    Tex2B = ResourceManager::CreateAsset<Texture2D>("textures/2B.png");
+		Texture2D::Sptr    Tex3B = ResourceManager::CreateAsset<Texture2D>("textures/3B.png");
+		Texture2D::Sptr    Tex4B = ResourceManager::CreateAsset<Texture2D>("textures/4B.png");
+		Texture2D::Sptr    Tex5B = ResourceManager::CreateAsset<Texture2D>("textures/5B.png");
+		Texture2D::Sptr    Tex6B = ResourceManager::CreateAsset<Texture2D>("textures/6B.png");
 
 		//written text
 		Texture2D::Sptr    ResumeTex = ResourceManager::CreateAsset<Texture2D>("textures/ResumeText.png");
@@ -2089,74 +2117,132 @@ int main() {
 			}
 
 			// Create some lights for our scene
-			scene->Lights.resize(18);
+			// Create some lights for our scene
+			// Create some lights for our scene
+			scene->Lights.resize(31);
 			scene->Lights[0].Position = glm::vec3(0.0f, 1.0f, 40.0f);
-			scene->Lights[0].Color = glm::vec3(1.f, 1.f, 1.f);
-			scene->Lights[0].Range = 1000.0f;
+			scene->Lights[0].Color = glm::vec3(0.8619f, 1.f, 0.819f);
+			scene->Lights[0].Range = 200.0f;
 
-			scene->Lights[1].Position = glm::vec3(-50.f, 0.0f, 3.0f);
-			scene->Lights[1].Color = glm::vec3(1.f, 1.f, 1.f);
+			scene->Lights[1].Position = glm::vec3(-50.f, 0.0f, 40.0f);
+			scene->Lights[1].Color = glm::vec3(0.8619f, 1.f, 0.819f);
+			scene->Lights[1].Range = 200.0f;
 
-			scene->Lights[2].Position = glm::vec3(-100.f, 1.0f, 3.0f);
-			scene->Lights[2].Color = glm::vec3(1.f, 1.f, 1.f);
+			scene->Lights[2].Position = glm::vec3(-100.f, 1.0f, 40.0f);
+			scene->Lights[2].Color = glm::vec3(0.8619f, 1.f, 0.819f);
+			scene->Lights[2].Range = 200.0f;
 
 			scene->Lights[3].Position = glm::vec3(-150.0f, 1.0f, 40.0f);
-			scene->Lights[3].Color = glm::vec3(1.f, 1.f, 1.f);
-			scene->Lights[3].Range = 1000.0f;
+			scene->Lights[3].Color = glm::vec3(0.8619f, 1.f, 0.819f);
+			scene->Lights[3].Range = 200.0f;
 
-			//scene->Lights[4].Position = glm::vec3(-200.0f, 1.0f, 40.0f);
-			//scene->Lights[4].Color = glm::vec3(1.f, 1.f, 1.f);
-			//scene->Lights[4].Range = 1000.0f;
+			scene->Lights[4].Position = glm::vec3(-100.0f, 1.0f, 40.0f);
+			scene->Lights[4].Color = glm::vec3(0.8619f, 1.f, 0.819f);
+			scene->Lights[4].Range = 200.0f;
 
-			//scene->Lights[5].Position = glm::vec3(-250.0f, 1.0f, 40.0f);
-			//scene->Lights[5].Color = glm::vec3(1.f, 1.f, 1.f);
-			//scene->Lights[5].Range = 1000.0f;
+			scene->Lights[5].Position = glm::vec3(-150.0f, 1.0f, 40.0f);
+			scene->Lights[5].Color = glm::vec3(0.8619f, 1.f, 0.819f);
+			scene->Lights[5].Range = 200.0f;
 
-			//scene->Lights[6].Position = glm::vec3(-300.0f, 1.0f, 40.0f);
-			//scene->Lights[6].Color = glm::vec3(1.f, 1.f, 1.f);
-			//scene->Lights[6].Range = 1000.0f;
+			scene->Lights[6].Position = glm::vec3(-200.0f, 1.0f, 40.0f);
+			scene->Lights[6].Color = glm::vec3(0.8619f, 1.f, 0.819f);
+			scene->Lights[6].Range = 200.0f;
 
-			//scene->Lights[7].Position = glm::vec3(-350.0f, 1.0f, 40.0f);
-			//scene->Lights[7].Color = glm::vec3(1.f, 1.f, 1.f);
-			//scene->Lights[7].Range = 1000.0f;
+			scene->Lights[7].Position = glm::vec3(-250.0f, 1.0f, 40.0f);
+			scene->Lights[7].Color = glm::vec3(0.8619f, 1.f, 0.819f);
+			scene->Lights[7].Range = 200.0f;
 
-			//scene->Lights[8].Position = glm::vec3(-200.0f, 1.0f, 40.0f);
-			//scene->Lights[8].Color = glm::vec3(1.f, 1.f, 1.f);
-			//scene->Lights[8].Range = 1000.0f;
+			scene->Lights[8].Position = glm::vec3(-300.0f, 1.0f, 40.0f);
+			scene->Lights[8].Color = glm::vec3(0.8619f, 1.f, 0.819f);
+			scene->Lights[8].Range = 200.0f;
 
-			scene->Lights[4].Position = glm::vec3(-240.0f, 1.0f, 40.0f);
-			scene->Lights[4].Color = glm::vec3(1.f, 1.f, 1.f);
-			scene->Lights[4].Range = 1000.0f;
+			scene->Lights[9].Position = glm::vec3(-350.0f, 1.0f, 40.0f);
+			scene->Lights[9].Color = glm::vec3(0.8619f, 1.f, 0.819f);
+			scene->Lights[9].Range = 200.0f;
 
-			scene->Lights[5].Position = glm::vec3(-280.0f, 1.0f, 40.0f);
-			scene->Lights[5].Color = glm::vec3(1.f, 1.f, 1.f);
-			scene->Lights[5].Range = 1000.0f;
+			scene->Lights[10].Position = glm::vec3(-400.0f, 1.0f, 40.0f);
+			scene->Lights[10].Color = glm::vec3(0.8619f, 1.f, 0.819f);
+			scene->Lights[10].Range = 200.0f;
 
-			scene->Lights[6].Position = glm::vec3(-320.0f, 1.0f, 40.0f);
-			scene->Lights[6].Color = glm::vec3(1.f, 1.f, 1.f);
-			scene->Lights[6].Range = 1000.0f;
-
-			scene->Lights[7].Position = glm::vec3(-360.0f, 1.0f, 40.0f);
-			scene->Lights[7].Color = glm::vec3(1.f, 1.f, 1.f);
-			scene->Lights[7].Range = 1000.0f;
-
-			scene->Lights[8].Position = glm::vec3(-400.0f, 1.0f, 40.0f);
-			scene->Lights[8].Color = glm::vec3(1.f, 1.f, 1.f);
-			scene->Lights[8].Range = 1000.0f;
-
-			scene->Lights[9].Position = glm::vec3(-200.0f, 1.0f, 40.0f);
-			scene->Lights[9].Color = glm::vec3(0.2f, 0.8f, 0.1f);
-			scene->Lights[9].Range = 1000.0f;
-
-			scene->Lights[10].Position = glm::vec3(-201.0f, 0.0f, 3.0f);
-			scene->Lights[10].Color = glm::vec3(0.2f, 0.8f, 0.1f);
-
-			scene->Lights[11].Position = glm::vec3(-400.0f, 1.0f, 40.0f);
-			scene->Lights[11].Color = glm::vec3(0.2f, 0.8f, 0.1f);
+			scene->Lights[11].Position = glm::vec3(0.0f, -90.0f, 100.0f);
+			scene->Lights[11].Color = glm::vec3(0.45f, 0.678f, 0.1872f);
 			scene->Lights[11].Range = 1000.0f;
 
-			scene->Lights[12].Position = glm::vec3(-401.0f, 0.0f, 3.0f);
-			scene->Lights[12].Color = glm::vec3(0.2f, 0.8f, 0.1f);
+			scene->Lights[12].Position = glm::vec3(-50.f, -90.0f, 100.0f);
+			scene->Lights[12].Color = glm::vec3(0.45f, 0.678f, 0.1872f);
+			scene->Lights[12].Range = 1000.0f;
+
+			scene->Lights[13].Position = glm::vec3(-100.f, -90.0f, 100.0f);
+			scene->Lights[13].Color = glm::vec3(0.45f, 0.678f, 0.1872f);
+			scene->Lights[13].Range = 1000.0f;
+
+			scene->Lights[14].Position = glm::vec3(-150.0f, -90.0f, 100.0f);
+			scene->Lights[14].Color = glm::vec3(0.45f, 0.678f, 0.1872f);
+			scene->Lights[14].Range = 1000.0f;
+
+			scene->Lights[15].Position = glm::vec3(-100.0f, -90.0f, 100.0f);
+			scene->Lights[15].Color = glm::vec3(0.45f, 0.678f, 0.1872f);
+			scene->Lights[15].Range = 1000.0f;
+
+			scene->Lights[16].Position = glm::vec3(-150.0f, -90.0f, 100.0f);
+			scene->Lights[16].Color = glm::vec3(0.45f, 0.678f, 0.1872f);
+			scene->Lights[16].Range = 1000.0f;
+
+			scene->Lights[17].Position = glm::vec3(-200.0f, -90.0f, 100.0f);
+			scene->Lights[17].Color = glm::vec3(0.45f, 0.678f, 0.1872f);
+			scene->Lights[17].Range = 1000.0f;
+
+			scene->Lights[18].Position = glm::vec3(-250.0f, -90.0f, 100.0f);
+			scene->Lights[18].Color = glm::vec3(0.45f, 0.678f, 0.1872f);
+			scene->Lights[18].Range = 1000.0f;
+
+			scene->Lights[19].Position = glm::vec3(-300.0f, -90.0f, 100.0f);
+			scene->Lights[19].Color = glm::vec3(0.45f, 0.678f, 0.1872f);
+			scene->Lights[19].Range = 1000.0f;
+
+			scene->Lights[20].Position = glm::vec3(-350.0f, -90.0f, 100.0f);
+			scene->Lights[20].Color = glm::vec3(0.45f, 0.678f, 0.1872f);
+			scene->Lights[20].Range = 1000.0f;
+
+			scene->Lights[21].Position = glm::vec3(-400.0f, -90.0f, 100.0f);
+			scene->Lights[21].Color = glm::vec3(0.45f, 0.678f, 0.1872f);
+			scene->Lights[21].Range = 1000.0f;
+
+			scene->Lights[22].Position = glm::vec3(-000.0f, 20.0f, 5.0f);
+			scene->Lights[22].Color = glm::vec3(1.f, 1.f, 1.f);
+			scene->Lights[22].Range = 150.0f;
+
+			scene->Lights[23].Position = glm::vec3(-50.0f, 20.0f, 5.0f);
+			scene->Lights[23].Color = glm::vec3(1.f, 1.f, 1.f);
+			scene->Lights[23].Range = 150.0f;
+
+			scene->Lights[24].Position = glm::vec3(-100.0f, 20.0f, 5.0f);
+			scene->Lights[24].Color = glm::vec3(1.f, 1.f, 1.f);
+			scene->Lights[24].Range = 150.0f;
+
+			scene->Lights[25].Position = glm::vec3(-150.0f, 20.0f, 5.0f);
+			scene->Lights[25].Color = glm::vec3(1.f, 1.f, 1.f);
+			scene->Lights[25].Range = 150.0f;
+
+			scene->Lights[26].Position = glm::vec3(-200.0f, 20.0f, 5.0f);
+			scene->Lights[26].Color = glm::vec3(1.f, 1.f, 1.f);
+			scene->Lights[26].Range = 150.0f;
+
+			scene->Lights[27].Position = glm::vec3(-250.0f, 20.0f, 5.0f);
+			scene->Lights[27].Color = glm::vec3(1.f, 1.f, 1.f);
+			scene->Lights[27].Range = 150.0f;
+
+			scene->Lights[28].Position = glm::vec3(-300.0f, 20.0f, 5.0f);
+			scene->Lights[28].Color = glm::vec3(1.f, 1.f, 1.f);
+			scene->Lights[28].Range = 150.0f;
+
+			scene->Lights[29].Position = glm::vec3(-350.0f, 20.0f, 5.0f);
+			scene->Lights[29].Color = glm::vec3(1.f, 1.f, 1.f);
+			scene->Lights[29].Range = 150.0f;
+
+			scene->Lights[30].Position = glm::vec3(-400.0f, 20.0f, 5.0f);
+			scene->Lights[30].Color = glm::vec3(1.f, 1.f, 1.f);
+			scene->Lights[30].Range = 150.0f;
 
 			// We'll create a mesh that is a simple plane that we can resize later
 			planeMesh = ResourceManager::CreateAsset<MeshResource>();
@@ -2800,7 +2886,7 @@ int main() {
 
 		}
 
-		/// Working Level ///									//////		Level 1		//////////
+		/// Working Level ///									//////		Level 1		////////// scenevalue == 1
 
 		{
 			// Create an empty scene
@@ -3185,50 +3271,131 @@ int main() {
 
 
 			// Create some lights for our scene
-			scene->Lights.resize(18);
+			// Create some lights for our scene
+			scene->Lights.resize(31);
 			scene->Lights[0].Position = glm::vec3(-400.0f, 1.0f, 40.0f);
-			scene->Lights[0].Color = glm::vec3(1.f, 1.f, 1.f);
-			scene->Lights[0].Range = 1000.0f;
+			scene->Lights[0].Color = glm::vec3(0.8619f, 1.f, 0.819f);
+			scene->Lights[0].Range = 200.0f;
 
-			scene->Lights[1].Position = glm::vec3(-450.f, 0.0f, 3.0f);
-			scene->Lights[1].Color = glm::vec3(1.f, 1.f, 1.f);
-			scene->Lights[1].Range = 100.0f;
+			scene->Lights[1].Position = glm::vec3(-450.f, 0.0f, 40.0f);
+			scene->Lights[1].Color = glm::vec3(0.8619f, 1.f, 0.819f);
+			scene->Lights[1].Range = 200.0f;
 
-			scene->Lights[2].Position = glm::vec3(-500.f, 1.0f, 3.0f);
-			scene->Lights[2].Color = glm::vec3(1.f, 1.f, 1.f);
-			scene->Lights[2].Range = 100.0f;
+			scene->Lights[2].Position = glm::vec3(-500.f, 1.0f, 40.0f);
+			scene->Lights[2].Color = glm::vec3(0.8619f, 1.f, 0.819f);
+			scene->Lights[2].Range = 200.0f;
 
 			scene->Lights[3].Position = glm::vec3(-550.0f, 1.0f, 40.0f);
-			scene->Lights[3].Color = glm::vec3(1.f, 1.f, 1.f);
-			scene->Lights[3].Range = 100.0f;
+			scene->Lights[3].Color = glm::vec3(0.8619f, 1.f, 0.819f);
+			scene->Lights[3].Range = 200.0f;
 
 			scene->Lights[4].Position = glm::vec3(-500.0f, 1.0f, 40.0f);
-			scene->Lights[4].Color = glm::vec3(1.f, 1.f, 1.f);
-			scene->Lights[4].Range = 100.0f;
+			scene->Lights[4].Color = glm::vec3(0.8619f, 1.f, 0.819f);
+			scene->Lights[4].Range = 200.0f;
 
 			scene->Lights[5].Position = glm::vec3(-550.0f, 1.0f, 40.0f);
-			scene->Lights[5].Color = glm::vec3(1.f, 1.f, 1.f);
-			scene->Lights[5].Range = 100.0f;
+			scene->Lights[5].Color = glm::vec3(0.8619f, 1.f, 0.819f);
+			scene->Lights[5].Range = 200.0f;
 
 			scene->Lights[6].Position = glm::vec3(-600.0f, 1.0f, 40.0f);
-			scene->Lights[6].Color = glm::vec3(1.f, 1.f, 1.f);
-			scene->Lights[6].Range = 100.0f;
+			scene->Lights[6].Color = glm::vec3(0.8619f, 1.f, 0.819f);
+			scene->Lights[6].Range = 200.0f;
 
 			scene->Lights[7].Position = glm::vec3(-650.0f, 1.0f, 40.0f);
-			scene->Lights[7].Color = glm::vec3(1.f, 1.f, 1.f);
-			scene->Lights[7].Range = 100.0f;
+			scene->Lights[7].Color = glm::vec3(0.8619f, 1.f, 0.819f);
+			scene->Lights[7].Range = 200.0f;
 
 			scene->Lights[8].Position = glm::vec3(-700.0f, 1.0f, 40.0f);
-			scene->Lights[8].Color = glm::vec3(1.f, 1.f, 1.f);
-			scene->Lights[8].Range = 100.0f;
+			scene->Lights[8].Color = glm::vec3(0.8619f, 1.f, 0.819f);
+			scene->Lights[8].Range = 200.0f;
 
 			scene->Lights[9].Position = glm::vec3(-750.0f, 1.0f, 40.0f);
-			scene->Lights[9].Color = glm::vec3(1.f, 1.f, 1.f);
-			scene->Lights[9].Range = 100.0f;
+			scene->Lights[9].Color = glm::vec3(0.8619f, 1.f, 0.819f);
+			scene->Lights[9].Range = 200.0f;
 
 			scene->Lights[10].Position = glm::vec3(-800.0f, 1.0f, 40.0f);
-			scene->Lights[10].Color = glm::vec3(1.f, 1.f, 1.f);
-			scene->Lights[9].Range = 100.0f;
+			scene->Lights[10].Color = glm::vec3(0.8619f, 1.f, 0.819f);
+			scene->Lights[10].Range = 200.0f;
+
+			scene->Lights[11].Position = glm::vec3(-400.0f, -90.0f, 100.0f);
+			scene->Lights[11].Color = glm::vec3(0.45f, 0.678f, 0.1872f);
+			scene->Lights[11].Range = 1000.0f;
+
+			scene->Lights[12].Position = glm::vec3(-450.f, -90.0f, 100.0f);
+			scene->Lights[12].Color = glm::vec3(0.45f, 0.678f, 0.1872f);
+			scene->Lights[12].Range = 1000.0f;
+
+			scene->Lights[13].Position = glm::vec3(-500.f, -90.0f, 100.0f);
+			scene->Lights[13].Color = glm::vec3(0.45f, 0.678f, 0.1872f);
+			scene->Lights[13].Range = 1000.0f;
+
+			scene->Lights[14].Position = glm::vec3(-550.0f, -90.0f, 100.0f);
+			scene->Lights[14].Color = glm::vec3(0.45f, 0.678f, 0.1872f);
+			scene->Lights[14].Range = 1000.0f;
+
+			scene->Lights[15].Position = glm::vec3(-500.0f, -90.0f, 100.0f);
+			scene->Lights[15].Color = glm::vec3(0.45f, 0.678f, 0.1872f);
+			scene->Lights[15].Range = 1000.0f;
+
+			scene->Lights[16].Position = glm::vec3(-550.0f, -90.0f, 100.0f);
+			scene->Lights[16].Color = glm::vec3(0.45f, 0.678f, 0.1872f);
+			scene->Lights[16].Range = 1000.0f;
+
+			scene->Lights[17].Position = glm::vec3(-600.0f, -90.0f, 100.0f);
+			scene->Lights[17].Color = glm::vec3(0.45f, 0.678f, 0.1872f);
+			scene->Lights[17].Range = 1000.0f;
+
+			scene->Lights[18].Position = glm::vec3(-650.0f, -90.0f, 100.0f);
+			scene->Lights[18].Color = glm::vec3(0.45f, 0.678f, 0.1872f);
+			scene->Lights[18].Range = 1000.0f;
+
+			scene->Lights[19].Position = glm::vec3(-700.0f, -90.0f, 100.0f);
+			scene->Lights[19].Color = glm::vec3(0.45f, 0.678f, 0.1872f);
+			scene->Lights[19].Range = 1000.0f;
+
+			scene->Lights[20].Position = glm::vec3(-750.0f, -90.0f, 100.0f);
+			scene->Lights[20].Color = glm::vec3(0.45f, 0.678f, 0.1872f);
+			scene->Lights[20].Range = 1000.0f;
+
+			scene->Lights[21].Position = glm::vec3(-800.0f, -90.0f, 100.0f);
+			scene->Lights[21].Color = glm::vec3(0.45f, 0.678f, 0.1872f);
+			scene->Lights[21].Range = 1000.0f;
+
+			scene->Lights[22].Position = glm::vec3(-400.0f, 20.0f, 5.0f);
+			scene->Lights[22].Color = glm::vec3(1.f, 1.f, 1.f);
+			scene->Lights[22].Range = 150.0f;
+
+			scene->Lights[23].Position = glm::vec3(-450.0f, 20.0f, 5.0f);
+			scene->Lights[23].Color = glm::vec3(1.f, 1.f, 1.f);
+			scene->Lights[23].Range = 150.0f;
+
+			scene->Lights[24].Position = glm::vec3(-500.0f, 20.0f, 5.0f);
+			scene->Lights[24].Color = glm::vec3(1.f, 1.f, 1.f);
+			scene->Lights[24].Range = 150.0f;
+
+			scene->Lights[25].Position = glm::vec3(-550.0f, 20.0f, 5.0f);
+			scene->Lights[25].Color = glm::vec3(1.f, 1.f, 1.f);
+			scene->Lights[25].Range = 150.0f;
+
+			scene->Lights[26].Position = glm::vec3(-600.0f, 20.0f, 5.0f);
+			scene->Lights[26].Color = glm::vec3(1.f, 1.f, 1.f);
+			scene->Lights[26].Range = 150.0f;
+
+			scene->Lights[27].Position = glm::vec3(-650.0f, 20.0f, 5.0f);
+			scene->Lights[27].Color = glm::vec3(1.f, 1.f, 1.f);
+			scene->Lights[27].Range = 150.0f;
+
+			scene->Lights[28].Position = glm::vec3(-700.0f, 20.0f, 5.0f);
+			scene->Lights[28].Color = glm::vec3(1.f, 1.f, 1.f);
+			scene->Lights[28].Range = 150.0f;
+
+			scene->Lights[29].Position = glm::vec3(-750.0f, 20.0f, 5.0f);
+			scene->Lights[29].Color = glm::vec3(1.f, 1.f, 1.f);
+			scene->Lights[29].Range = 150.0f;
+
+			scene->Lights[30].Position = glm::vec3(-800.0f, 20.0f, 5.0f);
+			scene->Lights[30].Color = glm::vec3(1.f, 1.f, 1.f);
+			scene->Lights[30].Range = 150.0f;
 
 			// We'll create a mesh that is a simple plane that we can resize later
 			planeMesh = ResourceManager::CreateAsset<MeshResource>();
@@ -5778,7 +5945,7 @@ int main() {
 		createBackgroundAsset("18", glm::vec3(-406.f - 800.f, -12.660f, 0.400), 0.05, glm::vec3(83.f, -7.0f, 90.0f), tmMesh, tmMaterial);
 
 		//Obstacles scene 3
-		createGroundObstacle("1", glm::vec3(-1250.f, -4.0f, 0.0f), glm::vec3(5.0f, 5.0f, 5.0f), glm::vec3(90.0f, 0.0f, -168.0f), SignPostMesh, SignPostMaterial);
+		/*createGroundObstacle("1", glm::vec3(-1250.f, -4.0f, 0.0f), glm::vec3(5.0f, 5.0f, 5.0f), glm::vec3(90.0f, 0.0f, -168.0f), SignPostMesh, SignPostMaterial);
 		createGroundObstacle("2", glm::vec3(-1280.f, 0.0f, -2.830f), glm::vec3(1.0f, 4.0f, 3.0f), glm::vec3(90.0f, 0.0f, -21.0f), RockPileMesh, RockPileMaterial);
 		createGroundObstacle("3", glm::vec3(-1300.f, 0.0f, 0.0f), glm::vec3(3.0f, 2.0f, 2.0f), glm::vec3(90.0f, 0.0f, 0.0f), RockTunnelMesh, RockTunnelMaterial);
 		createGroundObstacle("4", glm::vec3(-1350.f, -2.50f, 0.0f), glm::vec3(1.0f, 2.0f, 2.0f), glm::vec3(90.0f, 0.0f, 0.0f), RockWallMesh1, RockWallMaterial);
@@ -5787,7 +5954,7 @@ int main() {
 		createGroundObstacle("7", glm::vec3(-1450.f, 0.0f, 0.0f), glm::vec3(3.0f, 2.0f, 2.0f), glm::vec3(90.0f, 0.0f, 0.0f), RockTunnelMesh, RockTunnelMaterial);
 		createGroundObstacle("8", glm::vec3(-1490.f, 1.390f, 0.3f), glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(90.0f, 0.0f, 158.0f), PuddleMesh, PuddleMaterial);
 		createGroundObstacle("9", glm::vec3(-1520.f, 0.0f, 0.0f), glm::vec3(3.0f, 2.0f, 2.0f), glm::vec3(90.0f, 0.0f, 0.0f), RockTunnelMesh, RockTunnelMaterial);
-		createGroundObstacle("10", glm::vec3(-1550.f, -2.22f, 0.0f), glm::vec3(0.4f, 0.4f, 0.4f), glm::vec3(90.0f, 0.0f, -67.0f), CampfireMesh, CampfireMaterial);
+		createGroundObstacle("10", glm::vec3(-1550.f, -2.22f, 0.0f), glm::vec3(0.4f, 0.4f, 0.4f), glm::vec3(90.0f, 0.0f, -67.0f), CampfireMesh, CampfireMaterial);*/
 
 
 		//createGroundObstacle("2", glm::vec3(-900.f, 1.390f, 0.3f), glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(90.0f, 0.0f, 158.0f), PuddleMesh, PuddleMaterial);
@@ -5798,26 +5965,35 @@ int main() {
 		//createGroundObstacle("7", glm::vec3(-1150.f, -2.50f, 0.0f), glm::vec3(1.0f, 2.0f, 2.0f), glm::vec3(90.0f, 0.0f, 0.0f), RockWallMesh1, RockWallMaterial);
 		//createGroundObstacle("8", glm::vec3(-1200.f, 0.0f, 0.0f), glm::vec3(1.0f, 1.5f, 1.0f), glm::vec3(90.0f, 0.0f, 0.0f), RockWallMesh2, RockWallMaterial);
 
+		createGroundObstacle("1", glm::vec3(-1250.f, -2.50f, 0.0f), glm::vec3(1.0f, 2.0f, 2.0f), glm::vec3(90.0f, 0.0f, 0.0f), RockWallMesh1, RockWallMaterial);
+		createGroundObstacle("2", glm::vec3(-1280.f, -12.0f, -1.5f), glm::vec3(2.0f, 2.750f, 1.590f), glm::vec3(90.0f, 0.0f, -180.0f), HangingRockMesh, HangingRockMaterial);
+		createGroundObstacle("3", glm::vec3(-1300.f, 0.0f, 0.0f), glm::vec3(3.0f, 2.0f, 2.0f), glm::vec3(90.0f, 0.0f, 0.0f), RockTunnelMesh, RockTunnelMaterial);
+		createGroundObstacle("4", glm::vec3(-1360.f, 0.0f, 0.0f), glm::vec3(1.0f, 1.5f, 1.0f), glm::vec3(90.0f, 0.0f, 0.0f), RockWallMesh2, RockWallMaterial);
+		createGroundObstacle("5", glm::vec3(-1370.f, 0.0f, 0.0f), glm::vec3(1.0f, 1.5f, 1.0f), glm::vec3(90.0f, 0.0f, 0.0f), RockWallMesh2, RockWallMaterial);
+		createGroundObstacle("6", glm::vec3(-1380.f, - 12.0f, -1.5f), glm::vec3(2.0f, 2.750f, 1.590f), glm::vec3(90.0f, 0.0f, -180.0f), HangingRockMesh, HangingRockMaterial);
+		createGroundObstacle("7", glm::vec3(-1400.f, -2.50f, 0.0f), glm::vec3(1.0f, 2.0f, 2.0f), glm::vec3(90.0f, 0.0f, 0.0f), RockWallMesh1, RockWallMaterial);
+		createGroundObstacle("8", glm::vec3(-1420.f, -2.50f, 0.0f), glm::vec3(1.0f, 2.0f, 2.0f), glm::vec3(90.0f, 0.0f, 0.0f), RockWallMesh1, RockWallMaterial);
+		createGroundObstacle("9", glm::vec3(-1425.f, 0.0f, -2.830f), glm::vec3(1.0f, 4.0f, 3.0f), glm::vec3(90.0f, 0.0f, -21.0f), RockPileMesh, RockPileMaterial);
+		createGroundObstacle("10", glm::vec3(-1450.f, 1.390f, 0.3f), glm::vec3(4.0f, 2.0f, 4.0f), glm::vec3(90.0f, 0.0f, 90.0f), PuddleMesh, PuddleMaterial);
+		createGroundObstacle("11", glm::vec3(-1485.f, 1.390f, 0.3f), glm::vec3(4.0f, 2.0f, 4.0f), glm::vec3(90.0f, 0.0f, 90.0f), PuddleMesh, PuddleMaterial);
+		createGroundObstacle("12", glm::vec3(-1520.f, -2.50f, 0.0f), glm::vec3(1.0f, 2.0f, 2.0f), glm::vec3(90.0f, 0.0f, 0.0f), RockWallMesh1, RockWallMaterial);
+		createGroundObstacle("13", glm::vec3(-1530.f, -12.0f, -1.5f), glm::vec3(2.0f, 2.750f, 1.590f), glm::vec3(90.0f, 0.0f, -180.0f), HangingRockMesh, HangingRockMaterial);
+		createGroundObstacle("14", glm::vec3(-1540.f, -2.50f, 0.0f), glm::vec3(1.0f, 2.0f, 2.0f), glm::vec3(90.0f, 0.0f, 0.0f), RockWallMesh1, RockWallMaterial);
+		createGroundObstacle("15", glm::vec3(-1580.f, -4.0f, 0.0f), glm::vec3(5.0f, 5.0f, 5.0f), glm::vec3(90.0f, 0.0f, -168.0f), SignPostMesh, SignPostMaterial);
 
-
-
-		//createGroundObstacle("18", glm::vec3(-320.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 8 (small jump)
-		//createGroundObstacle("20", glm::vec3(-340.f, 0.0f, 3.0), glm::vec3(1.f, 1.f, 1.f), glm::vec3(90.f, 0.0f, 73.f), vinesMesh, vinesMaterial); // vine 6 (jump blocking)
-		//createGroundObstacle("24", glm::vec3(-380.f, 5.530f, 0.250f), glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(90.f, 0.0f, -25.f), vinesMesh, vinesMaterial); // vine 8 (squish blocking)
-		//createGroundObstacle("26", glm::vec3(-395.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 9 (tall jump)
-
-		/*
-		createGroundObstacle("1", glm::vec3(-450.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //red mushroom 1 (small jump)
-		createGroundObstacle("2", glm::vec3(-500.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //red mushroom 2 (small jump)
-		createGroundObstacle("3", glm::vec3(-550.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), tmMesh, tmMaterial); // tall mushroom 1 (small jump)
-		createGroundObstacle("4", glm::vec3(-600.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), bmMesh, bmMaterial); //branch mushroom 1 (small jump)
-
-		createGroundObstacle("5", glm::vec3(-650.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //red mushroom 3 (small jump)
-		createGroundObstacle("6", glm::vec3(-680.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //red mushroom 4 (small jump)
-
-		createGroundObstacle("7", glm::vec3(-710.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //red mushroom 5 (small jump)
-		createGroundObstacle("8", glm::vec3(-750.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), bmMesh, bmMaterial); //branch mushroom 2 (small jump)
-		*/
+		/*simple jump
+		* 
+			jump limit
+			jump limit(can fly)
+			double fly
+			Hangingrock
+			simple jump
+			simple jumpand hoop jump
+			puddle series 
+			small jump
+			hanging rock
+			simple jump
+			signpost
 
 		//Collisions
 
@@ -5869,7 +6045,7 @@ int main() {
 		//createCollision("271", -1150.f, 2.470f, 1.f, 2.f); //2y
 
 		//createCollision("281", -1198.98f, 1.560f, 1.f, 4.f); //4y
-
+		*/
 
 
 
@@ -7070,7 +7246,7 @@ int main() {
 			Crystal1Mesh = ResourceManager::CreateAsset<MeshResource>("Crystals1.obj");
 			Crystal2Mesh = ResourceManager::CreateAsset<MeshResource>("Crystals2.obj");
 			StalagmiteMesh = ResourceManager::CreateAsset<MeshResource>("Stalagmite.obj");
-			StalagtiteMesh = ResourceManager::CreateAsset<MeshResource>("Stalagite.obj");
+			StalagtiteMesh = ResourceManager::CreateAsset<MeshResource>("Stalagtite.obj");
 			GoldbarMesh = ResourceManager::CreateAsset<MeshResource>("Goldbar.obj");
 			GoldPile1Mesh = ResourceManager::CreateAsset<MeshResource>("GoldPile1.obj");
 			GoldPile2Mesh = ResourceManager::CreateAsset<MeshResource>("GoldPile2.obj");
@@ -7094,11 +7270,18 @@ int main() {
 
 			createGroundObstacle("1", glm::vec3(-1650.f, 0.0f, 0.215f), glm::vec3(6.f, 4.f, 8.f), glm::vec3(90.f, 0.0f, 80.0f), Crystal1Mesh, Crystal1BlueMaterial); //red mushroom 1 (small jump)
 			createGroundObstacle("2", glm::vec3(-1700.f, 0.0f, -0.f), glm::vec3(6.f, 3.f, 8.f), glm::vec3(90.f, 0.0f, -162.0f), Crystal2Mesh, Crystal2BlueMaterial); //red mushroom 2 (small jump)
+
+			createGroundObstacle("3", glm::vec3(-1650.f, 0.0f, 0.215f), glm::vec3(6.f, 4.f, 8.f), glm::vec3(90.f, 0.0f, 80.0f), Crystal1Mesh, Crystal1GreenMaterial); //red mushroom 1 (small jump)
+			createGroundObstacle("4", glm::vec3(-1700.f, 0.0f, -0.f), glm::vec3(6.f, 3.f, 8.f), glm::vec3(90.f, 0.0f, -162.0f), Crystal2Mesh, Crystal2GreenMaterial); //red mushroom 2 (small jump)
+
+			createGroundObstacle("5", glm::vec3(-1650.f, 0.0f, 0.215f), glm::vec3(6.f, 4.f, 8.f), glm::vec3(90.f, 0.0f, 80.0f), Crystal1Mesh, Crystal1PurpleMaterial); //red mushroom 1 (small jump)
+			createGroundObstacle("6", glm::vec3(-1650.f, 0.0f, 0.215f), glm::vec3(6.f, 4.f, 8.f), glm::vec3(90.f, 0.0f, 80.0f), Crystal1Mesh, Crystal1RedMaterial);
+			createGroundObstacle("7", glm::vec3(-1700.f, 0.0f, -0.f), glm::vec3(6.f, 3.f, 8.f), glm::vec3(90.f, 0.0f, -162.0f), Crystal2Mesh, Crystal2YellowMaterial); //red mushroom 2 (small jump)
 			//createGroundObstacle("3", glm::vec3(-1750.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), StalagmiteMesh, StalagmiteMaterial); // tall mushroom 1 (small jump)
 			//createGroundObstacle("4", glm::vec3(-1800.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), StalagtiteMesh, StalagtiteMaterial); //branch mushroom 1 (small jump)
 
-			createGroundObstacle("5", glm::vec3(-1850.f, 0.0f, 0.3f), glm::vec3(2.f, 2.f, 2.f), glm::vec3(90.f, 0.0f, 0.0f), GoldbarMesh, GoldBarMaterial); //red mushroom 3 (small jump)
-			createGroundObstacle("6", glm::vec3(-1900.f, 0.0f, -0.0), glm::vec3(4.f, 4.f, 2.f), glm::vec3(90.f, 0.0f, -71.0f), GoldPile1Mesh, GoldPile1Material); //red mushroom 4 (small jump)
+			createGroundObstacle("8", glm::vec3(-1850.f, 0.0f, 0.3f), glm::vec3(2.f, 2.f, 2.f), glm::vec3(90.f, 0.0f, 0.0f), GoldbarMesh, GoldBarMaterial); //red mushroom 3 (small jump)
+			createGroundObstacle("9", glm::vec3(-1900.f, 0.0f, -0.0), glm::vec3(4.f, 4.f, 2.f), glm::vec3(90.f, 0.0f, -71.0f), GoldPile1Mesh, GoldPile1Material); //red mushroom 4 (small jump)
 
 			//createGroundObstacle("7", glm::vec3(-2000.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), GoldPile2Mesh, GoldPile2Material); //red mushroom 5 (small jump)
 			//createGroundObstacle("8", glm::vec3(-2050.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), bmMesh, bmMaterial); //branch mushroom 2 (small jump)
@@ -7573,7 +7756,1240 @@ int main() {
 
 		}
 
+		/// Working Level ///									//////		Level 6	////////// scenevalue == 6
 
+		{
+		// Create an empty scene
+		scene = std::make_shared<Scene>();
+
+		// I hate this
+		scene->BaseShader = uboShader;
+
+		// Create our materials
+		Material::Sptr boxMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			boxMaterial->Name = "Box";
+			boxMaterial->MatShader = scene->BaseShader;
+			boxMaterial->Texture = boxTexture;
+			boxMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr PbarbugMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			PbarbugMaterial->Name = "minibug";
+			PbarbugMaterial->MatShader = scene->BaseShader;
+			PbarbugMaterial->Texture = PbarbugTex;
+			PbarbugMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr greenMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			greenMaterial->Name = "green";
+			greenMaterial->MatShader = scene->BaseShader;
+			greenMaterial->Texture = greenTex;
+			greenMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr bgMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			bgMaterial->Name = "bg";
+			bgMaterial->MatShader = scene->BaseShader;
+			bgMaterial->Texture = bgTexture;
+			bgMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr grassMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			grassMaterial->Name = "Grass";
+			grassMaterial->MatShader = scene->BaseShader;
+			grassMaterial->Texture = grassTexture;
+			grassMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr winMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			winMaterial->Name = "win";
+			winMaterial->MatShader = scene->BaseShader;
+			winMaterial->Texture = winTexture;
+			winMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr ladybugMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			ladybugMaterial->Name = "lbo";
+			ladybugMaterial->MatShader = scene->BaseShader;
+			ladybugMaterial->Texture = ladybugTexture;
+			ladybugMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr monkeyMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			monkeyMaterial->Name = "Monkey";
+			monkeyMaterial->MatShader = scene->BaseShader;
+			monkeyMaterial->Texture = monkeyTex;
+			monkeyMaterial->Shininess = 256.0f;
+
+		}
+
+		Material::Sptr mushroomMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			mushroomMaterial->Name = "Mushroom";
+			mushroomMaterial->MatShader = scene->BaseShader;
+			mushroomMaterial->Texture = mushroomTexture;
+			mushroomMaterial->Shininess = 256.0f;
+
+		}
+
+		Material::Sptr vinesMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			vinesMaterial->Name = "vines";
+			vinesMaterial->MatShader = scene->BaseShader;
+			vinesMaterial->Texture = vinesTexture;
+			vinesMaterial->Shininess = 256.0f;
+
+		}
+
+		Material::Sptr cobwebMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			cobwebMaterial->Name = "cobweb";
+			cobwebMaterial->MatShader = scene->BaseShader;
+			cobwebMaterial->Texture = cobwebTexture;
+			cobwebMaterial->Shininess = 256.0f;
+
+		}
+
+		Material::Sptr PanelMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			PanelMaterial->Name = "Panel";
+			PanelMaterial->MatShader = scene->BaseShader;
+			PanelMaterial->Texture = PanelTex;
+			PanelMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr ResumeMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			ResumeMaterial->Name = "Resume";
+			ResumeMaterial->MatShader = scene->BaseShader;
+			ResumeMaterial->Texture = ResumeTex;
+			ResumeMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr MainMenuMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			MainMenuMaterial->Name = "Main Menu";
+			MainMenuMaterial->MatShader = scene->BaseShader;
+			MainMenuMaterial->Texture = MainMenuTex;
+			MainMenuMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr PauseMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			PauseMaterial->Name = "Pause";
+			PauseMaterial->MatShader = scene->BaseShader;
+			PauseMaterial->Texture = PauseTex;
+			PauseMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr ButtonMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			ButtonMaterial->Name = "Button";
+			ButtonMaterial->MatShader = scene->BaseShader;
+			ButtonMaterial->Texture = ButtonTex;
+			ButtonMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr FilterMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			FilterMaterial->Name = "Button Filter";
+			FilterMaterial->MatShader = scene->BaseShader;
+			FilterMaterial->Texture = FilterTex;
+			FilterMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr WinnerMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			WinnerMaterial->Name = "WinnerLogo";
+			WinnerMaterial->MatShader = scene->BaseShader;
+			WinnerMaterial->Texture = WinnerTex;
+			WinnerMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr LoserMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			LoserMaterial->Name = "LoserLogo";
+			LoserMaterial->MatShader = scene->BaseShader;
+			LoserMaterial->Texture = LoserTex;
+			LoserMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr ReplayMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			ReplayMaterial->Name = "Replay Text";
+			ReplayMaterial->MatShader = scene->BaseShader;
+			ReplayMaterial->Texture = ReplayTex;
+			ReplayMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr BranchMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			BranchMaterial->Name = "Branch";
+			BranchMaterial->MatShader = scene->BaseShader;
+			BranchMaterial->Texture = BranchTex;
+			BranchMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr LogMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			LogMaterial->Name = "Log";
+			LogMaterial->MatShader = scene->BaseShader;
+			LogMaterial->Texture = LogTex;
+			LogMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr PlantMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			PlantMaterial->Name = "Plant";
+			PlantMaterial->MatShader = scene->BaseShader;
+			PlantMaterial->Texture = PlantTex;
+			PlantMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr SunflowerMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			SunflowerMaterial->Name = "Sunflower";
+			SunflowerMaterial->MatShader = scene->BaseShader;
+			SunflowerMaterial->Texture = SunflowerTex;
+			SunflowerMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr ToadMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			ToadMaterial->Name = "Toad";
+			ToadMaterial->MatShader = scene->BaseShader;
+			ToadMaterial->Texture = ToadTex;
+			ToadMaterial->Shininess = 2.0f;
+		}
+		Material::Sptr BlankMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			BlankMaterial->Name = "Blank";
+			BlankMaterial->MatShader = scene->BaseShader;
+			BlankMaterial->Texture = BlankTex;
+			BlankMaterial->Shininess = 2.0f;
+		}
+		Material::Sptr ForegroundMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			ForegroundMaterial->Name = "Foreground";
+			ForegroundMaterial->MatShader = scene->BaseShader;
+			ForegroundMaterial->Texture = ForegroundTex;
+			ForegroundMaterial->Shininess = 2.0f;
+		}
+		Material::Sptr rockMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			rockMaterial->Name = "Rock";
+			rockMaterial->MatShader = scene->BaseShader;
+			rockMaterial->Texture = RockTex;
+			rockMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr twigMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			twigMaterial->Name = "twig";
+			twigMaterial->MatShader = scene->BaseShader;
+			twigMaterial->Texture = twigTex;
+			twigMaterial->Shininess = 2.0f;
+		}
+		Material::Sptr frogMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			frogMaterial->Name = "frog";
+			frogMaterial->MatShader = scene->BaseShader;
+			frogMaterial->Texture = frogTex;
+			frogMaterial->Shininess = 2.0f;
+		}
+		Material::Sptr tmMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			tmMaterial->Name = "tallmushroom";
+			tmMaterial->MatShader = scene->BaseShader;
+			tmMaterial->Texture = tmTex;
+			tmMaterial->Shininess = 2.0f;
+		}
+		Material::Sptr bmMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			bmMaterial->Name = "branchmushroom";
+			bmMaterial->MatShader = scene->BaseShader;
+			bmMaterial->Texture = bmTex;
+			bmMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr PBMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			PBMaterial->Name = "PauseButton";
+			PBMaterial->MatShader = scene->BaseShader;
+			PBMaterial->Texture = PBTex;
+			PBMaterial->Shininess = 2.0f;
+		}
+		Material::Sptr BGMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			BGMaterial->Name = "BG";
+			BGMaterial->MatShader = scene->BaseShader;
+			BGMaterial->Texture = MBGTex;
+			BGMaterial->Shininess = 2.0f;
+		}
+		Material::Sptr BGGrassMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			BGGrassMaterial->Name = "BGGrass";
+			BGGrassMaterial->MatShader = scene->BaseShader;
+			BGGrassMaterial->Texture = BGGrassTex;
+			BGGrassMaterial->Shininess = 2.0f;
+		}
+		Material::Sptr ProgressBarMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			ProgressBarMaterial->Name = "ProgressBar";
+			ProgressBarMaterial->MatShader = scene->BaseShader;
+			ProgressBarMaterial->Texture = ProgressTex;
+			ProgressBarMaterial->Shininess = 2.0f;
+		}
+		Material::Sptr grass1Material = ResourceManager::CreateAsset<Material>();
+		{
+			grass1Material->Name = "grass1";
+			grass1Material->MatShader = scene->BaseShader;
+			grass1Material->Texture = Grass1Tex;
+			grass1Material->Shininess = 2.0f;
+		}
+		Material::Sptr grass2Material = ResourceManager::CreateAsset<Material>();
+		{
+			grass2Material->Name = "grass2";
+			grass2Material->MatShader = scene->BaseShader;
+			grass2Material->Texture = Grass2Tex;
+			grass2Material->Shininess = 2.0f;
+		}
+		Material::Sptr grass3Material = ResourceManager::CreateAsset<Material>();
+		{
+			grass3Material->Name = "grass3";
+			grass3Material->MatShader = scene->BaseShader;
+			grass3Material->Texture = Grass3Tex;
+			grass3Material->Shininess = 2.0f;
+		}
+		Material::Sptr grass4Material = ResourceManager::CreateAsset<Material>();
+		{
+			grass4Material->Name = "grass4";
+			grass4Material->MatShader = scene->BaseShader;
+			grass4Material->Texture = Grass4Tex;
+			grass4Material->Shininess = 2.0f;
+		}
+		Material::Sptr grass5Material = ResourceManager::CreateAsset<Material>();
+		{
+			grass5Material->Name = "grass5";
+			grass5Material->MatShader = scene->BaseShader;
+			grass5Material->Texture = Grass5Tex;
+			grass5Material->Shininess = 2.0f;
+		}
+		Material::Sptr ExitTreeMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			ExitTreeMaterial->Name = "ExitTree";
+			ExitTreeMaterial->MatShader = scene->BaseShader;
+			ExitTreeMaterial->Texture = ExitTreeTex;
+			ExitTreeMaterial->Shininess = 2.0f;
+		}
+		Material::Sptr LStextMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			LStextMaterial->Name = "LStext";
+			LStextMaterial->MatShader = scene->BaseShader;
+			LStextMaterial->Texture = LStextTex;
+			LStextMaterial->Shininess = 2.0f;
+		}
+		Material::Sptr ExitRockMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			ExitRockMaterial->Name = "ExitRock";
+			ExitRockMaterial->MatShader = scene->BaseShader;
+			ExitRockMaterial->Texture = ExitRockTex;
+			ExitRockMaterial->Shininess = 2.0f;
+		}
+
+
+		Material::Sptr FrogBodyMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			FrogBodyMaterial->Name = "FrogBody";
+			FrogBodyMaterial->MatShader = scene->BaseShader;
+			FrogBodyMaterial->Texture = FrogBodyTex;
+			FrogBodyMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr FrogHeadTopMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			FrogHeadTopMaterial->Name = "FrogHeadTop";
+			FrogHeadTopMaterial->MatShader = scene->BaseShader;
+			FrogHeadTopMaterial->Texture = FrogHeadTopTex;
+			FrogHeadTopMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr FrogHeadBotMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			FrogHeadBotMaterial->Name = "FrogHeadBot";
+			FrogHeadBotMaterial->MatShader = scene->BaseShader;
+			FrogHeadBotMaterial->Texture = FrogHeadBotTex;
+			FrogHeadBotMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr FrogTongueMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			FrogTongueMaterial->Name = "FrogTongue";
+			FrogTongueMaterial->MatShader = scene->BaseShader;
+			FrogTongueMaterial->Texture = FrogTongueTex;
+			FrogTongueMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr BushTransitionMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			BushTransitionMaterial->Name = "BushTransition";
+			BushTransitionMaterial->MatShader = scene->BaseShader;
+			BushTransitionMaterial->Texture = BushTransitionTex;
+			BushTransitionMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr SignPostMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			SignPostMaterial->Name = "SignPost";
+			SignPostMaterial->MatShader = scene->BaseShader;
+			SignPostMaterial->Texture = SignPostTex;
+			SignPostMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr PuddleMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			PuddleMaterial->Name = "Puddle";
+			PuddleMaterial->MatShader = scene->BaseShader;
+			PuddleMaterial->Texture = PuddleTex;
+			PuddleMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr CampfireMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			CampfireMaterial->Name = "Campfire";
+			CampfireMaterial->MatShader = scene->BaseShader;
+			CampfireMaterial->Texture = CampfireTex;
+			CampfireMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr HangingRockMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			HangingRockMaterial->Name = "HangingRock";
+			HangingRockMaterial->MatShader = scene->BaseShader;
+			HangingRockMaterial->Texture = HangingRockTex;
+			HangingRockMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr RockPileMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			RockPileMaterial->Name = "RockPile";
+			RockPileMaterial->MatShader = scene->BaseShader;
+			RockPileMaterial->Texture = RockPileTex;
+			RockPileMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr RockTunnelMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			RockTunnelMaterial->Name = "RockTunnel";
+			RockTunnelMaterial->MatShader = scene->BaseShader;
+			RockTunnelMaterial->Texture = RockTunnelTex;
+			RockTunnelMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr RockWallMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			RockWallMaterial->Name = "RockWall";
+			RockWallMaterial->MatShader = scene->BaseShader;
+			RockWallMaterial->Texture = RockWallTex;
+			RockWallMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr MineBackdropMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			MineBackdropMaterial->Name = "Backdrop";
+			MineBackdropMaterial->MatShader = scene->BaseShader;
+			MineBackdropMaterial->Texture = MineBackgroundTex;
+			MineBackdropMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr MineForegroundMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			MineForegroundMaterial->Name = "Foreground";
+			MineForegroundMaterial->MatShader = scene->BaseShader;
+			MineForegroundMaterial->Texture = MineForegroundTex;
+			MineForegroundMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr MineBackgroundMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			MineBackgroundMaterial->Name = "Background";
+			MineBackgroundMaterial->MatShader = scene->BaseShader;
+			MineBackgroundMaterial->Texture = MineUVTex;
+			MineBackgroundMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr CaveEntranceMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			CaveEntranceMaterial->Name = "CaveEntrance";
+			CaveEntranceMaterial->MatShader = scene->BaseShader;
+			CaveEntranceMaterial->Texture = CaveEntranceTex;
+			CaveEntranceMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr GoldBarMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			GoldBarMaterial->Name = "GoldBar";
+			GoldBarMaterial->MatShader = scene->BaseShader;
+			GoldBarMaterial->Texture = GoldBarTex;
+			GoldBarMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr GoldPile1Material = ResourceManager::CreateAsset<Material>();
+		{
+			GoldPile1Material->Name = "GoldPile1";
+			GoldPile1Material->MatShader = scene->BaseShader;
+			GoldPile1Material->Texture = GoldPile1Tex;
+			GoldPile1Material->Shininess = 2.0f;
+		}
+
+		Material::Sptr GoldPile2Material = ResourceManager::CreateAsset<Material>();
+		{
+			GoldPile2Material->Name = "GoldPile2";
+			GoldPile2Material->MatShader = scene->BaseShader;
+			GoldPile2Material->Texture = GoldPile2Tex;
+			GoldPile2Material->Shininess = 2.0f;
+		}
+
+		Material::Sptr Crystal1BlueMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			Crystal1BlueMaterial->Name = "Crystal1Blue";
+			Crystal1BlueMaterial->MatShader = scene->BaseShader;
+			Crystal1BlueMaterial->Texture = Crystal1BlueTex;
+			Crystal1BlueMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr Crystal1GreenMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			Crystal1GreenMaterial->Name = "Crystal1Green";
+			Crystal1GreenMaterial->MatShader = scene->BaseShader;
+			Crystal1GreenMaterial->Texture = Crystal1GreenTex;
+			Crystal1GreenMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr Crystal1PurpleMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			Crystal1PurpleMaterial->Name = "Crystal1Purple";
+			Crystal1PurpleMaterial->MatShader = scene->BaseShader;
+			Crystal1PurpleMaterial->Texture = Crystal1PurpleTex;
+			Crystal1PurpleMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr Crystal1RedMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			Crystal1RedMaterial->Name = "Crystal1Red";
+			Crystal1RedMaterial->MatShader = scene->BaseShader;
+			Crystal1RedMaterial->Texture = Crystal1RedTex;
+			Crystal1RedMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr Crystal2BlueMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			Crystal2BlueMaterial->Name = "Crystal2Blue";
+			Crystal2BlueMaterial->MatShader = scene->BaseShader;
+			Crystal2BlueMaterial->Texture = Crystal2BlueTex;
+			Crystal2BlueMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr Crystal2GreenMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			Crystal2GreenMaterial->Name = "Crystal2Green";
+			Crystal2GreenMaterial->MatShader = scene->BaseShader;
+			Crystal2GreenMaterial->Texture = Crystal2GreenTex;
+			Crystal2GreenMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr Crystal2YellowMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			Crystal2YellowMaterial->Name = "Crystal2Yellow";
+			Crystal2YellowMaterial->MatShader = scene->BaseShader;
+			Crystal2YellowMaterial->Texture = Crystal2YellowTex;
+			Crystal2YellowMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr StalagmiteMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			StalagmiteMaterial->Name = "Stalagmite";
+			StalagmiteMaterial->MatShader = scene->BaseShader;
+			StalagmiteMaterial->Texture = StalagmiteTex;
+			StalagmiteMaterial->Shininess = 2.0f;
+		}
+
+		Material::Sptr StalagtiteMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			StalagtiteMaterial->Name = "Stalagtite";
+			StalagtiteMaterial->MatShader = scene->BaseShader;
+			StalagtiteMaterial->Texture = StalagtiteTex;
+			StalagtiteMaterial->Shininess = 2.0f;
+		}
+
+		// Create some lights for our scene
+		scene->Lights.resize(31);
+		scene->Lights[0].Position = glm::vec3(-400.0f - 1600.f, 1.0f, 40.0f);
+		scene->Lights[0].Color = glm::vec3(1.f, 0.9867f, 0.8463f);
+		scene->Lights[0].Range = 200.0f;
+
+		scene->Lights[1].Position = glm::vec3(-450.f - 1600.f, 0.0f, 40.0f);
+		scene->Lights[1].Color = glm::vec3(1.f, 0.9867f, 0.8463f);
+		scene->Lights[1].Range = 200.0f;
+
+		scene->Lights[2].Position = glm::vec3(-500.f - 1600.f, 1.0f, 40.0f);
+		scene->Lights[2].Color = glm::vec3(1.f, 0.9867f, 0.8463f);
+		scene->Lights[2].Range = 200.0f;
+
+		scene->Lights[3].Position = glm::vec3(-550.0f - 1600.f, 1.0f, 40.0f);
+		scene->Lights[3].Color = glm::vec3(1.f, 0.9867f, 0.8463f);
+		scene->Lights[3].Range = 200.0f;
+
+		scene->Lights[4].Position = glm::vec3(-500.0f - 1600.f, 1.0f, 40.0f);
+		scene->Lights[4].Color = glm::vec3(1.f, 0.9867f, 0.8463f);
+		scene->Lights[4].Range = 200.0f;
+
+		scene->Lights[5].Position = glm::vec3(-550.0f - 1600.f, 1.0f, 40.0f);
+		scene->Lights[5].Color = glm::vec3(1.f, 0.9867f, 0.8463f);
+		scene->Lights[5].Range = 200.0f;
+
+		scene->Lights[6].Position = glm::vec3(-600.0f - 1600.f, 1.0f, 40.0f);
+		scene->Lights[6].Color = glm::vec3(1.f, 0.9867f, 0.8463f);
+		scene->Lights[6].Range = 200.0f;
+
+		scene->Lights[7].Position = glm::vec3(-650.0f - 1600.f, 1.0f, 40.0f);
+		scene->Lights[7].Color = glm::vec3(1.f, 0.9867f, 0.8463f);
+		scene->Lights[7].Range = 200.0f;
+
+		scene->Lights[8].Position = glm::vec3(-700.0f - 1600.f, 1.0f, 40.0f);
+		scene->Lights[8].Color = glm::vec3(1.f, 0.9867f, 0.8463f);
+		scene->Lights[8].Range = 200.0f;
+
+		scene->Lights[9].Position = glm::vec3(-750.0f - 1600.f, 1.0f, 40.0f);
+		scene->Lights[9].Color = glm::vec3(1.f, 0.9867f, 0.8463f);
+		scene->Lights[9].Range = 200.0f;
+
+		scene->Lights[10].Position = glm::vec3(-800.0f - 1600.f, 1.0f, 40.0f);
+		scene->Lights[10].Color = glm::vec3(1.f, 0.9867f, 0.8463f);
+		scene->Lights[10].Range = 200.0f;
+
+		scene->Lights[11].Position = glm::vec3(-400.0f - 1600.f, 1.0f, 40.0f);
+		scene->Lights[11].Color = glm::vec3(0.8268f, 0.6162f, 0.2301f);
+		scene->Lights[11].Range = 1000.0f;
+
+		scene->Lights[12].Position = glm::vec3(-450.f - 1600.f, -90.0f, 150.0f);
+		scene->Lights[12].Color = glm::vec3(0.8268f, 0.6162f, 0.2301f);
+		scene->Lights[12].Range = 1000.0f;
+
+		scene->Lights[13].Position = glm::vec3(-500.f - 1600.f, -90.0f, 150.0f);
+		scene->Lights[13].Color = glm::vec3(0.8268f, 0.6162f, 0.2301f);
+		scene->Lights[13].Range = 1000.0f;
+
+		scene->Lights[14].Position = glm::vec3(-550.0f - 1600.f, -90.0f, 150.0f);
+		scene->Lights[14].Color = glm::vec3(0.8268f, 0.6162f, 0.2301f);
+		scene->Lights[14].Range = 1000.0f;
+
+		scene->Lights[15].Position = glm::vec3(-500.0f - 1600.f, -90.0f, 150.0f);
+		scene->Lights[15].Color = glm::vec3(0.8268f, 0.6162f, 0.2301f);
+		scene->Lights[15].Range = 1000.0f;
+
+		scene->Lights[16].Position = glm::vec3(-550.0f - 1600.f, -90.0f, 150.0f);
+		scene->Lights[16].Color = glm::vec3(0.8268f, 0.6162f, 0.2301f);
+		scene->Lights[16].Range = 1000.0f;
+
+		scene->Lights[17].Position = glm::vec3(-600.0f - 1600.f, -90.0f, 150.0f);
+		scene->Lights[17].Color = glm::vec3(0.8268f, 0.6162f, 0.2301f);
+		scene->Lights[17].Range = 1000.0f;
+
+		scene->Lights[18].Position = glm::vec3(-650.0f - 1600.f, -90.0f, 150.0f);
+		scene->Lights[18].Color = glm::vec3(0.8268f, 0.6162f, 0.2301f);
+		scene->Lights[18].Range = 1000.0f;
+
+		scene->Lights[19].Position = glm::vec3(-700.0f - 1600.f, -90.0f, 150.0f);
+		scene->Lights[19].Color = glm::vec3(0.8268f, 0.6162f, 0.2301f);
+		scene->Lights[19].Range = 1000.0f;
+
+		scene->Lights[20].Position = glm::vec3(-750.0f - 1600.f, -90.0f, 150.0f);
+		scene->Lights[20].Color = glm::vec3(0.8268f, 0.6162f, 0.2301f);
+		scene->Lights[20].Range = 1000.0f;
+
+		scene->Lights[21].Position = glm::vec3(-800.0f - 1600.f, -90.0f, 150.0f);
+		scene->Lights[21].Color = glm::vec3(0.8268f, 0.6162f, 0.2301f);
+		scene->Lights[21].Range = 1000.0f;
+
+		scene->Lights[22].Position = glm::vec3(-400.0f - 1600.f, 20.0f, 5.0f);
+		scene->Lights[22].Color = glm::vec3(1.f, 1.f, 1.f);
+		scene->Lights[22].Range = 150.0f;
+
+		scene->Lights[23].Position = glm::vec3(-450.0f - 1600.f, 20.0f, 5.0f);
+		scene->Lights[23].Color = glm::vec3(1.f, 1.f, 1.f);
+		scene->Lights[23].Range = 150.0f;
+
+		scene->Lights[24].Position = glm::vec3(-500.0f - 1600.f, 20.0f, 5.0f);
+		scene->Lights[24].Color = glm::vec3(1.f, 1.f, 1.f);
+		scene->Lights[24].Range = 150.0f;
+
+		scene->Lights[25].Position = glm::vec3(-550.0f - 1600.f, 20.0f, 5.0f);
+		scene->Lights[25].Color = glm::vec3(1.f, 1.f, 1.f);
+		scene->Lights[25].Range = 150.0f;
+
+		scene->Lights[26].Position = glm::vec3(-600.0f - 1600.f, 20.0f, 5.0f);
+		scene->Lights[26].Color = glm::vec3(1.f, 1.f, 1.f);
+		scene->Lights[26].Range = 150.0f;
+
+		scene->Lights[27].Position = glm::vec3(-650.0f - 1600.f, 20.0f, 5.0f);
+		scene->Lights[27].Color = glm::vec3(1.f, 1.f, 1.f);
+		scene->Lights[27].Range = 150.0f;
+
+		scene->Lights[28].Position = glm::vec3(-700.0f - 1600.f, 20.0f, 5.0f);
+		scene->Lights[28].Color = glm::vec3(1.f, 1.f, 1.f);
+		scene->Lights[28].Range = 150.0f;
+
+		scene->Lights[29].Position = glm::vec3(-750.0f - 1600.f, 20.0f, 5.0f);
+		scene->Lights[29].Color = glm::vec3(1.f, 1.f, 1.f);
+		scene->Lights[29].Range = 150.0f;
+
+		scene->Lights[30].Position = glm::vec3(-800.0f - 1600.f, 20.0f, 5.0f);
+		scene->Lights[30].Color = glm::vec3(1.f, 1.f, 1.f);
+		scene->Lights[30].Range = 150.0f;
+
+		// We'll create a mesh that is a simple plane that we can resize later
+		planeMesh = ResourceManager::CreateAsset<MeshResource>();
+		cubeMesh = ResourceManager::CreateAsset<MeshResource>("cube.obj");
+
+		mushroomMesh = ResourceManager::CreateAsset<MeshResource>("Mushroom.obj");
+		tmMesh = ResourceManager::CreateAsset<MeshResource>("tm.obj");
+		bmMesh = ResourceManager::CreateAsset<MeshResource>("bm.obj");
+		ToadMesh = ResourceManager::CreateAsset<MeshResource>("ToadStool.obj");
+
+
+		cobwebMesh = ResourceManager::CreateAsset<MeshResource>("Cobweb.obj");
+		BranchMesh = ResourceManager::CreateAsset<MeshResource>("Branch.obj");
+		LogMesh = ResourceManager::CreateAsset<MeshResource>("Log.obj");
+		Plant1Mesh = ResourceManager::CreateAsset<MeshResource>("PLANT.obj");
+		Plant2Mesh = ResourceManager::CreateAsset<MeshResource>("Plant2.obj");
+		Plant3Mesh = ResourceManager::CreateAsset<MeshResource>("Plant3.obj");
+
+
+
+		ladybugMesh = ResourceManager::CreateAsset<MeshResource>("lbo.obj");
+		frogMesh = ResourceManager::CreateAsset<MeshResource>("frog.obj");
+
+		BGMineMesh = ResourceManager::CreateAsset<MeshResource>("MineBackground.obj");
+		BGRockMesh = ResourceManager::CreateAsset<MeshResource>("RockBackground.obj");
+		BGMesh = ResourceManager::CreateAsset<MeshResource>("Background.obj");
+		ExitTreeMesh = ResourceManager::CreateAsset<MeshResource>("ExitTree.obj");
+		ExitRockMesh = ResourceManager::CreateAsset<MeshResource>("ExitRock.obj");
+
+		CaveEntranceMesh = ResourceManager::CreateAsset<MeshResource>("CaveEntrance.obj");
+		Crystal1Mesh = ResourceManager::CreateAsset<MeshResource>("Crystals1.obj");
+		Crystal2Mesh = ResourceManager::CreateAsset<MeshResource>("Crystals2.obj");
+		StalagmiteMesh = ResourceManager::CreateAsset<MeshResource>("Stalagmite.obj");
+		StalagtiteMesh = ResourceManager::CreateAsset<MeshResource>("Stalagite.obj");
+		GoldbarMesh = ResourceManager::CreateAsset<MeshResource>("Goldbar.obj");
+		GoldPile1Mesh = ResourceManager::CreateAsset<MeshResource>("GoldPile1.obj");
+		GoldPile2Mesh = ResourceManager::CreateAsset<MeshResource>("GoldPile2.obj");
+
+
+		planeMesh->AddParam(MeshBuilderParam::CreatePlane(ZERO, UNIT_Z, UNIT_X, glm::vec2(1.0f)));
+		planeMesh->GenerateMesh();
+
+
+
+		//Background Assets
+		//createBackgroundAsset("16", glm::vec3(-387.060f - 400.f, 1.530f, 0.550), 0.05, glm::vec3(83.f, -7.0f, 90.0f), frogMesh, frogMaterial);
+
+		//Obstacles
+
+		//createGroundObstacle("18", glm::vec3(-320.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 8 (small jump)
+		//createGroundObstacle("20", glm::vec3(-340.f, 0.0f, 3.0), glm::vec3(1.f, 1.f, 1.f), glm::vec3(90.f, 0.0f, 73.f), vinesMesh, vinesMaterial); // vine 6 (jump blocking)
+		//createGroundObstacle("24", glm::vec3(-380.f, 5.530f, 0.250f), glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(90.f, 0.0f, -25.f), vinesMesh, vinesMaterial); // vine 8 (squish blocking)
+		//createGroundObstacle("26", glm::vec3(-395.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 9 (tall jump)
+
+
+		createGroundObstacle("1", glm::vec3(-1650.f, 0.0f, 0.215f), glm::vec3(6.f, 4.f, 8.f), glm::vec3(90.f, 0.0f, 80.0f), Crystal1Mesh, Crystal1BlueMaterial); //red mushroom 1 (small jump)
+		createGroundObstacle("2", glm::vec3(-1700.f, 0.0f, -0.f), glm::vec3(6.f, 3.f, 8.f), glm::vec3(90.f, 0.0f, -162.0f), Crystal2Mesh, Crystal2BlueMaterial); //red mushroom 2 (small jump)
+		//createGroundObstacle("3", glm::vec3(-1750.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), StalagmiteMesh, StalagmiteMaterial); // tall mushroom 1 (small jump)
+		//createGroundObstacle("4", glm::vec3(-1800.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), StalagtiteMesh, StalagtiteMaterial); //branch mushroom 1 (small jump)
+
+		createGroundObstacle("5", glm::vec3(-1850.f, 0.0f, 0.3f), glm::vec3(2.f, 2.f, 2.f), glm::vec3(90.f, 0.0f, 0.0f), GoldbarMesh, GoldBarMaterial); //red mushroom 3 (small jump)
+		createGroundObstacle("6", glm::vec3(-1900.f, 0.0f, -0.0), glm::vec3(4.f, 4.f, 2.f), glm::vec3(90.f, 0.0f, -71.0f), GoldPile1Mesh, GoldPile1Material); //red mushroom 4 (small jump)
+
+		//createGroundObstacle("7", glm::vec3(-2000.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), GoldPile2Mesh, GoldPile2Material); //red mushroom 5 (small jump)
+		//createGroundObstacle("8", glm::vec3(-2050.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), bmMesh, bmMaterial); //branch mushroom 2 (small jump)
+
+
+		//Collisions
+
+		//mushroom 8 collision
+	//	createCollision("101", -19.660f, 1.560f, 1.f, 1.f);
+	//	createCollision("102", -20.410f, 1.560f, 1.f, 1.f);
+	//	createCollision("103", -19.970f, 1.860f, 1.f, 1.f);
+	//	createCollision("104", -20.190f, 0.450f, 1.f, 1.f);
+
+		// vine 6 collisions
+		//createCollision("51", -333.30f, 11.f, 0.5f, 5.5f);
+		//createCollision("52", -340.30f, 11.f, 0.5f, 5.5f);
+		//createCollision("53", -336.8f, 6.f, 4.0f, 0.5f);
+		//createCollision("54", -336.8f, 17.f, 4.0f, 0.5f);
+
+		// squish collision
+		//createCollision("57", -379.780f, 10.4f, 0.420f, 10.f);
+
+		//cobweb collisions
+		//createCollision("58", -395.f, 1.63f, 1.f, 7.f);
+
+
+
+
+		//3D Backgrounds
+		createGroundObstacle("27", glm::vec3(-292.3f - 1600.f, -53.250f, -4.5f), glm::vec3(6.f, 12.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMineMesh, MineBackgroundMaterial);
+		createGroundObstacle("28", glm::vec3(-400.f - 1600.f, -53.250f, -4.5f), glm::vec3(6.f, 12.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMineMesh, MineBackgroundMaterial);
+		createGroundObstacle("29", glm::vec3(-507.7f - 1600.f, -53.250f, -4.5f), glm::vec3(6.f, 12.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMineMesh, MineBackgroundMaterial);
+
+		createGroundObstacle("30", glm::vec3(-615.4f - 1600.f, -53.250f, -4.5f), glm::vec3(6.f, 12.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMineMesh, MineBackgroundMaterial);
+		createGroundObstacle("31", glm::vec3(-723.1f - 1600.f, -53.250f, -4.5f), glm::vec3(6.f, 12.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMineMesh, MineBackgroundMaterial);
+		createGroundObstacle("32", glm::vec3(-830.8f - 1600.f, -53.250f, -4.5f), glm::vec3(6.f, 12.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMineMesh, MineBackgroundMaterial);
+		createGroundObstacle("26", glm::vec3(-938.2f - 1600.f, -53.250f, -4.5f), glm::vec3(6.f, 12.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMineMesh, MineBackgroundMaterial);
+
+		//2DBackGrounds
+		createGroundObstacle("33", glm::vec3(-75.f - 1600.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineBackdropMaterial);
+		createGroundObstacle("34", glm::vec3(-450.f - 1600.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineBackdropMaterial);
+		createGroundObstacle("35", glm::vec3(-825.f - 1600.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineBackdropMaterial);
+		createGroundObstacle("36", glm::vec3(-2400.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineBackdropMaterial);
+		createGroundObstacle("37", glm::vec3(-2550.f - 400.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineBackdropMaterial);
+
+		//Exit Rock
+		createGroundObstacle("58", glm::vec3(-409.f - 800.f - 1200.f, -1.f, 0.f), glm::vec3(2.f, 2.f, 1.f), glm::vec3(90.0f, 0.0f, -68.f), CaveEntranceMesh, CaveEntranceMaterial);
+
+		//Foreground 
+		createGroundObstacle("59", glm::vec3(40.f - 800.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+		createGroundObstacle("60", glm::vec3(0.f - 800.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+		createGroundObstacle("61", glm::vec3(-40.f - 800.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+		createGroundObstacle("62", glm::vec3(-80.f - 800.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+		createGroundObstacle("63", glm::vec3(-120.f - 800.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+		createGroundObstacle("64", glm::vec3(-160.f - 800.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+
+		createGroundObstacle("65", glm::vec3(-200.f - 800.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+		createGroundObstacle("66", glm::vec3(-240.f - 800.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+		createGroundObstacle("67", glm::vec3(-280.f - 800.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+		createGroundObstacle("68", glm::vec3(-320.f - 800.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+		createGroundObstacle("69", glm::vec3(-360.f - 800.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+		createGroundObstacle("70", glm::vec3(-400.f - 800.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+
+
+
+
+
+
+
+
+
+		// Set up the scene's camera
+		GameObject::Sptr camera = scene->CreateGameObject("Main Camera");
+		{
+			camera->SetPostion(glm::vec3(0, 6.8, 2));
+			camera->SetRotation(glm::vec3(90, 0, -180));
+			camera->SetScale(glm::vec3(0.8f, 0.8f, 0.8f));
+			camera->LookAt(glm::vec3(0.0f));
+
+			Camera::Sptr cam = camera->Add<Camera>();
+
+			// Make sure that the camera is set as the scene's main camera!
+			scene->MainCamera = cam;
+		}
+
+		GameObject::Sptr plane5 = scene->CreateGameObject("plane5");
+		{
+			//under 1
+			// Scale up the plane
+			plane5->SetPostion(glm::vec3(-48.f, 0.f, -7.f));
+			plane5->SetScale(glm::vec3(50.0F));
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = plane5->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(winMaterial);
+
+			// Attach a plane collider that extends infinitely along the X/Y axis
+			RigidBody::Sptr physics = plane5->Add<RigidBody>(/*static by default*/);
+			physics->AddCollider(PlaneCollider::Create());
+		}
+
+
+		GameObject::Sptr player = scene->CreateGameObject("player");
+		{
+			// Set position in the scene
+			player->SetPostion(glm::vec3(-2006.f, 0.0f, 1.0f));
+			player->SetScale(glm::vec3(1.0f, 1.0f, 1.0f));
+			player->SetScale(glm::vec3(0.5f, 0.5f, 0.5f));
+
+			// Add some behaviour that relies on the physics body
+			//player->Add<JumpBehaviour>(player->GetPosition());
+			//player->Get<JumpBehaviour>(player->GetPosition());
+			// Create and attach a renderer for the monkey
+			RenderComponent::Sptr renderer = player->Add<RenderComponent>();
+			renderer->SetMesh(ladybugMesh);
+			renderer->SetMaterial(ladybugMaterial);
+
+			collisions.push_back(CollisionRect(player->GetPosition(), 1.0f, 1.0f, 0));
+
+			// Add a dynamic rigid body to this monkey
+			RigidBody::Sptr physics = player->Add<RigidBody>(RigidBodyType::Dynamic);
+			physics->AddCollider(ConvexMeshCollider::Create());
+
+
+			// We'll add a behaviour that will interact with our trigger volumes
+			MaterialSwapBehaviour::Sptr triggerInteraction = player->Add<MaterialSwapBehaviour>();
+			triggerInteraction->EnterMaterial = boxMaterial;
+			triggerInteraction->ExitMaterial = monkeyMaterial;
+		}
+		GameObject::Sptr jumpingObstacle = scene->CreateGameObject("Trigger2");
+		{
+			// Set and rotation position in the scene
+			jumpingObstacle->SetPostion(glm::vec3(40.f, 0.0f, 1.0f));
+			jumpingObstacle->SetRotation(glm::vec3(0.0f, 0.0f, 0.0f));
+			jumpingObstacle->SetScale(glm::vec3(0.5f, 0.5f, 0.5f));
+
+			// Add a render component
+			RenderComponent::Sptr renderer = jumpingObstacle->Add<RenderComponent>();
+			renderer->SetMesh(cubeMesh);
+			renderer->SetMaterial(boxMaterial);
+
+			collisions.push_back(CollisionRect(jumpingObstacle->GetPosition(), 1.0f, 1.0f, 1));
+
+			//// This is an example of attaching a component and setting some parameters
+			//RotatingBehaviour::Sptr behaviour = jumpingObstacle->Add<RotatingBehaviour>();
+			//behaviour->RotationSpeed = glm::vec3(0.0f, 0.0f, -90.0f);
+		}
+
+		createGroundObstacle("79", glm::vec3(40.f - 400.f - 1600.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.22f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+		createGroundObstacle("80", glm::vec3(0.f - 400.f - 1600.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+		createGroundObstacle("81", glm::vec3(-40.f - 400.f - 1600.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+		createGroundObstacle("82", glm::vec3(-80.f - 400.f - 1600.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+		createGroundObstacle("83", glm::vec3(-120.f - 400.f - 1600.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+		createGroundObstacle("84", glm::vec3(-160.f - 400.f - 1600.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+
+		createGroundObstacle("85", glm::vec3(-200.f - 400.f - 1600.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+		createGroundObstacle("86", glm::vec3(-240.f - 400.f - 1600.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+		createGroundObstacle("87", glm::vec3(-280.f - 400.f - 1600.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+		createGroundObstacle("88", glm::vec3(-320.f - 400.f - 1600.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+		createGroundObstacle("89", glm::vec3(-360.f - 400.f - 1600.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+		createGroundObstacle("90", glm::vec3(-400.f - 400.f - 1600.f, 5.76f, 3.390f), glm::vec3(40.0f, 9.220f, 5.0f), glm::vec3(77.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
+
+
+		//Objects with transparency need to be loaded in last otherwise it creates issues
+		GameObject::Sptr PanelPause = scene->CreateGameObject("PanelPause");
+		{
+			// Set position in the scene
+			PanelPause->SetPostion(glm::vec3(1.f, -15.f, 6.5f));
+			// Scale down the plane
+			PanelPause->SetScale(glm::vec3(10.0f, 10.0f, 10.0f));
+			// Rotate panel
+			PanelPause->SetRotation(glm::vec3(-80.f, 0.f, 0.f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = PanelPause->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(PanelMaterial);
+		}
+
+		GameObject::Sptr ButtonBack1 = scene->CreateGameObject("ButtonBack1");
+		{
+			// Set position in the scene
+			ButtonBack1->SetPostion(glm::vec3(1.f, 6.25f, 6.f));
+			// Scale down the plane
+			ButtonBack1->SetScale(glm::vec3(3.0f, 0.8f, 0.5f));
+			//set rotateee
+			ButtonBack1->SetRotation(glm::vec3(-80.f, 0.f, 0.f));
+
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = ButtonBack1->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(ButtonMaterial);
+		}
+
+		GameObject::Sptr ButtonBack2 = scene->CreateGameObject("ButtonBack2");
+		{
+			// Set position in the scene
+			ButtonBack2->SetPostion(glm::vec3(1.f, 6.5f, 5.f));
+			// Scale down the plane
+			ButtonBack2->SetScale(glm::vec3(3.0f, 0.8f, 0.5f));
+			//spin things
+			ButtonBack2->SetRotation(glm::vec3(-80.0f, 0.f, 0.f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = ButtonBack2->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(ButtonMaterial);
+		}
+
+		GameObject::Sptr ButtonBack3 = scene->CreateGameObject("ButtonBack3");
+		{
+			// Set position in the scene
+			ButtonBack3->SetPostion(glm::vec3(1.f, 6.5f, 5.f));
+			// Scale down the plane
+			ButtonBack3->SetScale(glm::vec3(3.0f, 0.8f, 0.5f));
+			//spin things
+			ButtonBack3->SetRotation(glm::vec3(-80.0f, 0.f, 0.f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = ButtonBack3->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(ButtonMaterial);
+		}
+
+		GameObject::Sptr PBar = scene->CreateGameObject("ProgressBarGO");
+		{
+			// Scale up the plane
+			PBar->SetPostion(glm::vec3(0.060f, 3.670f, -0.510f));
+			PBar->SetRotation(glm::vec3(-90, -180.0f, 0.0f));
+			PBar->SetScale(glm::vec3(15.f, 1.620f, 47.950f));
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = PBar->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(ProgressBarMaterial);
+
+			// Attach a plane collider that extends infinitely along the X/Y axis
+			RigidBody::Sptr physics = PBar->Add<RigidBody>(/*static by default*/);
+		}
+
+		GameObject::Sptr PBug = scene->CreateGameObject("ProgressBarProgress");
+		{
+			// Scale up the plane
+			PBug->SetPostion(glm::vec3(0.060f, 3.670f, -0.510f));
+			PBug->SetRotation(glm::vec3(-90, -180.0f, 0.0f));
+			PBug->SetScale(glm::vec3(1.5f, 1.5f, 1.5f));
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = PBug->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(PbarbugMaterial);
+
+			// Attach a plane collider that extends infinitely along the X/Y axis
+			RigidBody::Sptr physics = PBug->Add<RigidBody>(/*static by default*/);
+		}
+
+		GameObject::Sptr PauseLogo = scene->CreateGameObject("PauseLogo");
+		{
+			// Set position in the scene
+			PauseLogo->SetPostion(glm::vec3(1.f, 5.75f, 8.f));
+			// Scale down the plane
+			PauseLogo->SetScale(glm::vec3(3.927f, 1.96f, 0.5f));
+			//Rotate Logo
+			PauseLogo->SetRotation(glm::vec3(80.f, 0.f, 180.f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = PauseLogo->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(PauseMaterial);
+		}
+
+		GameObject::Sptr WinnerLogo = scene->CreateGameObject("WinnerLogo");
+		{
+			// Set position in the scene
+			WinnerLogo->SetPostion(glm::vec3(1.f, 5.75f, 8.f));
+			// Scale down the plane
+			WinnerLogo->SetScale(glm::vec3(3.927f, 1.96f, 0.5f));
+			//Rotate Logo
+			WinnerLogo->SetRotation(glm::vec3(80.f, 0.f, 180.f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = WinnerLogo->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(WinnerMaterial);
+		}
+
+		GameObject::Sptr LoserLogo = scene->CreateGameObject("LoserLogo");
+		{
+			// Set position in the scene
+			LoserLogo->SetPostion(glm::vec3(1.f, 5.75f, 8.f));
+			// Scale down the plane
+			LoserLogo->SetScale(glm::vec3(3.927f, 1.96f, 0.5f));
+			//Rotate Logo
+			LoserLogo->SetRotation(glm::vec3(80.f, 0.f, 180.f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = LoserLogo->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(LoserMaterial);
+		}
+
+		GameObject::Sptr Filter = scene->CreateGameObject("Filter");
+		{
+			// Set position in the scene
+			Filter->SetPostion(glm::vec3(1.0f, 6.51f, 5.f));
+			// Scale down the plane
+			Filter->SetScale(glm::vec3(3.0f, 0.8f, 1.0f));
+			Filter->SetRotation(glm::vec3(-80.f, 0.0f, 0.0f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = Filter->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(FilterMaterial);
+
+			// This object is a renderable only, it doesn't have any behaviours or
+			// physics bodies attached!
+		}
+
+		// Creates Ground Collisions
+		GameObject::Sptr plane = scene->CreateGameObject("Plane");
+		{
+			// Scale up the plane
+			plane->SetPostion(glm::vec3(0.060f, 3.670f, -0.510f));
+			plane->SetScale(glm::vec3(47.880f, 23.7f, 48.38f));
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = plane->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(BlankMaterial);
+
+			// Attach a plane collider that extends infinitely along the X/Y axis
+			RigidBody::Sptr physics = plane->Add<RigidBody>(/*static by default*/);
+			physics->AddCollider(PlaneCollider::Create());
+		}
+
+		GameObject::Sptr ReplayText = scene->CreateGameObject("ReplayText");
+		{
+			// Set position in the scene
+			ReplayText->SetPostion(glm::vec3(1.0f, 8.0f, 6.1f));
+			// Scale down the plane
+			ReplayText->SetScale(glm::vec3(2.0f, 0.4f, 0.5f));
+			ReplayText->SetRotation(glm::vec3(80.0f, 0.f, -180.f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = ReplayText->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(ReplayMaterial);
+		}
+
+		GameObject::Sptr MainMenuText = scene->CreateGameObject("MainMenuText");
+		{
+			// Set position in the scene
+			MainMenuText->SetPostion(glm::vec3(1.0f, 8.0f, 5.4f));
+			// Scale down the plane
+			MainMenuText->SetScale(glm::vec3(2.0f, 0.4f, 0.5f));
+			MainMenuText->SetRotation(glm::vec3(80.0f, 0.f, -180.f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = MainMenuText->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(MainMenuMaterial);
+		}
+
+		GameObject::Sptr ResumeText = scene->CreateGameObject("ResumeText");
+		{
+			// Set position in the scene
+			ResumeText->SetPostion(glm::vec3(1.0f, 8.0f, 6.1f));
+			// Scale down the plane
+			ResumeText->SetScale(glm::vec3(2.0f, 0.4f, 0.5f));
+			ResumeText->SetRotation(glm::vec3(80.0f, 0.f, -180.f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = ResumeText->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(ResumeMaterial);
+		}
+
+		GameObject::Sptr LSText = scene->CreateGameObject("LSText");
+		{
+			// Set position in the scene
+			LSText->SetPostion(glm::vec3(1.0f, 8.0f, 6.1f));
+			// Scale down the plane
+			LSText->SetScale(glm::vec3(2.0f, 0.4f, 0.5f));
+			LSText->SetRotation(glm::vec3(80.0f, 0.f, -180.f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = LSText->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(LStextMaterial);
+		}
+
+
+		GameObject::Sptr FrogTongue = scene->CreateGameObject("FrogTongue");
+		{
+			// Set position in the scene
+			FrogTongue->SetPostion(glm::vec3(-3.4f, -1.05f, 3.59f));
+			// Scale down the plane
+			FrogTongue->SetScale(glm::vec3(1.0f, 0.1f, 1.0f));
+			FrogTongue->SetRotation(glm::vec3(0.0f, 0.0f, 45.0f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = FrogTongue->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(FrogTongueMaterial);
+		}
+
+		GameObject::Sptr FrogBody = scene->CreateGameObject("FrogBody");
+		{
+			// Set position in the scene
+			FrogBody->SetPostion(glm::vec3(-3.4f, -1.05f, 3.6f));
+			// Scale down the plane
+			FrogBody->SetScale(glm::vec3(1.5f, 1.5f, 1.0f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = FrogBody->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(FrogBodyMaterial);
+		}
+
+		GameObject::Sptr FrogHeadBot = scene->CreateGameObject("FrogHeadBot");
+		{
+			// Set position in the scene
+			FrogHeadBot->SetPostion(glm::vec3(-3.4f, -1.05f, 3.61f));
+			// Scale down the plane
+			FrogHeadBot->SetScale(glm::vec3(1.5f, 1.5f, 1.0f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = FrogHeadBot->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(FrogHeadBotMaterial);
+		}
+
+		GameObject::Sptr FrogHeadTop = scene->CreateGameObject("FrogHeadTop");
+		{
+			// Set position in the scene
+			FrogHeadTop->SetPostion(glm::vec3(-3.4f, -1.05f, 3.62f));
+			// Scale down the plane
+			FrogHeadTop->SetScale(glm::vec3(1.5f, 1.5f, 1.0f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = FrogHeadTop->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(FrogHeadTopMaterial);
+		}
+
+		GameObject::Sptr BushTransition = scene->CreateGameObject("BushTransition");
+		{
+			// Set position in the scene
+			BushTransition->SetPostion(glm::vec3(5.f, 0.0f, 3.8f));
+			// Scale down the plane
+			BushTransition->SetScale(glm::vec3(5.8f, 2.5f, 1.0f));
+
+			// Create and attach a render component
+			RenderComponent::Sptr renderer = BushTransition->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(BushTransitionMaterial);
+		}
+
+		scene->SetAmbientLight(glm::vec3(0.2f));
+
+		// Kinematic rigid bodies are those controlled by some outside controller
+		// and ONLY collide with dynamic objects
+		RigidBody::Sptr physics = jumpingObstacle->Add<RigidBody>(RigidBodyType::Kinematic);
+		physics->AddCollider(ConvexMeshCollider::Create());
+
+		// Save the asset manifest for all the resources we just loaded
+		ResourceManager::SaveManifest("manifest.json");
+		// Save the scene to a JSON file
+		scene->Save("Level6.json");
+
+		}
 
 
 		//// Making a 'Menu' Scene ////
@@ -7979,8 +9395,6 @@ int main() {
 				{ ShaderPartType::Vertex, "shaders/vertex_shader.glsl" },
 				{ ShaderPartType::Fragment, "shaders/frag_blinn_phong_textured.glsl" }
 			});
-
-
 
 			// Create an empty scene
 			scene = std::make_shared<Scene>();
@@ -8446,6 +9860,30 @@ int main() {
 				FrogTongueMaterial->Shininess = 2.0f;
 			}
 
+			Material::Sptr ForestButtonMaterial = ResourceManager::CreateAsset<Material>();
+			{
+				ForestButtonMaterial->Name = "ForestButton";
+				ForestButtonMaterial->MatShader = scene->BaseShader;
+				ForestButtonMaterial->Texture = ForestButtonTex;
+				ForestButtonMaterial->Shininess = 2.0f;
+			}
+
+			Material::Sptr MountainButtonMaterial = ResourceManager::CreateAsset<Material>();
+			{
+				MountainButtonMaterial->Name = "MountainButton";
+				MountainButtonMaterial->MatShader = scene->BaseShader;
+				MountainButtonMaterial->Texture = MountainButtonTex;
+				MountainButtonMaterial->Shininess = 2.0f;
+			}
+
+			Material::Sptr MineButtonMaterial = ResourceManager::CreateAsset<Material>();
+			{
+				MineButtonMaterial->Name = "MineButton";
+				MineButtonMaterial->MatShader = scene->BaseShader;
+				MineButtonMaterial->Texture = MineButtonTex;
+				MineButtonMaterial->Shininess = 2.0f;
+			}
+
 			Material::Sptr BushTransitionMaterial = ResourceManager::CreateAsset<Material>();
 			{
 				BushTransitionMaterial->Name = "BushTransition";
@@ -8453,6 +9891,103 @@ int main() {
 				BushTransitionMaterial->Texture = BushTransitionTex;
 				BushTransitionMaterial->Shininess = 2.0f;
 			}
+
+			Material::Sptr Red1Material = ResourceManager::CreateAsset<Material>();
+			{
+				Red1Material->Name = "Red 1";
+				Red1Material->MatShader = scene->BaseShader;
+				Red1Material->Texture = Tex1R;
+				Red1Material->Shininess = 2.0f;
+			}
+
+			Material::Sptr Red2Material = ResourceManager::CreateAsset<Material>();
+			{
+				Red2Material->Name = "Red 2";
+				Red2Material->MatShader = scene->BaseShader;
+				Red2Material->Texture = Tex2R;
+				Red2Material->Shininess = 2.0f;
+			}
+			
+			Material::Sptr Red3Material = ResourceManager::CreateAsset<Material>();
+			{
+				Red3Material->Name = "Red 3";
+				Red3Material->MatShader = scene->BaseShader;
+				Red3Material->Texture = Tex3R;
+				Red3Material->Shininess = 2.0f;
+			}
+
+			Material::Sptr Red4Material = ResourceManager::CreateAsset<Material>();
+			{
+				Red4Material->Name = "Red 4";
+				Red4Material->MatShader = scene->BaseShader;
+				Red4Material->Texture = Tex4R;
+				Red4Material->Shininess = 2.0f;
+			}
+
+			Material::Sptr Red5Material = ResourceManager::CreateAsset<Material>();
+			{
+				Red5Material->Name = "Red 5";
+				Red5Material->MatShader = scene->BaseShader;
+				Red5Material->Texture = Tex5R;
+				Red5Material->Shininess = 2.0f;
+			}
+
+			Material::Sptr Red6Material = ResourceManager::CreateAsset<Material>();
+			{
+				Red6Material->Name = "Red 6";
+				Red6Material->MatShader = scene->BaseShader;
+				Red6Material->Texture = Tex6R;
+				Red6Material->Shininess = 2.0f;
+			}
+
+			Material::Sptr Black1Material = ResourceManager::CreateAsset<Material>();
+			{
+				Black1Material->Name = "Black 1";
+				Black1Material->MatShader = scene->BaseShader;
+				Black1Material->Texture = Tex1B;
+				Black1Material->Shininess = 2.0f;
+			}
+
+			Material::Sptr Black2Material = ResourceManager::CreateAsset<Material>();
+			{
+				Black2Material->Name = "Black 2";
+				Black2Material->MatShader = scene->BaseShader;
+				Black2Material->Texture = Tex2B;
+				Black2Material->Shininess = 2.0f;
+			}
+
+			Material::Sptr Black3Material = ResourceManager::CreateAsset<Material>();
+			{
+				Black3Material->Name = "Black 3";
+				Black3Material->MatShader = scene->BaseShader;
+				Black3Material->Texture = Tex3B;
+				Black3Material->Shininess = 2.0f;
+			}
+
+			Material::Sptr Black4Material = ResourceManager::CreateAsset<Material>();
+			{
+				Black4Material->Name = "Black 4";
+				Black4Material->MatShader = scene->BaseShader;
+				Black4Material->Texture = Tex4B;
+				Black4Material->Shininess = 2.0f;
+			}
+
+			Material::Sptr Black5Material = ResourceManager::CreateAsset<Material>();
+			{
+				Black5Material->Name = "Black 5";
+				Black5Material->MatShader = scene->BaseShader;
+				Black5Material->Texture = Tex5B;
+				Black5Material->Shininess = 2.0f;
+			}
+
+			Material::Sptr Black6Material = ResourceManager::CreateAsset<Material>();
+			{
+				Black6Material->Name = "Black 6";
+				Black6Material->MatShader = scene->BaseShader;
+				Black6Material->Texture = Tex6B;
+				Black6Material->Shininess = 2.0f;
+			}
+
 
 			// Create some lights for our scene
 			scene->Lights.resize(8);
@@ -8534,7 +10069,7 @@ int main() {
 				// Create and attach a render component
 				RenderComponent::Sptr renderer = LsButton1->Add<RenderComponent>();
 				renderer->SetMesh(planeMesh);
-				renderer->SetMaterial(LSButtonMaterial);
+				renderer->SetMaterial(ForestButtonMaterial);
 
 				// This object is a renderable only, it doesn't have any behaviours or
 				// physics bodies attached!
@@ -8550,7 +10085,7 @@ int main() {
 				// Create and attach a render component
 				RenderComponent::Sptr renderer = LsButton2->Add<RenderComponent>();
 				renderer->SetMesh(planeMesh);
-				renderer->SetMaterial(LSButtonMaterial);
+				renderer->SetMaterial(ForestButtonMaterial);
 
 				// This object is a renderable only, it doesn't have any behaviours or
 				// physics bodies attached!
@@ -8566,7 +10101,7 @@ int main() {
 				// Create and attach a render component
 				RenderComponent::Sptr renderer = LsButton3->Add<RenderComponent>();
 				renderer->SetMesh(planeMesh);
-				renderer->SetMaterial(LSButtonMaterial);
+				renderer->SetMaterial(MountainButtonMaterial);
 
 				// This object is a renderable only, it doesn't have any behaviours or
 				// physics bodies attached!
@@ -8582,7 +10117,7 @@ int main() {
 				// Create and attach a render component
 				RenderComponent::Sptr renderer = LsButton4->Add<RenderComponent>();
 				renderer->SetMesh(planeMesh);
-				renderer->SetMaterial(LSButtonMaterial);
+				renderer->SetMaterial(MountainButtonMaterial);
 
 				// This object is a renderable only, it doesn't have any behaviours or
 				// physics bodies attached!
@@ -8598,7 +10133,7 @@ int main() {
 				// Create and attach a render component
 				RenderComponent::Sptr renderer = LsButton5->Add<RenderComponent>();
 				renderer->SetMesh(planeMesh);
-				renderer->SetMaterial(LSButtonMaterial);
+				renderer->SetMaterial(MineButtonMaterial);
 
 				// This object is a renderable only, it doesn't have any behaviours or
 				// physics bodies attached!
@@ -8614,7 +10149,7 @@ int main() {
 				// Create and attach a render component
 				RenderComponent::Sptr renderer = LsButton6->Add<RenderComponent>();
 				renderer->SetMesh(planeMesh);
-				renderer->SetMaterial(LSButtonMaterial);
+				renderer->SetMaterial(MineButtonMaterial);
 
 				// This object is a renderable only, it doesn't have any behaviours or
 				// physics bodies attached!
@@ -8681,61 +10216,61 @@ int main() {
 			GameObject::Sptr Num1 = scene->CreateGameObject("Num1");
 			{
 				Num1->SetPostion(glm::vec3(0.525f, 0.3f, 3.5f));
-				Num1->SetScale(glm::vec3(0.3f));
+				Num1->SetScale(glm::vec3(0.6f));
 
 				RenderComponent::Sptr renderer = Num1->Add<RenderComponent>();
 				renderer->SetMesh(planeMesh);
-				renderer->SetMaterial(Material1);
+				renderer->SetMaterial(Black1Material);
 			}
 
 			GameObject::Sptr Num2 = scene->CreateGameObject("Num2");
 			{
 				Num2->SetPostion(glm::vec3(0.525f, -0.3f, 3.5f));
-				Num2->SetScale(glm::vec3(0.3f));
+				Num2->SetScale(glm::vec3(0.6f));
 
 				RenderComponent::Sptr renderer = Num2->Add<RenderComponent>();
 				renderer->SetMesh(planeMesh);
-				renderer->SetMaterial(Material2);
+				renderer->SetMaterial(Black2Material);
 			}
 
 			GameObject::Sptr Num3 = scene->CreateGameObject("Num3");
 			{
 				Num3->SetPostion(glm::vec3(1.2f, 0.3f, 3.5f));
-				Num3->SetScale(glm::vec3(0.3f));
+				Num3->SetScale(glm::vec3(0.6f));
 
 				RenderComponent::Sptr renderer = Num3->Add<RenderComponent>();
 				renderer->SetMesh(planeMesh);
-				renderer->SetMaterial(Material3);
+				renderer->SetMaterial(Black3Material);
 			}
 
 			GameObject::Sptr Num4 = scene->CreateGameObject("Num4");
 			{
 				Num4->SetPostion(glm::vec3(1.2f, -0.3f, 3.5f));
-				Num4->SetScale(glm::vec3(0.3f));
+				Num4->SetScale(glm::vec3(0.6f));
 
 				RenderComponent::Sptr renderer = Num4->Add<RenderComponent>();
 				renderer->SetMesh(planeMesh);
-				renderer->SetMaterial(Material4);
+				renderer->SetMaterial(Black4Material);
 			}
 
 			GameObject::Sptr Num5 = scene->CreateGameObject("Num5");
 			{
 				Num5->SetPostion(glm::vec3(1.875f, 0.3f, 3.5f));
-				Num5->SetScale(glm::vec3(0.3f));
+				Num5->SetScale(glm::vec3(0.6f));
 
 				RenderComponent::Sptr renderer = Num5->Add<RenderComponent>();
 				renderer->SetMesh(planeMesh);
-				renderer->SetMaterial(Material5);
+				renderer->SetMaterial(Black5Material);
 			}
 
 			GameObject::Sptr Num6 = scene->CreateGameObject("Num6");
 			{
 				Num6->SetPostion(glm::vec3(1.875f, -0.3f, 3.5f));
-				Num6->SetScale(glm::vec3(0.3f));
+				Num6->SetScale(glm::vec3(0.6f));
 
 				RenderComponent::Sptr renderer = Num6->Add<RenderComponent>();
 				renderer->SetMesh(planeMesh);
-				renderer->SetMaterial(Material6);
+				renderer->SetMaterial(Black6Material);
 			}
 
 			GameObject::Sptr FrogTongue = scene->CreateGameObject("FrogTongue");
@@ -9063,6 +10598,10 @@ int main() {
 				{
 					scene->FindObjectByName("player")->SetPostion(glm::vec3(-1606.f, 0.f, scene->FindObjectByName("player")->GetPosition().z));
 				}
+				else if (scenevalue == 6)
+				{
+					scene->FindObjectByName("player")->SetPostion(glm::vec3(-2006.f, 0.f, scene->FindObjectByName("player")->GetPosition().z));
+				}
 
 				std::cout << "colision detected";
 				playerCollision.hitEntered = false;
@@ -9116,6 +10655,15 @@ int main() {
 				if (scene->FindObjectByName("player")->GetPosition().x < -2000)
 				{
 					scene->FindObjectByName("player")->SetPostion(glm::vec3(-1606.f, 0.f, scene->FindObjectByName("player")->GetPosition().z));
+					playerMove = false;
+					playerWin = true;
+				}
+			}
+			else if (scenevalue == 6)
+			{
+				if (scene->FindObjectByName("player")->GetPosition().x < -2400)
+				{
+					scene->FindObjectByName("player")->SetPostion(glm::vec3(-2006.f, 0.f, scene->FindObjectByName("player")->GetPosition().z));
 					playerMove = false;
 					playerWin = true;
 				}
