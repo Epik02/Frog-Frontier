@@ -63,6 +63,16 @@
 
 #include "fmod.hpp"
 
+std::ofstream timeToBeat;
+int giveScoreOnce = 0;
+int scoreLineCount = 0;
+
+std::string getScores;
+std::ifstream text("times.txt");
+std::vector<std::string> scores;
+std::vector<float> floatScores;
+bool scoreWritten = false; //So the code only writes the score to the text file once everytime the player wins
+
 //#define LOG_GL_NOTIFICATIONS
 
 /*
@@ -119,7 +129,6 @@ MeshResource::Sptr cubeMesh;
 MeshResource::Sptr mushroomMesh;
 MeshResource::Sptr vinesMesh;
 MeshResource::Sptr cobwebMesh;
-MeshResource::Sptr cobweb2Mesh;
 MeshResource::Sptr ladybugMesh;
 
 //Anim test
@@ -228,6 +237,30 @@ MeshResource::Sptr slidingMesh26;
 MeshResource::Sptr slidingMesh27;
 MeshResource::Sptr slidingMesh28;
 
+//Run to fly transition Animation
+MeshResource::Sptr runtoflyMesh1;
+MeshResource::Sptr runtoflyMesh2;
+MeshResource::Sptr runtoflyMesh3;
+MeshResource::Sptr runtoflyMesh4;
+MeshResource::Sptr runtoflyMesh5;
+MeshResource::Sptr runtoflyMesh6;
+MeshResource::Sptr runtoflyMesh7;
+MeshResource::Sptr runtoflyMesh8;
+MeshResource::Sptr runtoflyMesh9;
+MeshResource::Sptr runtoflyMesh10;
+
+//fly to run transition Animation
+MeshResource::Sptr flytorunMesh1;
+MeshResource::Sptr flytorunMesh2;
+MeshResource::Sptr flytorunMesh3;
+MeshResource::Sptr flytorunMesh4;
+MeshResource::Sptr flytorunMesh5;
+MeshResource::Sptr flytorunMesh6;
+MeshResource::Sptr flytorunMesh7;
+MeshResource::Sptr flytorunMesh8;
+MeshResource::Sptr flytorunMesh9;
+MeshResource::Sptr flytorunMesh10;
+
 int SceneLoad(Scene::Sptr& scene, std::string& path)
 {
 	// Since it's a reference to a ptr, this will
@@ -293,7 +326,6 @@ float transitiontimer = 0.0f;
 float transitionleft = 0.0f;
 bool transitioncomplete = true;
 bool DoTransition = false;
-bool firstload = false;
 //Gonna make a scenevalue to tell the keyboards what to do or some other scene specific update changes
 // So 11 is main menu, 12 is controls, 13 is levelselect
 // and then the actual levels can just have their value
@@ -549,12 +581,7 @@ bool DrawSaveLoadImGui(Scene::Sptr& scene, std::string& path) {
 			DoTransition = false;
 			break;
 		case 6:
-			path = "Level6.json";
-			SceneLoad(scene, path);
-			scenevalue = 6;
-			index = 1;
-			enterclick = true;
-			DoTransition = false;
+			return 0;
 			break;
 		case 7:
 			path = "menu.json";
@@ -701,6 +728,7 @@ bool isUpPressed = false;
 bool isJumpPressed = false;
 bool playerFlying = false;
 bool playerSliding = false;
+bool playerPlaying = false;
 bool returnToGround = false;
 bool playerMove = false;
 int clickCount = 0;
@@ -712,6 +740,9 @@ float jumpheight = 0.0000;
 float x = 0;
 float JTime = 0;
 float JTemp = 0;
+float PTime = 0;
+float PTemp = 0;
+float PTemp2 = 0;
 float AnimTime = 0;
 float runLoopNumber = 1; //number of times run animation has looped, we multiply this by 1.05 so we can return runAnimTime to 0 and repeat the Animation
 float FPSIncrease = 0.0; //gradually will increase so we can continue to play animations
@@ -723,10 +754,20 @@ float FResetTemp = 0;
 float RemainingFTime = 0;
 bool playerJumping = false;
 bool runningAnim = true;
+bool loadMeshOnce = true;
+float animIntervals = 0;
+int animFrame = 0;
 
+//plays animations
 bool running = true;
 bool sliding = false;
 bool flying = false;
+bool runToFly = false;
+bool flyToRun = false;
+
+bool onGround = false;
+bool inAir = false;
+
 
 
 
@@ -737,6 +778,10 @@ void SceneChanger()
 {
 	if (scenevalue == 11)
 	{
+		PTime = 0;
+		PTemp = 0;
+		PTemp2 = 0;
+		playerPlaying = false;
 		if (glfwGetKey(window, GLFW_KEY_UP) && performedtask == false) {
 			if (index - 1 < 1)
 			{
@@ -768,6 +813,10 @@ void SceneChanger()
 	}
 	else if (scenevalue == 13)
 	{
+		PTime = 0;
+		PTemp = 0;
+		PTemp2 = 0;
+		playerPlaying = false;
 		if (glfwGetKey(window, GLFW_KEY_UP) && performedtask == false) {
 			if (index == 1 || index == 3 || index == 5)
 			{
@@ -928,9 +977,46 @@ void SceneChanger()
 	}
 }
 
-bool loadMeshOnce = true;
-float animIntervals = 0;
-int animFrame = 0;
+void readScores() {
+	while (getline(text, getScores)) {
+		scores.push_back(getScores);
+		floatScores.push_back(std::stof(getScores)); //converts strings to floats
+		scoreLineCount = scoreLineCount + 1; //gets the number of lines in the text file
+	}
+	text.close();
+}
+
+int partition(std::vector<float>& arrayToSort, int low, int high, float pivot) {
+
+	int index1 = low;
+	int index2 = low;
+	float temp;
+	while (index1 <= high) {
+		if (arrayToSort[index1] > pivot) {
+			index1 = index1 + 1;
+		}
+		else {
+			temp = arrayToSort[index1]; //swaps
+			arrayToSort[index1] = arrayToSort[index2];
+			arrayToSort[index2] = temp;
+			index2 = index2 + 1;
+			index1 = index1 + 1;
+		}
+	}
+	return index2 - 1;
+}
+
+void quickSort(std::vector<float>& arrayToSort, int low, int high) { //low == first index, high = last index
+	if (low < high) {
+		float pivot = arrayToSort[high];
+		int position = partition(arrayToSort, low, high, pivot);
+
+		quickSort(arrayToSort, low, position - 1);
+		quickSort(arrayToSort, position + 1, high);
+	}
+}
+
+
 void keyboard()
 {
 	//Loads Keyframes for animations
@@ -957,6 +1043,9 @@ void keyboard()
 	if (paused == true || playerLose == true || playerWin == true)
 	{
 		if ((glfwGetKey(window, GLFW_KEY_UP) && performedtask == false)) {
+
+			playerPlaying == false;
+
 			if (index == 1)
 			{
 				index = 3;
@@ -1017,6 +1106,9 @@ void keyboard()
 			}
 		}
 	}
+	else if (paused == false) {
+		playerPlaying = true;
+	}
 
 	if (glfwGetKey(window, GLFW_KEY_P) == GLFW_RELEASE && glfwGetKey(window, GLFW_KEY_UP) == GLFW_RELEASE && glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_RELEASE)
 	{
@@ -1026,6 +1118,31 @@ void keyboard()
 	if (paused == false)
 	{
 		runningAnim = true;
+
+		//to time the time the player took to beat the level (while ingame)
+		if (playerPlaying == true) {
+			PTime = glfwGetTime() - PTemp;
+			PTime = PTime / 2.5;
+			PTime = PTime + PTemp2;
+		}
+		else {
+			PTemp2 = PTime;
+			PTemp = glfwGetTime();
+		}
+		//std::cout << PTime << "\n";
+
+		if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
+			playerPlaying = true;
+		}
+		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+			playerPlaying = false;
+		}
+		if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS) { //shows all scores from text file
+			for (int i = 0; i < scoreLineCount; i++) {
+				std::cout << floatScores[i] << "\n";
+			}
+		}
+
 		//All Slide Code
 		{
 			if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
@@ -1126,10 +1243,9 @@ void keyboard()
 			}
 
 			x = JTime * 12; //Multiply to increase speed of jump
-			//std::cout << JTime << "\n";
 
 			//parabola function so the jump will slow as it reaches the max height
-			jumpheight = (-4 * pow(x - 1.5, 2) + 9) + 0.2; //0.2 is currently the ladybugs starting point on z
+			jumpheight = (-4 * pow(x - 1.5, 2) + 9) + 0.3; //0.2 is currently the ladybugs starting point on z
 
 			if (jumpheight < 0) { //so the ladybug doesnt go through the ground
 				playerJumping = false;
@@ -1137,7 +1253,7 @@ void keyboard()
 
 		}
 		if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS) {
-			runningAnim = true;
+			runToFly = true;
 		}
 		if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS) {
 			runningAnim = false;
@@ -1152,7 +1268,7 @@ void keyboard()
 		}
 	}
 
-	//Run Animations (still working on lerping them) ***SWITCHING BETWEEN TOO MANY KEYFRAMES IN TOO SHORT A TIME WILL CAUSE THE GAME TO CRASH***
+	//Animations
 	if (runningAnim == true) {
 		AnimTime = glfwGetTime() - runAnimTemp;
 		AnimTime = AnimTime / 2.5;
@@ -1160,7 +1276,6 @@ void keyboard()
 	else {
 		runAnimTemp = glfwGetTime();
 	}
-	//std::cout << runAnimTime << "\n" << animIntervals << "\n";
 
 	if (AnimTime >= (0.02 + FPSIncrease) && AnimTime < (0.04 + FPSIncrease)) {
 		animFrame = animFrame + 1;
@@ -1169,8 +1284,15 @@ void keyboard()
 	else if (AnimTime < 0.02 || playerJumping == false) {
 		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runningMesh1); //sets obj to default
 	}
+
 	if (scene->FindObjectByName("player")->GetPosition().z <= 0.3) {
 		runningAnim = true;
+		inAir = false;
+		onGround = true;
+	}
+	else {
+		onGround = false;
+		inAir = true;
 	}
 
 	if (playerJumping == false && playerFlying == false && playerSliding == false) {
@@ -1200,7 +1322,20 @@ void keyboard()
 		}
 	}
 
-	std::cout << animFrame << "\n" << AnimTime << "\n";
+	else if (runToFly) { //53 to 62
+		if (animFrame <= 52) {
+			animFrame = 53;
+		}
+		if (animFrame > 62) {
+			runToFly = false;
+			flying = true;
+		}
+	}
+	else if (flyToRun) {
+
+	}
+
+	//std::cout << animFrame << "\n" << AnimTime << "\n";
 
 	switch (animFrame) {
 	case 1:
@@ -1359,6 +1494,66 @@ void keyboard()
 	case 52:
 		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(slidingMesh26); //Sliding Animation end
 		break;
+	case 53:
+		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runtoflyMesh1); //run to fly transition start
+		break;
+	case 54:
+		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runtoflyMesh2);
+		break;
+	case 55:
+		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runtoflyMesh3);
+		break;
+	case 56:
+		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runtoflyMesh4);
+		break;
+	case 57:
+		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runtoflyMesh5);
+		break;
+	case 58:
+		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runtoflyMesh6);
+		break;
+	case 59:
+		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runtoflyMesh7);
+		break;
+	case 60:
+		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runtoflyMesh8);
+		break;
+	case 61:
+		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runtoflyMesh9);
+		break;
+	case 62:
+		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(runtoflyMesh10); //run to fly transition end
+		break;
+	case 63:
+		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(flytorunMesh1); //fly to run transition start
+		break;
+	case 64:
+		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(flytorunMesh2);
+		break;
+	case 65:
+		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(flytorunMesh3);
+		break;
+	case 66:
+		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(flytorunMesh4);
+		break;
+	case 67:
+		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(flytorunMesh5);
+		break;
+	case 68:
+		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(flytorunMesh6);
+		break;
+	case 69:
+		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(flytorunMesh7);
+		break;
+	case 70:
+		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(flytorunMesh8);
+		break;
+	case 71:
+		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(flytorunMesh9);
+		break;
+	case 72:
+		scene->FindObjectByName("player")->Get<RenderComponent>()->SetMesh(flytorunMesh10); //fly to run transition end
+		break;
 	}
 
 
@@ -1366,11 +1561,10 @@ void keyboard()
 		if (scene->FindObjectByName("player")->GetPosition().z > 0.3) {
 			scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x, scene->FindObjectByName("player")->GetPosition().y, scene->FindObjectByName("player")->GetPosition().z - 0.4));
 		}
-		else if (scene->FindObjectByName("player")->GetPosition().z <= 0.3)
-		{
-			isJumpPressed = false;
-		}
-
+		//else if (scene->FindObjectByName("player")->GetPosition().z < 0.3)
+		//{
+		//	scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x, scene->FindObjectByName("player")->GetPosition().y, 0.04));
+		//}
 
 		if (scenevalue == 1)
 		{
@@ -1400,12 +1594,6 @@ void keyboard()
 		else if (scenevalue == 5)
 		{
 			if (scene->FindObjectByName("player")->GetPosition().x < -2000.f) {
-				playerMove = false;
-			}
-		}
-		else if (scenevalue == 6)
-		{
-			if (scene->FindObjectByName("player")->GetPosition().x < -2400.f) {
 				playerMove = false;
 			}
 		}
@@ -1558,7 +1746,7 @@ int main() {
 	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 
 	FMOD::System* system;
-	FMOD::Sound* sound1, * sound2, * sound3, * sound4, * sound5, *sound6, *sound7, *sound8, *sound9, *sound10, *sound11;
+	FMOD::Sound* sound1, * sound2, * sound3, * sound4, * sound5;
 	FMOD::Channel* channel = 0;
 	FMOD_RESULT       result;
 	void* extradriverdata = 0;
@@ -1577,18 +1765,6 @@ int main() {
 
 	result = system->createSound("media/Pitched-Pop.wav", FMOD_LOOP_NORMAL, 0, &sound5);
 
-	result = system->createSound("media/Buzz.wav", FMOD_DEFAULT, 0, &sound6);
-
-	result = system->createSound("media/Frog Tongue.wav", FMOD_DEFAULT, 0, &sound7);
-
-	result = system->createSound("media/Grass.wav", FMOD_DEFAULT, 0, &sound8);
-
-	result = system->createSound("media/Main song beat.wav", FMOD_LOOP_NORMAL, 0, &sound9);
-
-	result = system->createSound("media/Rock crushing orange.wav", FMOD_DEFAULT, 0, &sound10);
-
-	result = system->createSound("media/Victory sound effect.wav", FMOD_DEFAULT, 0, &sound11);
-
 	bool loadScene = false;
 	// For now we can use a toggle to generate our scene vs load from file
 	if (loadScene) {
@@ -1596,6 +1772,9 @@ int main() {
 		scene = Scene::Load("menu.json");
 	}
 	else {
+
+		readScores(); //reads all of the scores before loading the scene
+		quickSort(floatScores, 0, floatScores.size() - 1); //sorts our array from lowest to greatest
 
 		//load all our objects once for all scenes
 
@@ -1610,7 +1789,7 @@ int main() {
 		Texture2D::Sptr    BlankTex = ResourceManager::CreateAsset<Texture2D>("textures/blank.png");
 		Texture2D::Sptr    bmTex = ResourceManager::CreateAsset<Texture2D>("textures/bmuv.png");
 		Texture2D::Sptr    BranchTex = ResourceManager::CreateAsset<Texture2D>("textures/BranchUV.png");
-		Texture2D::Sptr    CaveEntranceTex = ResourceManager::CreateAsset<Texture2D>("texures/ExitCaveUV.png");
+		Texture2D::Sptr    CaveEntranceTex = ResourceManager::CreateAsset<Texture2D>("texures/CaveEntranceUV.png");
 		Texture2D::Sptr    CampfireTex = ResourceManager::CreateAsset<Texture2D>("textures/CampfireUVFrame.png");
 		Texture2D::Sptr    cobwebTexture = ResourceManager::CreateAsset<Texture2D>("textures/CobwebUV.png");
 		Texture2D::Sptr    cobweb2Texture = ResourceManager::CreateAsset<Texture2D>("textures/CobwebUVFrame.png");
@@ -1677,16 +1856,11 @@ int main() {
 		Texture2D::Sptr    ButtonBackTex = ResourceManager::CreateAsset<Texture2D>("textures/Button Background.png");
 		Texture2D::Sptr    LSButtonTex = ResourceManager::CreateAsset<Texture2D>("textures/Level Button Background 1.png");
 		Texture2D::Sptr    FilterTex = ResourceManager::CreateAsset<Texture2D>("textures/Button Filter.png");
-		Texture2D::Sptr    ForestButtonTex = ResourceManager::CreateAsset<Texture2D>("textures/Forest Level.png");
-		Texture2D::Sptr    MountainButtonTex = ResourceManager::CreateAsset<Texture2D>("textures/Mountain Level.png");
-		Texture2D::Sptr    MineButtonTex = ResourceManager::CreateAsset<Texture2D>("textures/Mine Level.png");
 
 		//UI textures
 		Texture2D::Sptr    PauseTex = ResourceManager::CreateAsset<Texture2D>("textures/Pause.png");
 		Texture2D::Sptr    PanelTex = ResourceManager::CreateAsset<Texture2D>("textures/Panel.png");
 		Texture2D::Sptr    ProgressTex = ResourceManager::CreateAsset<Texture2D>("textures/progressbar.png");
-		Texture2D::Sptr    Progress2Tex = ResourceManager::CreateAsset<Texture2D>("textures/progressBar2.png");
-		Texture2D::Sptr    Progress3Tex = ResourceManager::CreateAsset<Texture2D>("textures/progressBar3.png");
 		Texture2D::Sptr    PbarbugTex = ResourceManager::CreateAsset<Texture2D>("textures/progressmeter.png");
 		Texture2D::Sptr    FFLogoTex = ResourceManager::CreateAsset<Texture2D>("textures/Frog Frontier Logo.png");
 		Texture2D::Sptr    LSLogoTex = ResourceManager::CreateAsset<Texture2D>("textures/Frog Frontier Logo Side Scroller.png");
@@ -1703,20 +1877,6 @@ int main() {
 		Texture2D::Sptr    Tex8 = ResourceManager::CreateAsset<Texture2D>("textures/8.png");
 		Texture2D::Sptr    Tex9 = ResourceManager::CreateAsset<Texture2D>("textures/9.png");
 		Texture2D::Sptr    Tex10 = ResourceManager::CreateAsset<Texture2D>("textures/10.png");
-
-		Texture2D::Sptr    Tex1R = ResourceManager::CreateAsset<Texture2D>("textures/1R.png");
-		Texture2D::Sptr    Tex2R = ResourceManager::CreateAsset<Texture2D>("textures/2R.png");
-		Texture2D::Sptr    Tex3R = ResourceManager::CreateAsset<Texture2D>("textures/3R.png");
-		Texture2D::Sptr    Tex4R = ResourceManager::CreateAsset<Texture2D>("textures/4R.png");
-		Texture2D::Sptr    Tex5R = ResourceManager::CreateAsset<Texture2D>("textures/5R.png");
-		Texture2D::Sptr    Tex6R = ResourceManager::CreateAsset<Texture2D>("textures/6R.png");
-
-		Texture2D::Sptr    Tex1B = ResourceManager::CreateAsset<Texture2D>("textures/1B.png");
-		Texture2D::Sptr    Tex2B = ResourceManager::CreateAsset<Texture2D>("textures/2B.png");
-		Texture2D::Sptr    Tex3B = ResourceManager::CreateAsset<Texture2D>("textures/3B.png");
-		Texture2D::Sptr    Tex4B = ResourceManager::CreateAsset<Texture2D>("textures/4B.png");
-		Texture2D::Sptr    Tex5B = ResourceManager::CreateAsset<Texture2D>("textures/5B.png");
-		Texture2D::Sptr    Tex6B = ResourceManager::CreateAsset<Texture2D>("textures/6B.png");
 
 		//written text
 		Texture2D::Sptr    ResumeTex = ResourceManager::CreateAsset<Texture2D>("textures/ResumeText.png");
@@ -1847,12 +2007,10 @@ int main() {
 			{
 				cobwebMaterial->Name = "cobweb";
 				cobwebMaterial->MatShader = scene->BaseShader;
-				cobwebMaterial->Texture = cobweb2Texture;
+				cobwebMaterial->Texture = cobwebTexture;
 				cobwebMaterial->Shininess = 256.0f;
 
 			}
-
-			
 
 			Material::Sptr PanelMaterial = ResourceManager::CreateAsset<Material>();
 			{
@@ -2135,132 +2293,74 @@ int main() {
 			}
 
 			// Create some lights for our scene
-			// Create some lights for our scene
-			// Create some lights for our scene
-			scene->Lights.resize(31);
+			scene->Lights.resize(18);
 			scene->Lights[0].Position = glm::vec3(0.0f, 1.0f, 40.0f);
-			scene->Lights[0].Color = glm::vec3(0.8619f, 1.f, 0.819f);
-			scene->Lights[0].Range = 200.0f;
+			scene->Lights[0].Color = glm::vec3(1.f, 1.f, 1.f);
+			scene->Lights[0].Range = 1000.0f;
 
-			scene->Lights[1].Position = glm::vec3(-50.f, 0.0f, 40.0f);
-			scene->Lights[1].Color = glm::vec3(0.8619f, 1.f, 0.819f);
-			scene->Lights[1].Range = 200.0f;
+			scene->Lights[1].Position = glm::vec3(-50.f, 0.0f, 3.0f);
+			scene->Lights[1].Color = glm::vec3(1.f, 1.f, 1.f);
 
-			scene->Lights[2].Position = glm::vec3(-100.f, 1.0f, 40.0f);
-			scene->Lights[2].Color = glm::vec3(0.8619f, 1.f, 0.819f);
-			scene->Lights[2].Range = 200.0f;
+			scene->Lights[2].Position = glm::vec3(-100.f, 1.0f, 3.0f);
+			scene->Lights[2].Color = glm::vec3(1.f, 1.f, 1.f);
 
 			scene->Lights[3].Position = glm::vec3(-150.0f, 1.0f, 40.0f);
-			scene->Lights[3].Color = glm::vec3(0.8619f, 1.f, 0.819f);
-			scene->Lights[3].Range = 200.0f;
+			scene->Lights[3].Color = glm::vec3(1.f, 1.f, 1.f);
+			scene->Lights[3].Range = 1000.0f;
 
-			scene->Lights[4].Position = glm::vec3(-100.0f, 1.0f, 40.0f);
-			scene->Lights[4].Color = glm::vec3(0.8619f, 1.f, 0.819f);
-			scene->Lights[4].Range = 200.0f;
+			//scene->Lights[4].Position = glm::vec3(-200.0f, 1.0f, 40.0f);
+			//scene->Lights[4].Color = glm::vec3(1.f, 1.f, 1.f);
+			//scene->Lights[4].Range = 1000.0f;
 
-			scene->Lights[5].Position = glm::vec3(-150.0f, 1.0f, 40.0f);
-			scene->Lights[5].Color = glm::vec3(0.8619f, 1.f, 0.819f);
-			scene->Lights[5].Range = 200.0f;
+			//scene->Lights[5].Position = glm::vec3(-250.0f, 1.0f, 40.0f);
+			//scene->Lights[5].Color = glm::vec3(1.f, 1.f, 1.f);
+			//scene->Lights[5].Range = 1000.0f;
 
-			scene->Lights[6].Position = glm::vec3(-200.0f, 1.0f, 40.0f);
-			scene->Lights[6].Color = glm::vec3(0.8619f, 1.f, 0.819f);
-			scene->Lights[6].Range = 200.0f;
+			//scene->Lights[6].Position = glm::vec3(-300.0f, 1.0f, 40.0f);
+			//scene->Lights[6].Color = glm::vec3(1.f, 1.f, 1.f);
+			//scene->Lights[6].Range = 1000.0f;
 
-			scene->Lights[7].Position = glm::vec3(-250.0f, 1.0f, 40.0f);
-			scene->Lights[7].Color = glm::vec3(0.8619f, 1.f, 0.819f);
-			scene->Lights[7].Range = 200.0f;
+			//scene->Lights[7].Position = glm::vec3(-350.0f, 1.0f, 40.0f);
+			//scene->Lights[7].Color = glm::vec3(1.f, 1.f, 1.f);
+			//scene->Lights[7].Range = 1000.0f;
 
-			scene->Lights[8].Position = glm::vec3(-300.0f, 1.0f, 40.0f);
-			scene->Lights[8].Color = glm::vec3(0.8619f, 1.f, 0.819f);
-			scene->Lights[8].Range = 200.0f;
+			//scene->Lights[8].Position = glm::vec3(-200.0f, 1.0f, 40.0f);
+			//scene->Lights[8].Color = glm::vec3(1.f, 1.f, 1.f);
+			//scene->Lights[8].Range = 1000.0f;
 
-			scene->Lights[9].Position = glm::vec3(-350.0f, 1.0f, 40.0f);
-			scene->Lights[9].Color = glm::vec3(0.8619f, 1.f, 0.819f);
-			scene->Lights[9].Range = 200.0f;
+			scene->Lights[4].Position = glm::vec3(-240.0f, 1.0f, 40.0f);
+			scene->Lights[4].Color = glm::vec3(1.f, 1.f, 1.f);
+			scene->Lights[4].Range = 1000.0f;
 
-			scene->Lights[10].Position = glm::vec3(-400.0f, 1.0f, 40.0f);
-			scene->Lights[10].Color = glm::vec3(0.8619f, 1.f, 0.819f);
-			scene->Lights[10].Range = 200.0f;
+			scene->Lights[5].Position = glm::vec3(-280.0f, 1.0f, 40.0f);
+			scene->Lights[5].Color = glm::vec3(1.f, 1.f, 1.f);
+			scene->Lights[5].Range = 1000.0f;
 
-			scene->Lights[11].Position = glm::vec3(0.0f, -90.0f, 100.0f);
-			scene->Lights[11].Color = glm::vec3(0.45f, 0.678f, 0.1872f);
+			scene->Lights[6].Position = glm::vec3(-320.0f, 1.0f, 40.0f);
+			scene->Lights[6].Color = glm::vec3(1.f, 1.f, 1.f);
+			scene->Lights[6].Range = 1000.0f;
+
+			scene->Lights[7].Position = glm::vec3(-360.0f, 1.0f, 40.0f);
+			scene->Lights[7].Color = glm::vec3(1.f, 1.f, 1.f);
+			scene->Lights[7].Range = 1000.0f;
+
+			scene->Lights[8].Position = glm::vec3(-400.0f, 1.0f, 40.0f);
+			scene->Lights[8].Color = glm::vec3(1.f, 1.f, 1.f);
+			scene->Lights[8].Range = 1000.0f;
+
+			scene->Lights[9].Position = glm::vec3(-200.0f, 1.0f, 40.0f);
+			scene->Lights[9].Color = glm::vec3(0.2f, 0.8f, 0.1f);
+			scene->Lights[9].Range = 1000.0f;
+
+			scene->Lights[10].Position = glm::vec3(-201.0f, 0.0f, 3.0f);
+			scene->Lights[10].Color = glm::vec3(0.2f, 0.8f, 0.1f);
+
+			scene->Lights[11].Position = glm::vec3(-400.0f, 1.0f, 40.0f);
+			scene->Lights[11].Color = glm::vec3(0.2f, 0.8f, 0.1f);
 			scene->Lights[11].Range = 1000.0f;
 
-			scene->Lights[12].Position = glm::vec3(-50.f, -90.0f, 100.0f);
-			scene->Lights[12].Color = glm::vec3(0.45f, 0.678f, 0.1872f);
-			scene->Lights[12].Range = 1000.0f;
-
-			scene->Lights[13].Position = glm::vec3(-100.f, -90.0f, 100.0f);
-			scene->Lights[13].Color = glm::vec3(0.45f, 0.678f, 0.1872f);
-			scene->Lights[13].Range = 1000.0f;
-
-			scene->Lights[14].Position = glm::vec3(-150.0f, -90.0f, 100.0f);
-			scene->Lights[14].Color = glm::vec3(0.45f, 0.678f, 0.1872f);
-			scene->Lights[14].Range = 1000.0f;
-
-			scene->Lights[15].Position = glm::vec3(-100.0f, -90.0f, 100.0f);
-			scene->Lights[15].Color = glm::vec3(0.45f, 0.678f, 0.1872f);
-			scene->Lights[15].Range = 1000.0f;
-
-			scene->Lights[16].Position = glm::vec3(-150.0f, -90.0f, 100.0f);
-			scene->Lights[16].Color = glm::vec3(0.45f, 0.678f, 0.1872f);
-			scene->Lights[16].Range = 1000.0f;
-
-			scene->Lights[17].Position = glm::vec3(-200.0f, -90.0f, 100.0f);
-			scene->Lights[17].Color = glm::vec3(0.45f, 0.678f, 0.1872f);
-			scene->Lights[17].Range = 1000.0f;
-
-			scene->Lights[18].Position = glm::vec3(-250.0f, -90.0f, 100.0f);
-			scene->Lights[18].Color = glm::vec3(0.45f, 0.678f, 0.1872f);
-			scene->Lights[18].Range = 1000.0f;
-
-			scene->Lights[19].Position = glm::vec3(-300.0f, -90.0f, 100.0f);
-			scene->Lights[19].Color = glm::vec3(0.45f, 0.678f, 0.1872f);
-			scene->Lights[19].Range = 1000.0f;
-
-			scene->Lights[20].Position = glm::vec3(-350.0f, -90.0f, 100.0f);
-			scene->Lights[20].Color = glm::vec3(0.45f, 0.678f, 0.1872f);
-			scene->Lights[20].Range = 1000.0f;
-
-			scene->Lights[21].Position = glm::vec3(-400.0f, -90.0f, 100.0f);
-			scene->Lights[21].Color = glm::vec3(0.45f, 0.678f, 0.1872f);
-			scene->Lights[21].Range = 1000.0f;
-
-			scene->Lights[22].Position = glm::vec3(-000.0f, 20.0f, 5.0f);
-			scene->Lights[22].Color = glm::vec3(1.f, 1.f, 1.f);
-			scene->Lights[22].Range = 150.0f;
-
-			scene->Lights[23].Position = glm::vec3(-50.0f, 20.0f, 5.0f);
-			scene->Lights[23].Color = glm::vec3(1.f, 1.f, 1.f);
-			scene->Lights[23].Range = 150.0f;
-
-			scene->Lights[24].Position = glm::vec3(-100.0f, 20.0f, 5.0f);
-			scene->Lights[24].Color = glm::vec3(1.f, 1.f, 1.f);
-			scene->Lights[24].Range = 150.0f;
-
-			scene->Lights[25].Position = glm::vec3(-150.0f, 20.0f, 5.0f);
-			scene->Lights[25].Color = glm::vec3(1.f, 1.f, 1.f);
-			scene->Lights[25].Range = 150.0f;
-
-			scene->Lights[26].Position = glm::vec3(-200.0f, 20.0f, 5.0f);
-			scene->Lights[26].Color = glm::vec3(1.f, 1.f, 1.f);
-			scene->Lights[26].Range = 150.0f;
-
-			scene->Lights[27].Position = glm::vec3(-250.0f, 20.0f, 5.0f);
-			scene->Lights[27].Color = glm::vec3(1.f, 1.f, 1.f);
-			scene->Lights[27].Range = 150.0f;
-
-			scene->Lights[28].Position = glm::vec3(-300.0f, 20.0f, 5.0f);
-			scene->Lights[28].Color = glm::vec3(1.f, 1.f, 1.f);
-			scene->Lights[28].Range = 150.0f;
-
-			scene->Lights[29].Position = glm::vec3(-350.0f, 20.0f, 5.0f);
-			scene->Lights[29].Color = glm::vec3(1.f, 1.f, 1.f);
-			scene->Lights[29].Range = 150.0f;
-
-			scene->Lights[30].Position = glm::vec3(-400.0f, 20.0f, 5.0f);
-			scene->Lights[30].Color = glm::vec3(1.f, 1.f, 1.f);
-			scene->Lights[30].Range = 150.0f;
+			scene->Lights[12].Position = glm::vec3(-401.0f, 0.0f, 3.0f);
+			scene->Lights[12].Color = glm::vec3(0.2f, 0.8f, 0.1f);
 
 			// We'll create a mesh that is a simple plane that we can resize later
 			planeMesh = ResourceManager::CreateAsset<MeshResource>();
@@ -2268,7 +2368,6 @@ int main() {
 			mushroomMesh = ResourceManager::CreateAsset<MeshResource>("Mushroom.obj");
 			vinesMesh = ResourceManager::CreateAsset<MeshResource>("Vines.obj");
 			cobwebMesh = ResourceManager::CreateAsset<MeshResource>("Cobweb.obj");
-			cobweb2Mesh = ResourceManager::CreateAsset<MeshResource>("Spiderweb2.obj");
 
 			//Anim test
 			fly1Mesh = ResourceManager::CreateAsset<MeshResource>("fly1.obj");
@@ -2331,34 +2430,34 @@ int main() {
 			//Obstacles
 			createGroundObstacle("2", glm::vec3(-20.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 1 (small jump)
 			createGroundObstacle("3", glm::vec3(-60.f, 0.0f, 3.0), glm::vec3(1.f, 1.f, 1.f), glm::vec3(90.f, 0.0f, 73.f), vinesMesh, vinesMaterial); // vine 1 (jump blocking)
-			createGroundObstacle("4", glm::vec3(-110.f, 0.0f, -3.5f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(90.0f, 0.0f, 0.f), cobweb2Mesh, cobwebMaterial); //cobweb 1 (tall jump)
+			createGroundObstacle("4", glm::vec3(-110.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 1 (tall jump)
 			createGroundObstacle("5", glm::vec3(-45.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 2
 			createGroundObstacle("6", glm::vec3(-150.f, 5.530f, 0.250f), glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(90.f, 0.0f, -25.f), vinesMesh, vinesMaterial); // vine 2 (squish blocking)
-			createGroundObstacle("7", glm::vec3(-150.240f, 0.f, 0.0f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(90.0f, 0.0f, 0.f), cobweb2Mesh, cobwebMaterial); //cobweb 2 (squish Blocking 2)
+			createGroundObstacle("7", glm::vec3(-150.240f, 0.f, 7.88f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, 84.f), cobwebMesh, cobwebMaterial); //cobweb 2 (squish Blocking 2)
 
 			createGroundObstacle("8", glm::vec3(-170.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 3 (small jump)
 			createGroundObstacle("9", glm::vec3(-200.f, 0.0f, 3.0), glm::vec3(1.f, 1.f, 1.f), glm::vec3(90.f, 0.0f, 73.f), vinesMesh, vinesMaterial); // vine 3 (jump blocking)
-			createGroundObstacle("10", glm::vec3(-220.f, 0.0f, -3.5f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(90.0f, 0.0f, 0.f), cobweb2Mesh, cobwebMaterial); //cobweb 3 (tall jump)
+			createGroundObstacle("10", glm::vec3(-220.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 3 (tall jump)
 			createGroundObstacle("11", glm::vec3(-230.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 4 (small jump)
 			createGroundObstacle("12", glm::vec3(-250.f, 0.0f, 3.0), glm::vec3(1.f, 1.f, 1.f), glm::vec3(90.f, 0.0f, 73.f), vinesMesh, vinesMaterial); // vine 4 (jump blocking)
 			createGroundObstacle("13", glm::vec3(-275.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 5 (small jump)
 			createGroundObstacle("14", glm::vec3(-300.f, 5.530f, 0.250f), glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(90.f, 0.0f, -25.f), vinesMesh, vinesMaterial); // vine 5 (squish blocking)
-			createGroundObstacle("15", glm::vec3(-300.240f, 0.f, 0.0f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(90.0f, 0.0f, 0.f), cobweb2Mesh, cobwebMaterial); //cobweb 4 (squish Blocking 2)
+			createGroundObstacle("15", glm::vec3(-300.240f, 0.f, 7.88f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, 84.f), cobwebMesh, cobwebMaterial); //cobweb 4 (squish Blocking 2)
 
 			createGroundObstacle("16", glm::vec3(-310.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 6 (small jump)
 			createGroundObstacle("17", glm::vec3(-315.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 7 (small jump)
 			createGroundObstacle("18", glm::vec3(-320.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 8 (small jump)
-			createGroundObstacle("19", glm::vec3(-325.f, 0.0f, -3.5f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(90.0f, 0.0f, 0.f), cobweb2Mesh, cobwebMaterial); //cobweb 5 (tall jump)
+			createGroundObstacle("19", glm::vec3(-325.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 5 (tall jump)
 			createGroundObstacle("20", glm::vec3(-340.f, 0.0f, 3.0), glm::vec3(1.f, 1.f, 1.f), glm::vec3(90.f, 0.0f, 73.f), vinesMesh, vinesMaterial); // vine 6 (jump blocking)
 			createGroundObstacle("21", glm::vec3(-345.f, 5.530f, 0.250f), glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(90.f, 0.0f, -25.f), vinesMesh, vinesMaterial); // vine 7 (squish blocking)
-			createGroundObstacle("22", glm::vec3(-345.240f, 0.f, 0.0f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(90.0f, 0.0f, 0.f), cobweb2Mesh, cobwebMaterial); //cobweb 6 (squish Blocking 2)
-			createGroundObstacle("23", glm::vec3(-360.f, 0.0f, -3.5f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(90.0f, 0.0f, 0.f), cobweb2Mesh, cobwebMaterial); //cobweb 7 (tall jump)
+			createGroundObstacle("22", glm::vec3(-345.240f, 0.f, 7.88f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, 84.f), cobwebMesh, cobwebMaterial); //cobweb 6 (squish Blocking 2)
+			createGroundObstacle("23", glm::vec3(-360.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 7 (tall jump)
 			createGroundObstacle("24", glm::vec3(-380.f, 5.530f, 0.250f), glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(90.f, 0.0f, -25.f), vinesMesh, vinesMaterial); // vine 8 (squish blocking)
-			createGroundObstacle("25", glm::vec3(-380.240f, 0.f, 0.0f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(90.0f, 0.0f, 0.f), cobweb2Mesh, cobwebMaterial); //cobweb 8 (squish Blocking 2)
-			createGroundObstacle("26", glm::vec3(-395.f, 0.0f, -3.5f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(90.0f, 0.0f, 0.f), cobweb2Mesh, cobwebMaterial); //cobweb 9 (tall jump)
+			createGroundObstacle("25", glm::vec3(-380.240f, 0.f, 7.88f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, 84.f), cobwebMesh, cobwebMaterial); //cobweb 8 (squish Blocking 2)
+			createGroundObstacle("26", glm::vec3(-395.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 9 (tall jump)
 
 			//3D Backgrounds
-			createGroundObstacle("27", glm::vec3(107.7f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
+			createGroundObstacle("27", glm::vec3(107.7f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial); //-0.47 readjusts so the player doesnt clip through the ground
 			createGroundObstacle("28", glm::vec3(0.f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
 			createGroundObstacle("29", glm::vec3(-107.7f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMesh, BGMaterial);
 
@@ -2905,7 +3004,7 @@ int main() {
 
 		}
 
-		/// Working Level ///									//////		Level 1		////////// scenevalue == 1
+		/// Working Level ///									//////		Level 1		//////////
 
 		{
 			// Create an empty scene
@@ -2995,6 +3094,15 @@ int main() {
 				vinesMaterial->MatShader = scene->BaseShader;
 				vinesMaterial->Texture = vinesTexture;
 				vinesMaterial->Shininess = 256.0f;
+
+			}
+
+			Material::Sptr cobwebMaterial = ResourceManager::CreateAsset<Material>();
+			{
+				cobwebMaterial->Name = "cobweb";
+				cobwebMaterial->MatShader = scene->BaseShader;
+				cobwebMaterial->Texture = cobwebTexture;
+				cobwebMaterial->Shininess = 256.0f;
 
 			}
 
@@ -3281,131 +3389,50 @@ int main() {
 
 
 			// Create some lights for our scene
-			// Create some lights for our scene
-			scene->Lights.resize(31);
+			scene->Lights.resize(18);
 			scene->Lights[0].Position = glm::vec3(-400.0f, 1.0f, 40.0f);
-			scene->Lights[0].Color = glm::vec3(0.8619f, 1.f, 0.819f);
-			scene->Lights[0].Range = 200.0f;
+			scene->Lights[0].Color = glm::vec3(1.f, 1.f, 1.f);
+			scene->Lights[0].Range = 1000.0f;
 
-			scene->Lights[1].Position = glm::vec3(-450.f, 0.0f, 40.0f);
-			scene->Lights[1].Color = glm::vec3(0.8619f, 1.f, 0.819f);
-			scene->Lights[1].Range = 200.0f;
+			scene->Lights[1].Position = glm::vec3(-450.f, 0.0f, 3.0f);
+			scene->Lights[1].Color = glm::vec3(1.f, 1.f, 1.f);
+			scene->Lights[1].Range = 100.0f;
 
-			scene->Lights[2].Position = glm::vec3(-500.f, 1.0f, 40.0f);
-			scene->Lights[2].Color = glm::vec3(0.8619f, 1.f, 0.819f);
-			scene->Lights[2].Range = 200.0f;
+			scene->Lights[2].Position = glm::vec3(-500.f, 1.0f, 3.0f);
+			scene->Lights[2].Color = glm::vec3(1.f, 1.f, 1.f);
+			scene->Lights[2].Range = 100.0f;
 
 			scene->Lights[3].Position = glm::vec3(-550.0f, 1.0f, 40.0f);
-			scene->Lights[3].Color = glm::vec3(0.8619f, 1.f, 0.819f);
-			scene->Lights[3].Range = 200.0f;
+			scene->Lights[3].Color = glm::vec3(1.f, 1.f, 1.f);
+			scene->Lights[3].Range = 100.0f;
 
 			scene->Lights[4].Position = glm::vec3(-500.0f, 1.0f, 40.0f);
-			scene->Lights[4].Color = glm::vec3(0.8619f, 1.f, 0.819f);
-			scene->Lights[4].Range = 200.0f;
+			scene->Lights[4].Color = glm::vec3(1.f, 1.f, 1.f);
+			scene->Lights[4].Range = 100.0f;
 
 			scene->Lights[5].Position = glm::vec3(-550.0f, 1.0f, 40.0f);
-			scene->Lights[5].Color = glm::vec3(0.8619f, 1.f, 0.819f);
-			scene->Lights[5].Range = 200.0f;
+			scene->Lights[5].Color = glm::vec3(1.f, 1.f, 1.f);
+			scene->Lights[5].Range = 100.0f;
 
 			scene->Lights[6].Position = glm::vec3(-600.0f, 1.0f, 40.0f);
-			scene->Lights[6].Color = glm::vec3(0.8619f, 1.f, 0.819f);
-			scene->Lights[6].Range = 200.0f;
+			scene->Lights[6].Color = glm::vec3(1.f, 1.f, 1.f);
+			scene->Lights[6].Range = 100.0f;
 
 			scene->Lights[7].Position = glm::vec3(-650.0f, 1.0f, 40.0f);
-			scene->Lights[7].Color = glm::vec3(0.8619f, 1.f, 0.819f);
-			scene->Lights[7].Range = 200.0f;
+			scene->Lights[7].Color = glm::vec3(1.f, 1.f, 1.f);
+			scene->Lights[7].Range = 100.0f;
 
 			scene->Lights[8].Position = glm::vec3(-700.0f, 1.0f, 40.0f);
-			scene->Lights[8].Color = glm::vec3(0.8619f, 1.f, 0.819f);
-			scene->Lights[8].Range = 200.0f;
+			scene->Lights[8].Color = glm::vec3(1.f, 1.f, 1.f);
+			scene->Lights[8].Range = 100.0f;
 
 			scene->Lights[9].Position = glm::vec3(-750.0f, 1.0f, 40.0f);
-			scene->Lights[9].Color = glm::vec3(0.8619f, 1.f, 0.819f);
-			scene->Lights[9].Range = 200.0f;
+			scene->Lights[9].Color = glm::vec3(1.f, 1.f, 1.f);
+			scene->Lights[9].Range = 100.0f;
 
 			scene->Lights[10].Position = glm::vec3(-800.0f, 1.0f, 40.0f);
-			scene->Lights[10].Color = glm::vec3(0.8619f, 1.f, 0.819f);
-			scene->Lights[10].Range = 200.0f;
-
-			scene->Lights[11].Position = glm::vec3(-400.0f, -90.0f, 100.0f);
-			scene->Lights[11].Color = glm::vec3(0.45f, 0.678f, 0.1872f);
-			scene->Lights[11].Range = 1000.0f;
-
-			scene->Lights[12].Position = glm::vec3(-450.f, -90.0f, 100.0f);
-			scene->Lights[12].Color = glm::vec3(0.45f, 0.678f, 0.1872f);
-			scene->Lights[12].Range = 1000.0f;
-
-			scene->Lights[13].Position = glm::vec3(-500.f, -90.0f, 100.0f);
-			scene->Lights[13].Color = glm::vec3(0.45f, 0.678f, 0.1872f);
-			scene->Lights[13].Range = 1000.0f;
-
-			scene->Lights[14].Position = glm::vec3(-550.0f, -90.0f, 100.0f);
-			scene->Lights[14].Color = glm::vec3(0.45f, 0.678f, 0.1872f);
-			scene->Lights[14].Range = 1000.0f;
-
-			scene->Lights[15].Position = glm::vec3(-500.0f, -90.0f, 100.0f);
-			scene->Lights[15].Color = glm::vec3(0.45f, 0.678f, 0.1872f);
-			scene->Lights[15].Range = 1000.0f;
-
-			scene->Lights[16].Position = glm::vec3(-550.0f, -90.0f, 100.0f);
-			scene->Lights[16].Color = glm::vec3(0.45f, 0.678f, 0.1872f);
-			scene->Lights[16].Range = 1000.0f;
-
-			scene->Lights[17].Position = glm::vec3(-600.0f, -90.0f, 100.0f);
-			scene->Lights[17].Color = glm::vec3(0.45f, 0.678f, 0.1872f);
-			scene->Lights[17].Range = 1000.0f;
-
-			scene->Lights[18].Position = glm::vec3(-650.0f, -90.0f, 100.0f);
-			scene->Lights[18].Color = glm::vec3(0.45f, 0.678f, 0.1872f);
-			scene->Lights[18].Range = 1000.0f;
-
-			scene->Lights[19].Position = glm::vec3(-700.0f, -90.0f, 100.0f);
-			scene->Lights[19].Color = glm::vec3(0.45f, 0.678f, 0.1872f);
-			scene->Lights[19].Range = 1000.0f;
-
-			scene->Lights[20].Position = glm::vec3(-750.0f, -90.0f, 100.0f);
-			scene->Lights[20].Color = glm::vec3(0.45f, 0.678f, 0.1872f);
-			scene->Lights[20].Range = 1000.0f;
-
-			scene->Lights[21].Position = glm::vec3(-800.0f, -90.0f, 100.0f);
-			scene->Lights[21].Color = glm::vec3(0.45f, 0.678f, 0.1872f);
-			scene->Lights[21].Range = 1000.0f;
-
-			scene->Lights[22].Position = glm::vec3(-400.0f, 20.0f, 5.0f);
-			scene->Lights[22].Color = glm::vec3(1.f, 1.f, 1.f);
-			scene->Lights[22].Range = 150.0f;
-
-			scene->Lights[23].Position = glm::vec3(-450.0f, 20.0f, 5.0f);
-			scene->Lights[23].Color = glm::vec3(1.f, 1.f, 1.f);
-			scene->Lights[23].Range = 150.0f;
-
-			scene->Lights[24].Position = glm::vec3(-500.0f, 20.0f, 5.0f);
-			scene->Lights[24].Color = glm::vec3(1.f, 1.f, 1.f);
-			scene->Lights[24].Range = 150.0f;
-
-			scene->Lights[25].Position = glm::vec3(-550.0f, 20.0f, 5.0f);
-			scene->Lights[25].Color = glm::vec3(1.f, 1.f, 1.f);
-			scene->Lights[25].Range = 150.0f;
-
-			scene->Lights[26].Position = glm::vec3(-600.0f, 20.0f, 5.0f);
-			scene->Lights[26].Color = glm::vec3(1.f, 1.f, 1.f);
-			scene->Lights[26].Range = 150.0f;
-
-			scene->Lights[27].Position = glm::vec3(-650.0f, 20.0f, 5.0f);
-			scene->Lights[27].Color = glm::vec3(1.f, 1.f, 1.f);
-			scene->Lights[27].Range = 150.0f;
-
-			scene->Lights[28].Position = glm::vec3(-700.0f, 20.0f, 5.0f);
-			scene->Lights[28].Color = glm::vec3(1.f, 1.f, 1.f);
-			scene->Lights[28].Range = 150.0f;
-
-			scene->Lights[29].Position = glm::vec3(-750.0f, 20.0f, 5.0f);
-			scene->Lights[29].Color = glm::vec3(1.f, 1.f, 1.f);
-			scene->Lights[29].Range = 150.0f;
-
-			scene->Lights[30].Position = glm::vec3(-800.0f, 20.0f, 5.0f);
-			scene->Lights[30].Color = glm::vec3(1.f, 1.f, 1.f);
-			scene->Lights[30].Range = 150.0f;
+			scene->Lights[10].Color = glm::vec3(1.f, 1.f, 1.f);
+			scene->Lights[9].Range = 100.0f;
 
 			// We'll create a mesh that is a simple plane that we can resize later
 			planeMesh = ResourceManager::CreateAsset<MeshResource>();
@@ -3417,6 +3444,7 @@ int main() {
 			ToadMesh = ResourceManager::CreateAsset<MeshResource>("ToadStool.obj");
 
 
+			cobwebMesh = ResourceManager::CreateAsset<MeshResource>("Cobweb.obj");
 			BranchMesh = ResourceManager::CreateAsset<MeshResource>("Branch.obj");
 			LogMesh = ResourceManager::CreateAsset<MeshResource>("Log.obj");
 			Plant1Mesh = ResourceManager::CreateAsset<MeshResource>("PLANT.obj");
@@ -3495,6 +3523,30 @@ int main() {
 			slidingMesh25 = ResourceManager::CreateAsset<MeshResource>("CrawlToRun_000007.obj");
 			slidingMesh26 = ResourceManager::CreateAsset<MeshResource>("CrawlToRun_000008.obj");
 
+			//run to fly Mesh
+			runtoflyMesh1 = ResourceManager::CreateAsset<MeshResource>("RunToFly_000001.obj");
+			runtoflyMesh2 = ResourceManager::CreateAsset<MeshResource>("RunToFly_000002.obj");
+			runtoflyMesh3 = ResourceManager::CreateAsset<MeshResource>("RunToFly_000003.obj");
+			runtoflyMesh4 = ResourceManager::CreateAsset<MeshResource>("RunToFly_000004.obj");
+			runtoflyMesh5 = ResourceManager::CreateAsset<MeshResource>("RunToFly_000005.obj");
+			runtoflyMesh6 = ResourceManager::CreateAsset<MeshResource>("RunToFly_000006.obj");
+			runtoflyMesh7 = ResourceManager::CreateAsset<MeshResource>("RunToFly_000007.obj");
+			runtoflyMesh8 = ResourceManager::CreateAsset<MeshResource>("RunToFly_000008.obj");
+			runtoflyMesh9 = ResourceManager::CreateAsset<MeshResource>("RunToFly_000009.obj");
+			runtoflyMesh10 = ResourceManager::CreateAsset<MeshResource>("RunToFly_0000010.obj");
+
+			//fly to run Mesh
+			flytorunMesh1 = ResourceManager::CreateAsset<MeshResource>("flytorun1.obj");
+			flytorunMesh2 = ResourceManager::CreateAsset<MeshResource>("flytorun2.obj");
+			flytorunMesh3 = ResourceManager::CreateAsset<MeshResource>("flytorun3.obj");
+			flytorunMesh4 = ResourceManager::CreateAsset<MeshResource>("flytorun4.obj");
+			flytorunMesh5 = ResourceManager::CreateAsset<MeshResource>("flytorun5.obj");
+			flytorunMesh6 = ResourceManager::CreateAsset<MeshResource>("flytorun6.obj");
+			flytorunMesh7 = ResourceManager::CreateAsset<MeshResource>("flytorun7.obj");
+			flytorunMesh8 = ResourceManager::CreateAsset<MeshResource>("flytorun8.obj");
+			flytorunMesh9 = ResourceManager::CreateAsset<MeshResource>("flytorun9.obj");
+			flytorunMesh10 = ResourceManager::CreateAsset<MeshResource>("flytorun10.obj");
+
 			planeMesh->AddParam(MeshBuilderParam::CreatePlane(ZERO, UNIT_Z, UNIT_X, glm::vec2(1.0f)));
 			planeMesh->GenerateMesh();
 
@@ -3532,6 +3584,7 @@ int main() {
 			//createGroundObstacle("18", glm::vec3(-320.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //mushroom 8 (small jump)
 			//createGroundObstacle("20", glm::vec3(-340.f, 0.0f, 3.0), glm::vec3(1.f, 1.f, 1.f), glm::vec3(90.f, 0.0f, 73.f), vinesMesh, vinesMaterial); // vine 6 (jump blocking)
 			//createGroundObstacle("24", glm::vec3(-380.f, 5.530f, 0.250f), glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(90.f, 0.0f, -25.f), vinesMesh, vinesMaterial); // vine 8 (squish blocking)
+			//createGroundObstacle("26", glm::vec3(-395.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 9 (tall jump)
 
 			createGroundObstacle("1", glm::vec3(-450.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //red mushroom 1 (small jump)
 			createGroundObstacle("2", glm::vec3(-500.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), mushroomMesh, mushroomMaterial); //red mushroom 2 (small jump)
@@ -4142,7 +4195,14 @@ int main() {
 
 			}
 
-		
+			Material::Sptr cobwebMaterial = ResourceManager::CreateAsset<Material>();
+			{
+				cobwebMaterial->Name = "cobweb";
+				cobwebMaterial->MatShader = scene->BaseShader;
+				cobwebMaterial->Texture = cobwebTexture;
+				cobwebMaterial->Shininess = 256.0f;
+
+			}
 
 			Material::Sptr PanelMaterial = ResourceManager::CreateAsset<Material>();
 			{
@@ -4331,7 +4391,7 @@ int main() {
 			{
 				ProgressBarMaterial->Name = "ProgressBar";
 				ProgressBarMaterial->MatShader = scene->BaseShader;
-				ProgressBarMaterial->Texture = Progress2Tex;
+				ProgressBarMaterial->Texture = ProgressTex;
 				ProgressBarMaterial->Shininess = 2.0f;
 			}
 			Material::Sptr grass1Material = ResourceManager::CreateAsset<Material>();
@@ -4641,6 +4701,7 @@ int main() {
 			ToadMesh = ResourceManager::CreateAsset<MeshResource>("ToadStool.obj");
 
 
+			cobwebMesh = ResourceManager::CreateAsset<MeshResource>("Cobweb.obj");
 			BranchMesh = ResourceManager::CreateAsset<MeshResource>("Branch.obj");
 			LogMesh = ResourceManager::CreateAsset<MeshResource>("Log.obj");
 			Plant1Mesh = ResourceManager::CreateAsset<MeshResource>("PLANT.obj");
@@ -4773,49 +4834,40 @@ int main() {
 
 			//Collisions
 
-			//sign
+			//mushroom 8 collision
 			createCollision("211", -850.0f, 8.11f, 1.f, 2.f); //2y
 			createCollision("212", -849.6f, 7.79f, 1.f, 2.f);
 			createCollision("213", -849.930f, 8.160f, 1.f, 2.f);
 			createCollision("214", -850.f, 8.150f, 1.f, 2.f);
 
-			//rock pile
 			createCollision("221", -878.924f, 1.560f, 1.f, 2.f); //2y
 			createCollision("222", -880.00f, 12.390f, 1.f, 2.f); //2y
 
-			//rock tunnel
 			createCollision("231", -896.0f, 5.0f, 1.f, 1.f);
 			createCollision("232", -898.963f, 6.570f, 1.f, 1.f);
 			createCollision("233", -902.823f, 5.0f, 1.f, 1.f);
 
-			//rock wall
 			createCollision("241", -950.f, 2.470f, 1.f, 2.f);
 
-			//rock wall
 			createCollision("251", -980.f, 2.470f, 1.f, 2.f);
 
-			//tall rock wall
 			createCollision("261", -1008.98f, 1.560f, 1.f, 4.f); //4y
 
-			//rock tunnel
 			createCollision("271", -1046.0f, 5.0f, 1.f, 1.f);
 			createCollision("272", -1048.963f, 6.570f, 1.f, 1.f);
 			createCollision("273", -1052.823f, 5.0f, 1.f, 1.f);
 
-			//puddle
-			createCollision("281", -1085.f, 0.44f, 1.f, 1.f);
-			createCollision("282", -1091.f, 0.44f, 1.f, 1.f);
-			createCollision("283", -1093.f, 0.44f, 1.f, 1.f);
-			createCollision("284", -1095.f, 0.44f, 1.f, 1.f);
-			createCollision("285", -1087.f, 0.44f, 1.f, 1.f);
-			createCollision("286", -1089.f, 0.44f, 1.f, 1.f);
 
-			//rock tunnel
+			createCollision("281", -1096.f, 0.44f, 1.f, 1.f);
+			createCollision("282", -1095.f, 0.44f, 1.f, 1.f);
+			createCollision("283", -1098.f, 0.44f, 1.f, 1.f);
+			createCollision("284", -1092.f, 0.44f, 1.f, 1.f);
+
 			createCollision("291", -1116.0f, 5.0f, 1.f, 1.f);
 			createCollision("292", -1118.963f, 6.570f, 1.f, 1.f);
 			createCollision("293", -1122.823f, 5.0f, 1.f, 1.f);
 
-			//campfire
+
 			createCollision("201", -1147.44f, 6.3f, 1.f, 1.f);
 			createCollision("202", -1151.720f, 6.3f, 1.f, 1.f);
 			createCollision("203", -1150.f, 6.3f, 1.f, 1.f);
@@ -5321,6 +5373,15 @@ int main() {
 
 		}
 
+		Material::Sptr cobwebMaterial = ResourceManager::CreateAsset<Material>();
+		{
+			cobwebMaterial->Name = "cobweb";
+			cobwebMaterial->MatShader = scene->BaseShader;
+			cobwebMaterial->Texture = cobwebTexture;
+			cobwebMaterial->Shininess = 256.0f;
+
+		}
+
 		Material::Sptr PanelMaterial = ResourceManager::CreateAsset<Material>();
 		{
 			PanelMaterial->Name = "Panel";
@@ -5508,7 +5569,7 @@ int main() {
 		{
 			ProgressBarMaterial->Name = "ProgressBar";
 			ProgressBarMaterial->MatShader = scene->BaseShader;
-			ProgressBarMaterial->Texture = Progress2Tex;
+			ProgressBarMaterial->Texture = ProgressTex;
 			ProgressBarMaterial->Shininess = 2.0f;
 		}
 		Material::Sptr grass1Material = ResourceManager::CreateAsset<Material>();
@@ -5818,6 +5879,7 @@ int main() {
 		ToadMesh = ResourceManager::CreateAsset<MeshResource>("ToadStool.obj");
 
 
+		cobwebMesh = ResourceManager::CreateAsset<MeshResource>("Cobweb.obj");
 		BranchMesh = ResourceManager::CreateAsset<MeshResource>("Branch.obj");
 		LogMesh = ResourceManager::CreateAsset<MeshResource>("Log.obj");
 		Plant1Mesh = ResourceManager::CreateAsset<MeshResource>("PLANT.obj");
@@ -5876,7 +5938,7 @@ int main() {
 		createBackgroundAsset("18", glm::vec3(-406.f - 800.f, -12.660f, 0.400), 0.05, glm::vec3(83.f, -7.0f, 90.0f), tmMesh, tmMaterial);
 
 		//Obstacles scene 3
-		/*createGroundObstacle("1", glm::vec3(-1250.f, -4.0f, 0.0f), glm::vec3(5.0f, 5.0f, 5.0f), glm::vec3(90.0f, 0.0f, -168.0f), SignPostMesh, SignPostMaterial);
+		createGroundObstacle("1", glm::vec3(-1250.f, -4.0f, 0.0f), glm::vec3(5.0f, 5.0f, 5.0f), glm::vec3(90.0f, 0.0f, -168.0f), SignPostMesh, SignPostMaterial);
 		createGroundObstacle("2", glm::vec3(-1280.f, 0.0f, -2.830f), glm::vec3(1.0f, 4.0f, 3.0f), glm::vec3(90.0f, 0.0f, -21.0f), RockPileMesh, RockPileMaterial);
 		createGroundObstacle("3", glm::vec3(-1300.f, 0.0f, 0.0f), glm::vec3(3.0f, 2.0f, 2.0f), glm::vec3(90.0f, 0.0f, 0.0f), RockTunnelMesh, RockTunnelMaterial);
 		createGroundObstacle("4", glm::vec3(-1350.f, -2.50f, 0.0f), glm::vec3(1.0f, 2.0f, 2.0f), glm::vec3(90.0f, 0.0f, 0.0f), RockWallMesh1, RockWallMaterial);
@@ -5885,7 +5947,7 @@ int main() {
 		createGroundObstacle("7", glm::vec3(-1450.f, 0.0f, 0.0f), glm::vec3(3.0f, 2.0f, 2.0f), glm::vec3(90.0f, 0.0f, 0.0f), RockTunnelMesh, RockTunnelMaterial);
 		createGroundObstacle("8", glm::vec3(-1490.f, 1.390f, 0.3f), glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(90.0f, 0.0f, 158.0f), PuddleMesh, PuddleMaterial);
 		createGroundObstacle("9", glm::vec3(-1520.f, 0.0f, 0.0f), glm::vec3(3.0f, 2.0f, 2.0f), glm::vec3(90.0f, 0.0f, 0.0f), RockTunnelMesh, RockTunnelMaterial);
-		createGroundObstacle("10", glm::vec3(-1550.f, -2.22f, 0.0f), glm::vec3(0.4f, 0.4f, 0.4f), glm::vec3(90.0f, 0.0f, -67.0f), CampfireMesh, CampfireMaterial);*/
+		createGroundObstacle("10", glm::vec3(-1550.f, -2.22f, 0.0f), glm::vec3(0.4f, 0.4f, 0.4f), glm::vec3(90.0f, 0.0f, -67.0f), CampfireMesh, CampfireMaterial);
 
 
 		//createGroundObstacle("2", glm::vec3(-900.f, 1.390f, 0.3f), glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(90.0f, 0.0f, 158.0f), PuddleMesh, PuddleMaterial);
@@ -6054,11 +6116,6 @@ int main() {
 		//rock wall
 		createCollision("3141", -1540.f, 2.470f, 1.f, 2.f);
 
-		//sign post
-		createCollision("3151", -1580.0f, 8.11f, 1.f, 2.f); //2y
-		createCollision("3152", -1579.6f, 7.79f, 1.f, 2.f);
-		createCollision("3153", -1579.930f, 8.160f, 1.f, 2.f);
-		createCollision("3154", -1580.f, 8.150f, 1.f, 2.f);
 
 		// Set up the scene's camera
 		GameObject::Sptr camera = scene->CreateGameObject("Main Camera");
@@ -6557,6 +6614,15 @@ int main() {
 
 			}
 
+			Material::Sptr cobwebMaterial = ResourceManager::CreateAsset<Material>();
+			{
+				cobwebMaterial->Name = "cobweb";
+				cobwebMaterial->MatShader = scene->BaseShader;
+				cobwebMaterial->Texture = cobwebTexture;
+				cobwebMaterial->Shininess = 256.0f;
+
+			}
+
 			Material::Sptr PanelMaterial = ResourceManager::CreateAsset<Material>();
 			{
 				PanelMaterial->Name = "Panel";
@@ -6744,7 +6810,7 @@ int main() {
 			{
 				ProgressBarMaterial->Name = "ProgressBar";
 				ProgressBarMaterial->MatShader = scene->BaseShader;
-				ProgressBarMaterial->Texture = Progress3Tex;
+				ProgressBarMaterial->Texture = ProgressTex;
 				ProgressBarMaterial->Shininess = 2.0f;
 			}
 			Material::Sptr grass1Material = ResourceManager::CreateAsset<Material>();
@@ -6782,7 +6848,13 @@ int main() {
 				grass5Material->Texture = Grass5Tex;
 				grass5Material->Shininess = 2.0f;
 			}
-
+			Material::Sptr ExitTreeMaterial = ResourceManager::CreateAsset<Material>();
+			{
+				ExitTreeMaterial->Name = "ExitTree";
+				ExitTreeMaterial->MatShader = scene->BaseShader;
+				ExitTreeMaterial->Texture = ExitTreeTex;
+				ExitTreeMaterial->Shininess = 2.0f;
+			}
 			Material::Sptr LStextMaterial = ResourceManager::CreateAsset<Material>();
 			{
 				LStextMaterial->Name = "LStext";
@@ -6919,12 +6991,12 @@ int main() {
 				MineBackgroundMaterial->Shininess = 2.0f;
 			}
 
-			Material::Sptr CaveExitMaterial = ResourceManager::CreateAsset<Material>();
+			Material::Sptr CaveEntranceMaterial = ResourceManager::CreateAsset<Material>();
 			{
-				CaveExitMaterial->Name = "CaveEntrance";
-				CaveExitMaterial->MatShader = scene->BaseShader;
-				CaveExitMaterial->Texture = CaveEntranceTex;
-				CaveExitMaterial->Shininess = 2.0f;
+				CaveEntranceMaterial->Name = "CaveEntrance";
+				CaveEntranceMaterial->MatShader = scene->BaseShader;
+				CaveEntranceMaterial->Texture = CaveEntranceTex;
+				CaveEntranceMaterial->Shininess = 2.0f;
 			}
 
 			Material::Sptr GoldBarMaterial = ResourceManager::CreateAsset<Material>();
@@ -7159,6 +7231,7 @@ int main() {
 			ToadMesh = ResourceManager::CreateAsset<MeshResource>("ToadStool.obj");
 
 
+			cobwebMesh = ResourceManager::CreateAsset<MeshResource>("Cobweb.obj");
 			BranchMesh = ResourceManager::CreateAsset<MeshResource>("Branch.obj");
 			LogMesh = ResourceManager::CreateAsset<MeshResource>("Log.obj");
 			Plant1Mesh = ResourceManager::CreateAsset<MeshResource>("PLANT.obj");
@@ -7173,12 +7246,14 @@ int main() {
 			BGMineMesh = ResourceManager::CreateAsset<MeshResource>("MineBackground.obj");
 			BGRockMesh = ResourceManager::CreateAsset<MeshResource>("RockBackground.obj");
 			BGMesh = ResourceManager::CreateAsset<MeshResource>("Background.obj");
+			ExitTreeMesh = ResourceManager::CreateAsset<MeshResource>("ExitTree.obj");
+			ExitRockMesh = ResourceManager::CreateAsset<MeshResource>("ExitRock.obj");
 
 			CaveEntranceMesh = ResourceManager::CreateAsset<MeshResource>("CaveEntrance.obj");
 			Crystal1Mesh = ResourceManager::CreateAsset<MeshResource>("Crystals1.obj");
 			Crystal2Mesh = ResourceManager::CreateAsset<MeshResource>("Crystals2.obj");
 			StalagmiteMesh = ResourceManager::CreateAsset<MeshResource>("Stalagmite.obj");
-			StalagtiteMesh = ResourceManager::CreateAsset<MeshResource>("Stalagtite.obj");
+			StalagtiteMesh = ResourceManager::CreateAsset<MeshResource>("Stalagite.obj");
 			GoldbarMesh = ResourceManager::CreateAsset<MeshResource>("Goldbar.obj");
 			GoldPile1Mesh = ResourceManager::CreateAsset<MeshResource>("GoldPile1.obj");
 			GoldPile2Mesh = ResourceManager::CreateAsset<MeshResource>("GoldPile2.obj");
@@ -7200,17 +7275,17 @@ int main() {
 			//createGroundObstacle("26", glm::vec3(-395.f, 0.0f, 3.3f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.0f, 0.0f, -75.f), cobwebMesh, cobwebMaterial); //cobweb 9 (tall jump)
 
 
-			createGroundObstacle("1", glm::vec3(-1650.f, 0.0f, 0.215f), glm::vec3(6.f, 4.f, 8.f), glm::vec3(90.f, 0.0f, 80.0f), Crystal1Mesh, Crystal1BlueMaterial); // (beeg jump)
-			createGroundObstacle("2", glm::vec3(-1700.f, 0.0f, -0.f), glm::vec3(4.f, 1.5f, 6.f), glm::vec3(90.f, 0.0f, -162.0f), Crystal2Mesh, Crystal2BlueMaterial); //(small jump)
-			createGroundObstacle("3", glm::vec3(-1750.f, 0.0f, -0.f), glm::vec3(4.f, 1.5f, 6.f), glm::vec3(90.f, 0.0f, -162.0f), Crystal2Mesh, Crystal2BlueMaterial); //(small jump)
-			createGroundObstacle("4", glm::vec3(-1800.f, 0.0f, 0.215f), glm::vec3(6.f, 4.f, 8.f), glm::vec3(90.f, 0.0f, 80.0f), Crystal1Mesh, Crystal1BlueMaterial); // (beeg jump)
-			createGroundObstacle("5", glm::vec3(-1850.f, 0.0f, -0.f), glm::vec3(4.f, 1.5f, 6.f), glm::vec3(90.f, 0.0f, -162.0f), Crystal2Mesh, Crystal2BlueMaterial); //(small jump)
-			createGroundObstacle("6", glm::vec3(-1880.f, 0.0f, -0.f), glm::vec3(4.f, 1.5f, 6.f), glm::vec3(90.f, 0.0f, -162.0f), Crystal2Mesh, Crystal2BlueMaterial); //(small jump)
-			createGroundObstacle("7", glm::vec3(-1900.f, 0.0f, 0.215f), glm::vec3(6.f, 4.f, 8.f), glm::vec3(90.f, 0.0f, 80.0f), Crystal1Mesh, Crystal1BlueMaterial); // (beeg jump)
-			createGroundObstacle("8", glm::vec3(-1910.f, 0.0f, 0.215f), glm::vec3(6.f, 4.f, 8.f), glm::vec3(90.f, 0.0f, 80.0f), Crystal1Mesh, Crystal1BlueMaterial); // (beeg jump)
-			createGroundObstacle("9", glm::vec3(-1930.f, 0.0f, -0.f), glm::vec3(4.f, 1.5f, 6.f), glm::vec3(90.f, 0.0f, -162.0f), Crystal2Mesh, Crystal2BlueMaterial); //(small jump)
-			createGroundObstacle("10", glm::vec3(-1950.f, 0.0f, 0.215f), glm::vec3(6.f, 4.f, 8.f), glm::vec3(90.f, 0.0f, 80.0f), Crystal1Mesh, Crystal1BlueMaterial); // (beeg jump)
-			createGroundObstacle("11", glm::vec3(-1960.f, 0.0f, 0.215f), glm::vec3(6.f, 4.f, 8.f), glm::vec3(90.f, 0.0f, 80.0f), Crystal1Mesh, Crystal1BlueMaterial); // (beeg jump)
+			createGroundObstacle("1", glm::vec3(-1650.f, 0.0f, 0.215f), glm::vec3(6.f, 4.f, 8.f), glm::vec3(90.f, 0.0f, 80.0f), Crystal1Mesh, Crystal1BlueMaterial); //red mushroom 1 (small jump)
+			createGroundObstacle("2", glm::vec3(-1700.f, 0.0f, -0.f), glm::vec3(6.f, 3.f, 8.f), glm::vec3(90.f, 0.0f, -162.0f), Crystal2Mesh, Crystal2BlueMaterial); //red mushroom 2 (small jump)
+			//createGroundObstacle("3", glm::vec3(-1750.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), StalagmiteMesh, StalagmiteMaterial); // tall mushroom 1 (small jump)
+			//createGroundObstacle("4", glm::vec3(-1800.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), StalagtiteMesh, StalagtiteMaterial); //branch mushroom 1 (small jump)
+
+			createGroundObstacle("5", glm::vec3(-1850.f, 0.0f, 0.3f), glm::vec3(2.f, 2.f, 2.f), glm::vec3(90.f, 0.0f, 0.0f), GoldbarMesh, GoldBarMaterial); //red mushroom 3 (small jump)
+			createGroundObstacle("6", glm::vec3(-1900.f, 0.0f, -0.0), glm::vec3(4.f, 4.f, 2.f), glm::vec3(90.f, 0.0f, -71.0f), GoldPile1Mesh, GoldPile1Material); //red mushroom 4 (small jump)
+
+			//createGroundObstacle("7", glm::vec3(-2000.f, 0.0f, -0.660), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(90.f, 0.0f, 0.0f), GoldPile2Mesh, GoldPile2Material); //red mushroom 5 (small jump)
+			//createGroundObstacle("8", glm::vec3(-2050.f, 0.0f, -0.660), glm::vec3(1.f), glm::vec3(90.f, 0.0f, 0.0f), bmMesh, bmMaterial); //branch mushroom 2 (small jump)
+
 
 			//3D Backgrounds
 			createGroundObstacle("27", glm::vec3(-292.3f - 1200.f, -53.250f, -4.5f), glm::vec3(6.f, 12.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGMineMesh, MineBackgroundMaterial);
@@ -7230,7 +7305,7 @@ int main() {
 			createGroundObstacle("37", glm::vec3(-2150.f - 400.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineBackdropMaterial);
 
 			//Exit Rock
-			createGroundObstacle("58", glm::vec3(-409.f - 400.f - 1200.f, -1.f, 0.f), glm::vec3(2.f, 2.f, 1.f), glm::vec3(90.0f, 0.0f, -68.f), CaveEntranceMesh, CaveExitMaterial);
+			createGroundObstacle("58", glm::vec3(-409.f - 400.f - 1200.f, -1.f, 0.f), glm::vec3(2.f, 2.f, 1.f), glm::vec3(90.0f, 0.0f, -68.f), CaveEntranceMesh, CaveEntranceMaterial);
 
 			//Foreground 
 			createGroundObstacle("59", glm::vec3(40.f - 400.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
@@ -7247,83 +7322,11 @@ int main() {
 			createGroundObstacle("69", glm::vec3(-360.f - 400.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
 			createGroundObstacle("70", glm::vec3(-400.f - 400.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
 
-			//large rock
-			createCollision("511", -1646.f, 1.560f, 1.f, 1.f);
-			createCollision("512", -1649.44f, 4.f, 1.f, 1.f);
-			createCollision("513", -1652.f, 3.8f, 1.f, 1.f);
-			createCollision("514", -1648.f, 2.82f, 1.f, 1.f);
-			createCollision("515", -1646.f, 1.f, 1.f, 1.f);
-			createCollision("516", -1654.f, 1.56f, 1.f, 1.f);
 
-			//small rock
-			createCollision("521", -1698.f, 0.8f, 1.f, 1.f);
-			createCollision("522", -1699.f, 1.f, 1.f, 1.f);
-			createCollision("523", -1700.f, 1.f, 1.f, 1.f);
-			createCollision("524", -1702.f, 0.7f, 1.f, 1.f);
 
-			//small rock
-			createCollision("531", -1748.f, 0.8f, 1.f, 1.f);
-			createCollision("532", -1749.f, 1.f, 1.f, 1.f);
-			createCollision("533", -1750.f, 1.f, 1.f, 1.f);
-			createCollision("534", -1752.f, 0.7f, 1.f, 1.f);
 
-			//large rock
-			createCollision("541", -1796.f, 1.560f, 1.f, 1.f);
-			createCollision("542", -1796.f, 1.f, 1.f, 1.f);
-			createCollision("543", -1798.f, 2.82f, 1.f, 1.f);
-			createCollision("544", -1799.44f, 4.f, 1.f, 1.f);
-			createCollision("545", -1802.f, 3.8f, 1.f, 1.f);
-			createCollision("546", -1804.f, 1.56f, 1.f, 1.f);
 
-			//small rock 1850
-			createCollision("551", -1848.f, 0.8f, 1.f, 1.f);
-			createCollision("552", -1849.f, 1.f, 1.f, 1.f);
-			createCollision("553", -1850.f, 1.f, 1.f, 1.f);
-			createCollision("554", -1852.f, 0.7f, 1.f, 1.f);
 
-			//small rock 1880
-			createCollision("561", -1878.f, 0.8f, 1.f, 1.f);
-			createCollision("562", -1879.f, 1.f, 1.f, 1.f);
-			createCollision("563", -1880.f, 1.f, 1.f, 1.f);
-			createCollision("564", -1882.f, 0.7f, 1.f, 1.f);
-
-			//large rock 1900
-			createCollision("571", -1896.f, 1.560f, 1.f, 1.f);
-			createCollision("572", -1896.f, 1.f, 1.f, 1.f);
-			createCollision("573", -1898.f, 2.82f, 1.f, 1.f);
-			createCollision("574", -1899.44f, 4.f, 1.f, 1.f);
-			createCollision("575", -1902.f, 3.8f, 1.f, 1.f);
-			createCollision("576", -1904.f, 1.56f, 1.f, 1.f);
-
-			//large rock 1910
-			createCollision("581", -1906.f, 1.560f, 1.f, 1.f);
-			createCollision("582", -1906.f, 1.f, 1.f, 1.f);
-			createCollision("583", -1908.f, 2.82f, 1.f, 1.f);
-			createCollision("584", -1909.44f, 4.f, 1.f, 1.f);
-			createCollision("585", -1912.f, 3.8f, 1.f, 1.f);
-			createCollision("586", -1914.f, 1.56f, 1.f, 1.f);
-
-			//small rock 1930
-			createCollision("591", -1928.f, 0.8f, 1.f, 1.f);
-			createCollision("592", -1929.f, 1.f, 1.f, 1.f);
-			createCollision("593", -1930.f, 1.f, 1.f, 1.f);
-			createCollision("594", -1932.f, 0.7f, 1.f, 1.f);
-
-			//large rock 1950
-			createCollision("5101", -1946.f, 1.560f, 1.f, 1.f);
-			createCollision("5102", -1946.f, 1.f, 1.f, 1.f);
-			createCollision("5103", -1948.f, 2.82f, 1.f, 1.f);
-			createCollision("5104", -1949.44f, 4.f, 1.f, 1.f);
-			createCollision("5105", -1952.f, 3.8f, 1.f, 1.f);
-			createCollision("5106", -1954.f, 1.56f, 1.f, 1.f);
-
-			//large rock 1960
-			createCollision("5111", -1956.f, 1.560f, 1.f, 1.f);
-			createCollision("5112", -1956.f, 1.f, 1.f, 1.f);
-			createCollision("5113", -1958.f, 2.82f, 1.f, 1.f);
-			createCollision("5114", -1959.44f, 4.f, 1.f, 1.f);
-			createCollision("5115", -1962.f, 3.8f, 1.f, 1.f);
-			createCollision("5116", -1964.f, 1.56f, 1.f, 1.f);
 
 
 
@@ -7730,115 +7733,114 @@ int main() {
 
 		}
 
-		/// Working Level ///									//////		Level 6	////////// scenevalue == 6
+
+
+
+		//// Making a 'Menu' Scene ////
 
 		{
-		// Create an empty scene
-		scene = std::make_shared<Scene>();
 
-		// I hate this
-		scene->BaseShader = uboShader;
+			// Create an empty scene
+			scene = std::make_shared<Scene>();
 
-		// Create our materials
-		Material::Sptr boxMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			boxMaterial->Name = "Box";
-			boxMaterial->MatShader = scene->BaseShader;
-			boxMaterial->Texture = boxTexture;
-			boxMaterial->Shininess = 2.0f;
-		}
+			// I hate this
+			scene->BaseShader = uboShader;
 
-		Material::Sptr PbarbugMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			PbarbugMaterial->Name = "minibug";
-			PbarbugMaterial->MatShader = scene->BaseShader;
-			PbarbugMaterial->Texture = PbarbugTex;
-			PbarbugMaterial->Shininess = 2.0f;
-		}
+			Material::Sptr MenuMaterial = ResourceManager::CreateAsset<Material>();
+			{
+				MenuMaterial->Name = "Menu";
+				MenuMaterial->MatShader = scene->BaseShader;
+				MenuMaterial->Texture = MenuTex;
+				MenuMaterial->Shininess = 2.0f;
+			}
 
-		Material::Sptr greenMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			greenMaterial->Name = "green";
-			greenMaterial->MatShader = scene->BaseShader;
-			greenMaterial->Texture = greenTex;
-			greenMaterial->Shininess = 2.0f;
-		}
+			Material::Sptr ButtonBackMaterial = ResourceManager::CreateAsset<Material>();
+			{
+				ButtonBackMaterial->Name = "ButtonBackground";
+				ButtonBackMaterial->MatShader = scene->BaseShader;
+				ButtonBackMaterial->Texture = ButtonBackTex;
+				ButtonBackMaterial->Shininess = 2.0f;
+			}
 
-		Material::Sptr bgMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			bgMaterial->Name = "bg";
-			bgMaterial->MatShader = scene->BaseShader;
-			bgMaterial->Texture = bgTexture;
-			bgMaterial->Shininess = 2.0f;
-		}
+			Material::Sptr ButtonStartMaterial = ResourceManager::CreateAsset<Material>();
+			{
+				ButtonStartMaterial->Name = "ButtonStart";
+				ButtonStartMaterial->MatShader = scene->BaseShader;
+				ButtonStartMaterial->Texture = ButtonStartTex;
+				ButtonStartMaterial->Shininess = 2.0f;
+			}
 
-		Material::Sptr grassMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			grassMaterial->Name = "Grass";
-			grassMaterial->MatShader = scene->BaseShader;
-			grassMaterial->Texture = grassTexture;
-			grassMaterial->Shininess = 2.0f;
-		}
+			Material::Sptr ButtonExitMaterial = ResourceManager::CreateAsset<Material>();
+			{
+				ButtonExitMaterial->Name = "ButtonExit";
+				ButtonExitMaterial->MatShader = scene->BaseShader;
+				ButtonExitMaterial->Texture = ButtonExitTex;
+				ButtonExitMaterial->Shininess = 2.0f;
+			}
 
-		Material::Sptr winMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			winMaterial->Name = "win";
-			winMaterial->MatShader = scene->BaseShader;
-			winMaterial->Texture = winTexture;
-			winMaterial->Shininess = 2.0f;
-		}
+			Material::Sptr FFLogoMaterial = ResourceManager::CreateAsset<Material>();
+			{
+				FFLogoMaterial->Name = "Frog Frontier Logo";
+				FFLogoMaterial->MatShader = scene->BaseShader;
+				FFLogoMaterial->Texture = FFLogoTex;
+				FFLogoMaterial->Shininess = 2.0f;
+			}
 
-		Material::Sptr ladybugMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			ladybugMaterial->Name = "lbo";
-			ladybugMaterial->MatShader = scene->BaseShader;
-			ladybugMaterial->Texture = ladybugTexture;
-			ladybugMaterial->Shininess = 2.0f;
-		}
+			Material::Sptr BackTextMaterial = ResourceManager::CreateAsset<Material>();
+			{
+				BackTextMaterial->Name = "Back Button Text";
+				BackTextMaterial->MatShader = scene->BaseShader;
+				BackTextMaterial->Texture = BackTextTex;
+				BackTextMaterial->Shininess = 2.0f;
+			}
 
-		Material::Sptr monkeyMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			monkeyMaterial->Name = "Monkey";
-			monkeyMaterial->MatShader = scene->BaseShader;
-			monkeyMaterial->Texture = monkeyTex;
-			monkeyMaterial->Shininess = 256.0f;
+			Material::Sptr StartTextMaterial = ResourceManager::CreateAsset<Material>();
+			{
+				StartTextMaterial->Name = "Start Button Text";
+				StartTextMaterial->MatShader = scene->BaseShader;
+				StartTextMaterial->Texture = StartTextTex;
+				StartTextMaterial->Shininess = 2.0f;
+			}
 
-		}
+			Material::Sptr ControlsMaterial = ResourceManager::CreateAsset<Material>();
+			{
+				ControlsMaterial->Name = "Controls Text";
+				ControlsMaterial->MatShader = scene->BaseShader;
+				ControlsMaterial->Texture = ControlsTex;
+				ControlsMaterial->Shininess = 2.0f;
+			}
 
-		Material::Sptr mushroomMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			mushroomMaterial->Name = "Mushroom";
-			mushroomMaterial->MatShader = scene->BaseShader;
-			mushroomMaterial->Texture = mushroomTexture;
-			mushroomMaterial->Shininess = 256.0f;
+			Material::Sptr FilterMaterial = ResourceManager::CreateAsset<Material>();
+			{
+				FilterMaterial->Name = "Button Filter";
+				FilterMaterial->MatShader = scene->BaseShader;
+				FilterMaterial->Texture = FilterTex;
+				FilterMaterial->Shininess = 2.0f;
+			}
 
-		}
+			Material::Sptr FrogBodyMaterial = ResourceManager::CreateAsset<Material>();
+			{
+				FrogBodyMaterial->Name = "FrogBody";
+				FrogBodyMaterial->MatShader = scene->BaseShader;
+				FrogBodyMaterial->Texture = FrogBodyTex;
+				FrogBodyMaterial->Shininess = 2.0f;
+			}
 
-		Material::Sptr vinesMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			vinesMaterial->Name = "vines";
-			vinesMaterial->MatShader = scene->BaseShader;
-			vinesMaterial->Texture = vinesTexture;
-			vinesMaterial->Shininess = 256.0f;
+			Material::Sptr FrogHeadTopMaterial = ResourceManager::CreateAsset<Material>();
+			{
+				FrogHeadTopMaterial->Name = "FrogHeadTop";
+				FrogHeadTopMaterial->MatShader = scene->BaseShader;
+				FrogHeadTopMaterial->Texture = FrogHeadTopTex;
+				FrogHeadTopMaterial->Shininess = 2.0f;
+			}
 
-		}
-
-		Material::Sptr cobwebMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			cobwebMaterial->Name = "cobweb";
-			cobwebMaterial->MatShader = scene->BaseShader;
-			cobwebMaterial->Texture = cobwebTexture;
-			cobwebMaterial->Shininess = 256.0f;
-
-		}
-
-		Material::Sptr PanelMaterial = ResourceManager::CreateAsset<Material>();
-		{
-			PanelMaterial->Name = "Panel";
-			PanelMaterial->MatShader = scene->BaseShader;
-			PanelMaterial->Texture = PanelTex;
-			PanelMaterial->Shininess = 2.0f;
-		}
+			Material::Sptr FrogHeadBotMaterial = ResourceManager::CreateAsset<Material>();
+			{
+				FrogHeadBotMaterial->Name = "FrogHeadBot";
+				FrogHeadBotMaterial->MatShader = scene->BaseShader;
+				FrogHeadBotMaterial->Texture = FrogHeadBotTex;
+				FrogHeadBotMaterial->Shininess = 2.0f;
+			}
 
 		Material::Sptr ResumeMaterial = ResourceManager::CreateAsset<Material>();
 		{
@@ -9503,6 +9505,8 @@ int main() {
 				{ ShaderPartType::Fragment, "shaders/frag_blinn_phong_textured.glsl" }
 			});
 
+
+
 			// Create an empty scene
 			scene = std::make_shared<Scene>();
 
@@ -9967,30 +9971,6 @@ int main() {
 				FrogTongueMaterial->Shininess = 2.0f;
 			}
 
-			Material::Sptr ForestButtonMaterial = ResourceManager::CreateAsset<Material>();
-			{
-				ForestButtonMaterial->Name = "ForestButton";
-				ForestButtonMaterial->MatShader = scene->BaseShader;
-				ForestButtonMaterial->Texture = ForestButtonTex;
-				ForestButtonMaterial->Shininess = 2.0f;
-			}
-
-			Material::Sptr MountainButtonMaterial = ResourceManager::CreateAsset<Material>();
-			{
-				MountainButtonMaterial->Name = "MountainButton";
-				MountainButtonMaterial->MatShader = scene->BaseShader;
-				MountainButtonMaterial->Texture = MountainButtonTex;
-				MountainButtonMaterial->Shininess = 2.0f;
-			}
-
-			Material::Sptr MineButtonMaterial = ResourceManager::CreateAsset<Material>();
-			{
-				MineButtonMaterial->Name = "MineButton";
-				MineButtonMaterial->MatShader = scene->BaseShader;
-				MineButtonMaterial->Texture = MineButtonTex;
-				MineButtonMaterial->Shininess = 2.0f;
-			}
-
 			Material::Sptr BushTransitionMaterial = ResourceManager::CreateAsset<Material>();
 			{
 				BushTransitionMaterial->Name = "BushTransition";
@@ -9998,103 +9978,6 @@ int main() {
 				BushTransitionMaterial->Texture = BushTransitionTex;
 				BushTransitionMaterial->Shininess = 2.0f;
 			}
-
-			Material::Sptr Red1Material = ResourceManager::CreateAsset<Material>();
-			{
-				Red1Material->Name = "Red 1";
-				Red1Material->MatShader = scene->BaseShader;
-				Red1Material->Texture = Tex1R;
-				Red1Material->Shininess = 2.0f;
-			}
-
-			Material::Sptr Red2Material = ResourceManager::CreateAsset<Material>();
-			{
-				Red2Material->Name = "Red 2";
-				Red2Material->MatShader = scene->BaseShader;
-				Red2Material->Texture = Tex2R;
-				Red2Material->Shininess = 2.0f;
-			}
-			
-			Material::Sptr Red3Material = ResourceManager::CreateAsset<Material>();
-			{
-				Red3Material->Name = "Red 3";
-				Red3Material->MatShader = scene->BaseShader;
-				Red3Material->Texture = Tex3R;
-				Red3Material->Shininess = 2.0f;
-			}
-
-			Material::Sptr Red4Material = ResourceManager::CreateAsset<Material>();
-			{
-				Red4Material->Name = "Red 4";
-				Red4Material->MatShader = scene->BaseShader;
-				Red4Material->Texture = Tex4R;
-				Red4Material->Shininess = 2.0f;
-			}
-
-			Material::Sptr Red5Material = ResourceManager::CreateAsset<Material>();
-			{
-				Red5Material->Name = "Red 5";
-				Red5Material->MatShader = scene->BaseShader;
-				Red5Material->Texture = Tex5R;
-				Red5Material->Shininess = 2.0f;
-			}
-
-			Material::Sptr Red6Material = ResourceManager::CreateAsset<Material>();
-			{
-				Red6Material->Name = "Red 6";
-				Red6Material->MatShader = scene->BaseShader;
-				Red6Material->Texture = Tex6R;
-				Red6Material->Shininess = 2.0f;
-			}
-
-			Material::Sptr Black1Material = ResourceManager::CreateAsset<Material>();
-			{
-				Black1Material->Name = "Black 1";
-				Black1Material->MatShader = scene->BaseShader;
-				Black1Material->Texture = Tex1B;
-				Black1Material->Shininess = 2.0f;
-			}
-
-			Material::Sptr Black2Material = ResourceManager::CreateAsset<Material>();
-			{
-				Black2Material->Name = "Black 2";
-				Black2Material->MatShader = scene->BaseShader;
-				Black2Material->Texture = Tex2B;
-				Black2Material->Shininess = 2.0f;
-			}
-
-			Material::Sptr Black3Material = ResourceManager::CreateAsset<Material>();
-			{
-				Black3Material->Name = "Black 3";
-				Black3Material->MatShader = scene->BaseShader;
-				Black3Material->Texture = Tex3B;
-				Black3Material->Shininess = 2.0f;
-			}
-
-			Material::Sptr Black4Material = ResourceManager::CreateAsset<Material>();
-			{
-				Black4Material->Name = "Black 4";
-				Black4Material->MatShader = scene->BaseShader;
-				Black4Material->Texture = Tex4B;
-				Black4Material->Shininess = 2.0f;
-			}
-
-			Material::Sptr Black5Material = ResourceManager::CreateAsset<Material>();
-			{
-				Black5Material->Name = "Black 5";
-				Black5Material->MatShader = scene->BaseShader;
-				Black5Material->Texture = Tex5B;
-				Black5Material->Shininess = 2.0f;
-			}
-
-			Material::Sptr Black6Material = ResourceManager::CreateAsset<Material>();
-			{
-				Black6Material->Name = "Black 6";
-				Black6Material->MatShader = scene->BaseShader;
-				Black6Material->Texture = Tex6B;
-				Black6Material->Shininess = 2.0f;
-			}
-
 
 			// Create some lights for our scene
 			scene->Lights.resize(8);
@@ -10176,7 +10059,7 @@ int main() {
 				// Create and attach a render component
 				RenderComponent::Sptr renderer = LsButton1->Add<RenderComponent>();
 				renderer->SetMesh(planeMesh);
-				renderer->SetMaterial(ForestButtonMaterial);
+				renderer->SetMaterial(LSButtonMaterial);
 
 				// This object is a renderable only, it doesn't have any behaviours or
 				// physics bodies attached!
@@ -10192,7 +10075,7 @@ int main() {
 				// Create and attach a render component
 				RenderComponent::Sptr renderer = LsButton2->Add<RenderComponent>();
 				renderer->SetMesh(planeMesh);
-				renderer->SetMaterial(ForestButtonMaterial);
+				renderer->SetMaterial(LSButtonMaterial);
 
 				// This object is a renderable only, it doesn't have any behaviours or
 				// physics bodies attached!
@@ -10208,7 +10091,7 @@ int main() {
 				// Create and attach a render component
 				RenderComponent::Sptr renderer = LsButton3->Add<RenderComponent>();
 				renderer->SetMesh(planeMesh);
-				renderer->SetMaterial(MountainButtonMaterial);
+				renderer->SetMaterial(LSButtonMaterial);
 
 				// This object is a renderable only, it doesn't have any behaviours or
 				// physics bodies attached!
@@ -10224,7 +10107,7 @@ int main() {
 				// Create and attach a render component
 				RenderComponent::Sptr renderer = LsButton4->Add<RenderComponent>();
 				renderer->SetMesh(planeMesh);
-				renderer->SetMaterial(MountainButtonMaterial);
+				renderer->SetMaterial(LSButtonMaterial);
 
 				// This object is a renderable only, it doesn't have any behaviours or
 				// physics bodies attached!
@@ -10240,7 +10123,7 @@ int main() {
 				// Create and attach a render component
 				RenderComponent::Sptr renderer = LsButton5->Add<RenderComponent>();
 				renderer->SetMesh(planeMesh);
-				renderer->SetMaterial(MineButtonMaterial);
+				renderer->SetMaterial(LSButtonMaterial);
 
 				// This object is a renderable only, it doesn't have any behaviours or
 				// physics bodies attached!
@@ -10256,7 +10139,7 @@ int main() {
 				// Create and attach a render component
 				RenderComponent::Sptr renderer = LsButton6->Add<RenderComponent>();
 				renderer->SetMesh(planeMesh);
-				renderer->SetMaterial(MineButtonMaterial);
+				renderer->SetMaterial(LSButtonMaterial);
 
 				// This object is a renderable only, it doesn't have any behaviours or
 				// physics bodies attached!
@@ -10323,61 +10206,61 @@ int main() {
 			GameObject::Sptr Num1 = scene->CreateGameObject("Num1");
 			{
 				Num1->SetPostion(glm::vec3(0.525f, 0.3f, 3.5f));
-				Num1->SetScale(glm::vec3(0.6f));
+				Num1->SetScale(glm::vec3(0.3f));
 
 				RenderComponent::Sptr renderer = Num1->Add<RenderComponent>();
 				renderer->SetMesh(planeMesh);
-				renderer->SetMaterial(Black1Material);
+				renderer->SetMaterial(Material1);
 			}
 
 			GameObject::Sptr Num2 = scene->CreateGameObject("Num2");
 			{
 				Num2->SetPostion(glm::vec3(0.525f, -0.3f, 3.5f));
-				Num2->SetScale(glm::vec3(0.6f));
+				Num2->SetScale(glm::vec3(0.3f));
 
 				RenderComponent::Sptr renderer = Num2->Add<RenderComponent>();
 				renderer->SetMesh(planeMesh);
-				renderer->SetMaterial(Black2Material);
+				renderer->SetMaterial(Material2);
 			}
 
 			GameObject::Sptr Num3 = scene->CreateGameObject("Num3");
 			{
 				Num3->SetPostion(glm::vec3(1.2f, 0.3f, 3.5f));
-				Num3->SetScale(glm::vec3(0.6f));
+				Num3->SetScale(glm::vec3(0.3f));
 
 				RenderComponent::Sptr renderer = Num3->Add<RenderComponent>();
 				renderer->SetMesh(planeMesh);
-				renderer->SetMaterial(Black3Material);
+				renderer->SetMaterial(Material3);
 			}
 
 			GameObject::Sptr Num4 = scene->CreateGameObject("Num4");
 			{
 				Num4->SetPostion(glm::vec3(1.2f, -0.3f, 3.5f));
-				Num4->SetScale(glm::vec3(0.6f));
+				Num4->SetScale(glm::vec3(0.3f));
 
 				RenderComponent::Sptr renderer = Num4->Add<RenderComponent>();
 				renderer->SetMesh(planeMesh);
-				renderer->SetMaterial(Black4Material);
+				renderer->SetMaterial(Material4);
 			}
 
 			GameObject::Sptr Num5 = scene->CreateGameObject("Num5");
 			{
 				Num5->SetPostion(glm::vec3(1.875f, 0.3f, 3.5f));
-				Num5->SetScale(glm::vec3(0.6f));
+				Num5->SetScale(glm::vec3(0.3f));
 
 				RenderComponent::Sptr renderer = Num5->Add<RenderComponent>();
 				renderer->SetMesh(planeMesh);
-				renderer->SetMaterial(Black5Material);
+				renderer->SetMaterial(Material5);
 			}
 
 			GameObject::Sptr Num6 = scene->CreateGameObject("Num6");
 			{
 				Num6->SetPostion(glm::vec3(1.875f, -0.3f, 3.5f));
-				Num6->SetScale(glm::vec3(0.6f));
+				Num6->SetScale(glm::vec3(0.3f));
 
 				RenderComponent::Sptr renderer = Num6->Add<RenderComponent>();
 				renderer->SetMesh(planeMesh);
-				renderer->SetMaterial(Black6Material);
+				renderer->SetMaterial(Material6);
 			}
 
 			GameObject::Sptr FrogTongue = scene->CreateGameObject("FrogTongue");
@@ -10483,20 +10366,19 @@ int main() {
 	nlohmann::json editorSceneState;
 
 
-		//result = system->playSound(sound4, 0, false, &channel);
-		
-		result = system->playSound(sound9, 0, false, &channel);
-	
-	
-
+	result = system->playSound(sound4, 0, false, &channel);
 	bool isEscapePressed = false;
-	
 
 	float ProgressBarTime = 0; //will calculate the time from the beginning to the end of the level
 	float ProgressBarTemp = 0; //temp value so we can calculate time elapsed from beginning to end of level
 	float ProgressBarTempPaused = 0;
 	float ProgressBarTempPaused2 = 0;
 	float ProgressBarPaused = 0;
+
+	PTime = 0;
+	PTemp = 0;
+	PTemp2 = 0;
+	playerPlaying = false;
 
 	///// Game loop /////
 	while (!glfwWindowShouldClose(window)) {
@@ -10523,7 +10405,7 @@ int main() {
 		}
 
 
-		
+
 
 
 		/// with this change to the check, switching between scenes using scenePath no longer causes the game to crash since if the scene doesn't have a player it wont prompt commands
@@ -10531,6 +10413,7 @@ int main() {
 		{
 			if (paused == true)
 			{
+				playerPlaying = false;
 				scene->FindObjectByName("PanelPause")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6, 6.5));
 				scene->FindObjectByName("ButtonBack1")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6.25, 6.0));
 				scene->FindObjectByName("ButtonBack2")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6.5, 5.0));
@@ -10559,6 +10442,7 @@ int main() {
 
 			if (playerLose == true)
 			{
+				playerPlaying = false;
 				scene->FindObjectByName("PanelPause")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6, 6.5));
 				scene->FindObjectByName("ButtonBack1")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6.25, 6.0));
 				scene->FindObjectByName("ButtonBack2")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6.5, 5.0));
@@ -10585,6 +10469,16 @@ int main() {
 
 			if (playerWin == true)
 			{
+				if (scoreWritten == false) {
+					//writes time to text file
+					timeToBeat.open("times.txt", std::ios::app);
+					timeToBeat << PTime << "\n";
+					timeToBeat.close();
+					std::cout << "yay it worked!";
+				}
+				scoreWritten = true;
+
+				playerPlaying = false;
 				scene->FindObjectByName("PanelPause")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6, 6.5));
 				scene->FindObjectByName("ButtonBack1")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6.25, 6.0));
 				scene->FindObjectByName("ButtonBack2")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6.5, 5.0));
@@ -10608,9 +10502,13 @@ int main() {
 					scene->FindObjectByName("Filter")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6.76, 4.0));
 				}
 			}
+			else {
+				scoreWritten = false;
+			}
 
 			if (paused != true && playerLose != true && playerWin != true)
 			{
+				playerPlaying = true;
 				//originally these were all back at -15 but idk if that makes the game more jank cause of overlap so i tried to spread em out
 				scene->FindObjectByName("PanelPause")->SetPostion(glm::vec3(scene->FindObjectByName("Main Camera")->GetPosition().x, scene->FindObjectByName("Main Camera")->GetPosition().y + 1, 6.5));
 				scene->FindObjectByName("ButtonBack1")->SetPostion(glm::vec3(scene->FindObjectByName("Main Camera")->GetPosition().x, scene->FindObjectByName("Main Camera")->GetPosition().y + 2, 6));
@@ -10624,28 +10522,11 @@ int main() {
 				scene->FindObjectByName("LoserLogo")->SetPostion(glm::vec3(scene->FindObjectByName("Main Camera")->GetPosition().x, scene->FindObjectByName("Main Camera")->GetPosition().y + 9, 8));
 				scene->FindObjectByName("ReplayText")->SetPostion(glm::vec3(scene->FindObjectByName("Main Camera")->GetPosition().x, scene->FindObjectByName("Main Camera")->GetPosition().y + 10, 6.1));
 				scene->FindObjectByName("WinnerLogo")->SetPostion(glm::vec3(scene->FindObjectByName("Main Camera")->GetPosition().x, scene->FindObjectByName("Main Camera")->GetPosition().y + 11, 6.1));
-
-				if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS && soundprompt == false)
-				{
-					result = system->playSound(sound6, 0, false, &channel);
-					soundprompt = true;
-				}
-
-				if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && soundprompt == false)
-				{
-					result = system->playSound(sound5, 0, false, &channel);
-					soundprompt = true;
-				}
-
-				if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_RELEASE && glfwGetKey(window, GLFW_KEY_UP) == GLFW_RELEASE && glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_RELEASE && glfwGetKey(window, GLFW_KEY_P) == GLFW_RELEASE && glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_RELEASE)
-				{
-					soundprompt = false;
-				}
-
 			}
 
 			if (paused == true || playerLose == true || playerWin == true)
 			{
+				playerPlaying = false;
 				if (((glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) || (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)) && soundprompt == false)
 				{
 					result = system->playSound(sound1, 0, false, &channel);
@@ -10677,12 +10558,19 @@ int main() {
 			scene->FindObjectByName("ProgressBarGO")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 1.620, 13)); //makes progress bar follow the player
 			scene->FindObjectByName("ProgressBarProgress")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x + 2 - ProgressBarTime, 1.7, 12.75)); //Makes Progress of progress bar follow the player
 
-
 			//Stops the player from rotating
 			scene->FindObjectByName("player")->SetRotation(glm::vec3(90.f, scene->FindObjectByName("player")->GetRotation().y, 90.f));
 
 			keyboard();
-			
+			if (soundprompt == false && glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS && (paused != true && playerLose != true && playerWin != true))
+			{
+				result = system->playSound(sound3, 0, false, &channel);
+				soundprompt = true;
+			}
+			else if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_RELEASE && (paused != true && playerLose != true && playerWin != true))
+			{
+				soundprompt = false;
+			}
 
 
 			//collisions system
@@ -10699,9 +10587,8 @@ int main() {
 				playerCollision.rectOverlap(playerCollision, collisions[i]); //changed ballcollision to playercollision
 			}
 
-			if (playerCollision.hitEntered == true) {
 
-				result = system->playSound(sound10, 0, false, &channel);
+			if (playerCollision.hitEntered == true) {
 
 				if (scenevalue == 1)
 				{
@@ -10723,10 +10610,6 @@ int main() {
 				{
 					scene->FindObjectByName("player")->SetPostion(glm::vec3(-1606.f, 0.f, scene->FindObjectByName("player")->GetPosition().z));
 				}
-				else if (scenevalue == 6)
-				{
-					scene->FindObjectByName("player")->SetPostion(glm::vec3(-2006.f, 0.f, scene->FindObjectByName("player")->GetPosition().z));
-				}
 
 				std::cout << "colision detected";
 				playerCollision.hitEntered = false;
@@ -10746,7 +10629,6 @@ int main() {
 					scene->FindObjectByName("player")->SetPostion(glm::vec3(-406.f, 0.f, scene->FindObjectByName("player")->GetPosition().z));
 					playerMove = false;
 					playerWin = true;
-					result = system->playSound(sound11, 0, false, &channel);
 				}
 			}
 			else if (scenevalue == 2)
@@ -10756,7 +10638,6 @@ int main() {
 					scene->FindObjectByName("player")->SetPostion(glm::vec3(6.f, 0.f, scene->FindObjectByName("player")->GetPosition().z));
 					playerMove = false;
 					playerWin = true;
-					result = system->playSound(sound11, 0, false, &channel);
 				}
 			}
 			else if (scenevalue == 3)
@@ -10766,7 +10647,6 @@ int main() {
 					scene->FindObjectByName("player")->SetPostion(glm::vec3(-806.f, 0.f, scene->FindObjectByName("player")->GetPosition().z));
 					playerMove = false;
 					playerWin = true;
-					result = system->playSound(sound11, 0, false, &channel);
 				}
 			}
 			else if (scenevalue == 4)
@@ -10776,7 +10656,6 @@ int main() {
 					scene->FindObjectByName("player")->SetPostion(glm::vec3(-1206.f, 0.f, scene->FindObjectByName("player")->GetPosition().z));
 					playerMove = false;
 					playerWin = true;
-					result = system->playSound(sound11, 0, false, &channel);
 				}
 			}
 			else if (scenevalue == 5)
@@ -10786,17 +10665,6 @@ int main() {
 					scene->FindObjectByName("player")->SetPostion(glm::vec3(-1606.f, 0.f, scene->FindObjectByName("player")->GetPosition().z));
 					playerMove = false;
 					playerWin = true;
-					result = system->playSound(sound11, 0, false, &channel);
-				}
-			}
-			else if (scenevalue == 6)
-			{
-				if (scene->FindObjectByName("player")->GetPosition().x < -2400)
-				{
-					scene->FindObjectByName("player")->SetPostion(glm::vec3(-2006.f, 0.f, scene->FindObjectByName("player")->GetPosition().z));
-					playerMove = false;
-					playerWin = true;
-					result = system->playSound(sound11, 0, false, &channel);
 				}
 			}
 
@@ -10806,13 +10674,13 @@ int main() {
 		{
 			SceneChanger();
 
-			if (((glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) || (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) || (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) || (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)) && soundprompt == false)
+			if (((glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) || (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)) && soundprompt == false)
 			{
 				result = system->playSound(sound1, 0, false, &channel);
 				soundprompt = true;
 			}
 
-			if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_RELEASE && glfwGetKey(window, GLFW_KEY_UP) == GLFW_RELEASE && glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_RELEASE && glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_RELEASE && glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_RELEASE)
+			if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_RELEASE && glfwGetKey(window, GLFW_KEY_UP) == GLFW_RELEASE && glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_RELEASE)
 			{
 				soundprompt = false;
 			}
