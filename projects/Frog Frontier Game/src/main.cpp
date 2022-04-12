@@ -727,6 +727,7 @@ float JTemp = 0;
 float PTime = 0;
 float PTemp = 0;
 float PTemp2 = 0;
+float runAnimTemp2 = 0;
 float AnimTime = 0;
 float runLoopNumber = 1; //number of times run animation has looped, we multiply this by 1.05 so we can return runAnimTime to 0 and repeat the Animation
 float FPSIncrease = 0.0; //gradually will increase so we can continue to play animations
@@ -1093,7 +1094,7 @@ void keyboard()
 
 	if (paused == false)
 	{
-		runningAnim = true;
+		//runningAnim = true;
 
 		//to time the time the player took to beat the level (while ingame)
 		if (playerPlaying == true) {
@@ -1105,7 +1106,7 @@ void keyboard()
 			PTemp2 = PTime;
 			PTemp = glfwGetTime();
 		}
-		std::cout << PTime << "\n";
+		//std::cout << PTime << "\n";
 
 		//All Slide Code
 		{
@@ -1242,11 +1243,13 @@ void keyboard()
 	if (runningAnim == true) {
 		AnimTime = glfwGetTime() - runAnimTemp;
 		AnimTime = AnimTime / 2.5;
+		AnimTime = AnimTime + runAnimTemp2;
 	}
 	else {
+		runAnimTemp2 = AnimTime;
 		runAnimTemp = glfwGetTime();
 	}
-	//std::cout << runAnimTime << "\n" << animIntervals << "\n";
+	std::cout << AnimTime << "\n" << FPSIncrease << "\n";
 
 	if (AnimTime >= (0.02 + FPSIncrease) && AnimTime < (0.04 + FPSIncrease)) {
 		animFrame = animFrame + 1;
@@ -1284,6 +1287,13 @@ void keyboard()
 		if (animFrame == 52) {
 			animFrame = 27;
 		}
+	}
+
+	if (playerPlaying) {
+		runningAnim = true;
+	}
+	else {
+		runningAnim = false;
 	}
 
 	//std::cout << animFrame << "\n" << AnimTime << "\n";
@@ -10654,6 +10664,8 @@ int main() {
 
 			if (playerLose == true)
 			{
+				AnimTime = 0;
+				FPSIncrease = 0;
 				playerPlaying = false;
 				scene->FindObjectByName("PanelPause")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6, 6.5));
 				scene->FindObjectByName("ButtonBack1")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6.25, 6.0));
