@@ -4711,14 +4711,14 @@ int main() {
 			createGroundObstacle("10", glm::vec3(-1150.f, -2.22f, 0.0f), glm::vec3(0.4f, 0.4f, 0.4f), glm::vec3(90.0f, 0.0f, -67.0f), CampfireMesh, CampfireMaterial);
 
 			//3D Backgrounds
-			createGroundObstacle("27", glm::vec3(-292.3f - 400.f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGRockMesh, BGMaterial);
-			createGroundObstacle("28", glm::vec3(-400.f - 400.f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGRockMesh, BGMaterial);
-			createGroundObstacle("29", glm::vec3(-507.7f - 400.f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGRockMesh, BGMaterial);
+			createGroundObstacle("27", glm::vec3(-292.3f - 400.f, -55.830f, -2.5f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGRockMesh, BGMaterial);
+			createGroundObstacle("28", glm::vec3(-400.f - 400.f, -55.830f, -2.5f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGRockMesh, BGMaterial);
+			createGroundObstacle("29", glm::vec3(-507.7f - 400.f, -55.830f, -2.5f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGRockMesh, BGMaterial);
 
-			createGroundObstacle("30", glm::vec3(-615.4f - 400.f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGRockMesh, BGMaterial);
-			createGroundObstacle("31", glm::vec3(-723.1f - 400.f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGRockMesh, BGMaterial);
-			createGroundObstacle("32", glm::vec3(-830.8f - 400.f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGRockMesh, BGMaterial);
-			createGroundObstacle("26", glm::vec3(-938.2f - 400.f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGRockMesh, BGMaterial);
+			createGroundObstacle("30", glm::vec3(-615.4f - 400.f, -55.830f, -2.5f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGRockMesh, BGMaterial);
+			createGroundObstacle("31", glm::vec3(-723.1f - 400.f, -55.830f, -2.5f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGRockMesh, BGMaterial);
+			createGroundObstacle("32", glm::vec3(-830.8f - 400.f, -55.830f, -2.5f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGRockMesh, BGMaterial);
+			createGroundObstacle("26", glm::vec3(-938.2f - 400.f, -55.830f, -2.5f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGRockMesh, BGMaterial);
 
 			//2DBackGrounds
 			createGroundObstacle("33", glm::vec3(-75.f - 400.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MountainBackdropMaterial);
@@ -5916,14 +5916,14 @@ int main() {
 
 
 		//3D Backgrounds
-		createGroundObstacle("27", glm::vec3(-292.3f - 800.f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGRockMesh, BGMaterial);
-		createGroundObstacle("28", glm::vec3(-400.f - 800.f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGRockMesh, BGMaterial);
-		createGroundObstacle("29", glm::vec3(-507.7f - 800.f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGRockMesh, BGMaterial);
+		createGroundObstacle("27", glm::vec3(-292.3f - 800.f, -55.830f, -2.5f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGRockMesh, BGMaterial);
+		createGroundObstacle("28", glm::vec3(-400.f - 800.f, -55.830f, -2.5f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGRockMesh, BGMaterial);
+		createGroundObstacle("29", glm::vec3(-507.7f - 800.f, -55.830f, -2.5f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGRockMesh, BGMaterial);
 
-		createGroundObstacle("30", glm::vec3(-615.4f - 800.f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGRockMesh, BGMaterial);
-		createGroundObstacle("31", glm::vec3(-723.1f - 800.f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGRockMesh, BGMaterial);
-		createGroundObstacle("32", glm::vec3(-830.8f - 800.f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGRockMesh, BGMaterial);
-		createGroundObstacle("26", glm::vec3(-938.2f - 800.f, -55.830f, -1.7f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGRockMesh, BGMaterial);
+		createGroundObstacle("30", glm::vec3(-615.4f - 800.f, -55.830f, -2.5f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGRockMesh, BGMaterial);
+		createGroundObstacle("31", glm::vec3(-723.1f - 800.f, -55.830f, -2.5f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGRockMesh, BGMaterial);
+		createGroundObstacle("32", glm::vec3(-830.8f - 800.f, -55.830f, -2.5f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGRockMesh, BGMaterial);
+		createGroundObstacle("26", glm::vec3(-938.2f - 800.f, -55.830f, -2.5f), glm::vec3(6.f, 6.f, 6.f), glm::vec3(90.0f, 0.0f, -180.f), BGRockMesh, BGMaterial);
 
 		//2DBackGrounds
 		createGroundObstacle("33", glm::vec3(-75.f - 800.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MountainBackdropMaterial);
