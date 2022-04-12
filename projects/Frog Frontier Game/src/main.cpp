@@ -1557,7 +1557,7 @@ int main() {
 	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 
 	FMOD::System* system;
-	FMOD::Sound* sound1, * sound2, * sound3, * sound4, * sound5;
+	FMOD::Sound* sound1, * sound2, * sound3, * sound4, * sound5, *sound6, *sound7, *sound8, *sound9, *sound10, *sound11;
 	FMOD::Channel* channel = 0;
 	FMOD_RESULT       result;
 	void* extradriverdata = 0;
@@ -1575,6 +1575,18 @@ int main() {
 	result = system->createSound("media/bensound-funnysong.wav", FMOD_LOOP_NORMAL, 0, &sound4);
 
 	result = system->createSound("media/Pitched-Pop.wav", FMOD_LOOP_NORMAL, 0, &sound5);
+
+	result = system->createSound("media/Buzz.wav", FMOD_LOOP_NORMAL, 0, &sound6);
+
+	result = system->createSound("media/Frog Tongue.wav", FMOD_DEFAULT, 0, &sound7);
+
+	result = system->createSound("media/Grass.wav", FMOD_DEFAULT, 0, &sound8);
+
+	result = system->createSound("media/Main song beat.wav", FMOD_LOOP_NORMAL, 0, &sound9);
+
+	result = system->createSound("media/Rock crushing orange.wav", FMOD_DEFAULT, 0, &sound10);
+
+	result = system->createSound("media/Victory sound effect.wav", FMOD_DEFAULT, 0, &sound11);
 
 	bool loadScene = false;
 	// For now we can use a toggle to generate our scene vs load from file
@@ -10596,7 +10608,14 @@ int main() {
 	nlohmann::json editorSceneState;
 
 
+	//sound collection
+	if (playerFlying == true)
+	{
+		result = system->playSound(sound6, 0, false, &channel);
+	}
+
 	result = system->playSound(sound4, 0, false, &channel);
+
 	bool isEscapePressed = false;
 
 	float ProgressBarTime = 0; //will calculate the time from the beginning to the end of the level
@@ -10630,7 +10649,7 @@ int main() {
 		}
 
 
-
+		
 
 
 		/// with this change to the check, switching between scenes using scenePath no longer causes the game to crash since if the scene doesn't have a player it wont prompt commands
@@ -10771,15 +10790,7 @@ int main() {
 			scene->FindObjectByName("player")->SetRotation(glm::vec3(90.f, scene->FindObjectByName("player")->GetRotation().y, 90.f));
 
 			keyboard();
-			if (soundprompt == false && glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS && (paused != true && playerLose != true && playerWin != true))
-			{
-				result = system->playSound(sound3, 0, false, &channel);
-				soundprompt = true;
-			}
-			else if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_RELEASE && (paused != true && playerLose != true && playerWin != true))
-			{
-				soundprompt = false;
-			}
+			
 
 
 			//collisions system
@@ -10797,6 +10808,8 @@ int main() {
 			}
 
 			if (playerCollision.hitEntered == true) {
+
+				result = system->playSound(sound10, 0, false, &channel);
 
 				if (scenevalue == 1)
 				{
@@ -10841,6 +10854,7 @@ int main() {
 					scene->FindObjectByName("player")->SetPostion(glm::vec3(-406.f, 0.f, scene->FindObjectByName("player")->GetPosition().z));
 					playerMove = false;
 					playerWin = true;
+					result = system->playSound(sound11, 0, false, &channel);
 				}
 			}
 			else if (scenevalue == 2)
@@ -10850,6 +10864,7 @@ int main() {
 					scene->FindObjectByName("player")->SetPostion(glm::vec3(6.f, 0.f, scene->FindObjectByName("player")->GetPosition().z));
 					playerMove = false;
 					playerWin = true;
+					result = system->playSound(sound11, 0, false, &channel);
 				}
 			}
 			else if (scenevalue == 3)
@@ -10859,6 +10874,7 @@ int main() {
 					scene->FindObjectByName("player")->SetPostion(glm::vec3(-806.f, 0.f, scene->FindObjectByName("player")->GetPosition().z));
 					playerMove = false;
 					playerWin = true;
+					result = system->playSound(sound11, 0, false, &channel);
 				}
 			}
 			else if (scenevalue == 4)
@@ -10868,6 +10884,7 @@ int main() {
 					scene->FindObjectByName("player")->SetPostion(glm::vec3(-1206.f, 0.f, scene->FindObjectByName("player")->GetPosition().z));
 					playerMove = false;
 					playerWin = true;
+					result = system->playSound(sound11, 0, false, &channel);
 				}
 			}
 			else if (scenevalue == 5)
@@ -10877,6 +10894,7 @@ int main() {
 					scene->FindObjectByName("player")->SetPostion(glm::vec3(-1606.f, 0.f, scene->FindObjectByName("player")->GetPosition().z));
 					playerMove = false;
 					playerWin = true;
+					result = system->playSound(sound11, 0, false, &channel);
 				}
 			}
 			else if (scenevalue == 6)
@@ -10886,6 +10904,7 @@ int main() {
 					scene->FindObjectByName("player")->SetPostion(glm::vec3(-2006.f, 0.f, scene->FindObjectByName("player")->GetPosition().z));
 					playerMove = false;
 					playerWin = true;
+					result = system->playSound(sound11, 0, false, &channel);
 				}
 			}
 
@@ -10895,7 +10914,7 @@ int main() {
 		{
 			SceneChanger();
 
-			if (((glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) || (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)) && soundprompt == false)
+			if (((glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) || (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) || (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) || (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)) && soundprompt == false)
 			{
 				result = system->playSound(sound1, 0, false, &channel);
 				soundprompt = true;
