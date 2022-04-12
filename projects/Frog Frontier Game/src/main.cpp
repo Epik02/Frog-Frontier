@@ -139,7 +139,6 @@ MeshResource::Sptr fly2Mesh;
 
 MeshResource::Sptr BranchMesh;
 MeshResource::Sptr LogMesh;
-MeshResource::Sptr Plant1Mesh;
 MeshResource::Sptr Plant2Mesh;
 MeshResource::Sptr Plant3Mesh;
 
@@ -2376,7 +2375,6 @@ int main() {
 
 			BranchMesh = ResourceManager::CreateAsset<MeshResource>("Branch.obj");
 			LogMesh = ResourceManager::CreateAsset<MeshResource>("Log.obj");
-			Plant1Mesh = ResourceManager::CreateAsset<MeshResource>("PLANT.obj");
 			Plant2Mesh = ResourceManager::CreateAsset<MeshResource>("Plant2.obj");
 			Plant3Mesh = ResourceManager::CreateAsset<MeshResource>("Plant3.obj");
 
@@ -2407,7 +2405,6 @@ int main() {
 			createBackgroundAsset("3", glm::vec3(-186.f, 4.0f, -0.660), 3, glm::vec3(83.f, 5.0f, 0.0f), LogMesh, LogMaterial);
 			createBackgroundAsset("4", glm::vec3(-20.f, 0.0f, -0.660), 0.5, glm::vec3(400.f, 5.0f, 0.0f), LogMesh, LogMaterial);
 
-			createBackgroundAsset("5", glm::vec3(-54.5, 5.470f, -0.330), 6.0, glm::vec3(83.f, 5.0f, 0.0f), Plant1Mesh, PlantMaterial);
 			createBackgroundAsset("6", glm::vec3(-140.5, 5.470f, -0.330), 6.0, glm::vec3(83.f, 5.0f, 0.0f), Plant2Mesh, PlantMaterial);
 			createBackgroundAsset("7", glm::vec3(-240.5, 5.470f, -0.330), 6.0, glm::vec3(83.f, 5.0f, 0.0f), Plant3Mesh, PlantMaterial);
 
@@ -3518,7 +3515,6 @@ int main() {
 
 			BranchMesh = ResourceManager::CreateAsset<MeshResource>("Branch.obj");
 			LogMesh = ResourceManager::CreateAsset<MeshResource>("Log.obj");
-			Plant1Mesh = ResourceManager::CreateAsset<MeshResource>("PLANT.obj");
 			Plant2Mesh = ResourceManager::CreateAsset<MeshResource>("Plant2.obj");
 			Plant3Mesh = ResourceManager::CreateAsset<MeshResource>("Plant3.obj");
 
@@ -3606,7 +3602,6 @@ int main() {
 			createBackgroundAsset("3", glm::vec3(-586.f, 4.0f, -0.660), 3, glm::vec3(83.f, 5.0f, 0.0f), LogMesh, LogMaterial);
 			createBackgroundAsset("4", glm::vec3(-420.f, 0.0f, -0.660), 0.5, glm::vec3(400.f, 5.0f, 0.0f), LogMesh, LogMaterial);
 
-			createBackgroundAsset("5", glm::vec3(-454.5, 5.470f, -0.330), 6.0, glm::vec3(83.f, 5.0f, 0.0f), Plant1Mesh, PlantMaterial);
 			createBackgroundAsset("6", glm::vec3(-540.5, 5.470f, -0.330), 6.0, glm::vec3(83.f, 5.0f, 0.0f), Plant2Mesh, PlantMaterial);
 			createBackgroundAsset("7", glm::vec3(-640.5, 5.470f, -0.330), 6.0, glm::vec3(83.f, 5.0f, 0.0f), Plant3Mesh, PlantMaterial);
 
@@ -4742,7 +4737,6 @@ int main() {
 
 			BranchMesh = ResourceManager::CreateAsset<MeshResource>("Branch.obj");
 			LogMesh = ResourceManager::CreateAsset<MeshResource>("Log.obj");
-			Plant1Mesh = ResourceManager::CreateAsset<MeshResource>("PLANT.obj");
 			Plant2Mesh = ResourceManager::CreateAsset<MeshResource>("Plant2.obj");
 			Plant3Mesh = ResourceManager::CreateAsset<MeshResource>("Plant3.obj");
 
@@ -4777,7 +4771,6 @@ int main() {
 			createBackgroundAsset("3", glm::vec3(-586.f - 400.f, 4.0f, -0.660), 3, glm::vec3(83.f, 5.0f, 0.0f), LogMesh, LogMaterial);
 			createBackgroundAsset("4", glm::vec3(-420.f - 400.f, 0.0f, -0.660), 0.5, glm::vec3(400.f, 5.0f, 0.0f), LogMesh, LogMaterial);
 
-			createBackgroundAsset("5", glm::vec3(-454.5 - 400.f, 5.470f, -0.330), 6.0, glm::vec3(83.f, 5.0f, 0.0f), Plant1Mesh, PlantMaterial);
 			createBackgroundAsset("6", glm::vec3(-540.5 - 400.f, 5.470f, -0.330), 6.0, glm::vec3(83.f, 5.0f, 0.0f), Plant2Mesh, PlantMaterial);
 			createBackgroundAsset("7", glm::vec3(-640.5 - 400.f, 5.470f, -0.330), 6.0, glm::vec3(83.f, 5.0f, 0.0f), Plant3Mesh, PlantMaterial);
 
@@ -5919,7 +5912,6 @@ int main() {
 
 		BranchMesh = ResourceManager::CreateAsset<MeshResource>("Branch.obj");
 		LogMesh = ResourceManager::CreateAsset<MeshResource>("Log.obj");
-		Plant1Mesh = ResourceManager::CreateAsset<MeshResource>("PLANT.obj");
 		Plant2Mesh = ResourceManager::CreateAsset<MeshResource>("Plant2.obj");
 		Plant3Mesh = ResourceManager::CreateAsset<MeshResource>("Plant3.obj");
 
@@ -5954,7 +5946,6 @@ int main() {
 		createBackgroundAsset("3", glm::vec3(-586.f - 800.f, 4.0f, -0.660), 3, glm::vec3(83.f, 5.0f, 0.0f), LogMesh, LogMaterial);
 		createBackgroundAsset("4", glm::vec3(-420.f - 800.f, 0.0f, -0.660), 0.5, glm::vec3(400.f, 5.0f, 0.0f), LogMesh, LogMaterial);
 
-		createBackgroundAsset("5", glm::vec3(-454.5 - 800.f, 5.470f, -0.330), 6.0, glm::vec3(83.f, 5.0f, 0.0f), Plant1Mesh, PlantMaterial);
 		createBackgroundAsset("6", glm::vec3(-540.5 - 800.f, 5.470f, -0.330), 6.0, glm::vec3(83.f, 5.0f, 0.0f), Plant2Mesh, PlantMaterial);
 		createBackgroundAsset("7", glm::vec3(-640.5 - 800.f, 5.470f, -0.330), 6.0, glm::vec3(83.f, 5.0f, 0.0f), Plant3Mesh, PlantMaterial);
 
@@ -7260,7 +7251,6 @@ int main() {
 
 			BranchMesh = ResourceManager::CreateAsset<MeshResource>("Branch.obj");
 			LogMesh = ResourceManager::CreateAsset<MeshResource>("Log.obj");
-			Plant1Mesh = ResourceManager::CreateAsset<MeshResource>("PLANT.obj");
 			Plant2Mesh = ResourceManager::CreateAsset<MeshResource>("Plant2.obj");
 			Plant3Mesh = ResourceManager::CreateAsset<MeshResource>("Plant3.obj");
 
@@ -8542,7 +8532,6 @@ int main() {
 		cobwebMesh = ResourceManager::CreateAsset<MeshResource>("Cobweb.obj");
 		BranchMesh = ResourceManager::CreateAsset<MeshResource>("Branch.obj");
 		LogMesh = ResourceManager::CreateAsset<MeshResource>("Log.obj");
-		Plant1Mesh = ResourceManager::CreateAsset<MeshResource>("PLANT.obj");
 		Plant2Mesh = ResourceManager::CreateAsset<MeshResource>("Plant2.obj");
 		Plant3Mesh = ResourceManager::CreateAsset<MeshResource>("Plant3.obj");
 
