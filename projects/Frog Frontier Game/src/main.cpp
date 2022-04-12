@@ -293,6 +293,7 @@ float transitiontimer = 0.0f;
 float transitionleft = 0.0f;
 bool transitioncomplete = true;
 bool DoTransition = false;
+bool firstload = false;
 //Gonna make a scenevalue to tell the keyboards what to do or some other scene specific update changes
 // So 11 is main menu, 12 is controls, 13 is levelselect
 // and then the actual levels can just have their value
@@ -1576,7 +1577,7 @@ int main() {
 
 	result = system->createSound("media/Pitched-Pop.wav", FMOD_LOOP_NORMAL, 0, &sound5);
 
-	result = system->createSound("media/Buzz.wav", FMOD_LOOP_NORMAL, 0, &sound6);
+	result = system->createSound("media/Buzz.wav", FMOD_DEFAULT, 0, &sound6);
 
 	result = system->createSound("media/Frog Tongue.wav", FMOD_DEFAULT, 0, &sound7);
 
@@ -1609,7 +1610,7 @@ int main() {
 		Texture2D::Sptr    BlankTex = ResourceManager::CreateAsset<Texture2D>("textures/blank.png");
 		Texture2D::Sptr    bmTex = ResourceManager::CreateAsset<Texture2D>("textures/bmuv.png");
 		Texture2D::Sptr    BranchTex = ResourceManager::CreateAsset<Texture2D>("textures/BranchUV.png");
-		Texture2D::Sptr    CaveEntranceTex = ResourceManager::CreateAsset<Texture2D>("texures/CaveEntranceUV.png");
+		Texture2D::Sptr    CaveEntranceTex = ResourceManager::CreateAsset<Texture2D>("texures/ExitCaveUV.png");
 		Texture2D::Sptr    CampfireTex = ResourceManager::CreateAsset<Texture2D>("textures/CampfireUVFrame.png");
 		Texture2D::Sptr    cobwebTexture = ResourceManager::CreateAsset<Texture2D>("textures/CobwebUV.png");
 		Texture2D::Sptr    cobweb2Texture = ResourceManager::CreateAsset<Texture2D>("textures/CobwebUVFrame.png");
@@ -6847,13 +6848,7 @@ int main() {
 				grass5Material->Texture = Grass5Tex;
 				grass5Material->Shininess = 2.0f;
 			}
-			Material::Sptr ExitTreeMaterial = ResourceManager::CreateAsset<Material>();
-			{
-				ExitTreeMaterial->Name = "ExitTree";
-				ExitTreeMaterial->MatShader = scene->BaseShader;
-				ExitTreeMaterial->Texture = ExitTreeTex;
-				ExitTreeMaterial->Shininess = 2.0f;
-			}
+
 			Material::Sptr LStextMaterial = ResourceManager::CreateAsset<Material>();
 			{
 				LStextMaterial->Name = "LStext";
@@ -6990,12 +6985,12 @@ int main() {
 				MineBackgroundMaterial->Shininess = 2.0f;
 			}
 
-			Material::Sptr CaveEntranceMaterial = ResourceManager::CreateAsset<Material>();
+			Material::Sptr CaveExitMaterial = ResourceManager::CreateAsset<Material>();
 			{
-				CaveEntranceMaterial->Name = "CaveEntrance";
-				CaveEntranceMaterial->MatShader = scene->BaseShader;
-				CaveEntranceMaterial->Texture = CaveEntranceTex;
-				CaveEntranceMaterial->Shininess = 2.0f;
+				CaveExitMaterial->Name = "CaveEntrance";
+				CaveExitMaterial->MatShader = scene->BaseShader;
+				CaveExitMaterial->Texture = CaveEntranceTex;
+				CaveExitMaterial->Shininess = 2.0f;
 			}
 
 			Material::Sptr GoldBarMaterial = ResourceManager::CreateAsset<Material>();
@@ -7244,8 +7239,6 @@ int main() {
 			BGMineMesh = ResourceManager::CreateAsset<MeshResource>("MineBackground.obj");
 			BGRockMesh = ResourceManager::CreateAsset<MeshResource>("RockBackground.obj");
 			BGMesh = ResourceManager::CreateAsset<MeshResource>("Background.obj");
-			ExitTreeMesh = ResourceManager::CreateAsset<MeshResource>("ExitTree.obj");
-			ExitRockMesh = ResourceManager::CreateAsset<MeshResource>("ExitRock.obj");
 
 			CaveEntranceMesh = ResourceManager::CreateAsset<MeshResource>("CaveEntrance.obj");
 			Crystal1Mesh = ResourceManager::CreateAsset<MeshResource>("Crystals1.obj");
@@ -7327,7 +7320,7 @@ int main() {
 			createGroundObstacle("37", glm::vec3(-2150.f - 400.f, -130.0f, 64.130f), glm::vec3(375.0f, 125.0f, 250.f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineBackdropMaterial);
 
 			//Exit Rock
-			createGroundObstacle("58", glm::vec3(-409.f - 400.f - 1200.f, -1.f, 0.f), glm::vec3(2.f, 2.f, 1.f), glm::vec3(90.0f, 0.0f, -68.f), CaveEntranceMesh, CaveEntranceMaterial);
+			createGroundObstacle("58", glm::vec3(-409.f - 400.f - 1200.f, -1.f, 0.f), glm::vec3(2.f, 2.f, 1.f), glm::vec3(90.0f, 0.0f, -68.f), CaveEntranceMesh, CaveExitMaterial);
 
 			//Foreground 
 			createGroundObstacle("59", glm::vec3(40.f - 400.f - 1200.f, -5.f, 8.f), glm::vec3(42.0f, 20.f, 5.0f), glm::vec3(90.0f, 0.0f, -180.f), planeMesh, MineForegroundMaterial);
@@ -10608,15 +10601,14 @@ int main() {
 	nlohmann::json editorSceneState;
 
 
-	//sound collection
-	if (playerFlying == true)
-	{
-		result = system->playSound(sound6, 0, false, &channel);
-	}
-
-	result = system->playSound(sound4, 0, false, &channel);
+		//result = system->playSound(sound4, 0, false, &channel);
+		
+		result = system->playSound(sound9, 0, false, &channel);
+	
+	
 
 	bool isEscapePressed = false;
+	
 
 	float ProgressBarTime = 0; //will calculate the time from the beginning to the end of the level
 	float ProgressBarTemp = 0; //temp value so we can calculate time elapsed from beginning to end of level
@@ -10750,6 +10742,24 @@ int main() {
 				scene->FindObjectByName("LoserLogo")->SetPostion(glm::vec3(scene->FindObjectByName("Main Camera")->GetPosition().x, scene->FindObjectByName("Main Camera")->GetPosition().y + 9, 8));
 				scene->FindObjectByName("ReplayText")->SetPostion(glm::vec3(scene->FindObjectByName("Main Camera")->GetPosition().x, scene->FindObjectByName("Main Camera")->GetPosition().y + 10, 6.1));
 				scene->FindObjectByName("WinnerLogo")->SetPostion(glm::vec3(scene->FindObjectByName("Main Camera")->GetPosition().x, scene->FindObjectByName("Main Camera")->GetPosition().y + 11, 6.1));
+
+				if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS && soundprompt == false)
+				{
+					result = system->playSound(sound6, 0, false, &channel);
+					soundprompt = true;
+				}
+
+				if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && soundprompt == false)
+				{
+					result = system->playSound(sound5, 0, false, &channel);
+					soundprompt = true;
+				}
+
+				if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_RELEASE && glfwGetKey(window, GLFW_KEY_UP) == GLFW_RELEASE && glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_RELEASE && glfwGetKey(window, GLFW_KEY_P) == GLFW_RELEASE && glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_RELEASE)
+				{
+					soundprompt = false;
+				}
+
 			}
 
 			if (paused == true || playerLose == true || playerWin == true)
@@ -10920,7 +10930,7 @@ int main() {
 				soundprompt = true;
 			}
 
-			if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_RELEASE && glfwGetKey(window, GLFW_KEY_UP) == GLFW_RELEASE && glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_RELEASE)
+			if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_RELEASE && glfwGetKey(window, GLFW_KEY_UP) == GLFW_RELEASE && glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_RELEASE && glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_RELEASE && glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_RELEASE)
 			{
 				soundprompt = false;
 			}
