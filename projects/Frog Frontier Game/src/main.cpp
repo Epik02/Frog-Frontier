@@ -25,7 +25,7 @@
 #include "Graphics/VertexBuffer.h"
 #include "Graphics/VertexArrayObject.h"
 #include "Graphics/Shader.h"
-#include "Graphics/Texture2D.h"
+#include "Graphics/Texture2D.h" 
 #include "Graphics/VertexTypes.h"
 
 // Utilities
@@ -3570,7 +3570,7 @@ int main() {
 			slidingMesh5 = ResourceManager::CreateAsset<MeshResource>("RunToCrawl_000005.obj");
 			slidingMesh6 = ResourceManager::CreateAsset<MeshResource>("RunToCrawl_000006.obj");
 			slidingMesh7 = ResourceManager::CreateAsset<MeshResource>("RunToCrawl_000007.obj");
-			slidingMesh8 = ResourceManager::CreateAsset<MeshResource>("RunToCrawl_000008.obj");
+			slidingMesh8 = ResourceManager::CreateAsset<MeshResource>("RunToCrawl_000007.obj");
 			slidingMesh9 = ResourceManager::CreateAsset<MeshResource>("Crawling_000001.obj");
 			slidingMesh10 = ResourceManager::CreateAsset<MeshResource>("Crawling_000002.obj");
 			slidingMesh11 = ResourceManager::CreateAsset<MeshResource>("Crawling_000003.obj");
@@ -3588,7 +3588,7 @@ int main() {
 			slidingMesh23 = ResourceManager::CreateAsset<MeshResource>("CrawlToRun_000005.obj");
 			slidingMesh24 = ResourceManager::CreateAsset<MeshResource>("CrawlToRun_000006.obj");
 			slidingMesh25 = ResourceManager::CreateAsset<MeshResource>("CrawlToRun_000007.obj");
-			slidingMesh26 = ResourceManager::CreateAsset<MeshResource>("CrawlToRun_000008.obj");
+			slidingMesh26 = ResourceManager::CreateAsset<MeshResource>("CrawlToRun_000007.obj");
 
 			planeMesh->AddParam(MeshBuilderParam::CreatePlane(ZERO, UNIT_Z, UNIT_X, glm::vec2(1.0f)));
 			planeMesh->GenerateMesh();
