@@ -8,6 +8,7 @@
 #include <json.hpp>
 #include <fstream>
 #include <sstream>
+#include <istream>
 #include <typeindex>
 #include <optional>
 #include <string>
@@ -62,6 +63,16 @@
 #include "Gameplay/Physics/CollisionRect.h"
 
 #include "fmod.hpp"
+
+std::ofstream timeToBeat;
+int giveScoreOnce = 0;
+int scoreLineCount = 0;
+
+std::string getScores;
+std::ifstream text("unsortedScores.txt");
+std::vector<std::string> scores;
+std::vector<float> floatScores;
+bool scoreWritten = false; //So the code only writes the score to the text file once everytime the player wins
 
 //#define LOG_GL_NOTIFICATIONS
 
@@ -702,6 +713,7 @@ bool isJumpPressed = false;
 bool playerFlying = false;
 bool playerSliding = false;
 bool returnToGround = false;
+bool playerPlaying = false;
 bool playerMove = false;
 int clickCount = 0;
 bool soundprompt = false;
@@ -712,6 +724,9 @@ float jumpheight = 0.0000;
 float x = 0;
 float JTime = 0;
 float JTemp = 0;
+float PTime = 0;
+float PTemp = 0;
+float PTemp2 = 0;
 float AnimTime = 0;
 float runLoopNumber = 1; //number of times run animation has looped, we multiply this by 1.05 so we can return runAnimTime to 0 and repeat the Animation
 float FPSIncrease = 0.0; //gradually will increase so we can continue to play animations
@@ -723,6 +738,9 @@ float FResetTemp = 0;
 float RemainingFTime = 0;
 bool playerJumping = false;
 bool runningAnim = true;
+bool loadMeshOnce = true;
+float animIntervals = 0;
+int animFrame = 0;
 
 bool running = true;
 bool sliding = false;
@@ -737,6 +755,10 @@ void SceneChanger()
 {
 	if (scenevalue == 11)
 	{
+		PTime = 0;
+		PTemp = 0;
+		PTemp2 = 0;
+		playerPlaying = false;
 		if (glfwGetKey(window, GLFW_KEY_UP) && performedtask == false) {
 			if (index - 1 < 1)
 			{
@@ -768,6 +790,10 @@ void SceneChanger()
 	}
 	else if (scenevalue == 13)
 	{
+		PTime = 0;
+		PTemp = 0;
+		PTemp2 = 0;
+		playerPlaying = false;
 		if (glfwGetKey(window, GLFW_KEY_UP) && performedtask == false) {
 			if (index == 1 || index == 3 || index == 5)
 			{
@@ -928,9 +954,45 @@ void SceneChanger()
 	}
 }
 
-bool loadMeshOnce = true;
-float animIntervals = 0;
-int animFrame = 0;
+void readScores() {
+	while (getline(text, getScores)) {
+		scores.push_back(getScores);
+		floatScores.push_back(std::stof(getScores)); //converts strings to floats
+		scoreLineCount = scoreLineCount + 1; //gets the number of lines in the text file
+	}
+	text.close();
+}
+
+int partition(std::vector<float>& arrayToSort, int low, int high, float pivot) {
+
+	int index1 = low;
+	int index2 = low;
+	float temp;
+	while (index1 <= high) {
+		if (arrayToSort[index1] > pivot) {
+			index1 = index1 + 1;
+		}
+		else {
+			temp = arrayToSort[index1]; //swaps
+			arrayToSort[index1] = arrayToSort[index2];
+			arrayToSort[index2] = temp;
+			index2 = index2 + 1;
+			index1 = index1 + 1;
+		}
+	}
+	return index2 - 1;
+}
+
+void quickSort(std::vector<float>& arrayToSort, int low, int high) { //low == first index, high = last index
+	if (low < high) {
+		float pivot = arrayToSort[high];
+		int position = partition(arrayToSort, low, high, pivot);
+
+		quickSort(arrayToSort, low, position - 1);
+		quickSort(arrayToSort, position + 1, high);
+	}
+}
+
 void keyboard()
 {
 	//Loads Keyframes for animations
@@ -957,6 +1019,9 @@ void keyboard()
 	if (paused == true || playerLose == true || playerWin == true)
 	{
 		if ((glfwGetKey(window, GLFW_KEY_UP) && performedtask == false)) {
+
+			playerPlaying == false;
+
 			if (index == 1)
 			{
 				index = 3;
@@ -1017,6 +1082,9 @@ void keyboard()
 			}
 		}
 	}
+	else if (paused == false) {
+		playerPlaying = true;
+	}
 
 	if (glfwGetKey(window, GLFW_KEY_P) == GLFW_RELEASE && glfwGetKey(window, GLFW_KEY_UP) == GLFW_RELEASE && glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_RELEASE)
 	{
@@ -1026,6 +1094,19 @@ void keyboard()
 	if (paused == false)
 	{
 		runningAnim = true;
+
+		//to time the time the player took to beat the level (while ingame)
+		if (playerPlaying == true) {
+			PTime = glfwGetTime() - PTemp;
+			PTime = PTime / 2.5;
+			PTime = PTime + PTemp2;
+		}
+		else {
+			PTemp2 = PTime;
+			PTemp = glfwGetTime();
+		}
+		std::cout << PTime << "\n";
+
 		//All Slide Code
 		{
 			if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
@@ -1150,6 +1231,11 @@ void keyboard()
 			running = false;
 			flying = true;
 		}
+		if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS) { //shows all scores from text file
+			for (int i = 0; i < scoreLineCount; i++) {
+				std::cout << floatScores[i] << "\n";
+			}
+		}
 	}
 
 	//Run Animations (still working on lerping them) ***SWITCHING BETWEEN TOO MANY KEYFRAMES IN TOO SHORT A TIME WILL CAUSE THE GAME TO CRASH***
@@ -1200,7 +1286,7 @@ void keyboard()
 		}
 	}
 
-	std::cout << animFrame << "\n" << AnimTime << "\n";
+	//std::cout << animFrame << "\n" << AnimTime << "\n";
 
 	switch (animFrame) {
 	case 1:
@@ -1596,6 +1682,9 @@ int main() {
 		scene = Scene::Load("menu.json");
 	}
 	else {
+
+		//readScores(); //reads all of the scores before loading the scene
+		//quickSort(floatScores, 0, floatScores.size() - 1); //sorts our array from lowest to greatest
 
 		//load all our objects once for all scenes
 
@@ -10498,6 +10587,11 @@ int main() {
 	float ProgressBarTempPaused2 = 0;
 	float ProgressBarPaused = 0;
 
+	PTime = 0;
+	PTemp = 0;
+	PTemp2 = 0;
+	playerPlaying = false;
+
 	///// Game loop /////
 	while (!glfwWindowShouldClose(window)) {
 		glfwPollEvents();
@@ -10531,6 +10625,7 @@ int main() {
 		{
 			if (paused == true)
 			{
+				playerPlaying = false;
 				scene->FindObjectByName("PanelPause")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6, 6.5));
 				scene->FindObjectByName("ButtonBack1")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6.25, 6.0));
 				scene->FindObjectByName("ButtonBack2")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6.5, 5.0));
@@ -10559,6 +10654,7 @@ int main() {
 
 			if (playerLose == true)
 			{
+				playerPlaying = false;
 				scene->FindObjectByName("PanelPause")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6, 6.5));
 				scene->FindObjectByName("ButtonBack1")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6.25, 6.0));
 				scene->FindObjectByName("ButtonBack2")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6.5, 5.0));
@@ -10585,6 +10681,16 @@ int main() {
 
 			if (playerWin == true)
 			{
+				if (scoreWritten == false) {
+					//writes time to text file
+					timeToBeat.open("unsortedScores.txt", std::ios::app);
+					timeToBeat << PTime << "\n";
+					timeToBeat.close();
+					std::cout << "yay it worked!";
+				}
+				scoreWritten = true;
+
+				playerPlaying = false;
 				scene->FindObjectByName("PanelPause")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6, 6.5));
 				scene->FindObjectByName("ButtonBack1")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6.25, 6.0));
 				scene->FindObjectByName("ButtonBack2")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6.5, 5.0));
@@ -10608,9 +10714,13 @@ int main() {
 					scene->FindObjectByName("Filter")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6.76, 4.0));
 				}
 			}
+			else {
+				scoreWritten = false;
+			}
 
 			if (paused != true && playerLose != true && playerWin != true)
 			{
+				playerPlaying = true;
 				//originally these were all back at -15 but idk if that makes the game more jank cause of overlap so i tried to spread em out
 				scene->FindObjectByName("PanelPause")->SetPostion(glm::vec3(scene->FindObjectByName("Main Camera")->GetPosition().x, scene->FindObjectByName("Main Camera")->GetPosition().y + 1, 6.5));
 				scene->FindObjectByName("ButtonBack1")->SetPostion(glm::vec3(scene->FindObjectByName("Main Camera")->GetPosition().x, scene->FindObjectByName("Main Camera")->GetPosition().y + 2, 6));
@@ -10646,6 +10756,7 @@ int main() {
 
 			if (paused == true || playerLose == true || playerWin == true)
 			{
+				playerPlaying = false;
 				if (((glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) || (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)) && soundprompt == false)
 				{
 					result = system->playSound(sound1, 0, false, &channel);
