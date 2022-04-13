@@ -1000,7 +1000,6 @@ void keyboard()
 	//}
 	//loadMeshOnce
 
-
 	if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS && performedtask == false)
 	{
 		if (paused == true)
@@ -1105,7 +1104,7 @@ void keyboard()
 			PTemp2 = PTime;
 			PTemp = glfwGetTime();
 		}
-		//std::cout << PTime << "\n";
+		std::cout << PTime << "\n";
 
 		//All Slide Code
 		{
@@ -1217,20 +1216,6 @@ void keyboard()
 			}
 
 		}
-		if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS) {
-			runningAnim = true;
-		}
-		if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS) {
-			runningAnim = false;
-		}
-		if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
-			running = true;
-			flying = false;
-		}
-		if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS) {
-			running = false;
-			flying = true;
-		}
 		if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS) { //shows all scores from text file
 			for (int i = 0; i < scoreLineCount; i++) {
 				std::cout << floatScores[i] << "\n";
@@ -1248,7 +1233,7 @@ void keyboard()
 		runAnimTemp2 = AnimTime;
 		runAnimTemp = glfwGetTime();
 	}
-	std::cout << AnimTime << "\n" << FPSIncrease << "\n";
+	//std::cout << AnimTime << "\n" << FPSIncrease << "\n";
 
 	if (AnimTime >= (0.02 + FPSIncrease) && AnimTime < (0.04 + FPSIncrease)) {
 		animFrame = animFrame + 1;
@@ -10688,8 +10673,26 @@ int main() {
 					timeToBeat << PTime << "\n";
 					timeToBeat.close();
 					std::cout << "yay it worked!";
+
+
+					readScores(); //reads all of the scores before loading the scene
+					quickSort(floatScores, 0, floatScores.size() - 1); //sorts our array from lowest to greatest
+
+					timeToBeat.open("sortedScores.txt", std::ofstream::out | std::ofstream::trunc);
+					timeToBeat.close();
+
+					//writes sorted vector to text file
+					for (int i = 0; i < floatScores.size(); i++) {
+						timeToBeat.open("sortedScores.txt", std::ios::app);
+						timeToBeat << floatScores[i] << "\n";
+						timeToBeat.close();
+						std::cout << "yay it worked2!";
+					}
 				}
 				scoreWritten = true;
+				PTime = 0;
+				PTemp2 = 0;
+				PTemp = 0;
 
 				playerPlaying = false;
 				scene->FindObjectByName("PanelPause")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x - 5, 6, 6.5));
